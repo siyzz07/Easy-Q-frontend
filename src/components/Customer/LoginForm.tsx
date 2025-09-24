@@ -93,7 +93,7 @@ const LoginForm: FC = () => {
           className="w-full border border-gray-500 text-black hover:bg-slate-200 h-12 text-base font-medium bg-transparent rounded-lg"
           onClick={() => navigate("/customer/signup")}
         >
-          
+
           Create an Account
         </button>
 
@@ -106,6 +106,8 @@ const LoginForm: FC = () => {
           &{" "}
           <a href="#" className="text-blue-400 hover:underline">
             Privacy Policy
+
+            
           </a>
         </p>
       </div>
