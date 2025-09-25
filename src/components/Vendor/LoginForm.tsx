@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import type { FC } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye,EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const SignupForm: FC = () => {
-  const navigate = useNavigate();
+
+
+
+const SignupForm:FC = () => {
+
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 text-white">
@@ -28,7 +33,7 @@ const SignupForm: FC = () => {
       <div className="mb-6 relative">
         <div className="flex bg-slate-700 rounded-lg p-1 relative">
           <button
-            onClick={() => navigate("/customer/login")}
+            onClick={() => navigate('/customer/login')}
             className={`px-8 py-2 text-sm font-medium rounded-md transition-colors relative z-10 cursor-pointer`}
           >
             Customer
@@ -68,11 +73,7 @@ const SignupForm: FC = () => {
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
             >
               {/* Icon here */}
-              {showPassword ? (
-                <Eye className="w-5 h-5" />
-              ) : (
-                <EyeOff className="w-5 h-5" />
-              )}
+              {showPassword? <Eye className="w-5 h-5" /> : <EyeOff  className="w-5 h-5"/>}
             </button>
           </div>
           <div className="text-right mt-2">
@@ -93,7 +94,7 @@ const SignupForm: FC = () => {
         </button>
 
         {/* Terms */}
-        <p className="text-center text-xs text-gray-400 mt-4">
+        <p className="text-center text-xs text-gray-400 mt-4">  
           By logging in, you agree to our{" "}
           <a href="#" className="text-blue-400 hover:underline">
             Terms
