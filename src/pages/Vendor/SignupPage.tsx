@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import image from "../../assets/vendor-login-image.png";
 import Image from "../../components/Shared/Image";
 
 import SignupForm from "../../components/Vendor/SignupForm";
 
+
 const SignupPage = () => {
+    const [selected, setSelected] = useState<{ lat: number; lng: number } | null>(null);
   return (
     <div className="min-h-screen  flex">
       {/* Left side - */}
@@ -13,6 +15,8 @@ const SignupPage = () => {
       {/* Right side  */}
       <div className="flex-1 bg-slate-800">
         <SignupForm />
+
+        
       </div>
     </div>
   );

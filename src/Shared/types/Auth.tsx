@@ -22,3 +22,13 @@ export interface IVendor{
    country?:string,
 
 }
+
+
+
+
+export interface Imap {
+  onSelect: (coords: { lat: number; lng: number }) => void;
+  defaultCenter?: { lat: number; lng: number };
+  zoom?: number;
+  height?: string;
+}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import LoginPage from '../pages/Vendor/LoginPage'
 import SignupPage from '../pages/Vendor/SignupPage'
@@ -7,8 +7,10 @@ import Sidebar from '../components/Vendor/Sidebar'
 import Services from '../components/Vendor/Services'
 import Navbar from '../components/Vendor/Navbar'
 import Layout from '../components/Vendor/Layout/Layout'
+import Map from '../components/Shared/Map'
 
 const VendorRoutes = () => {
+   
   return (
 
     <Routes>
@@ -19,7 +21,7 @@ const VendorRoutes = () => {
 
 
 
-        <Route path='*' element ={ <Layout/>} />
+        {/* <Route path='*' element ={} /> */}
     </Routes>
   )
 }
