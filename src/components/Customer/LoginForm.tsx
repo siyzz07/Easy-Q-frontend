@@ -2,6 +2,14 @@ import React, { useState } from "react";
 import type { FC } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+// ✅ Validation Schema
+const LoginSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string().min(6, "Minimum 6 characters").required("Password is required"),
+});
 
 const LoginForm: FC = () => {
   const navigate = useNavigate();
@@ -27,14 +35,11 @@ const LoginForm: FC = () => {
       {/* Tab switcher */}
       <div className="mb-6 relative">
         <div className="flex bg-slate-200 rounded-lg p-1 relative">
-          <button
-            // onClick={() => setActiveTab("Customer")}
-            className={`px-8 py-2 text-sm font-medium rounded-md transition-colors relative z-10 text-slate-800 bg-white`}
-          >
+          <button className="px-8 py-2 text-sm font-medium rounded-md transition-colors relative z-10 text-slate-800 bg-white">
             Customer
           </button>
           <button
-            className={`px-8 py-2 text-sm font-medium rounded-md transition-colors relative z-10 cursor-pointer `}
+            className="px-8 py-2 text-sm font-medium rounded-md transition-colors relative z-10 cursor-pointer"
             onClick={() => navigate("/vendor/login")}
           >
             Vendor
@@ -42,75 +47,103 @@ const LoginForm: FC = () => {
         </div>
       </div>
 
-      {/* Login form */}
-      <div className="w-full max-w-md mx-auto p-6 space-y-4 bg-white ">
-        {/* Email */}
-        <div>
-          <input
-            id="email"
-            type="email"
-            placeholder="Enter your email"
-            className="w-full mt-1 px-3 h-12 rounded-lg bg-white border-2 border-gray-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+      {/* ✅ Formik Form */}
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        validationSchema={LoginSchema}
+        onSubmit={(values, { setSubmitting }) => {
+          console.log("Form submitted:", values);
+          // You can call your login API here
+          setTimeout(() => {
+            setSubmitting(false);
+            navigate("/dashboard"); // example redirect
+          }, 1000);
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form className="w-full max-w-md mx-auto p-6 space-y-4 bg-white">
+            {/* Email */}
+            <div>
+              <Field
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                className="w-full mt-1 px-3 h-12 rounded-lg bg-white border-2 border-gray-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+            </div>
 
-        {/* Password */}
-        <div>
-          <div className="relative mt-1">
-            <input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              className="w-full h-12 pr-12 px-3 rounded-lg border-2 bg-white border-gray-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            {/* Password */}
+            <div>
+              <div className="relative mt-1">
+                <Field
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  className="w-full h-12 pr-12 px-3 rounded-lg border-2 bg-white border-gray-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? (
+                    <Eye className="w-5 h-5" />
+                  ) : (
+                    <EyeOff className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="text-red-500 text-sm mt-1"
+              />
+              <div className="text-right mt-2">
+                <a href="#" className="text-blue-400 text-sm hover:underline">
+                  Forgot Password?
+                </a>
+              </div>
+            </div>
+
+            {/* Log In Button */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg cursor-pointer"
+            >
+              {isSubmitting ? "Logging in..." : "Log In"}
+            </button>
+
+            {/* Create Account Button */}
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              className="w-full border border-gray-500 text-black hover:bg-slate-200 h-12 text-base font-medium bg-transparent rounded-lg cursor-pointer"
+              onClick={() => navigate("/customer/signup")}
             >
-              {/* Icon here */}
-              {showPassword ? (
-                <Eye className="w-5 h-5" />
-              ) : (
-                <EyeOff className="w-5 h-5" />
-              )}
+              Create an Account
             </button>
-          </div>
-          <div className="text-right mt-2">
-            <a href="#" className="text-blue-400 text-sm hover:underline">
-              Forgot Password?
-            </a>
-          </div>
-        </div>
 
-        {/* Log In Button */}
-        <button className="w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg">
-          Log In
-        </button>
-
-        {/* Create Account Button */}
-        <button
-          className="w-full border border-gray-500 text-black hover:bg-slate-200 h-12 text-base font-medium bg-transparent rounded-lg"
-          onClick={() => navigate("/customer/signup")}
-        >
-
-          Create an Account
-        </button>
-
-        {/* Terms */}
-        <p className="text-center text-xs text-gray-400 mt-4">
-          By logging in, you agree to our{" "}
-          <a href="#" className="text-blue-400 hover:underline">
-            Terms
-          </a>{" "}
-          &{" "}
-          <a href="#" className="text-blue-400 hover:underline">
-            Privacy Policy
-
-            
-          </a>
-        </p>
-      </div>
+            {/* Terms */}
+            <p className="text-center text-xs text-gray-400 mt-4">
+              By logging in, you agree to our{" "}
+              <a href="#" className="text-blue-400 hover:underline">
+                Terms
+              </a>{" "}
+              &{" "}
+              <a href="#" className="text-blue-400 hover:underline">
+                Privacy Policy
+              </a>
+            </p>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Palette } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import type { ICustomer } from "../../Shared/types/Auth";
 import * as Yup from "yup";
+import { customerSignup } from "../../Services/CustomerApiService";
+import { toast } from "react-toastify";
 
 // Yup Validation Schema
 
@@ -46,13 +48,42 @@ const SignupForm: React.FC = () => {
     confirmPassword: "",
   };
 
-  const handleSubmit = (values: ICustomer) => {
-    console.log("Form submitted:", values);
-    // Here you would call an API to register the user
+  const handleSubmit = async(values: ICustomer) => {
+    try{
+
+
+
+
+      const { confirmPassword, ...payload } = values;
+      const response = await customerSignup(payload) 
+
+
+      toast.info("Please verify your email. We have sent a verification link to your email address.",{
+        autoClose:5000
+      })
+      
+
+
+      navigate('/customer/login')
+
+
+
+
+
+    }catch(error:any){
+      console.log(error);
+      
+        if(error.response.data){
+          toast.error(error.response.data)
+        }else{
+          toast.error('some error please try later')
+        }
+        
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 text-black">
+    <div className="flex flex-col items-center justify-center min-h-screen  text-black">
       {/* Logo and Heading */}
       <div className="mb-8 text-center">
         <div className="flex items-center justify-center mb-4">
@@ -205,7 +236,7 @@ const SignupForm: React.FC = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg"
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg cursor-pointer"
               >
                 Submit
               </button>

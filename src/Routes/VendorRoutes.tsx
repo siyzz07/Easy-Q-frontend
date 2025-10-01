@@ -8,6 +8,8 @@ import Services from '../components/Vendor/Services'
 import Navbar from '../components/Vendor/Navbar'
 import Layout from '../components/Vendor/Layout/Layout'
 import Map from '../components/Shared/Map'
+import LoadingVerify from '../components/Shared/LoadingVerify'
+import LoadingPage from '../pages/Customer/LodingPage'
 
 const VendorRoutes = () => {
    
@@ -21,7 +23,7 @@ const VendorRoutes = () => {
 
 
 
-        {/* <Route path='*' element ={} /> */}
+        <Route path='*' element ={<LoadingPage/>} />
     </Routes>
   )
 }

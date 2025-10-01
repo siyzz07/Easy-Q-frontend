@@ -41,7 +41,7 @@ const SignupForm: FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen pt-3 text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen pt-4 text-white">
       <div className="mb-4 text-center">
         <div className="flex items-center justify-center mb-4">
           <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center mr-3">
@@ -51,7 +51,7 @@ const SignupForm: FC = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-md mx-auto p-5 space-y-3 bg-slate-800 rounded-3xl shadow-md">
+      <div className="w-full max-w-md mx-auto p-5 space-y-4  rounded-3xl shadow-md">
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -62,7 +62,7 @@ const SignupForm: FC = () => {
               <div>
                 <label
                   htmlFor="shopName"
-                  className="block text-sm font-medium mb-1"
+                  className="block text-sm font-medium mb-2 mt-2"
                 >
                   Shop Name
                 </label>
@@ -83,7 +83,7 @@ const SignupForm: FC = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium mb-1"
+                  className="block text-sm font-medium  mb-2 mt-2"
                 >
                   Email
                 </label>
@@ -104,7 +104,7 @@ const SignupForm: FC = () => {
               <div>
                 <label
                   htmlFor="phone"
-                  className="block text-sm font-medium mb-1"
+                  className="block text-sm font-medium  mb-2 mt-2"
                 >
                   Phone
                 </label>
@@ -125,7 +125,7 @@ const SignupForm: FC = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium mb-1"
+                  className="block text-sm font-medium  mb-2 mt-2"
                 >
                   Password
                 </label>
@@ -159,7 +159,7 @@ const SignupForm: FC = () => {
               <div>
                 <label
                   htmlFor="confirmPassword"
-                  className="block text-sm font-medium mb-1"
+                  className="block text-sm font-medium  mb-2 mt-2"
                 >
                   Confirm Password
                 </label>

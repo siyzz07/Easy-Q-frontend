@@ -8,6 +8,11 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 
 
 const customerAxios = axios.create({
-    baseURL :import.meta.env.BASE_URL,
-     headers: { "Content-Type": "application/json" },
-})
+  baseURL: `${import.meta.env.VITE_BASE_URL}/api/customer`,
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true,
+});
+
+
+
+export default customerAxios
