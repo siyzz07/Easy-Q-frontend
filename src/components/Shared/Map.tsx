@@ -19,7 +19,7 @@ const Map: FC<Imap> = ({
   const [markerPos, setMarkerPos] = useState(defaultCenter);
   const [mapCenter, setMapCenter] = useState(defaultCenter);
 
-  // Function to get current location when icon is clicked
+  
   const locateMe = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -33,7 +33,7 @@ const Map: FC<Imap> = ({
           onSelect(userLocation);
         },
         (error) => {
-          // console.warn("Geolocation error:", error);
+          console.warn("Geolocation error:", error);
           // alert("Could not get your location. Please allow location access.");
         }
       );

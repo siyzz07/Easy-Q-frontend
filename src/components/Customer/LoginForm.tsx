@@ -4,16 +4,61 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-
-// ✅ Validation Schema
-const LoginSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().min(6, "Minimum 6 characters").required("Password is required"),
-});
+import type { ICustomerLogin } from "../../Shared/types/Auth";
+import { loginCustomer } from "../../Services/CustomerApiService";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
+import { customerSetAceesToken } from "../../Utils/tokenUtils";
+import { useDispatch } from "react-redux";
+import { customerLoginSuccess } from "../../Redux/CustomeSlice";
 
 const LoginForm: FC = () => {
+  let dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const LoginSchema = Yup.object().shape({
+    email: Yup.string()
+      .trim()
+      .email("Invalid email")
+      .required("Email is required"),
+
+    password: Yup.string()
+      .required("Password is required")
+      .min(6, "Password must be at least 6 characters")
+      .test(
+        "not-all-same",
+        "Password cannot contain the same character repeated",
+        (value) => {
+          if (!value) return false;
+          return !/^([a-zA-Z0-9])\1*$/.test(value);
+        }
+      )
+      .test(
+        "not-empty-spaces",
+        "Password cannot be only spaces",
+        (value) => value?.trim().length > 0
+      ),
+  });
+
+  const submit = async (values: ICustomerLogin) => {
+    try {
+      const response = await loginCustomer(values);
+      if (response.data.accesstoken) {
+        customerSetAceesToken(response.data.accesstoken);
+        dispatch(customerLoginSuccess(response.data.accesstoken));
+        navigate("/customer");
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        if (error?.response?.data) {
+          toast.error(error.response.data);
+        }
+      } else {
+        console.log("customer login error", error);
+      }
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 text-Black">
@@ -47,20 +92,12 @@ const LoginForm: FC = () => {
         </div>
       </div>
 
-      {/* ✅ Formik Form */}
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={LoginSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          console.log("Form submitted:", values);
-          // You can call your login API here
-          setTimeout(() => {
-            setSubmitting(false);
-            navigate("/dashboard"); // example redirect
-          }, 1000);
-        }}
+        onSubmit={submit}
       >
-        {({ isSubmitting }) => (
+        {({}) => (
           <Form className="w-full max-w-md mx-auto p-6 space-y-4 bg-white">
             {/* Email */}
             <div>
@@ -115,10 +152,9 @@ const LoginForm: FC = () => {
             {/* Log In Button */}
             <button
               type="submit"
-              disabled={isSubmitting}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg cursor-pointer"
             >
-              {isSubmitting ? "Logging in..." : "Log In"}
+              {true ? "Log In" : "Log In"}
             </button>
 
             {/* Create Account Button */}

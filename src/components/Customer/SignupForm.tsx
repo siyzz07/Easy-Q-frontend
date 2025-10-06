@@ -7,38 +7,60 @@ import * as Yup from "yup";
 import { customerSignup } from "../../Services/CustomerApiService";
 import { toast } from "react-toastify";
 
-// Yup Validation Schema
 
 const SignupForm: React.FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const validationSchema = Yup.object({
-    name: Yup.string()
-      .min(4, "Name must be at least 4 characters long")
-      .required("Name is required"),
+  name: Yup.string()
+        .required("Name is required")
+        .min(3, "Name must be at least 3 characters")
+        .matches(
+          /^[A-Za-z0-9 ]+$/,
+          "Name can only contain letters, numbers, and spaces"
+        )
+        .test(
+          "not-only-spaces",
+          "Name cannot be just spaces",
+          (value) => value?.trim().length > 0
+        )
+        .test(
+          "not-repeated-chars",
+          "Name cannot be the same character repeated",
+          (value) => (value ? !/^([A-Za-z0-9 ])\1+$/.test(value) : true)
+        ),
 
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
 
-    phone: Yup.string()
-      .matches(/^[0-9]+$/, "Phone number must contain only digits")
-      .min(10, "Phone number must be at least 10 digits")
-      .max(15, "Phone number must not exceed 15 digits")
-      .required("Phone number is required"),
+  phone: Yup.string()
+    .required("Phone number is required")
+    .matches(/^[0-9]+$/, "Phone number must contain only digits")
+    .min(10, "Phone number must be at least 10 digits")
+    .test(
+      "valid-phone",
+      "Phone number is not valid",
+      (value) => value ? /^[6-9][0-9]{9,14}$/.test(value) : false
+    ),
 
-    password: Yup.string()
-      .min(7, "Password must be at least 7 characters")
-      .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-      .matches(/[a-z]/, "Password must contain at least one lowercase letter")
-      .matches(/[0-9]/, "Password must contain at least one number")
-      .required("Password is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters")
+    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+    .matches(/[0-9]/, "Password must contain at least one number")
+    .test(
+      "not-all-same",
+      "Password cannot be the same character repeated",
+      (value) => value ? !/^([a-zA-Z0-9@$!%*?&])\1*$/.test(value) : true
+    ),
 
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password")], "Passwords must match")
-      .required("Confirm Password is required"),
-  });
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "Passwords must match")
+    .required("Confirm Password is required"),
+});
 
   const initialValues: ICustomer = {
     name: "",
@@ -226,7 +248,6 @@ const SignupForm: React.FC = () => {
                   Already have an account?
                 </p>
                 <p
-                  className="text-blue-400 hover:underline"
                   onClick={() => navigate("/customer/login")}
                 >
                   Login

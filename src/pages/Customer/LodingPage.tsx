@@ -58,7 +58,7 @@ useEffect(() => {
 
       {/* Right side  */}
       <div className="flex-1  bg-white">
-        <LoadingVerify />
+        <LoadingVerify style="#666666" />
       </div>
        
     </div>

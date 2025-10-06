@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import type { IVendor } from "../../Shared/types/Auth";
+import { verifyEmail } from "../../Services/VendorApiServices";
+import { toast } from "react-toastify";
 
 const SignupForm: FC = () => {
   const navigate = useNavigate();
@@ -12,22 +15,59 @@ const SignupForm: FC = () => {
   const validationSchema = Yup.object({
     shopName: Yup.string()
       .required("Shop name is required")
-      .min(3, "Shop name must be at least 3 characters"),
+      .min(3, "Shop name must be at least 3 characters")
+      .matches(
+        /^[A-Za-z0-9 ]+$/,
+        "Shop name can only contain letters, numbers, and spaces"
+      )
+      .test(
+        "not-only-spaces",
+        "Shop name cannot be just spaces",
+        (value) => value?.trim().length > 0
+      )
+      .test(
+        "not-repeated-chars",
+        "Shop name cannot be the same character repeated",
+        (value) => (value ? !/^([A-Za-z0-9 ])\1+$/.test(value) : true)
+      ),
+
     email: Yup.string()
+      .trim()
       .email("Invalid email format")
       .required("Email is required"),
+
     phone: Yup.string()
+      .required("Phone number is required")
       .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
-      .required("Phone number is required"),
+      .test(
+        "not-all-same",
+        "Phone number cannot be all the same digit",
+        (value) => !/^(\d)\1+$/.test(value || "")
+      ),
+
     password: Yup.string()
+      .required("Password is required")
       .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
+      .test(
+        "not-only-spaces",
+        "Password cannot be only spaces",
+        (value) => value?.trim().length > 0
+      )
+      .test(
+        "not-all-same",
+        "Password cannot be the same character repeated",
+        (value) => !/^([a-zA-Z0-9])\1+$/.test(value || "")
+      )
+      .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+      .matches(/[0-9]/, "Password must contain at least one number"),
+
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password")], "Passwords must match")
-      .required("Confirm Password is required"),
+      .required("Confirm Password is required")
+      .oneOf([Yup.ref("password")], "Passwords must match"),
   });
 
-  const initialValues = {
+  const initialValues: IVendor = {
     shopName: "",
     email: "",
     phone: "",
@@ -35,9 +75,28 @@ const SignupForm: FC = () => {
     confirmPassword: "",
   };
 
-  const handleSubmit = (values: typeof initialValues) => {
-    console.log("Form Data:", values);
-    navigate("/dashboard");
+  const handleSubmit = async (values: IVendor, { setSubmitting }: any) => {
+    try {
+      const { confirmPassword, ...payload } = values;
+
+      const response = await verifyEmail(payload);
+
+      toast.info(
+        "Please verify your email. We have sent a verification link to your email address.",
+        { autoClose: 5000 }
+      );
+
+      navigate("/vendor/login");
+    } catch (error: any) {
+      console.log(error);
+      if (error.response?.data) {
+        toast.error(error.response.data);
+      } else {
+        toast.error("Some error, please try later");
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -57,7 +116,7 @@ const SignupForm: FC = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {() => (
+          {({ isSubmitting }) => (
             <Form>
               <div>
                 <label
@@ -177,21 +236,21 @@ const SignupForm: FC = () => {
                 />
               </div>
 
-              <div className="text-right mt-2">
-                <span className="text-sm">Already have an account? </span>
-                <a
-                  href="/login"
-                  className="text-blue-400 text-sm hover:underline"
-                >
+              <div className="flex justify-end items-center mt-2">
+                <span className="text-sm">Already have an account?</span>
+                <p 
+                  onClick={()=> navigate('/vendor/login')}
+                className="text-blue-400 ml-1 text-sm hover:underline cursor-pointer">
                   Login
-                </a>
+                </p>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg mt-3"
+                disabled={isSubmitting}
+                className={` w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg mt-3 `}
               >
-                Sign Up
+                {isSubmitting ? "Submitting..." : "Submit"}
               </button>
             </Form>
           )}
