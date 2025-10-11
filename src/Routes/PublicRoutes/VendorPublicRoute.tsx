@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { IVendorState } from "../../Redux/VendorSlice";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import type { IReduxStore } from "../../Shared/types/Auth";
+import type { IReduxStore } from "../../Shared/types/Types";
 
 interface IVProtectedRoute {
   children: ReactNode;

@@ -5,18 +5,21 @@ import Layout from '../pages/Admin/Layout/Layout'
 import Dashboard from '../components/Admin/Dashboard'
 import AdminPublicdRoute from './PublicRoutes/AdminPublicRoute'
 import AdminProtectedRoute from './ProtectedRoutes/AdminProtectedRoute'
+import PublicdRoute from './PublicRoutes/PublicRoute'
+import { ADMIN_ROUTES } from '../Shared/Constants/RouteConstants'
 
 const AdminRoutes = () => {
   return (
     <Routes>
-      <Route path='/login' element={
-        <AdminPublicdRoute>
-          <LoginPage/>
-        </AdminPublicdRoute>
+      <Route path= {ADMIN_ROUTES.LOGIN} element={
+       <PublicdRoute>
+         <LoginPage/>
+       </PublicdRoute>
+        
         
         } />
 
-      <Route path='/' element={
+      <Route path={ADMIN_ROUTES.BASE} element={
         <AdminProtectedRoute>
           <Layout/>
         </AdminProtectedRoute>

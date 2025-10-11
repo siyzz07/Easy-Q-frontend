@@ -6,18 +6,24 @@ import AdminRoutes from "./Routes/AdminRoutes";
 import LandingPage from "./pages/Customer/LandingPage";
 import VendorPublicRoute from "./Routes/PublicRoutes/VendorPublicRoute";
 import CustomerPublicdRoute from "./Routes/PublicRoutes/CustomerPublicRoute";
+import PublicdRoute from "./Routes/PublicRoutes/PublicRoute";
+import { ADMIN_ROUTES, CUSTOMER_ROUTES, VENDOR_ROUTES } from "./Shared/Constants/RouteConstants";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         
-        <Route path="/customer/*" element={<CustomerRoutes />} />
-        <Route path="/vendor/*" element={<VendorRoutes />} />
-        <Route path="/admin/*" element={<AdminRoutes />} />
+        <Route path={CUSTOMER_ROUTES.MAIN} element={<CustomerRoutes />} />
+        <Route path={VENDOR_ROUTES.MAIN} element={<VendorRoutes />} />
+        <Route path={ADMIN_ROUTES.MAIN} element={<AdminRoutes />} />
 
 
-        <Route path="/" element ={ <LandingPage/>  } 
+        <Route path="/" element ={ 
+          <PublicdRoute>
+            <LandingPage/>  
+          </PublicdRoute>
+        } 
           
           />
       </Routes>

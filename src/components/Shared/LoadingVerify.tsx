@@ -9,21 +9,7 @@ interface LoadingVerifyProps {
 }
 
 const LoadingVerify: FC<LoadingVerifyProps> = ({ style }) => {
-  //   const handleClick = () => {
-
-  //     setTimeLeft(240);
-  //     setIsActive(true);
-
-  //     console.log("Button clicked, timer restarted!");
-  //   };
-
-  //   const formatTime = (seconds: number) => {
-  //     const m = Math.floor(seconds / 60)
-  //       .toString()
-  //       .padStart(2, "0");
-  //     const s = (seconds % 60).toString().padStart(2, "0");
-  //     return `${m}:${s}`;
-  //   };
+ 
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 text-black">

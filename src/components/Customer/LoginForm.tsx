@@ -4,11 +4,11 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import type { ICustomerLogin } from "../../Shared/types/Auth";
+import type { ICustomerLogin } from "../../Shared/types/Types";
 import { loginCustomer } from "../../Services/CustomerApiService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { customerSetAceesToken } from "../../Utils/tokenUtils";
+import {  setAccessToken } from "../../Utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import { customerLoginSuccess } from "../../Redux/CustomeSlice";
 
@@ -45,7 +45,9 @@ const LoginForm: FC = () => {
     try {
       const response = await loginCustomer(values);
       if (response.data.accesstoken) {
-        customerSetAceesToken(response.data.accesstoken);
+
+
+        setAccessToken(response.data.accesstoken)
         dispatch(customerLoginSuccess(response.data.accesstoken));
         navigate("/customer");
       }

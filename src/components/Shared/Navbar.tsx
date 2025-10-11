@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Bell, Menu, X } from "lucide-react";
-import { customerGetAccessToken } from "../../Utils/tokenUtils";
+import { Bell, Menu, X,User } from "lucide-react";
+import { customerGetAccessToken, getAccessToken } from "../../Utils/tokenUtils";
 
 interface NavbarProps {
   menu: { label: string; path: string }[];
@@ -9,7 +9,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ menu }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const token = customerGetAccessToken()
+  const token = getAccessToken()
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -49,7 +49,7 @@ const Navbar: React.FC<NavbarProps> = ({ menu }) => {
               </button>
 
               <div className="h-8 w-8 flex items-center justify-center rounded-full bg-gray-400 text-white font-bold">
-                JD
+                <User/>
               </div>
             </>
           ) : (

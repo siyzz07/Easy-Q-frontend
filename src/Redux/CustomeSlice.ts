@@ -1,9 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { customerGetAccessToken } from "../Utils/tokenUtils";
+import {
+  customerGetAccessToken,
+  decodeToken,
+  getAccessToken,
+} from "../Utils/tokenUtils";
+import type { ITokenDdecode } from "../Shared/types/Types";
 
-const token = customerGetAccessToken();
-console.log("tttoken",token);
+const tokenDecode: ITokenDdecode | null = decodeToken();
 
+let token: string | null;
+
+if (tokenDecode) {
+  if (tokenDecode.role === "Customer") {
+    token = getAccessToken();
+  } else {
+    token = null;
+  }
+} else {
+  token = null;
+}
 
 export interface ICustomerState {
   customerToken: string | null;
@@ -30,6 +45,5 @@ const cusotmerSlice = createSlice({
   },
 });
 
-
-export const {customerLoginSuccess,customerLogOut} = cusotmerSlice.actions
-export default cusotmerSlice.reducer
+export const { customerLoginSuccess, customerLogOut } = cusotmerSlice.actions;
+export default cusotmerSlice.reducer;

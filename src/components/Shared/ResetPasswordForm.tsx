@@ -8,43 +8,18 @@ import type { IVendor } from "../../Shared/types/Types";
 import { verifyEmail } from "../../Services/VendorApiServices";
 import { toast } from "react-toastify";
 
-const SignupForm: FC = () => {
+
+interface IResetPasswordForm{
+  onSubmit :(token:string) => void
+}
+
+
+
+const ResetPasswordForm: FC<IResetPasswordForm> = ({onSubmit}) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const validationSchema = Yup.object({
-    shopName: Yup.string()
-      .required("Shop name is required")
-      .min(3, "Shop name must be at least 3 characters")
-      .matches(
-        /^[A-Za-z0-9 ]+$/,
-        "Shop name can only contain letters, numbers, and spaces"
-      )
-      .test(
-        "not-only-spaces",
-        "Shop name cannot be just spaces",
-        (value) => value?.trim().length > 0
-      )
-      .test(
-        "not-repeated-chars",
-        "Shop name cannot be the same character repeated",
-        (value) => (value ? !/^([A-Za-z0-9 ])\1+$/.test(value) : true)
-      ),
-
-    email: Yup.string()
-      .trim()
-      .email("Invalid email format")
-      .required("Email is required"),
-
-    phone: Yup.string()
-      .required("Phone number is required")
-      .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits")
-      .test(
-        "not-all-same",
-        "Phone number cannot be all the same digit",
-        (value) => !/^(\d)\1+$/.test(value || "")
-      ),
-
     password: Yup.string()
       .required("Password is required")
       .min(6, "Password must be at least 6 characters")
@@ -67,36 +42,20 @@ const SignupForm: FC = () => {
       .oneOf([Yup.ref("password")], "Passwords must match"),
   });
 
-  const initialValues: IVendor = {
-    shopName: "",
-    email: "",
-    phone: "",
+  interface IResetPassword{
+    password:string;
+    confirmPassword:string
+}
+
+
+  const initialValues:IResetPassword  = {
+
     password: "",
     confirmPassword: "",
   };
 
-  const handleSubmit = async (values: IVendor, { setSubmitting }: any) => {
-    try {
-      const { confirmPassword, ...payload } = values;
-
-      const response = await verifyEmail(payload);
-
-      toast.info(
-        "Please verify your email. We have sent a verification link to your email address.",
-        { autoClose: 5000 }
-      );
-
-      navigate("/vendor/login");
-    } catch (error: any) {
-      console.log(error);
-      if (error.response?.data) {
-        toast.error(error.response.data);
-      } else {
-        toast.error("Some error, please try later");
-      }
-    } finally {
-      setSubmitting(false);
-    }
+  const handleSubmit = async (values: IResetPassword) => {
+          onSubmit(values.password)
   };
 
   return (
@@ -118,69 +77,7 @@ const SignupForm: FC = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <div>
-                <label
-                  htmlFor="shopName"
-                  className="block text-sm font-medium mb-2 mt-2"
-                >
-                  Shop Name
-                </label>
-                <Field
-                  id="shopName"
-                  name="shopName"
-                  type="text"
-                  placeholder="Enter your shop name"
-                  className="w-full mt-1 px-3 h-12 rounded-lg bg-white border-2 border-gray-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <ErrorMessage
-                  name="shopName"
-                  component="div"
-                  className="text-red-400 text-sm mt-1"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium  mb-2 mt-2"
-                >
-                  Email
-                </label>
-                <Field
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full mt-1 px-3 h-12 rounded-lg bg-white border-2 border-gray-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className="text-red-400 text-sm mt-1"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium  mb-2 mt-2"
-                >
-                  Phone
-                </label>
-                <Field
-                  id="phone"
-                  name="phone"
-                  type="number"
-                  placeholder="Enter your phone number"
-                  className="w-full mt-1 px-3 h-12 rounded-lg bg-white border-2 border-gray-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <ErrorMessage
-                  name="phone"
-                  component="div"
-                  className="text-red-400 text-sm mt-1"
-                />
-              </div>
-
+              
               <div>
                 <label
                   htmlFor="password"
@@ -236,14 +133,6 @@ const SignupForm: FC = () => {
                 />
               </div>
 
-              <div className="flex justify-end items-center mt-2">
-                <span className="text-sm">Already have an account?</span>
-                <p 
-                  onClick={()=> navigate('/vendor/login')}
-                className="text-blue-400 ml-1 text-sm hover:underline cursor-pointer">
-                  Login
-                </p>
-              </div>
 
               <button
                 type="submit"
@@ -260,4 +149,4 @@ const SignupForm: FC = () => {
   );
 };
 
-export default SignupForm;
+export default ResetPasswordForm;

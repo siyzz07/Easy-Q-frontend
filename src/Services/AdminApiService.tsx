@@ -1,11 +1,12 @@
-import adminAxios, { adminAxiosInstance } from "../config/AdminAxios";
+import {  adminAxiosInstance } from "../config/AxiosInstance";
+
 
 
 
 export const loginAdmin = async (value :{email:string;password:string}) =>{
 
 
-    const response =  await adminAxios.post('/auth/login',value)
+    const response =  await adminAxiosInstance.post('/auth/login',value)
     return response
 
 

@@ -4,12 +4,12 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import type { IVendorLogin } from "../../Shared/types/Auth";
+import type { IVendorLogin } from "../../Shared/types/Types";
 import { loginVendor } from "../../Services/VendorApiServices";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { hasShopData, shopData, vendorLoginSuccess } from "../../Redux/VendorSlice";
-import { vendorSetAceessToken } from "../../Utils/tokenUtils";
+import { setAccessToken } from "../../Utils/tokenUtils";
 
 const SignupForm: FC = () => {
   const navigate = useNavigate();
@@ -49,7 +49,9 @@ const SignupForm: FC = () => {
     try {
       let response = await loginVendor(values);
       if (response.data.accesstoken) {
-        vendorSetAceessToken(response.data.accesstoken);
+
+
+        setAccessToken(response.data.accesstoken)
         dispatch(vendorLoginSuccess(response.data.accesstoken));
         if(response.data.data){
 

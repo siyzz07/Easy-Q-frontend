@@ -70,6 +70,7 @@ const Sidebar = () => {
       if (response?.status === 200) {
         dispatch(adminLogOut())
         adminRemoveAccessToken()
+        
         navigate("/admin/login");
       } else {
         console.error("Logout failed:", response);

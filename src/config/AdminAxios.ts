@@ -1,77 +1,77 @@
-import type { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
-import axios from "axios";
-import { adminGetAccessToken, adminRemoveAccessToken, adminSetAceesToken } from "../Utils/tokenUtils";
+// import type { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+// import axios from "axios";
+// import { adminGetAccessToken, adminRemoveAccessToken } from "../Utils/tokenUtils";
 
 
-interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
-  _retry?: boolean;
-}
+// interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+//   _retry?: boolean;
+// }
 
 
-const adminAxios = axios.create({
-  baseURL: `${import.meta.env.VITE_BASE_URL}/api/admin`,
-  headers: { "Content-Type": "application/json" },
-  withCredentials: true,
-});
+// const adminAxios = axios.create({
+//   baseURL: `${import.meta.env.VITE_BASE_URL}/api/admin`,
+//   headers: { "Content-Type": "application/json" },
+//   withCredentials: true,
+// });
 
-export const adminAxiosInstance = axios.create({
-  baseURL: `${import.meta.env.VITE_BASE_URL}/api/admin`,
-  headers: { "Content-Type": "application/json" },
-  withCredentials: true,
-});
-
-
-adminAxiosInstance.interceptors.request.use(
-  (config: CustomAxiosRequestConfig) => {
-    console.log("requst customer interceptors");
-    const token = adminGetAccessToken();
-
-    if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error: AxiosError) => {
-    console.error("User request error:", error);
-    return Promise.reject(error);
-  }
-);
+// export const adminAxiosInstance = axios.create({
+//   baseURL: `${import.meta.env.VITE_BASE_URL}/api/admin`,
+//   headers: { "Content-Type": "application/json" },
+//   withCredentials: true,
+// });
 
 
+// adminAxiosInstance.interceptors.request.use(
+//   (config: CustomAxiosRequestConfig) => {
+//     console.log("requst customer interceptors");
+//     const token = adminGetAccessToken();
+
+//     if (token) {
+//       config.headers["Authorization"] = `Bearer ${token}`;
+//     }
+//     return config;
+//   },
+//   (error: AxiosError) => {
+//     console.error("User request error:", error);
+//     return Promise.reject(error);
+//   }
+// );
 
 
-adminAxiosInstance.interceptors.response.use(
-  (response: AxiosResponse) => response,
 
-  async (error: AxiosError) => {
-    const originalRequest = error.config as CustomAxiosRequestConfig;
 
-    if (
-      originalRequest &&
-      error.response?.status === 401 &&
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
+// adminAxiosInstance.interceptors.response.use(
+//   (response: AxiosResponse) => response,
 
-      try {
-        const response = await adminAxiosInstance.post("/auth/refresh-token");
+//   async (error: AxiosError) => {
+//     const originalRequest = error.config as CustomAxiosRequestConfig;
 
-        const newAccessToken = response.data.accessToken;
-        adminRemoveAccessToken()
-        adminSetAceesToken(newAccessToken);
-        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+//     if (
+//       originalRequest &&
+//       error.response?.status === 401 &&
+//       !originalRequest._retry
+//     ) {
+//       originalRequest._retry = true;
 
-        console.log(originalRequest.data);
+//       try {
+//         const response = await adminAxiosInstance.post("/auth/refresh-token");
 
-        return adminAxiosInstance(originalRequest);
-      } catch (refreshError) {
-        adminRemoveAccessToken()
-        window.location.href = "/admin/login";
-        return Promise.reject(refreshError);
-      }
-    }
-    return Promise.reject(error);
-  }
-);
+//         const newAccessToken = response.data.accessToken;
+//         adminRemoveAccessToken()
+//         // adminSetAceesToken(newAccessToken);
+//         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 
-export default adminAxios
+//         console.log(originalRequest.data);
+
+//         return adminAxiosInstance(originalRequest);
+//       } catch (refreshError) {
+//         adminRemoveAccessToken()
+//         window.location.href = "/admin/login";
+//         return Promise.reject(refreshError);
+//       }
+//     }
+//     return Promise.reject(error);
+//   }
+// );
+
+// export default adminAxios

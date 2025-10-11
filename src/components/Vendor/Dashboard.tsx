@@ -21,7 +21,7 @@ const Dashboard = () => {
 
   return (
     <>
-    kkkkkkkkkkkkkkk
+    Dashboard
     </>
   )
 }

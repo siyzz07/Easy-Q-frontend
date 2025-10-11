@@ -1,54 +1,61 @@
-
-
 import { createSlice } from "@reduxjs/toolkit";
-import { vendorGetAccessToken } from "../Utils/tokenUtils";
+import {
+  decodeToken,
+  getAccessToken,
+  vendorGetAccessToken,
+} from "../Utils/tokenUtils";
 import { act } from "react";
+import type { ITokenDdecode } from "../Shared/types/Types";
 
+const tokenDecode: ITokenDdecode | null = decodeToken();
 
+let token: string | null;
 
-const token:string|null = vendorGetAccessToken()
-
-export interface IVendorState{
-    vendorToken :string|null
-    isAuthenticated :boolean
-    hasShop: boolean;
-    shopData?: any;
- 
+if (tokenDecode) {
+  if (tokenDecode.role === "Vendor") {
+    token = getAccessToken();
+  } else {
+    token = null;
+  }
+} else {
+  token = null;
 }
 
-const initialState:IVendorState = {
-    vendorToken : token?token:null,
-    isAuthenticated:(!!token),  
-    hasShop: false,
-    shopData: undefined,
-   
+export interface IVendorState {
+  vendorToken: string | null;
+  isAuthenticated: boolean;
+  hasShop: boolean;
+  shopData?: any;
 }
 
+const initialState: IVendorState = {
+  vendorToken: token ? token : null,
+  isAuthenticated: !!token,
+  hasShop: false,
+  shopData: undefined,
+};
 
 const vendorSlice = createSlice({
-    name :'vendorSlice',
-    initialState,
-    reducers:{
-        vendorLoginSuccess:(state,action)=>  {
-                state.vendorToken =action.payload
-                state.isAuthenticated=true
-        },
-        vendorLogout :(state) => {
-                state.vendorToken = null
-                state.isAuthenticated = false
-        },
-        shopData :(state,action) =>{
+  name: "vendorSlice",
+  initialState,
+  reducers: {
+    vendorLoginSuccess: (state, action) => {
+      state.vendorToken = action.payload;
+      state.isAuthenticated = true;
+    },
+    vendorLogout: (state) => {
+      state.vendorToken = null;
+      state.isAuthenticated = false;
+    },
+    shopData: (state, action) => {
+      state.shopData = action.payload;
+    },
+    hasShopData: (state, action) => {
+      state.hasShop = action.payload;
+    },
+  },
+});
 
-                state.shopData = action.payload
-        },
-        hasShopData:(state,action)=>{
-
-                state.hasShop = action.payload
-        }
-    }
-
-})
-
-
-export const {vendorLogout,vendorLoginSuccess,shopData,hasShopData} = vendorSlice.actions
-export default vendorSlice.reducer
+export const { vendorLogout, vendorLoginSuccess, shopData, hasShopData } =
+  vendorSlice.actions;
+export default vendorSlice.reducer;
