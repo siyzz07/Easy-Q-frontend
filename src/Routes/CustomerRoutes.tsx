@@ -11,6 +11,8 @@ import ForgotPasswordPage from "../pages/Customer/ForgotPassworPage";
 import ResetPasswordPage from "../pages/Customer/ResetPasswordPage";
 import ProfilePageLayout from "../pages/Customer/Layout/ProfilePageLayout";
 import Profile from "../components/Customer/Profile";
+import ChangePasswordInProfile from "../components/Customer/ChangePasswordInProfile";
+import CustomerAddress from "../components/Customer/CustomerAddress";
 
 const CustomerRoutes = () => {
   return (
@@ -74,15 +76,17 @@ const CustomerRoutes = () => {
           }
         />
 
-
-          <Route path="/profile" element={<ProfilePageLayout/>}>
+{/* //----------------------------------------------------------------------- */}
+          <Route path="profile" element={<ProfilePageLayout/>}>
                 <Route index element ={
                   <Profile/>
                 }/>
+
+
+                <Route path="/profile/security" element={<ChangePasswordInProfile/>} />
+                <Route path = '/profile/customer-address' element ={<CustomerAddress/>} />
           </Route>
-
-
-
+     {/* //----------------------------------------------------------------------- */}
       </Route>
     </Routes>
   );

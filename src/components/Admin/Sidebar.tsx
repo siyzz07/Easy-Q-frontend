@@ -12,7 +12,7 @@ import { NavLink, Route, useLocation, useNavigate } from "react-router-dom";
 import { logoutAdmin } from "../../Services/AdminApiService";
 import { useDispatch } from "react-redux";
 import { adminLogOut } from "../../Redux/AdminAuthSlice";
-import { adminRemoveAccessToken } from "../../Utils/tokenUtils";
+import { adminRemoveAccessToken, removeToken } from "../../Utils/tokenUtils";
 
 
 const Sidebar = () => {
@@ -69,7 +69,7 @@ const Sidebar = () => {
 
       if (response?.status === 200) {
         dispatch(adminLogOut())
-        adminRemoveAccessToken()
+         removeToken()
         
         navigate("/admin/login");
       } else {

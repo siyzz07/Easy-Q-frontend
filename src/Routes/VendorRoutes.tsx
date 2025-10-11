@@ -7,18 +7,20 @@ import LoadingPage from "../pages/Vendor/LodingPage";
 import ShopdataExtra from "../components/Vendor/ShopdataExtra";
 import ShopDataPage from "../pages/Vendor/ShopDataPage";
 import DeleteButton from "../components/Vendor/DeleteButton";
-import Layout from "../components/Vendor/Layout/Layout";
+import Layout from "../pages/Vendor/Layout/Layout";
 import LandingPage from "../pages/Customer/LandingPage";
 import Dashboard from "../components/Vendor/Dashboard";
 // import Services from "../components/Vendor/Services";
 import VendorProtectedRoute from "./ProtectedRoutes/VendorProtectedRoute";
 import VendorPublicRoute from "./PublicRoutes/VendorPublicRoute";
-import { Services } from "../components/Vendor/Services";
+import  Services  from "../components/Vendor/Services";
 import PublicdRoute from "./PublicRoutes/PublicRoute";
 import { VENDOR_ROUTES } from "../Shared/Constants/RouteConstants";
 import ForgotPassword from "../pages/Vendor/ForgotPasswordPage";
 import ResetPasswordForm from "../components/Shared/ResetPasswordForm";
 import ResetPasswordPage from "../pages/Vendor/ResetPasswordPage";
+import ProfilePage from "../pages/Vendor/ProfilePage";
+import ShopImages from "../components/Shared/ShopImages";
 
 const VendorRoutes = () => {
   return (
@@ -101,6 +103,15 @@ const VendorRoutes = () => {
             </VendorProtectedRoute>
           }
         />
+
+          <Route path='profile' element={<ProfilePage/>}>
+          
+                  <Route index element ={<ShopImages/>}/>
+          
+          
+          
+          </Route>
+
       </Route>
 
       {/* <Route path="*" element={<LandingPage />} /> */}

@@ -5,7 +5,7 @@ import { PenLine } from 'lucide-react';
  function Profile() {
   return (
     <div className="rounded-lg border border-gray-400 bg-card p-4 shadow-sm md:p-6">
-      <h2 className="mb-4 text-lg font-semibold text-foreground">User Details</h2>
+      <h2 className="mb-4 font-bold text-xl">Customer Details</h2>
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
@@ -17,7 +17,7 @@ import { PenLine } from 'lucide-react';
             value="ftisa4500"
             readOnly
             disabled
-            className="h-10 w-full rounded-md border-1 border-gray-400 bg-muted px-3 text-sm text-foreground/80 disabled:cursor-not-allowed"
+            className="h-10 w-full rounded-md border-1 border-gray-400 bg-muted px-3 text-sm text-foreground/80 "
           />
         </div>
 
@@ -34,7 +34,19 @@ import { PenLine } from 'lucide-react';
           />
         </div>
 
-        <div className="space-y-2 md:col-span-2">
+        <div className="space-y-2 ">
+          <label htmlFor="phone" className="text-sm font-medium text-foreground">
+            Phone
+          </label>
+          <input
+            id="phone"
+            value="9072284410"
+            readOnly
+            disabled
+            className="h-10 w-full rounded-md border-1 border-gray-400 bg-muted px-3 text-sm text-foreground/80 disabled:cursor-not-allowed"
+          />
+        </div>
+        <div className="space-y-2 ">
           <label htmlFor="phone" className="text-sm font-medium text-foreground">
             Phone
           </label>

@@ -12,6 +12,7 @@ const tokenDecode: ITokenDdecode | null = decodeToken();
 let token: string | null;
 
 if (tokenDecode) {
+  console.log('tokenDecode :>> ', tokenDecode);
   if (tokenDecode.role === "Vendor") {
     token = getAccessToken();
   } else {
@@ -20,6 +21,9 @@ if (tokenDecode) {
 } else {
   token = null;
 }
+
+console.log("---------------",token);
+
 
 export interface IVendorState {
   vendorToken: string | null;

@@ -20,6 +20,8 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+
+
   let location = useLocation();
   let path = location?.pathname.split("/").filter(Boolean);
   const page = path[1]
@@ -124,7 +126,7 @@ const Sidebar = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 mt-4 md:mt-0">
+        {/* <nav className="flex-1 p-4 mt-4 md:mt-0">
           <ul className="space-y-2">
             {items.map((item, index) => (
               <li key={index}>
@@ -142,18 +144,44 @@ const Sidebar = () => {
               </li>
             ))}
           </ul>
-        </nav>
+        </nav> */}
+
+
+        <nav className="flex-1 flex flex-col">
+  <ul className="flex-1 overflow-y-auto p-4 space-y-2">
+    {items.map((item, idx) => (
+      <li key={idx}>
+        <NavLink
+          to={item.route}
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+              isActive
+                ? "bg-slate-700 border-l-4 border-l-blue-500 text-white"
+                : "text-slate-300 hover:bg-slate-700 hover:text-white"
+            }`
+          }
+        >
+          <item.icon size={18} />
+          <span>{item.label}</span>
+        </NavLink>
+      </li>
+    ))}
+  </ul>
+
+  {/* Logout */}
+  <div className="p-4 border-t border-slate-700">
+    <button
+      onClick={submitLogout}
+      className="flex items-center gap-3 px-3 py-2 rounded-lg text-red-700 hover:bg-slate-700 hover:text-white w-full transition-colors"
+    >
+      <LogOut size={18} color="red" />
+      <span>Logout</span>
+    </button>
+  </div>
+</nav>
 
         {/* Logout */}
-        <div className="p-4 border-t border-slate-700">
-          <button
-            onClick={submitLogout}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-red-700 hover:bg-slate-700 hover:text-white transition-colors w-full"
-          >
-            <LogOut size={18} color="red" />
-            <span>Logout</span>
-          </button>
-        </div>
+       
       </div>
 
       {/* Overlay for mobile */}

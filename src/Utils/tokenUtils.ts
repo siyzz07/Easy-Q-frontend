@@ -19,7 +19,7 @@ export const getAccessToken = () => sessionStorage.getItem('Token')
 
 
 //----------- removeToken
-export const removeToken = () => sessionStorage.getItem('Token')
+export const removeToken = () => sessionStorage.removeItem('Token')
 
 
 
