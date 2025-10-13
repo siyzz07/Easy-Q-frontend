@@ -1,26 +1,19 @@
-import React, { useState } from "react";
+
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/Vendor/LoginPage";
 import SignupPage from "../pages/Vendor/SignupPage";
-import OtpPage from "../pages/Vendor/OtpPage";
 import LoadingPage from "../pages/Vendor/LodingPage";
-import ShopdataExtra from "../components/Vendor/ShopdataExtra";
 import ShopDataPage from "../pages/Vendor/ShopDataPage";
-import DeleteButton from "../components/Vendor/DeleteButton";
 import Layout from "../pages/Vendor/Layout/Layout";
-import LandingPage from "../pages/Customer/LandingPage";
 import Dashboard from "../components/Vendor/Dashboard";
 // import Services from "../components/Vendor/Services";
 import VendorProtectedRoute from "./ProtectedRoutes/VendorProtectedRoute";
-import VendorPublicRoute from "./PublicRoutes/VendorPublicRoute";
-import  Services  from "../components/Vendor/Services";
+import Services from "../components/Vendor/Services";
 import PublicdRoute from "./PublicRoutes/PublicRoute";
 import { VENDOR_ROUTES } from "../Shared/Constants/RouteConstants";
 import ForgotPassword from "../pages/Vendor/ForgotPasswordPage";
-import ResetPasswordForm from "../components/Shared/ResetPasswordForm";
 import ResetPasswordPage from "../pages/Vendor/ResetPasswordPage";
 import ProfilePage from "../pages/Vendor/ProfilePage";
-import ShopImages from "../components/Shared/ShopImages";
 
 const VendorRoutes = () => {
   return (
@@ -104,14 +97,14 @@ const VendorRoutes = () => {
           }
         />
 
-          <Route path='profile' element={<ProfilePage/>}>
-          
-                  <Route index element ={<ShopImages/>}/>
-          
-          
-          
-          </Route>
-
+        <Route
+          path={VENDOR_ROUTES.PROFILE}
+          element={
+            <VendorProtectedRoute>
+              <ProfilePage />
+            </VendorProtectedRoute>
+          }
+        />
       </Route>
 
       {/* <Route path="*" element={<LandingPage />} /> */}

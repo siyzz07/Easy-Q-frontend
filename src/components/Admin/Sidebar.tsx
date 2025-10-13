@@ -34,32 +34,32 @@ const Sidebar = () => {
       icon: Store ,
       label: "Vendors",
       path: "Vendors",
-      route: "vendor/dashboard",
+      route: "/admin/vendors",
     },
 
     {
       icon: Users,
       label: "Customers",
       path: "Customers",
-      route: "vendor/dashboard",
+      route: "/admin/customers",
     },
     {
       icon: CreditCard ,
       label: "Payments",
       path: "Payments",
-      route: "vendor/dashboard",
+      route: "/vendor/dashboard",
     },
     {
       icon: Wrench ,
       label: "Services",
       path: "Services",
-      route: "vendor/dashboard",
+      route: "/admin/dashboard",
     },
      {
       icon: TextAlignStart ,
       label: "Recharge plans",
       path: "Recharge-plans",
-      route: "vendor/dashboard",
+      route: "/admin/dashboard",
     },
   ];
 

@@ -67,7 +67,10 @@ export const resetPasword = async(data:{token:string;password:string}) =>{
 
 //---------------------------logout vendor
 export const logoutVendor = async () =>{
-
+    
     const response = await VendorAxiosInstance.post('/logout')
     return response
 }
+
+
+

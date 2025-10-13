@@ -1,27 +1,27 @@
-import type { ReactNode } from "react";
-import type { IVendorState } from "../../Redux/VendorSlice";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import type { IReduxStore } from "../../Shared/types/Types";
+// import type { ReactNode } from "react";
+// import type { IVendorState } from "../../Redux/VendorSlice";
+// import { useSelector } from "react-redux";
+// import { Navigate } from "react-router-dom";
+// import type { IReduxStore } from "../../Shared/types/Types";
 
-interface IVProtectedRoute {
-  children: ReactNode;
-}
-
-// interface IState {
-//   vendorAuth: IVendorState;
+// interface IVProtectedRoute {
+//   children: ReactNode;
 // }
 
-const VendorPublicRoute = ({ children }: IVProtectedRoute) => {
-  const isVendorAuthenticated = useSelector(
-    (state: IReduxStore) => state.vendorSlice.isAuthenticated
-  );
+// // interface IState {
+// //   vendorAuth: IVendorState;
+// // }
 
-  if (isVendorAuthenticated) {
-    return <Navigate to="/vendor" replace />;
-  }
+// const VendorPublicRoute = ({ children }: IVProtectedRoute) => {
+//   const isVendorAuthenticated = useSelector(
+//     (state: IReduxStore) => state.vendorSlice.isAuthenticated
+//   );
 
-  return <>{children}</>;
-};
+//   if (isVendorAuthenticated) {
+//     return <Navigate to="/vendor" replace />;
+//   }
 
-export default VendorPublicRoute
+//   return <>{children}</>;
+// };
+
+// export default VendorPublicRoute

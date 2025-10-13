@@ -28,6 +28,25 @@ interface Coordinates {
   lat: number;
   lng: number;
 }
+
+export interface IVendroShopData{
+  _id?:string
+shopName?: string;
+  email?: string;
+  phone?: string;
+  password?: string;
+  confirmPassword?: string;
+  state?: string;
+  city?: string;
+  shopType?: string;
+  openAt?: any;
+  closeAt?: any;
+  ProfileImage?: any;
+  workingDays?: any;
+  coordinates?: Coordinates;
+}
+
+
 export interface IShopData {
   state: string;
   city: string;
@@ -73,5 +92,22 @@ export interface ITokenDdecode {
 export interface IForgotPassword{
 
   email:string
+
+}
+
+
+interface IAddressCoordinates {
+  lat: any;
+  lng: any;
+}
+
+export interface ICustomerAddress{
+  _id?:string
+  address:string;
+  city:string;
+  state:string;
+  country:string;
+  phone:string;
+  coordinates?:IAddressCoordinates
 
 }

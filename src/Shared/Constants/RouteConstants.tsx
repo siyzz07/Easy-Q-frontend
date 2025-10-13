@@ -8,7 +8,9 @@ export const ADMIN_ROUTES = {
     LOGIN:'/login',
     BASE:'/',
     FORGOT_PASSWORD:'/forogt-password',
-    RESEST_PASSWORD:'/reset-password'
+    RESEST_PASSWORD:'/reset-password',
+    VEDORS_DATA:'/vendors',
+    CUSTOMERS_DATA:'/customers'
 
 }
 
@@ -22,7 +24,10 @@ export const CUSTOMER_ROUTES ={
     EMAIL_VERIFY:'/verify-email',
     BASE:'/',
     FORGOT_PASSWORD:'/forgot-password',
-    RESEST_PASSWORD:'/reset-password'
+    RESEST_PASSWORD:'/reset-password',
+    PROFILE:'profile',
+    CHANGE_PASSWORD_IN_PROFILE:"/profile/security",
+    ADDRESS:'/profile/customer-address'
 
 
 }
@@ -38,6 +43,7 @@ export const VENDOR_ROUTES ={
     BASE:'/',
     SERVICES:'services',
     FORGOT_PASSWORD:'/forgot-password',
-    RESEST_PASSWORD:'/reset-password'
+    RESEST_PASSWORD:'/reset-password',
+    PROFILE:'profile'
 
 }

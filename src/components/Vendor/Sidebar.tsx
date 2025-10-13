@@ -12,7 +12,7 @@ import {
 import { NavLink, Route, useLocation, useNavigate } from "react-router-dom";
 import { boolean } from "yup";
 import { logoutVendor } from "../../Services/VendorApiServices";
-import { vendorRemoveAccessToken } from "../../Utils/tokenUtils";
+import { removeToken, vendorRemoveAccessToken } from "../../Utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import { vendorLogout } from "../../Redux/VendorSlice";
 
@@ -55,7 +55,7 @@ const Sidebar = () => {
       icon: User,
       label: "Profile",
       path: "Profile",
-      route: "vendor/dashboard",
+      route: "/vendor/profile",
     },
   ];
 
@@ -65,7 +65,7 @@ const Sidebar = () => {
 
       if (response?.status === 200) {
         dispatch(vendorLogout());
-        vendorRemoveAccessToken();
+        removeToken()
         navigate("/vendor/login");
       } else {
         console.error("Logout failed:", response);
@@ -155,7 +155,7 @@ const Sidebar = () => {
           to={item.route}
           className={({ isActive }) =>
             `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-              isActive
+              page == item.path
                 ? "bg-slate-700 border-l-4 border-l-blue-500 text-white"
                 : "text-slate-300 hover:bg-slate-700 hover:text-white"
             }`

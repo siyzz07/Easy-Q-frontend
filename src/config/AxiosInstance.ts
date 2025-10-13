@@ -1,12 +1,18 @@
-import axios, { AxiosError, type AxiosResponse, type InternalAxiosRequestConfig } from "axios";
-import { getAccessToken, removeToken, setAccessToken } from "../Utils/tokenUtils";
+import axios, {
+  AxiosError,
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from "axios";
+import {
+  getAccessToken,
+  removeToken,
+  setAccessToken,
+} from "../Utils/tokenUtils";
+import { toast } from "react-toastify";
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
-
-
-
 
 export const axiosInstance = (role: string) => {
   const instance = axios.create({
@@ -23,7 +29,6 @@ export const axiosInstance = (role: string) => {
     },
     (error: AxiosError) => Promise.reject(error)
   );
- 
 
   instance.interceptors.response.use(
     (response: AxiosResponse) => response,
@@ -34,36 +39,40 @@ export const axiosInstance = (role: string) => {
         originalRequest._retry = true;
 
         try {
-          const refreshResponse = await instance.post('/auth/refresh-token');
+          console.log("Access token expired");
+
+          const refreshResponse = await instance.post("/auth/refresh-token");
           const newAccessToken = refreshResponse.data.accessToken;
 
-        //   removeAccessToken(role);
-        //   setAccessToken(role, newAccessToken);
-         removeToken()
-         setAccessToken(newAccessToken)
+          removeToken();
+          setAccessToken(newAccessToken);
 
-          originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return instance(originalRequest);
         } catch (refreshError) {
-        //   removeAccessToken(role);
-        removeToken()
+          console.log("Refresh token error");
+          removeToken();
           window.location.href = `/${role}/login`;
           return Promise.reject(refreshError);
         }
       }
 
+      if (
+        error.response?.status === 403 &&
+        (error.response.data as any)?.message === "Your account is blocked"
+      ) {
+        toast.error("Your account has been blocked by admin.");
+        removeToken();
+        window.location.href = `/${role}/login`;
+      }
+
       return Promise.reject(error);
     }
   );
-  return instance
 
-
+  return instance;
 };
 
-
-
-export  const adminAxiosInstance = axiosInstance('admin')
-export  const VendorAxiosInstance = axiosInstance('vendor')
-export  const CustomerAxiosInstance = axiosInstance('customer')
-
-
+export const adminAxiosInstance = axiosInstance("admin");
+export const VendorAxiosInstance = axiosInstance("vendor");
+export const CustomerAxiosInstance = axiosInstance("customer");

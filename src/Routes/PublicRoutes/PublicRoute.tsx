@@ -18,7 +18,6 @@ const PublicdRoute = ({ children }: IVProtectedRoute) => {
     (state: IReduxStore) => state.vendorSlice.isAuthenticated
   );
 
-  console.log('is :>> ', isAdminAuthenticated,"------",isCustomerAuhenticated,"--------",isVendorAuthenticated);
 
   if (isAdminAuthenticated) {
     return <Navigate to="/admin" replace />;

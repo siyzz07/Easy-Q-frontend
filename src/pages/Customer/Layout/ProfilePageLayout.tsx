@@ -1,19 +1,37 @@
 import React from "react";
 import Navbar from "../../../components/Shared/Navbar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Footer from "../../../components/Shared/Footer";
 import LandingPageBody from "../../../components/Customer/LandingPageBody";
 import ProfileTabs from "../../../components/Customer/ProfileTabs";
 import { LogOut } from "lucide-react";
+import { loginCustomer, logoutCustomer } from "../../../Services/CustomerApiService";
+import { useDispatch } from "react-redux";
+import { customerLogOut } from "../../../Redux/CustomeSlice";
+import { removeToken } from "../../../Utils/tokenUtils";
 
 const ProfilePageLayout = () => {
-  const menuItems = [
-    { label: "Home", path: "/customer" },
-    { label: "Booking", path: "/customer/booking" },
-    { label: "Contract", path: "/customer/contract" },
-    { label: "Favorite", path: "/customer/favorite" },
-    { label: "About", path: "/customer/about" },
-  ];
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+ const submitLogout = async (e: React.FormEvent) => {
+    try {
+      const response = await logoutCustomer()
+
+      if (response?.status === 200) {
+        dispatch(customerLogOut())
+         removeToken()
+        
+        navigate("/customer/login");
+      } else {
+        console.error("Logout failed:", response);
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
+
   return (
     <section className="w-full bg-[#d2e4f0] py-8">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
@@ -45,7 +63,9 @@ const ProfilePageLayout = () => {
               </div>
             </div>
 
-            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors">
+            <button
+              onClick={submitLogout}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors">
               <LogOut size={16} />
               Logout
             </button>

@@ -51,13 +51,14 @@ const CustomerRoutes = () => {
         }
       />
 
-        <Route 
-          path={CUSTOMER_ROUTES.RESEST_PASSWORD}
-          element ={
-            <PublicdRoute>
-              <ResetPasswordPage/>
-            </PublicdRoute>
-          }/>
+      <Route
+        path={CUSTOMER_ROUTES.RESEST_PASSWORD}
+        element={
+          <PublicdRoute>
+            <ResetPasswordPage />
+          </PublicdRoute>
+        }
+      />
 
       <Route
         path={CUSTOMER_ROUTES.BASE}
@@ -76,17 +77,42 @@ const CustomerRoutes = () => {
           }
         />
 
-{/* //----------------------------------------------------------------------- */}
-          <Route path="profile" element={<ProfilePageLayout/>}>
-                <Route index element ={
-                  <Profile/>
-                }/>
+        {/* //----------------------------------------------------------------------- */}
+        <Route
+          path={CUSTOMER_ROUTES.PROFILE}
+          element={
+            <CustomerProtectedRoute>
+              <ProfilePageLayout />
+            </CustomerProtectedRoute>
+          }
+        >
+          <Route
+            index
+            element={
+              <CustomerProtectedRoute>
+                <Profile />
+              </CustomerProtectedRoute>
+            }
+          />
 
-
-                <Route path="/profile/security" element={<ChangePasswordInProfile/>} />
-                <Route path = '/profile/customer-address' element ={<CustomerAddress/>} />
-          </Route>
-     {/* //----------------------------------------------------------------------- */}
+          <Route
+            path={CUSTOMER_ROUTES.CHANGE_PASSWORD_IN_PROFILE}
+            element={
+              <CustomerProtectedRoute>
+                <ChangePasswordInProfile />
+              </CustomerProtectedRoute>
+            }
+          />
+          <Route
+            path={CUSTOMER_ROUTES.ADDRESS}
+            element={
+              <CustomerProtectedRoute>
+                <CustomerAddress />
+              </CustomerProtectedRoute>
+            }
+          />
+        </Route>
+        {/* //----------------------------------------------------------------------- */}
       </Route>
     </Routes>
   );

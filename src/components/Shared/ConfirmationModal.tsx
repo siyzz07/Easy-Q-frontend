@@ -3,24 +3,33 @@ import type { FC } from "react";
 import { X, AlertTriangle } from "lucide-react";
 
 interface IConfirmationModal {
-  submit: () => void;
-  text: string;
+  submit?: (payload?:string) => void;
+  text?: string;
   bg?: string;
-  close: () => void;
-  description: string;
+  close?: () => void;
+  description?: string;
+  payload?:string
   
 }
 
 const ConfirmationModal: FC<IConfirmationModal> = ({
   submit,
   text,
-  bg = "bg-red-600",
   description,
   close,
+  payload,
+  bg = "bg-red-600",
 
 }) => {
   
 
+
+  const handleSubmit = () =>{
+      if(submit) submit(payload)
+        if(close)close()
+
+
+  }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md relative p-6">
@@ -41,7 +50,7 @@ const ConfirmationModal: FC<IConfirmationModal> = ({
           {/* Buttons */}
           <div className="mt-6 flex justify-center gap-4">
             <button
-              onClick={submit}
+              onClick={handleSubmit}
               className={`${bg} text-white px-5 py-2 rounded-lg hover:opacity-90 transition`}
             >
               Yes, Confirm

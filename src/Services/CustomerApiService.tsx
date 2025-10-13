@@ -1,7 +1,7 @@
 
 
 import {  CustomerAxiosInstance } from "../config/AxiosInstance";
-import type { ICustomer, ICustomerLogin } from "../Shared/types/Types";
+import type { ICustomer, ICustomerAddress, ICustomerLogin } from "../Shared/types/Types";
 
 
 
@@ -58,4 +58,55 @@ export const resetCustomerPasword = async(data:{token:string;password:string}) =
             const response = await CustomerAxiosInstance.post('/reset-password',data)
             return response
 
+}
+
+
+//------------------------------------------------------get Customer data
+
+export const getCustomerData = async () =>{
+    
+    const response = await CustomerAxiosInstance.get('/profile/customer-data')
+    return response
+    
+}
+
+
+//------------------------------------------------------add Address
+export const postNewAddress = async (form:ICustomerAddress) =>{
+    
+    const response = await CustomerAxiosInstance.post('/profile/add-address',form)
+    return response
+    
+}
+//------------------------------------------------------add Address
+
+export const deleteCustomerAddress = async (addressId:string) =>{
+
+    const response = await CustomerAxiosInstance.post('/profile/delete-address',{addressId})
+    return response
+
+
+}
+//------------------------------------------------------get all address
+
+export const getAddress = async () =>{
+    
+    const response = await CustomerAxiosInstance.get('/profile/get-address')
+    return response
+    
+}
+
+//------------------------------------------------------edit cusotmer address
+export const editAddress = async (form:ICustomerAddress) =>{
+    
+    const reponse = await CustomerAxiosInstance.post('/profile/edit-address',form)
+    return reponse
+    
+}
+
+//------------------------------------------------------logout
+export const logoutCustomer = async () =>{
+
+    const response = await CustomerAxiosInstance.post('/logout')
+    return response
 }
