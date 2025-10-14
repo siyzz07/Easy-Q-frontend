@@ -8,17 +8,17 @@ function Profile() {
   const [customerData, setCustomerData] = useState<ICustomer | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Fetch data on mount
+
   useEffect(() => {
     getData();
-  }, []);
-
-  // Fetch data when modal closes
-  useEffect(() => {
-    if (!editPopup) {
-      getData();
-    }
   }, [editPopup]);
+
+
+  // useEffect(() => {
+  //   if (!editPopup) {
+  //     getData();
+  //   }
+  // }, [editPopup]);
 
   const getData = async () => {
     setLoading(true);
@@ -93,7 +93,7 @@ function Profile() {
               />
             </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <label htmlFor="altPhone" className="text-sm font-medium text-foreground">
                 Alternate Phone
               </label>
@@ -104,7 +104,7 @@ function Profile() {
                 disabled
                 className="h-10 w-full rounded-md border border-gray-400 bg-muted px-3 text-sm text-foreground/80 disabled:cursor-not-allowed"
               />
-            </div>
+            </div> */}
           </div>
         )}
 
@@ -113,7 +113,7 @@ function Profile() {
             onClick={() => setEditPopup(true)}
             className="inline-flex items-center rounded-md px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 shadow-sm text-white transition hover:opacity-90"
           >
-            UPDATE PROFILE
+            Update Profile
           </button>
         </div>
       </div>

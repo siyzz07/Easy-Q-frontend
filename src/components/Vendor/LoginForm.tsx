@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { FC } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import type { IVendorLogin } from "../../Shared/types/Types";
@@ -156,11 +156,12 @@ const SignupForm: FC = () => {
                   component="div"
                   className="text-red-400 text-sm mt-1"
                 />
-                <div className="text-right mt-2">
-                  <a href="#" className="text-blue-400 text-sm hover:underline">
-                    Forgot Password?
-                  </a>
-                </div>
+               <Link
+                to="/vendor/forgot-password"
+                className="text-blue-400 text-sm hover:underline "
+              >
+                Forgot Password?
+              </Link>
               </div>
 
               <button

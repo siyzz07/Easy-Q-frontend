@@ -4,8 +4,7 @@ import CustomerRoutes from "./Routes/CustomerRoutes";
 import VendorRoutes from "./Routes/VendorRoutes";
 import AdminRoutes from "./Routes/AdminRoutes";
 import LandingPage from "./pages/Customer/LandingPage";
-import VendorPublicRoute from "./Routes/PublicRoutes/VendorPublicRoute";
-import CustomerPublicdRoute from "./Routes/PublicRoutes/CustomerPublicRoute";
+
 import PublicdRoute from "./Routes/PublicRoutes/PublicRoute";
 import { ADMIN_ROUTES, CUSTOMER_ROUTES, VENDOR_ROUTES } from "./Shared/Constants/RouteConstants";
 

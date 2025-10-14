@@ -2,21 +2,23 @@ import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
-  CardFooter,
+
   CardHeader,
-  CardTitle,
+
 } from "../../components/ui/card";
-import { CreditCard } from "lucide-react";
-import { MapPin, Phone, Mail, Clock, Star, Circle, Pencil } from "lucide-react";
-import { Link, Outlet } from "react-router-dom";
+
+import { MapPin, Phone, Mail, Clock, Star, Pencil } from "lucide-react";
+
 import ShopViews from "../../components/Shared/ShopViews";
 import { getShopData } from "../../Services/VendorApiServices";
 import type { IVendor, IVendroShopData } from "../../Shared/types/Types";
 import { AxiosError } from "axios";
-import { shopData, type IVendorState } from "../../Redux/VendorSlice";
+import EditProfileModal from "../../components/Vendor/EditProfileModal";
+// import { shopData, type IVendorState } from "../../Redux/VendorSlice";
 
 const ProfilePage = () => {
   let [vendordata, setVendorData] = useState<IVendroShopData>();
+  let [editShopPoppup,setShopPopup] = useState<boolean>(false)
 
   useEffect(() => {
     getShop();
@@ -60,7 +62,15 @@ const ProfilePage = () => {
     return `${hours12}:${minutes} ${ampm}`;
   }
 
+  let onClose = ()=>setShopPopup(false)
+
   return (
+    <>
+    <div className="overflow-y-auto max-h-screen">
+  {editShopPoppup && (
+    <EditProfileModal onClose={onClose} vendorData={vendordata || {}} />
+  )}
+</div>
     <div className="flex h-screen bg-gray-100">
       <div className="flex-1 flex flex-col">
         <main className="flex-1 p-6 md:p-8 ">
@@ -89,13 +99,13 @@ const ProfilePage = () => {
                       </h1>
 
                       {/* Edit button */}
-                      <Link
-                        to="#"
+                      <button
+                        onClick={()=>setShopPopup(true)}
                         aria-label="Edit profile"
                         className="p-2 rounded-full hover:bg-gray-100 transition"
                       >
                         <Pencil className="w-5 h-5 text-gray-600 hover:text-blue-600" />
-                      </Link>
+                      </button>
                     </div>
 
                     {/* <p className="text-sm text-gray-500 mt-1">
@@ -173,6 +183,7 @@ const ProfilePage = () => {
         </main>
       </div>
     </div>
+      </>
   );
 };
 

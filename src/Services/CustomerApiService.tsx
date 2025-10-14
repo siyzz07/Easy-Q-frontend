@@ -106,7 +106,22 @@ export const editAddress = async (form:ICustomerAddress) =>{
 
 //------------------------------------------------------logout
 export const logoutCustomer = async () =>{
-
+    
     const response = await CustomerAxiosInstance.post('/logout')
     return response
+}
+
+//------------------------------------------------------Edit profile
+export const editProfile = async (form:{name:string;email:string;phone:string}) =>{
+    
+    const response = await CustomerAxiosInstance.post('/profile/edit-profile',form)
+    return response
+}
+
+//------------------------------------------------------change passwordin in profile
+export const changePassword = async (form:{currentPassword:string,password:string}) =>{
+
+    const response = await CustomerAxiosInstance.post('/profile/change-password',form)
+    return response
+
 }

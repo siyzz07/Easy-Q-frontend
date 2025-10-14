@@ -4,7 +4,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Footer from "../../../components/Shared/Footer";
 import LandingPageBody from "../../../components/Customer/LandingPageBody";
 import ProfileTabs from "../../../components/Customer/ProfileTabs";
-import { LogOut } from "lucide-react";
+import { LogOut,User } from "lucide-react";
 import { loginCustomer, logoutCustomer } from "../../../Services/CustomerApiService";
 import { useDispatch } from "react-redux";
 import { customerLogOut } from "../../../Redux/CustomeSlice";
@@ -51,11 +51,13 @@ const ProfilePageLayout = () => {
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 border-b border-gray-100 bg-white">
             <div className="flex items-center gap-4">
               <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-lg">
-                F
+                {/* F */}
+                <User/>
               </div>
               <div>
                 <p className="text-base md:text-lg font-semibold text-gray-800">
-                  Welcome, <span className="text-blue-600">ftisa4500</span> 👋
+                  Welcome, 
+                  {/* <span className="text-blue-600">ftisa4500</span> 👋 */}
                 </p>
                 <p className="text-sm text-gray-500">
                   Manage your account and preferences here

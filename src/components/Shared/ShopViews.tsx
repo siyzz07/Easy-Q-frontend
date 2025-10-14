@@ -72,8 +72,8 @@ const ShopViews = () => {
             </TabsTrigger>
           </TabsList>
 
-          {/* --- Photos Tab --- */}
-          <TabsContent value="photos" className="mt-0 w-full overflow-x-hidden">
+        
+          {/* <TabsContent value="photos" className="mt-0 w-full overflow-x-hidden">
             {PHOTOS.length > 0 ? (
               <div className="grid w-full grid-cols-2 gap-4 p-6 md:grid-cols-4 lg:grid-cols-6 box-border">
                 {PHOTOS.map((p, i) => (
@@ -94,18 +94,17 @@ const ShopViews = () => {
                 No photos uploaded yet.
               </div>
             )}
-          </TabsContent>
+          </TabsContent> */}
 
-          {/* --- Reviews Tab --- */}
-          <TabsContent value="reviews" className="mt-0 w-full overflow-x-hidden">
+          {/* <TabsContent value="reviews" className="mt-0 w-full overflow-x-hidden">
             {REVIEWS.length > 0 ? (
               <div className="p-6 space-y-6">
-                {/* --- Review Summary --- */}
+           
                 <div className="rounded-lg border bg-muted/10 p-5 shadow-sm">
                   <h3 className="text-lg font-semibold mb-3">Overall Ratings</h3>
 
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                    {/* Average rating */}
+               
                     <div className="flex flex-col items-center justify-center text-center min-w-[120px]">
                       <span className="text-4xl font-bold text-primary">{avgRating}</span>
                       <div className="text-yellow-500 text-lg">
@@ -116,7 +115,7 @@ const ShopViews = () => {
                       </p>
                     </div>
 
-                    {/* Star distribution */}
+                  
                     <div className="flex-1 space-y-1">
                       {[5, 4, 3, 2, 1].map((star) => {
                         const count = distribution[star - 1];
@@ -140,7 +139,7 @@ const ShopViews = () => {
                   </div>
                 </div>
 
-                {/* --- Individual Reviews --- */}
+             
                 <div className="flex flex-col gap-4">
                   {REVIEWS.map((r) => (
                     <div
@@ -167,7 +166,7 @@ const ShopViews = () => {
                 No reviews yet.
               </div>
             )}
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </CardContent>
     </Card>
