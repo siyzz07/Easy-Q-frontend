@@ -65,7 +65,7 @@ const Sidebar = () => {
 
       if (response?.status === 200) {
         dispatch(vendorLogout());
-        removeToken()
+        removeToken();
         navigate("/vendor/login");
       } else {
         console.error("Logout failed:", response);

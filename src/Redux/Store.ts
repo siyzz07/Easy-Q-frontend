@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import vendorSlice from './VendorSlice'
-import customerSlice from './CustomeSlice'
-import adminSlice from './AdminAuthSlice'
+import vendorSlice from "./VendorSlice";
+import customerSlice from "./CustomeSlice";
+import adminSlice from "./AdminAuthSlice";
 
 
 
@@ -14,6 +14,6 @@ const Store = configureStore({
         adminSlice:adminSlice
 
     }
-})
+});
 
-export default Store
+export default Store;

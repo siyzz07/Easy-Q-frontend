@@ -11,10 +11,10 @@ const LoadingPage: FC = () => {
 
 const [searchParams] = useSearchParams();
 const token: string | null = searchParams.get("token");
-const navigate = useNavigate()
+const navigate = useNavigate();
 useEffect(() => {
 
-  verify()
+  verify();
 });
 
 
@@ -27,22 +27,22 @@ useEffect(() => {
         if (response){
 
           setTimeout(()=>{
-          navigate ('/customer/login')
-          toast.success(response.data)
-        },3000)
+          navigate ("/customer/login");
+          toast.success(response.data);
+        },3000);
         }
 
       }else{
-        toast.error('Token not found')
-        navigate('/customer/login')
+        toast.error("Token not found");
+        navigate("/customer/login");
       }
 
     } catch (error:any) {
 
       if(error?.response?.data){
-        toast.error(error.response.data)
+        toast.error(error.response.data);
       }
-      navigate('/customer/login')
+      navigate("/customer/login");
 
     }
   };

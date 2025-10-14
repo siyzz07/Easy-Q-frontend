@@ -18,7 +18,7 @@ import EditProfileModal from "../../components/Vendor/EditProfileModal";
 
 const ProfilePage = () => {
   let [vendordata, setVendorData] = useState<IVendroShopData>();
-  let [editShopPoppup,setShopPopup] = useState<boolean>(false)
+  let [editShopPoppup,setShopPopup] = useState<boolean>(false);
 
   useEffect(() => {
     getShop();
@@ -62,7 +62,7 @@ const ProfilePage = () => {
     return `${hours12}:${minutes} ${ampm}`;
   }
 
-  let onClose = ()=>setShopPopup(false)
+  let onClose = ()=>setShopPopup(false);
 
   return (
     <>

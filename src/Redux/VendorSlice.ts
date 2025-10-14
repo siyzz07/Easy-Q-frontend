@@ -12,7 +12,7 @@ const tokenDecode: ITokenDdecode | null = decodeToken();
 let token: string | null;
 
 if (tokenDecode) {
-  console.log('tokenDecode :>> ', tokenDecode);
+  console.log("tokenDecode :>> ", tokenDecode);
   if (tokenDecode.role === "Vendor") {
     token = getAccessToken();
   } else {

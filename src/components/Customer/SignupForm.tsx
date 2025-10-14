@@ -77,16 +77,16 @@ const SignupForm: React.FC = () => {
 
 
       const { confirmPassword, ...payload } = values;
-      const response = await customerSignup(payload) 
+      const response = await customerSignup(payload); 
 
 
       toast.info("Please verify your email. We have sent a verification link to your email address.",{
         autoClose:5000
-      })
+      });
       
 
 
-      navigate('/customer/login')
+      navigate("/customer/login");
 
 
 
@@ -96,9 +96,9 @@ const SignupForm: React.FC = () => {
       console.log(error);
       
         if(error.response.data){
-          toast.error(error.response.data)
+          toast.error(error.response.data);
         }else{
-          toast.error('some error please try later')
+          toast.error("some error please try later");
         }
         
     }

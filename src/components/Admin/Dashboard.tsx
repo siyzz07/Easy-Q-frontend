@@ -11,7 +11,7 @@ const Dashboard = () => {
     <>
     AdminDashboard
     </>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

@@ -1,7 +1,7 @@
 import {
   Plus,
   Edit,
-} from "lucide-react"
+} from "lucide-react";
 
  const Services = () => {
   const services = [
@@ -37,7 +37,7 @@ import {
       description:
         "Professional styling service currently unavailable. Check back soon!",
     },
-  ]
+  ];
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -91,7 +91,7 @@ import {
         </main>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Services
+export default Services;

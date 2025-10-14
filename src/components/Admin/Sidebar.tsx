@@ -17,7 +17,7 @@ import { adminRemoveAccessToken, removeToken } from "../../Utils/tokenUtils";
 
 const Sidebar = () => {
  
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   let location = useLocation();
@@ -65,11 +65,11 @@ const Sidebar = () => {
 
   const submitLogout = async (e: React.FormEvent) => {
     try {
-      const response = await logoutAdmin()
+      const response = await logoutAdmin();
 
       if (response?.status === 200) {
-        dispatch(adminLogOut())
-         removeToken()
+        dispatch(adminLogOut());
+         removeToken();
         
         navigate("/admin/login");
       } else {

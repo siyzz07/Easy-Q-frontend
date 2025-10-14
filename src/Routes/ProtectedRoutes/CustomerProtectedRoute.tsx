@@ -13,15 +13,15 @@ interface IVProtectedRoute {
 
 const CustomerProtectedRoute = ({children}:IVProtectedRoute) =>{
 
-  let isCustomerAuthenticated = useSelector((state:IReduxStore)=> state.customerSlice.isAuthenticated)
+  let isCustomerAuthenticated = useSelector((state:IReduxStore)=> state.customerSlice.isAuthenticated);
     
     
     if(!isCustomerAuthenticated){
-        return <Navigate to='/customer/login' replace />
+        return <Navigate to='/customer/login' replace />;
     }
 
 
-    return <>{children}</>
-}
+    return <>{children}</>;
+};
 
-export default CustomerProtectedRoute
+export default CustomerProtectedRoute;

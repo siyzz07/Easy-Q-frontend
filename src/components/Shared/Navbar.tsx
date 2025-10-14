@@ -8,9 +8,9 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ menu }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const token = getAccessToken()
+  const token = getAccessToken();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -50,7 +50,7 @@ const Navbar: React.FC<NavbarProps> = ({ menu }) => {
               </button>
 
               <div
-              onClick={()=>navigate('profile')}
+              onClick={()=>navigate("profile")}
               className="h-8 w-8 flex items-center justify-center rounded-full bg-gray-400 text-white font-bold">
                 <User/>
               </div>

@@ -1,4 +1,4 @@
-import React from "react";
+
 import type { FC } from "react";
 import LoginForm from "../../components/Customer/LoginForm";
 import Image from "../../components/Shared/Image";

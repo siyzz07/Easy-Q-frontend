@@ -1,7 +1,7 @@
-import React from 'react'
-import Sidebar from '../../../components/Admin/Sidebar'
-import Navbar from '../../../components/Admin/Navbar'
-import { Outlet } from 'react-router-dom'
+import React from "react";
+import Sidebar from "../../../components/Admin/Sidebar";
+import Navbar from "../../../components/Admin/Navbar";
+import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
@@ -13,7 +13,7 @@ const Layout = () => {
       </div>
 
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

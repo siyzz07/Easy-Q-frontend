@@ -51,18 +51,18 @@ const SignupForm: FC = () => {
       if (response.data.accesstoken) {
 
 
-        setAccessToken(response.data.accesstoken)
+        setAccessToken(response.data.accesstoken);
         dispatch(vendorLoginSuccess(response.data.accesstoken));
         if(response.data.data){
 
-          dispatch(shopData(response.data.data))
-          dispatch(hasShopData(response.data.data.hasShop)) 
+          dispatch(shopData(response.data.data));
+          dispatch(hasShopData(response.data.data.hasShop)); 
           
           if(response.data.data.hasShop==true){
    
-            navigate('/vendor')
+            navigate("/vendor");
           }else{
-            navigate('/vendor/shop-data')
+            navigate("/vendor/shop-data");
           }
 
         }
@@ -174,7 +174,7 @@ const SignupForm: FC = () => {
               <button
                 type="button"
                 className="w-full border border-gray-500 text-white hover:bg-slate-700 h-12 text-base font-medium bg-transparent rounded-lg cursor-pointer" 
-                onClick={()=> navigate('/vendor/signup')}
+                onClick={()=> navigate("/vendor/signup")}
               >
                 Create an Account
               </button>

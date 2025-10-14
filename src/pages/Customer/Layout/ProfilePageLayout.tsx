@@ -12,16 +12,16 @@ import { removeToken } from "../../../Utils/tokenUtils";
 
 const ProfilePageLayout = () => {
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
  const submitLogout = async (e: React.FormEvent) => {
     try {
-      const response = await logoutCustomer()
+      const response = await logoutCustomer();
 
       if (response?.status === 200) {
-        dispatch(customerLogOut())
-         removeToken()
+        dispatch(customerLogOut());
+         removeToken();
         
         navigate("/customer/login");
       } else {

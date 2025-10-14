@@ -34,8 +34,8 @@ const CustomerAddress: React.FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [addressId, setAddresId] = useState<any | null>(null);
   const [deletePopup, setDeletePopup] = useState<Boolean>(false);
-  const [editAddress,setEditAddress] = useState<Boolean>(false)
-  const [eachAddres,setEachAddress] =useState<any|null>(null)
+  const [editAddress,setEditAddress] = useState<Boolean>(false);
+  const [eachAddres,setEachAddress] =useState<any|null>(null);
 
   useEffect(() => {
     getAllAddress();
@@ -60,13 +60,13 @@ const CustomerAddress: React.FC = () => {
       if (id) {
         let response = await deleteCustomerAddress(id);
         if(response?.data?.message){
-          toast.success(response.data.message)
+          toast.success(response.data.message);
         }
-        setAddresId(null)
+        setAddresId(null);
       }
     } catch (error: unknown) {
       if(error instanceof AxiosError){
-        console.log('delete address error',error);
+        console.log("delete address error",error);
         
       }
     }
@@ -126,7 +126,7 @@ const CustomerAddress: React.FC = () => {
                     <Edit
                     onClick={()=>{
                       setEditAddress(true),
-                      setEachAddress(data)
+                      setEachAddress(data);
                     }}
                     className="h-5 w-5 text-gray-500 hover:text-blue-600 cursor-pointer" />
                     <Trash

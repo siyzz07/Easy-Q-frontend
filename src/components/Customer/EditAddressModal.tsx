@@ -88,11 +88,11 @@ const EditAddressModal: React.FC<Props> = ({ onClose, data }) => {
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         if(error.response?.data.message){
-            toast.error(error.response.data.message)
-            onClose()
+            toast.error(error.response.data.message);
+            onClose();
         }else{
 
-          onClose()
+          onClose();
           toast.error("Something went wrong");
         }
         console.log(error);

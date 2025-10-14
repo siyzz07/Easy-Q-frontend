@@ -55,7 +55,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({onSubmit}) => {
   };
 
   const handleSubmit = async (values: IResetPassword) => {
-          onSubmit(values.password)
+          onSubmit(values.password);
   };
 
   return (
@@ -137,7 +137,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({onSubmit}) => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={` w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg mt-3 `}
+                className={" w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg mt-3 "}
               >
                 {isSubmitting ? "Submitting..." : "Submit"}
               </button>

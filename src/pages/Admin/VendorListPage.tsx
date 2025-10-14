@@ -12,7 +12,7 @@ import { AxiosError } from "axios";
 
 const VendorListPage = () => {
   let [customerDatas, setCustomerDatas] = useState<ICustomer[] | []>([]);
-  let [update,setUpdate] = useState <boolean>(true)
+  let [update,setUpdate] = useState <boolean>(true);
 
   useEffect(() => {
     vendorData();

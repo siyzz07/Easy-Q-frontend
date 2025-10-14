@@ -18,25 +18,25 @@ interface IVProtectedRoute {
 
 
  const VendorProtectedRoute = ({children}:IVProtectedRoute)=>{
-     const dispatch = useDispatch() 
-     const isVendorAuthenticated = useSelector((state:any)=>state.vendorSlice.isAuthenticated)
+     const dispatch = useDispatch(); 
+     const isVendorAuthenticated = useSelector((state:any)=>state.vendorSlice.isAuthenticated);
     useEffect(()=>{
         const vendorData = async () =>{
 
-             let  response = await getShopData()
+             let  response = await getShopData();
              if(response){
-                dispatch(shopData(response.data.data))
-                dispatch(hasShopData(response.data.data.hasShop))
+                dispatch(shopData(response.data.data));
+                dispatch(hasShopData(response.data.data.hasShop));
              }
               
-        }
+        };
         if(isVendorAuthenticated){
 
-            vendorData()
+            vendorData();
         }
     
 
-    },[])
+    },[]);
 
 
 
@@ -44,18 +44,18 @@ interface IVProtectedRoute {
 
 
     if(!isVendorAuthenticated){
-        return <Navigate to ='/vendor/login' replace/>
+        return <Navigate to ='/vendor/login' replace/>;
     }
 
     
        
-    return <>{children}</>
+    return <>{children}</>;
       
 
 
 
 
 
-}
+};
 
-export default VendorProtectedRoute
+export default VendorProtectedRoute;

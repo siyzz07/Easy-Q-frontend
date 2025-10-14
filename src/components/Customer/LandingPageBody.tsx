@@ -1,6 +1,6 @@
 import React from "react";
 import { CalendarCheck2, BadgeCheck, Search, Clock, ShieldCheck, Smartphone, Users } from "lucide-react";
-import landingImage from '../../assets/landImage.jpg'
+import landingImage from "../../assets/landImage.jpg";
 
 
 

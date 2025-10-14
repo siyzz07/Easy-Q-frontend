@@ -1,4 +1,4 @@
-import React from "react";
+
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import CustomerRoutes from "./Routes/CustomerRoutes";
 import VendorRoutes from "./Routes/VendorRoutes";

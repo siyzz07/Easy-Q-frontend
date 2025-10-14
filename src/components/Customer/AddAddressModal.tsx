@@ -88,7 +88,7 @@ const AddAddressModal: React.FC<Props> = ({ onClose }) => {
           toast.error("Error to add address!");
         }
       }
-      onClose()
+      onClose();
     } finally {
       setSubmitting(false);
     }

@@ -1,7 +1,7 @@
-import React from 'react'
-import LoginForm from '../../components/Admin/LoginForm';
-import image from '../../assets/adimn-login-image.png'
-import Image from '../../components/Shared/Image'
+import React from "react";
+import LoginForm from "../../components/Admin/LoginForm";
+import image from "../../assets/adimn-login-image.png";
+import Image from "../../components/Shared/Image";
 
 const LoginPage = () => {
  return (
@@ -15,6 +15,6 @@ const LoginPage = () => {
       </div>
     </div>
   );
-}
+};
 
-export default LoginPage
+export default LoginPage;

@@ -1,18 +1,18 @@
-import React from 'react'
-import Image from '../../components/Shared/Image'
-import image from '../../assets/customer-login-image.png'
-import ForgotMailForm from '../../components/Shared/ForgotMailForm';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { verificationForResetPassword } from '../../Services/CustomerApiService';
-import { AxiosError } from 'axios';
+import React from "react";
+import Image from "../../components/Shared/Image";
+import image from "../../assets/customer-login-image.png";
+import ForgotMailForm from "../../components/Shared/ForgotMailForm";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { verificationForResetPassword } from "../../Services/CustomerApiService";
+import { AxiosError } from "axios";
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate();
 
   const submit = async (email: string) => {
     try {
-      const response = await verificationForResetPassword(email)
+      const response = await verificationForResetPassword(email);
 
       if (response) {
         toast.info(
@@ -44,7 +44,7 @@ const ForgotPasswordPage = () => {
         <ForgotMailForm onSubmit={submit} style="bg-white" heading='text-black'/>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ForgotPasswordPage
+export default ForgotPasswordPage;

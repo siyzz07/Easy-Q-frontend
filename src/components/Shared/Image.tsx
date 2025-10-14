@@ -1,6 +1,6 @@
-import React, { type FC } from 'react'
-import image from '../../assets/customer-login-image.png'
-import type { IimageProp } from '../../Shared/types/Types'
+import React, { type FC } from "react";
+import image from "../../assets/customer-login-image.png";
+import type { IimageProp } from "../../Shared/types/Types";
 
 const Image :FC<IimageProp> = ({image,style}) => {
   return (
@@ -12,7 +12,7 @@ const Image :FC<IimageProp> = ({image,style}) => {
           className="object-contain max-w-full max-h-full"
         />
       </div>
-  )
-}
+  );
+};
 
-export default Image
+export default Image;

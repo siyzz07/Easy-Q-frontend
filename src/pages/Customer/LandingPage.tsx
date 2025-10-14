@@ -1,24 +1,24 @@
 
-import Navbar from '../../components/Shared/Navbar'
-import Footer from '../../components/Shared/Footer'
-import LandingPageBody from '../../components/Customer/LandingPageBody'
-import { useEffect } from 'react'
-import { customerGetAccessToken, vendorGetAccessToken } from '../../Utils/tokenUtils'
-import { useNavigate } from 'react-router-dom'
+import Navbar from "../../components/Shared/Navbar";
+import Footer from "../../components/Shared/Footer";
+import LandingPageBody from "../../components/Customer/LandingPageBody";
+import { useEffect } from "react";
+import { customerGetAccessToken, vendorGetAccessToken } from "../../Utils/tokenUtils";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
-   const navigate = useNavigate()
+   const navigate = useNavigate();
   useEffect(()=>{
-    let  customerToken = customerGetAccessToken()
-    let vendorToken = vendorGetAccessToken()
+    let  customerToken = customerGetAccessToken();
+    let vendorToken = vendorGetAccessToken();
 
     if(vendorToken || customerToken){
-          navigate('/customer/login')
+          navigate("/customer/login");
     }
 
 
 
-  })
+  });
 
 
 
@@ -39,7 +39,7 @@ const LandingPage = () => {
       </main>
       <Footer/>
     </>
-  )
-}
+  );
+};
 
-export default LandingPage
+export default LandingPage;

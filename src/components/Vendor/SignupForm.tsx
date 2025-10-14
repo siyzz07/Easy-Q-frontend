@@ -239,7 +239,7 @@ const SignupForm: FC = () => {
               <div className="flex justify-end items-center mt-2">
                 <span className="text-sm">Already have an account?</span>
                 <p 
-                  onClick={()=> navigate('/vendor/login')}
+                  onClick={()=> navigate("/vendor/login")}
                 className="text-blue-400 ml-1 text-sm hover:underline cursor-pointer">
                   Login
                 </p>
@@ -248,7 +248,7 @@ const SignupForm: FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={` w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg mt-3 `}
+                className={" w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg mt-3 "}
               >
                 {isSubmitting ? "Submitting..." : "Submit"}
               </button>

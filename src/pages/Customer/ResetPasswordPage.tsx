@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Image from "../../components/Shared/Image";
-import image from '../../assets/customer-login-image.png'
+import image from "../../assets/customer-login-image.png";
 import ResetPasswordForm from "../../components/Shared/ResetPasswordForm";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
@@ -29,7 +29,7 @@ const ResetPasswordPage = () => {
           token: token,
           password: password,
         };
-        const response = await resetCustomerPasword(data)
+        const response = await resetCustomerPasword(data);
         if (response.data.message) {
           toast.success(response.data.message);
           navigate("/customer/login");
