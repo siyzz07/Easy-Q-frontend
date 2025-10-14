@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Bell, Menu, X } from "lucide-react";
-import { customerGetAccessToken } from "../../Utils/tokenUtils";
+import { Link, useNavigate } from "react-router-dom";
+import { Bell, Menu, X,User } from "lucide-react";
+import { customerGetAccessToken, getAccessToken } from "../../Utils/tokenUtils";
 
 interface NavbarProps {
   menu: { label: string; path: string }[];
 }
 
 const Navbar: React.FC<NavbarProps> = ({ menu }) => {
+  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false);
-  const token = customerGetAccessToken()
+  const token = getAccessToken()
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -48,8 +49,10 @@ const Navbar: React.FC<NavbarProps> = ({ menu }) => {
                 <span className="sr-only">Notifications</span>
               </button>
 
-              <div className="h-8 w-8 flex items-center justify-center rounded-full bg-gray-400 text-white font-bold">
-                JD
+              <div
+              onClick={()=>navigate('profile')}
+              className="h-8 w-8 flex items-center justify-center rounded-full bg-gray-400 text-white font-bold">
+                <User/>
               </div>
             </>
           ) : (

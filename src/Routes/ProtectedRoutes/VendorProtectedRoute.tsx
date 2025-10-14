@@ -18,7 +18,8 @@ interface IVProtectedRoute {
 
 
  const VendorProtectedRoute = ({children}:IVProtectedRoute)=>{
-    const dispatch = useDispatch() 
+     const dispatch = useDispatch() 
+     const isVendorAuthenticated = useSelector((state:any)=>state.vendorSlice.isAuthenticated)
     useEffect(()=>{
         const vendorData = async () =>{
 
@@ -29,13 +30,15 @@ interface IVProtectedRoute {
              }
               
         }
-        vendorData()
+        if(isVendorAuthenticated){
+
+            vendorData()
+        }
     
 
     },[])
 
 
-    const isVendorAuthenticated = useSelector((state:any)=>state.vendorSlice.isAuthenticated)
 
 
 

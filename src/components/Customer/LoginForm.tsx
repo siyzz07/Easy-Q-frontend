@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import type { FC } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import type { ICustomerLogin } from "../../Shared/types/Auth";
+import type { ICustomerLogin } from "../../Shared/types/Types";
 import { loginCustomer } from "../../Services/CustomerApiService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { customerSetAceesToken } from "../../Utils/tokenUtils";
+import { setAccessToken } from "../../Utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import { customerLoginSuccess } from "../../Redux/CustomeSlice";
 
@@ -45,7 +45,7 @@ const LoginForm: FC = () => {
     try {
       const response = await loginCustomer(values);
       if (response.data.accesstoken) {
-        customerSetAceesToken(response.data.accesstoken);
+        setAccessToken(response.data.accesstoken);
         dispatch(customerLoginSuccess(response.data.accesstoken));
         navigate("/customer");
       }
@@ -142,11 +142,12 @@ const LoginForm: FC = () => {
                 component="div"
                 className="text-red-500 text-sm mt-1"
               />
-              <div className="text-right mt-2">
-                <a href="#" className="text-blue-400 text-sm hover:underline">
-                  Forgot Password?
-                </a>
-              </div>
+              <Link
+                to="/customer/forgot-password"
+                className="text-blue-400 text-sm hover:underline"
+              >
+                Forgot Password?
+              </Link>
             </div>
 
             {/* Log In Button */}

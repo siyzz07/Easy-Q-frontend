@@ -1,7 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { adminGetAccessToken } from "../Utils/tokenUtils";
+import { adminGetAccessToken, decodeToken, getAccessToken } from "../Utils/tokenUtils";
+import type { ITokenDdecode } from "../Shared/types/Types";
 
-const token = adminGetAccessToken()
+const tokenDecode: ITokenDdecode | null = decodeToken();
+
+let token: string | null;
+
+if (tokenDecode) {
+  if (tokenDecode.role === "Admin") {
+    token = getAccessToken();
+  } else {
+    token = null;
+  }
+} else {
+  token = null;
+}
 
 
 

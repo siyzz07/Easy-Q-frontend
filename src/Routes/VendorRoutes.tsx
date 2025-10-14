@@ -1,49 +1,69 @@
-import React, { useState } from "react";
+
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/Vendor/LoginPage";
 import SignupPage from "../pages/Vendor/SignupPage";
-import OtpPage from "../pages/Vendor/OtpPage";
 import LoadingPage from "../pages/Vendor/LodingPage";
-import ShopdataExtra from "../components/Vendor/ShopdataExtra";
 import ShopDataPage from "../pages/Vendor/ShopDataPage";
-import DeleteButton from "../components/Vendor/DeleteButton";
-import Layout from "../components/Vendor/Layout/Layout";
-import LandingPage from "../pages/Customer/LandingPage";
+import Layout from "../pages/Vendor/Layout/Layout";
 import Dashboard from "../components/Vendor/Dashboard";
-import Services from "../components/Vendor/Services";
+// import Services from "../components/Vendor/Services";
 import VendorProtectedRoute from "./ProtectedRoutes/VendorProtectedRoute";
-import VendorPublicRoute from "./PublicRoutes/VendorPublicRoute";
+import Services from "../components/Vendor/Services";
+import PublicdRoute from "./PublicRoutes/PublicRoute";
+import { VENDOR_ROUTES } from "../Shared/Constants/RouteConstants";
+import ForgotPassword from "../pages/Vendor/ForgotPasswordPage";
+import ResetPasswordPage from "../pages/Vendor/ResetPasswordPage";
+import ProfilePage from "../pages/Vendor/ProfilePage";
 
 const VendorRoutes = () => {
   return (
     <Routes>
       <Route
-        path="/login"
+        path={VENDOR_ROUTES.LOGIN}
         element={
-          <VendorPublicRoute>
+          <PublicdRoute>
             <LoginPage />
-          </VendorPublicRoute>
+          </PublicdRoute>
         }
       />
       <Route
-        path="/signup"
+        path={VENDOR_ROUTES.SIGNUP}
         element={
-          <VendorPublicRoute>
+          <PublicdRoute>
             <SignupPage />
-          </VendorPublicRoute>
+          </PublicdRoute>
         }
       />
 
       <Route
-        path="/verify-email"
+        path={VENDOR_ROUTES.EMAIL_VERIFY}
         element={
-          <VendorPublicRoute>
+          <PublicdRoute>
             <LoadingPage />
-          </VendorPublicRoute>
+          </PublicdRoute>
         }
       />
+
       <Route
-        path="/shop-data"
+        path={VENDOR_ROUTES.FORGOT_PASSWORD}
+        element={
+          <PublicdRoute>
+            <ForgotPassword />
+          </PublicdRoute>
+        }
+      />
+
+      <Route
+        path={VENDOR_ROUTES.RESEST_PASSWORD}
+        element={
+          <PublicdRoute>
+            <ResetPasswordPage />
+          </PublicdRoute>
+        }
+      />
+
+      <Route
+        path={VENDOR_ROUTES.SHOP_DATA}
         element={
           <VendorProtectedRoute>
             <ShopDataPage />
@@ -52,7 +72,7 @@ const VendorRoutes = () => {
       />
 
       <Route
-        path="/"
+        path={VENDOR_ROUTES.BASE}
         element={
           <VendorProtectedRoute>
             <Layout />
@@ -69,10 +89,19 @@ const VendorRoutes = () => {
         />
 
         <Route
-          path="services"
+          path={VENDOR_ROUTES.SERVICES}
           element={
             <VendorProtectedRoute>
               <Services />
+            </VendorProtectedRoute>
+          }
+        />
+
+        <Route
+          path={VENDOR_ROUTES.PROFILE}
+          element={
+            <VendorProtectedRoute>
+              <ProfilePage />
             </VendorProtectedRoute>
           }
         />

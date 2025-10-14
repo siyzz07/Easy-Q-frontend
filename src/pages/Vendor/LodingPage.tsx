@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import type { FC } from "react";
 import Image from "../../components/Shared/Image";
 import image from "../../assets/vendor-login-image.png";
@@ -9,47 +9,39 @@ import { toast } from "react-toastify";
 import { addVendor } from "../../Services/VendorApiServices";
 
 const LoadingPage: FC = () => {
-
-const [searchParams] = useSearchParams();
-const token: string | null = searchParams.get("token");
-const navigate = useNavigate()
-useEffect(() => {
-
-  verify()
-},[]);
-
-
+  const [searchParams] = useSearchParams();
+  const token: string | null = searchParams.get("token");
+  const navigate = useNavigate();
+  let send = useRef(false);
+  useEffect(() => {
+    if (send.current == false) {
+      verify();
+    }
+    send.current = true;
+  }, []);
 
   const verify = async () => {
     try {
       if (token != null) {
-  
-        const response = await addVendor(token)
-        
-        if (response){
+        const response = await addVendor(token);
 
-          setTimeout(()=>{
-          navigate ('/vendor/login')
-          toast.success(response.data)
-        },3000)
+        if (response) {
+          setTimeout(() => {
+            navigate("/vendor/login");
+            toast.success(response.data);
+          }, 3000);
         }
-
-      }else{
-        toast.error('Token not found')
-        navigate('/vendor/login')
+      } else {
+        toast.error("Token not found");
+        navigate("/vendor/login");
       }
-
-    } catch (error:any) {
-
-      if(error?.response?.data){
-        toast.error(error.response.data)
+    } catch (error: any) {
+      if (error?.response?.data) {
+        toast.error(error.response.data);
       }
-      navigate('/vendor/login')
-
+      navigate("/vendor/login");
     }
   };
-
-
 
   return (
     <div className="min-h-screen  flex">
@@ -62,7 +54,6 @@ useEffect(() => {
       <div className="flex-1  bg-slate-800">
         <LoadingVerify style="#ffffff" />
       </div>
-       
     </div>
   );
 };

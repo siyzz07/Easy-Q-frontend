@@ -12,7 +12,7 @@ import { NavLink, Route, useLocation, useNavigate } from "react-router-dom";
 import { logoutAdmin } from "../../Services/AdminApiService";
 import { useDispatch } from "react-redux";
 import { adminLogOut } from "../../Redux/AdminAuthSlice";
-import { adminRemoveAccessToken } from "../../Utils/tokenUtils";
+import { adminRemoveAccessToken, removeToken } from "../../Utils/tokenUtils";
 
 
 const Sidebar = () => {
@@ -34,32 +34,32 @@ const Sidebar = () => {
       icon: Store ,
       label: "Vendors",
       path: "Vendors",
-      route: "vendor/dashboard",
+      route: "/admin/vendors",
     },
 
     {
       icon: Users,
       label: "Customers",
       path: "Customers",
-      route: "vendor/dashboard",
+      route: "/admin/customers",
     },
     {
       icon: CreditCard ,
       label: "Payments",
       path: "Payments",
-      route: "vendor/dashboard",
+      route: "/vendor/dashboard",
     },
     {
       icon: Wrench ,
       label: "Services",
       path: "Services",
-      route: "vendor/dashboard",
+      route: "/admin/dashboard",
     },
      {
       icon: TextAlignStart ,
       label: "Recharge plans",
       path: "Recharge-plans",
-      route: "vendor/dashboard",
+      route: "/admin/dashboard",
     },
   ];
 
@@ -69,7 +69,8 @@ const Sidebar = () => {
 
       if (response?.status === 200) {
         dispatch(adminLogOut())
-        adminRemoveAccessToken()
+         removeToken()
+        
         navigate("/admin/login");
       } else {
         console.error("Logout failed:", response);

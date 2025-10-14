@@ -1,6 +1,6 @@
 import {  type ReactNode } from "react";
 import { useSelector } from "react-redux";
-import type { IReduxStore } from "../../Shared/types/Auth";
+import type { IReduxStore } from "../../Shared/types/Types";
 import { Navigate } from "react-router-dom";
 
 

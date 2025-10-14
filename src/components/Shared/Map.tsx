@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { FC } from "react";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import type { Imap } from "../../Shared/types/Auth";
+import type { Imap } from "../../Shared/types/Types";
 import { MapPin } from "lucide-react";
 
 const containerStyle = { width: "100%", height: "400px" };

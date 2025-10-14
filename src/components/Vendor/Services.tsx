@@ -3,7 +3,7 @@ import {
   Edit,
 } from "lucide-react"
 
-export default function Services() {
+ const Services = () => {
   const services = [
     {
       name: "Classic Haircut",
@@ -93,3 +93,5 @@ export default function Services() {
     </div>
   )
 }
+
+export default Services

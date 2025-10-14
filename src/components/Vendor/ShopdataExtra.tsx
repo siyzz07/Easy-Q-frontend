@@ -5,7 +5,7 @@ import DeleteButton from "./DeleteButton";
 import Map from "../Shared/Map";
 import { addShopData } from "../../Services/VendorApiServices";
 import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
-import type { IShopData, IVendor } from "../../Shared/types/Auth";
+import type { IShopData, IVendor } from "../../Shared/types/Types";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -34,76 +34,125 @@ const ShopdataExtra = () => {
   };
 
   const validationSchema = Yup.object({
-  state: Yup.string()
-    .required("State is required")
-    .matches(/^[A-Za-z\s]+$/, "State can only contain letters")
-    .test("not-empty", "State cannot be just spaces", (val) => val?.trim().length > 0),
+    state: Yup.string()
+      .required("State is required")
+      .matches(
+        /^(?!.*\s{2,})[A-Za-z\s]+$/,
+        "State can only contain letters and single spaces"
+      )
+      .test(
+        "not-empty",
+        "State cannot be just spaces",
+        (val) => val?.trim().length > 0
+      )
+      .test(
+        "no-repeated-letters",
+        "State cannot contain the same letter repeated only",
+        (val) => {
+          if (!val) return false;
+          const trimmed = val.replace(/\s/g, "");
+          return !/^([A-Za-z])\1+$/.test(trimmed);
+        }
+      ),
 
-  city: Yup.string()
-    .required("City is required")
-    .matches(/^[A-Za-z\s]+$/, "City can only contain letters")
-    .test("not-empty", "City cannot be just spaces", (val) => val?.trim().length > 0),
+    city: Yup.string()
+      .required("City is required")
+      .matches(
+        /^(?!.*\s{2,})[A-Za-z\s]+$/,
+        "City can only contain letters and single spaces"
+      )
+      .test(
+        "not-empty",
+        "City cannot be just spaces",
+        (val) => val?.trim().length > 0
+      )
+      .test(
+        "no-repeated-letters",
+        "City cannot contain the same letter repeated only",
+        (val) => {
+          if (!val) return false;
+          const trimmed = val.replace(/\s/g, "");
+          return !/^([A-Za-z])\1+$/.test(trimmed);
+        }
+      ),
 
-  shopType: Yup.string()
-    .required("Shop type is required")
-    .matches(/^[A-Za-z\s]+$/, "Shop type can only contain letters")
-    .test("not-empty", "Shop type cannot be just spaces", (val) => val?.trim().length > 0),
+    shopType: Yup.string()
+      .required("Shop type is required")
+      .matches(/^[A-Za-z\s]+$/, "Shop type can only contain letters")
+      .test(
+        "not-empty",
+        "Shop type cannot be just spaces",
+        (val) => val?.trim().length > 0
+      ),
 
-  openAt: Yup.string()
-    .required("Opening time is required")
-    .matches(
-      /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-      "Opening time must be in HH:MM format"
-    ),
+    openAt: Yup.string()
+      .required("Opening time is required")
+      .matches(
+        /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+        "Opening time must be in HH:MM format"
+      ),
 
-  closeAt: Yup.string()
-    .required("Closing time is required")
-    .matches(
-      /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-      "Closing time must be in HH:MM format"
-    )
-    .test(
-      "after-open",
-      "Closing time must be after opening time",
-      function (value) {
-        const { openAt } = this.parent;
-        if (!openAt || !value) return true;
-        return value > openAt;
-      }
-    ),
+    closeAt: Yup.string()
+      .required("Closing time is required")
+      .matches(
+        /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+        "Closing time must be in HH:MM format"
+      )
+      .test(
+        "after-open",
+        "Closing time must be after opening time",
+        function (value) {
+          const { openAt } = this.parent;
+          if (!openAt || !value) return true;
+          return value > openAt;
+        }
+      ),
 
-  ProfileImage: Yup.mixed()
-    .required("Image is required")
-    .test(
-      "fileSize",
-      "Image size must be less than 4MB",
-      (file:any) => !file || (file && file.size <= 4 * 1024 * 1024)
-    )
-    .test(
-      "fileType",
-      "Only JPG, JPEG, and PNG formats are allowed",
-      (file :any) =>
-        !file ||
-        (file &&
-          ["image/jpeg", "image/png", "image/jpg"].includes(file.type))
-    ),
+    ProfileImage: Yup.mixed()
+      .required("Image is required")
+      .test(
+        "fileSize",
+        "Image size must be less than 4MB",
+        (file: any) => !file || (file && file.size <= 4 * 1024 * 1024)
+      )
+      .test(
+        "fileType",
+        "Only JPG, JPEG, and PNG formats are allowed",
+        (file: any) =>
+          !file ||
+          (file &&
+            [
+              "image/jpeg",
+              "image/png",
+              "image/jpg",
+              "image/webp",
+              "image/gif",
+              "image/bmp",
+              "image/tiff",
+              "image/svg+xml",
+              "image/x-icon",
+              "image/heic",
+              "image/heif",
+              "image/avif",
+            ].includes(file.type))
+      ),
 
-  workingDays: Yup.array()
-    .of(Yup.string().oneOf(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]))
-    .min(1, "Select at least one working day")
-    .required("Working days are required"),
+    workingDays: Yup.array()
+      .of(Yup.string().oneOf(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]))
+      .min(1, "Select at least one working day")
+      .required("Working days are required"),
 
-  coordinates: Yup.object().shape({
-    lat: Yup.number()
-      .required("Latitude is required")
-      .min(-90, "Latitude must be between -90 and 90")
-      .max(90, "Latitude must be between -90 and 90"),
-    lng: Yup.number()
-      .required("Longitude is required")
-      .min(-180, "Longitude must be between -180 and 180")
-      .max(180, "Longitude must be between -180 and 180"),
-  }),
-});
+    coordinates: Yup.object().shape({
+      lat: Yup.number()
+        .required("Latitude is required")
+        .min(-90, "Latitude must be between -90 and 90")
+        .max(90, "Latitude must be between -90 and 90"),
+      lng: Yup.number()
+        .required("Longitude is required")
+        .min(-180, "Longitude must be between -180 and 180")
+        .max(180, "Longitude must be between -180 and 180"),
+    }),
+  });
   const handleSubmit = async (values: typeof initialValues) => {
     try {
       const imageUrl = values.ProfileImage
@@ -233,7 +282,9 @@ const ShopdataExtra = () => {
                         <option value="">Select type</option>
                         <option value="grocery">Grocery</option>
                         <option value="cafe">Cafe</option>
+                        <option value="saloon">saloon</option>
                         <option value="pharmacy">Pharmacy</option>
+                        <option value="servicecenter">Service center</option>
                       </Field>
                       <ErrorMessage
                         name="shopType"

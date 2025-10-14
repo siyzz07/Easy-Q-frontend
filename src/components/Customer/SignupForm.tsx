@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Eye, EyeOff, Palette } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import type { ICustomer } from "../../Shared/types/Auth";
+import type { ICustomer } from "../../Shared/types/Types";
 import * as Yup from "yup";
 import { customerSignup } from "../../Services/CustomerApiService";
 import { toast } from "react-toastify";
