@@ -1,4 +1,4 @@
-import React from "react";
+
 import Image from "../../components/Shared/Image";
 import image from "../../assets/customer-login-image.png";
 

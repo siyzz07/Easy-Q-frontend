@@ -376,7 +376,7 @@ const ShopdataExtra = () => {
 
                     <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
                       <DeleteButton
-                        onDelete={() => console.log("Shop deleted")}
+                        onDelete={() => console.log()}
                       />
                       <button
                         type="submit"
