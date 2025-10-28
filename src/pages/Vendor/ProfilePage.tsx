@@ -43,7 +43,7 @@ const ProfilePage = () => {
     let workingDays: string[];
     try {
       workingDays = JSON.parse(workingDaysStr);
-    } catch {
+    } catch { 
       return false;
     }
 

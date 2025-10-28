@@ -3,9 +3,13 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import DeleteButton from "./DeleteButton";
 import Map from "../Shared/Map";
-import { addShopData } from "../../Services/VendorApiServices";
+import { addShopData, getShopType } from "../../Services/VendorApiServices";
 import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
-import type { IShopData, IVendor } from "../../Shared/types/Types";
+import type {
+  IServiceVendorTypes,
+  IShopData,
+  IVendor,
+} from "../../Shared/types/Types";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -13,7 +17,10 @@ import { useSelector } from "react-redux";
 const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const ShopdataExtra = () => {
+  useEffect(() => {}, []);
+
   let navigate = useNavigate();
+  const [vendorTypes, setVendorType] = useState<IServiceVendorTypes[] | []>([]);
 
   let hasShop = useSelector((state: any) => state.vendorSlice.hasShop);
   useEffect(() => {
@@ -21,6 +28,21 @@ const ShopdataExtra = () => {
       navigate("/vendor");
     }
   });
+
+  useEffect(() => {
+    getServices();
+  }, []);
+
+  const getServices = async () => {
+    try {
+      let response = await getShopType();
+      if (response?.data.data) {
+        setVendorType(response.data.data);
+      }
+    } catch (error: unknown) {
+      console.log("error to fetch the vendor types");
+    }
+  };
 
   const initialValues: IShopData = {
     state: "",
@@ -78,7 +100,6 @@ const ShopdataExtra = () => {
 
     shopType: Yup.string()
       .required("Shop type is required")
-      .matches(/^[A-Za-z\s]+$/, "Shop type can only contain letters")
       .test(
         "not-empty",
         "Shop type cannot be just spaces",
@@ -272,20 +293,23 @@ const ShopdataExtra = () => {
                   <div className="space-y-6">
                     <div className="flex flex-col">
                       <label className="text-sm font-medium text-gray-700">
-                        Shop Type
+                        Shop Type<span className="text-red-500">*</span>
                       </label>
+
                       <Field
                         as="select"
                         name="shopType"
                         className="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">Select type</option>
-                        <option value="grocery">Grocery</option>
-                        <option value="cafe">Cafe</option>
-                        <option value="saloon">saloon</option>
-                        <option value="pharmacy">Pharmacy</option>
-                        <option value="servicecenter">Service center</option>
+
+                        {vendorTypes.map((type:IServiceVendorTypes) => (
+                          <option key={type._id} value={type._id}>
+                            {type.serviceName}
+                          </option>
+                        ))}
                       </Field>
+
                       <ErrorMessage
                         name="shopType"
                         component="div"
@@ -375,9 +399,9 @@ const ShopdataExtra = () => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
-                      <DeleteButton
+                      {/* <DeleteButton
                         onDelete={() => console.log()}
-                      />
+                      /> */}
                       <button
                         type="submit"
                         className="flex-1 rounded-xl border-2 border-blue-500 bg-blue-500 text-white py-2 font-semibold hover:opacity-90 transition"

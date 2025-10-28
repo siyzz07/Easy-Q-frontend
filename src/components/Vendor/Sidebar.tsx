@@ -21,7 +21,6 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
-
   let location = useLocation();
   let path = location?.pathname.split("/").filter(Boolean);
   const page = path[1]
@@ -38,7 +37,7 @@ const Sidebar = () => {
       path: "Payments",
       route: "vendor/dashboard",
     },
-    { icon: Users, label: "Staffs", path: "Staffs", route: "vendor/dashboard" },
+    { icon: Users, label: "Staffs", path: "Staffs", route: "/vendor/staffs" },
     {
       icon: Briefcase,
       label: "Works",
@@ -146,42 +145,40 @@ const Sidebar = () => {
           </ul>
         </nav> */}
 
-
         <nav className="flex-1 flex flex-col">
-  <ul className="flex-1 overflow-y-auto p-4 space-y-2">
-    {items.map((item, idx) => (
-      <li key={idx}>
-        <NavLink
-          to={item.route}
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-              page == item.path
-                ? "bg-slate-700 border-l-4 border-l-blue-500 text-white"
-                : "text-slate-300 hover:bg-slate-700 hover:text-white"
-            }`
-          }
-        >
-          <item.icon size={18} />
-          <span>{item.label}</span>
-        </NavLink>
-      </li>
-    ))}
-  </ul>
+          <ul className="flex-1 overflow-y-auto p-4 space-y-2">
+            {items.map((item, idx) => (
+              <li key={idx}>
+                <NavLink
+                  to={item.route}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                      page == item.path
+                        ? "bg-slate-700 border-l-4 border-l-blue-500 text-white"
+                        : "text-slate-300 hover:bg-slate-700 hover:text-white"
+                    }`
+                  }
+                >
+                  <item.icon size={18} />
+                  <span>{item.label}</span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
 
-  {/* Logout */}
-  <div className="p-4 border-t border-slate-700">
-    <button
-      onClick={submitLogout}
-      className="flex items-center gap-3 px-3 py-2 rounded-lg text-red-700 hover:bg-slate-700 hover:text-white w-full transition-colors"
-    >
-      <LogOut size={18} color="red" />
-      <span>Logout</span>
-    </button>
-  </div>
-</nav>
+          {/* Logout */}
+          <div className="p-4 border-t border-slate-700">
+            <button
+              onClick={submitLogout}
+              className="flex items-center gap-3 px-3 py-2 rounded-lg text-red-700 hover:bg-slate-700 hover:text-white w-full transition-colors"
+            >
+              <LogOut size={18} color="red" />
+              <span>Logout</span>
+            </button>
+          </div>
+        </nav>
 
         {/* Logout */}
-       
       </div>
 
       {/* Overlay for mobile */}

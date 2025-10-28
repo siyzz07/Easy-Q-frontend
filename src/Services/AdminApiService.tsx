@@ -1,4 +1,5 @@
 import {  adminAxiosInstance } from "../config/AxiosInstance";
+import type { IServiceVendorTypes } from "../Shared/types/Types";
 
 
 
@@ -52,3 +53,60 @@ export const blockVendor= async(id:string) =>{
     
     
 };
+
+
+//--------------------------------------------------------------get service types
+export const getServiceTypes = async() =>{
+    
+    const response = await adminAxiosInstance.get('service/get-services')
+    return response
+}
+
+
+//--------------------------------------------------------------add service types
+export const addServiceType = async (form:{serviceName:string;description:string}) =>{
+    
+    const response = await adminAxiosInstance.post("service/add-service",form)
+    return response
+    
+}
+
+//--------------------------------------------------------------edit service types
+export const editServiceType = async (form:IServiceVendorTypes) =>{
+    const response = await adminAxiosInstance.put('/service/edit-service',form)
+    
+   return  response
+}
+
+
+
+//--------------------------------------------------------------show vendors request
+export const vendorsRequests = async () =>{
+    
+    const response = await adminAxiosInstance.get('/data/vendors-request')
+    return response
+}
+
+//--------------------------------------------------------------vendors request reject
+export const vendrRequestReject = async(id:string) =>{
+    const response = await adminAxiosInstance.post('/data/reject-vendor',{id})
+    return response
+}
+//--------------------------------------------------------------vendors request verified
+export const vendrRequestVerified = async(id:string) =>{
+    const response = await adminAxiosInstance.post('/data/verified-vendor',{id})
+    return response
+}
+
+/**
+ * dashboared api
+ * 
+*/
+
+//-------------------------------------------------------------- get admin dashboard data
+export const adminDashbordData = async () =>{
+
+    const response = await adminAxiosInstance.get('/admin-dashboard')
+    return response
+
+}

@@ -1,4 +1,3 @@
-
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/Admin/LoginPage";
 import Layout from "../pages/Admin/Layout/Layout";
@@ -8,6 +7,9 @@ import PublicdRoute from "./PublicRoutes/PublicRoute";
 import { ADMIN_ROUTES } from "../Shared/Constants/RouteConstants";
 import CustomerList from "../pages/Admin/CustomerListPage";
 import VendorListPage from "../pages/Admin/VendorListPage";
+import ServicesPage from "../pages/Admin/VendorServicesTypePage";
+import VendorRequest from "../pages/Admin/VendorRequest";
+import DashboardAdmin from "../pages/Admin/DashboardAdmin";
 
 const AdminRoutes = () => {
   return (
@@ -33,7 +35,7 @@ const AdminRoutes = () => {
           index
           element={
             <AdminProtectedRoute>
-              <Dashboard />
+              <DashboardAdmin/>
             </AdminProtectedRoute>
           }
         />
@@ -52,6 +54,20 @@ const AdminRoutes = () => {
           element={
             <AdminProtectedRoute>
               <VendorListPage />
+            </AdminProtectedRoute>
+          }
+        />
+
+        <Route path="verification-requests"
+        element ={
+          <VendorRequest/>
+        }/>
+
+        <Route
+          path="/services"
+          element={
+            <AdminProtectedRoute>
+              <ServicesPage />
             </AdminProtectedRoute>
           }
         />

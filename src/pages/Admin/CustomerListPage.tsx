@@ -26,6 +26,8 @@ const CustomerList = () => {
   const customerData = async () => {
     try {
       let response = await getCustomersData();
+      console.log(response);
+      
       if (response?.data?.data) {
         setCustomerDatas(response.data.data);
       }

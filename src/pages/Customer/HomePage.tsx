@@ -10,26 +10,32 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchShops = async () => {
-      try {
-        const response = await getShopsData();
-
-        setShops(response.data.data || []);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
+    
     fetchShops();
   }, []);
+  
+  
+  
+  const fetchShops = async () => {
+    try {
+      const response = await getShopsData();
 
+      setShops(response.data.data || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  
+  
   return (
-    <main className="min-h-screen bg-[#EFF6FF] py-6 px-4">
+    <main className="min-h-screen bg-[#EFF6FF] py-5 px-4">
       {/* Top Search Bar */}
-      <section className="bg-white shadow rounded-xl shadow-gray-200 p-7 max-w-7xl mx-auto flex flex-col md:flex-row gap-5 items-center">
-        <div className="relative w-full md:w-1/2">
+      <section className="bg-white shadow rounded-xl justify-center shadow-gray-200 p-5 max-w-8xl mx-auto flex flex-col md:flex-row gap-5 items-center">
+        <div className="relative w-full md:w-1/3">
           <Search
             className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400"
             size={16}
@@ -42,7 +48,7 @@ const HomePage = () => {
           />
         </div>
 
-        <div className="relative w-full md:w-1/2">
+        <div className="relative w-full md:w-1/3">
           <MapPin
             className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400"
             size={16}
@@ -61,7 +67,7 @@ const HomePage = () => {
       </section>
 
       {/* Main Content Area */}
-      <section className="mt-6 max-w-7xl mx-auto grid md:grid-cols-[260px_1fr] gap-4">
+      <section className="mt-6 max-w-8xl mx-auto grid md:grid-cols-[260px_1fr] gap-4">
         <aside>
           <Filter />
         </aside>
@@ -72,9 +78,9 @@ const HomePage = () => {
           ) : shops.length === 0 ? (
             <p>No shops found</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {shops.map((shop) => (
-                <ShopDataCard key={shop.email} shopData={shop} />
+                <ShopDataCard key={shop.email} shopData={shop}  />
               ))}
             </div>
           )}

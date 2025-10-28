@@ -22,6 +22,7 @@ export interface IVendor {
   phone: string;
   password: string;
   confirmPassword?: string;
+  proofImage:string
 }
 
 interface Coordinates {
@@ -31,7 +32,7 @@ interface Coordinates {
 
 export interface IVendroShopData{
   _id?:string
-shopName?: string;
+  shopName?: string;
   email?: string;
   phone?: string;
   password?: string;
@@ -41,9 +42,11 @@ shopName?: string;
   shopType?: string;
   openAt?: any;
   closeAt?: any;
+  proofImage?:any;
   ProfileImage?: any;
   workingDays?: any;
   coordinates?: Coordinates;
+  isVerified?:"pending" | "verified" | "rejected"; 
 }
 
 
@@ -110,4 +113,38 @@ export interface ICustomerAddress{
   phone:string;
   coordinates?:IAddressCoordinates
 
+}
+
+
+export interface IServiceVendorTypes{
+  _id?:string;
+  serviceName:string;
+  description:string;
+  isActive:string
+}
+
+export interface IStaff {
+  _id?: string;
+  shopName?:string
+  staffName: string;
+  openingTime: string;
+  closingTime: string;
+  breakStartTime: string;
+  breakEndTime: string;
+  isActive?: boolean;
+  bookingBlocks?: string[];
+}
+
+
+
+export interface IService {
+  _id?:string;
+  shopName?:string;
+  serviceName:string;
+  description:string;
+  duration:number|string;
+  image:string|File|null
+  availableStaff:string[]
+  isActive?:boolean;
+  price:number|string
 }

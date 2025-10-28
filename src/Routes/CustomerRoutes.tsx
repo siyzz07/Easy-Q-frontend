@@ -13,6 +13,7 @@ import ProfilePageLayout from "../pages/Customer/Layout/ProfilePageLayout";
 import Profile from "../components/Customer/Profile";
 import ChangePasswordInProfile from "../components/Customer/ChangePasswordInProfile";
 import CustomerAddress from "../components/Customer/CustomerAddress";
+import ViewServicesPage from "../pages/Customer/ViewServicesPage";
 
 const CustomerRoutes = () => {
   return (
@@ -77,7 +78,16 @@ const CustomerRoutes = () => {
           }
         />
 
-        {/* //----------------------------------------------------------------------- */}
+        <Route
+          path={CUSTOMER_ROUTES.SHOP_SERVICES}
+    
+          element={
+            <CustomerProtectedRoute>
+              <ViewServicesPage/>
+            </CustomerProtectedRoute>
+          }/>
+
+        {/* //----------------------------------------------- profile ------------------------ */}
         <Route
           path={CUSTOMER_ROUTES.PROFILE}
           element={

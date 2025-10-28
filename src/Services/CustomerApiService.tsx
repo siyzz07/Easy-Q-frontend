@@ -38,11 +38,22 @@ return response;
 //---------------------------------------------------- get shop Data
 
 export const getShopsData = async () =>{
-
+    
     const response = await CustomerAxiosInstance.get("/shops-data");
-    return response;
+    return response; 
 };
 
+//---------------------------------------------------- get each shop data
+export const getEachShopData = async (_id:string) =>{
+    const response = await CustomerAxiosInstance.get(`/shop-data/${_id}`,)
+    return response
+}
+
+//---------------------------------------------------- get each shop dservice
+export const getEachShopServices = async (shopId:string) =>{
+    const response = await CustomerAxiosInstance.get(`/shop-data/services/${shopId}`,)
+    return response
+}
 
 //----------------------------------------------------verify Email for reset password
 export const verificationForResetPassword =  async (email:string) =>{

@@ -64,7 +64,7 @@ const VendorListPage = () => {
           <div className="w-full border-2">
             <ReusableTable
               caption="Vendors Datas"
-              data={customerDatas}
+              data={customerDatas} 
               columns={column}
               onAction={onBlockVendor}
             />

@@ -100,6 +100,7 @@ const SignupForm: React.FC = () => {
         }else{
           toast.error("some error please try later");
         }
+        navigate("/customer/login")
         
     }
   };

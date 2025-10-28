@@ -27,7 +27,8 @@ export const CUSTOMER_ROUTES ={
     RESEST_PASSWORD:"/reset-password",
     PROFILE:"profile",
     CHANGE_PASSWORD_IN_PROFILE:"/profile/security",
-    ADDRESS:"/profile/customer-address"
+    ADDRESS:"/profile/customer-address",
+    SHOP_SERVICES:"/services/:id"
 
 
 };

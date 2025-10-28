@@ -14,6 +14,8 @@ import { VENDOR_ROUTES } from "../Shared/Constants/RouteConstants";
 import ForgotPassword from "../pages/Vendor/ForgotPasswordPage";
 import ResetPasswordPage from "../pages/Vendor/ResetPasswordPage";
 import ProfilePage from "../pages/Vendor/ProfilePage";
+import StaffPage from "../pages/Vendor/StaffPage";
+import ServicePage from "../pages/Vendor/ServicePage";
 
 const VendorRoutes = () => {
   return (
@@ -92,7 +94,7 @@ const VendorRoutes = () => {
           path={VENDOR_ROUTES.SERVICES}
           element={
             <VendorProtectedRoute>
-              <Services />
+              <ServicePage/>
             </VendorProtectedRoute>
           }
         />
@@ -105,6 +107,12 @@ const VendorRoutes = () => {
             </VendorProtectedRoute>
           }
         />
+
+        <Route 
+          path="staffs"
+          element={
+            <StaffPage/>
+          }/>
       </Route>
 
       {/* <Route path="*" element={<LandingPage />} /> */}

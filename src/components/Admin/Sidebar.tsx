@@ -7,6 +7,7 @@ import {
   CreditCard,
   TextAlignStart ,
   LogOut,
+  MessageCirclePlus 
 } from "lucide-react";
 import { NavLink, Route, useLocation, useNavigate } from "react-router-dom";
 import { logoutAdmin } from "../../Services/AdminApiService";
@@ -22,9 +23,16 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   let location = useLocation();
   let path = location?.pathname.split("/").filter(Boolean);
+ 
+  
   const page = path[1]
     ? path[1].charAt(0).toUpperCase() + path[1].slice(1)
     : "";
+
+
+  console.log(page);
+  
+
 
   let items = [
     { icon: LayoutDashboard, label: "Dashboard", path: "", route: "" },
@@ -44,6 +52,12 @@ const Sidebar = () => {
       route: "/admin/customers",
     },
     {
+      icon: MessageCirclePlus ,
+      label: "Verification Requests",
+      path: "Verification-requests",
+      route: "/admin/verification-requests",
+    },
+    {
       icon: CreditCard ,
       label: "Payments",
       path: "Payments",
@@ -53,7 +67,7 @@ const Sidebar = () => {
       icon: Wrench ,
       label: "Services",
       path: "Services",
-      route: "/admin/dashboard",
+      route: "/admin/services",
     },
      {
       icon: TextAlignStart ,
