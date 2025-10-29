@@ -42,7 +42,6 @@ const VendorListPage = () => {
     try {
       if (data._id) {
         let response = await blockVendor(data._id);
-        console.log(response);
 
         if (response.data.message) {
           toast.success(response.data.message);

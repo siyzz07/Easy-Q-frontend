@@ -10,6 +10,7 @@ export interface IvendroFullData{
   _id?:string
   shopName?: string;
   email?: string;
+  isActive?:boolean
   phone?: string;
   password?: string;
   confirmPassword?: string;
@@ -51,6 +52,14 @@ const ViewServicesPage: React.FC = () => {
 
       if (shopResponse?.data?.data) setShopData(shopResponse.data.data);
       if (serviceResponse?.data?.data) setShopServiceData(serviceResponse.data.data);
+
+      if(shopResponse?.data?.data){
+        if(!shopResponse.data.data.isActive){
+          navigate('/customer')
+        }
+      }
+      
+      
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         setError("Failed to fetch shop details. Please try again later.");

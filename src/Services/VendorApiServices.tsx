@@ -80,6 +80,20 @@ export const logoutVendor = async () =>{
     return response;
 };
 
+
+/**
+ * 
+ *         dashboard 
+ * 
+ * 
+ */
+export const vendorDashboard = async () =>{
+    const response = await VendorAxiosInstance.get('/dashboard/data')
+    return response
+}
+
+
+
 /**
  * 
  *         staff api services 

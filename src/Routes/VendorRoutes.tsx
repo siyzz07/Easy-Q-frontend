@@ -16,6 +16,7 @@ import ResetPasswordPage from "../pages/Vendor/ResetPasswordPage";
 import ProfilePage from "../pages/Vendor/ProfilePage";
 import StaffPage from "../pages/Vendor/StaffPage";
 import ServicePage from "../pages/Vendor/ServicePage";
+import DashboardVendor from "../pages/Vendor/DashboardVendor";
 
 const VendorRoutes = () => {
   return (
@@ -85,7 +86,7 @@ const VendorRoutes = () => {
           index
           element={
             <VendorProtectedRoute>
-              <Dashboard />
+             <DashboardVendor/>
             </VendorProtectedRoute>
           }
         />
@@ -111,7 +112,9 @@ const VendorRoutes = () => {
         <Route 
           path={VENDOR_ROUTES.STAFFS}
           element={
-            <StaffPage/>
+            <VendorProtectedRoute>
+              <StaffPage/>
+            </VendorProtectedRoute>
           }/>
       </Route>
 
