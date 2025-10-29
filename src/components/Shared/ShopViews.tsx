@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
-// Dummy photo array
+
 const PHOTOS = [
   "/shop-1.jpg",
   "/shop-2.jpg",
@@ -13,7 +13,7 @@ const PHOTOS = [
   "/shop-6.jpg",
 ];
 
-// Dummy reviews array
+
 const REVIEWS = [
   { id: 1, name: "John Doe", date: "Oct 10, 2025", rating: 5, comment: "Excellent service and great quality!" },
   { id: 2, name: "Sarah Lee", date: "Oct 8, 2025", rating: 4, comment: "Good experience overall, will return again." },

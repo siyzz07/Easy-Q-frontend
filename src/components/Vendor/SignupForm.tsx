@@ -168,7 +168,7 @@ const SignupForm: FC = () => {
                 <ErrorMessage name="confirmPassword" component="div" className="text-red-400 text-sm mt-1" />
               </div>
 
-              {/* ✅ Proof upload section */}
+            
               <div className="mt-3">
                 <label className="block text-sm font-medium mb-2">
                   Upload Proof (Aadhaar / License)

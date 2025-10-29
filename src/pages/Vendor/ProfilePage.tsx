@@ -76,10 +76,7 @@ const ProfilePage = () => {
         <main className="flex-1 p-6 md:p-8 ">
           {/* Header */}
           <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
-            {/* <button className="flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
-              <Plus size={16} className="mr-2" />
-              Add Service
-            </button> */}
+         
 
             <Card className="w-full rounded-2xl border bg-white p-5 md:p-8 shadow-sm hover:shadow-md transition">
               <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-0">
@@ -108,9 +105,7 @@ const ProfilePage = () => {
                       </button>
                     </div>
 
-                    {/* <p className="text-sm text-gray-500 mt-1">
-                      Your trusted neighborhood grooming experts ✂️
-                    </p> */}
+                  
                   </div>
                 </div>
               </CardHeader>
@@ -151,10 +146,7 @@ const ProfilePage = () => {
                       (127 reviews)
                     </span>
                   </span>
-                  {/* <span className="mx-2 inline-flex items-center gap-1 text-green-600 font-medium">
-                    <Circle className="w-2 h-2 fill-green-600 text-green-600" />
-                    Open Now
-                  </span> */}
+                 
                 </div>
                 <div className="flex items-center gap-2 sm:col-span-2">
                   <span

@@ -58,13 +58,15 @@ const AdminRoutes = () => {
           }
         />
 
-        <Route path="verification-requests"
+        <Route path={ADMIN_ROUTES.VERIFICATION}
         element ={
-          <VendorRequest/>
+          <AdminProtectedRoute>
+            <VendorRequest/>
+          </AdminProtectedRoute>
         }/>
 
         <Route
-          path="/services"
+          path={ADMIN_ROUTES.SERVICES}
           element={
             <AdminProtectedRoute>
               <ServicesPage />

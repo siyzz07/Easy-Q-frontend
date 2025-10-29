@@ -18,7 +18,7 @@ interface FormValues {
   phone: string;
 }
 
-// ✅ Yup validation schema
+
 const validationSchema = Yup.object({
   name: Yup.string()
     .trim()

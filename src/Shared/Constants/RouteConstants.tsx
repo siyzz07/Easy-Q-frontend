@@ -10,7 +10,9 @@ export const ADMIN_ROUTES = {
     FORGOT_PASSWORD:"/forogt-password",
     RESEST_PASSWORD:"/reset-password",
     VEDORS_DATA:"/vendors",
-    CUSTOMERS_DATA:"/customers"
+    CUSTOMERS_DATA:"/customers",
+    VERIFICATION:"verification-requests" ,
+    SERVICES:"/services"
 
 };
 
@@ -45,6 +47,7 @@ export const VENDOR_ROUTES ={
     SERVICES:"services",
     FORGOT_PASSWORD:"/forgot-password",
     RESEST_PASSWORD:"/reset-password",
-    PROFILE:"profile"
+    PROFILE:"profile",
+    STAFFS:"staffs"
 
 };

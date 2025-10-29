@@ -1,22 +1,3 @@
-// import React from "react";
-// import Navbar from "../../../components/Vendor/Navbar";
-// import Sidebar from "../../../components/Vendor/Sidebar";
-// import { Divide } from "lucide-react";
-// import { Outlet } from "react-router-dom";
-
-// const Layout = () => {
-//   return (
-//    <div className="flex h-screen bg-gray-100">
-//   <Sidebar />
-//   <div className="flex-1 flex flex-col">
-//     <Navbar />
-//     <Outlet />
-//   </div>
-// </div>
-//   );
-// };
-
-// export default Layout;
 
 
 import React from "react";

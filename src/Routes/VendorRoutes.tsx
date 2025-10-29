@@ -109,7 +109,7 @@ const VendorRoutes = () => {
         />
 
         <Route 
-          path="staffs"
+          path={VENDOR_ROUTES.STAFFS}
           element={
             <StaffPage/>
           }/>

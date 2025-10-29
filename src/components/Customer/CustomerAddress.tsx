@@ -14,7 +14,6 @@ import EditAddressModal from "./EditAddressModal";
 import type { data } from "react-router-dom";
 
 
-// 🧠 Address type (matches AddAddressModal form)
 interface AddressData {
   _id?: string;
   address: string;

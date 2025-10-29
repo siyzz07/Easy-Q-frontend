@@ -1,6 +1,6 @@
 import React, { useState, type FC } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup"; // ✅ Import Yup for validation
+import * as Yup from "yup"; 
 import { MapPin, User, X } from "lucide-react";
 import type { IService } from "../../Shared/types/Types";
 
@@ -11,9 +11,7 @@ interface Staff {
 }
 
 const staffList: Staff[] = [
-  { id: 1, name: "John Doe", avatar: "https://i.pravatar.cc/50?img=1" },
-  { id: 2, name: "Emma Smith", avatar: "https://i.pravatar.cc/50?img=2" },
-  { id: 3, name: "Alex Johnson", avatar: "https://i.pravatar.cc/50?img=3" },
+
 ];
 
 const addresses = [
@@ -27,29 +25,25 @@ interface IBookNow {
   data: IService;
 }
 
-// ✅ Initial Values (separate for clarity)
+
 const initialValues = {
   staff: "",
   address: "",
 };
 
-// ✅ Yup Validation Schema (cleaner validation)
+
 const validationSchema = Yup.object({
   staff: Yup.string().required("Please select a staff member"),
   address: Yup.string().required("Please select an address"),
 });
 
-// ✅ onSubmit Handler
+
 const handleSubmit = (
   values: typeof initialValues,
   selectedDate: Date,
   data: IService
 ) => {
-  alert(
-    `✅ Booking confirmed!\n\n📅 Date: ${selectedDate.toDateString()}\n👤 Staff: ${
-      values.staff
-    }\n📍 Address: ${values.address}\n🧾 Service: ${data.serviceName}`
-  );
+  
 };
 
 const BookNow: FC<IBookNow> = ({ onClose, data }) => {
