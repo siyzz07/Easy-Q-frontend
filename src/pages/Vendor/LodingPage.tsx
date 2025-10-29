@@ -37,7 +37,7 @@ const LoadingPage: FC = () => {
       }
     } catch (error: any) {
       if (error?.response?.data) {
-        toast.error(error.response.data);
+        toast.error(error.response.data.message);
       }
       navigate("/vendor/login");
     }

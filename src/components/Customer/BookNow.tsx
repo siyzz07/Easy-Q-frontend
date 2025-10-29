@@ -118,7 +118,7 @@ const BookNow: FC<IBookNow> = ({ onClose, data }) => {
         >
           {() => (
             <Form>
-              {/* Select Staff */}
+              
               <div className="mb-5">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Select Staff
@@ -149,7 +149,7 @@ const BookNow: FC<IBookNow> = ({ onClose, data }) => {
                 />
               </div>
 
-              {/* Select Address */}
+           
               <div className="mb-5">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Select Address

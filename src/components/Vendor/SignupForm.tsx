@@ -66,7 +66,7 @@ const SignupForm: FC = () => {
       navigate("/vendor/login");
     } catch (error: any) {
       console.log(error);
-      toast.error(error.response?.data || "Some error, please try later");
+      toast.error(error.response?.data.message || "Some error, please try later");
       navigate("/vendor/login");  
     } finally {
       setSubmitting(false);

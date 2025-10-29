@@ -30,7 +30,7 @@ const LoginForm = () => {
       }
     } catch (error) {
       if (error instanceof AxiosError && error?.response?.data) {
-        toast.error(error.response.data);
+        toast.error(error.response.data.message);
       }
     }
   };

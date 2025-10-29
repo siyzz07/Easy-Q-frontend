@@ -40,7 +40,7 @@ useEffect(() => {
     } catch (error:any) {
 
       if(error?.response?.data){
-        toast.error(error.response.data);
+        toast.error(error.response.data.message);
       }
       navigate("/customer/login");
 

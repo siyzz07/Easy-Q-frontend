@@ -16,7 +16,11 @@ const ServicesList: FC<InterfaceServicesList> = ({ services }) => {
   return (
 
     <>
+      {/* book now modal */}
+
     {bookService && <BookNow onClose={()=>setBookService(false)} data={serviceData as IService}/>}
+
+
     <section className="max-w-7xl mx-auto px-4 py-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-2">

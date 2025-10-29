@@ -73,10 +73,15 @@ const EditStaff: React.FC<AddStaffProps> = ({ onClose, data }) => {
             }
             values.staffName = values.staffName.toLocaleLowerCase()
 
+            console.log(values.isActive);
+            
       const updatedValues = {
         ...values,
-        isActive: values?.isActive === true,
+        isActive: values?.isActive as any === 'true',
       };
+
+     
+      
 
         const response = await editStaff(updatedValues);
 

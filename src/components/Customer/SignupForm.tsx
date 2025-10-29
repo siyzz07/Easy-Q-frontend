@@ -96,7 +96,7 @@ const SignupForm: React.FC = () => {
       console.log(error);
       
         if(error.response.data){
-          toast.error(error.response.data);
+          toast.error(error.response.data.message);
         }else{
           toast.error("some error please try later");
         }

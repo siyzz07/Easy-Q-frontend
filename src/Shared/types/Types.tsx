@@ -21,8 +21,10 @@ export interface IVendor {
   email: string;
   phone: string;
   password: string;
+  proof?:any
   confirmPassword?: string;
-  proofImage:string
+  proofImage?:string
+  
 }
 
 interface Coordinates {

@@ -52,7 +52,7 @@ const LoginForm: FC = () => {
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         if (error?.response?.data) {
-          toast.error(error.response.data);
+          toast.error(error.response.data.message);
         }
       } else {
         console.log("customer login error", error);
