@@ -3,12 +3,13 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 interface IForgotMailForm {
-  onSubmit: (email: string) => void;
+  onSubmit: (email: string,role:string) => void;
   style?: string;
-  heading:string
+  heading:string,
+  role:string
 }
 
-const ForgotMailForm: FC<IForgotMailForm> = ({ onSubmit, style,heading }) => {
+const ForgotMailForm: FC<IForgotMailForm> = ({ onSubmit, style,heading,role }) => {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .trim()
@@ -18,11 +19,13 @@ const ForgotMailForm: FC<IForgotMailForm> = ({ onSubmit, style,heading }) => {
 
   const initialValues = {
     email: "",
+    role:role
   };
 
   const handleSubmit = (values: typeof initialValues) => {
     
-    onSubmit(values.email);
+    onSubmit(values.email,values.role);
+    
   };
 
   return (
@@ -47,7 +50,7 @@ const ForgotMailForm: FC<IForgotMailForm> = ({ onSubmit, style,heading }) => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {() => (
+          {({isSubmitting}) => (
             <Form className="space-y-4">
               <div>
                 <Field
@@ -66,9 +69,11 @@ const ForgotMailForm: FC<IForgotMailForm> = ({ onSubmit, style,heading }) => {
 
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg cursor-pointer"
               >
-                Send mail
+                {isSubmitting?'submitting...':'Send mail'}
+                
               </button>
             </Form>
           )}

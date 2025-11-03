@@ -1,25 +1,24 @@
-import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import React, { useState } from "react";
+import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import type { IStaff } from "../../Shared/types/Types";
 import { addStaff } from "../../Services/VendorApiServices";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
+import type { IStaff } from "../../Shared/types/Types";
 
 interface AddStaffProps {
   onClose?: () => void;
 }
 
+// Validation Schema
 const AddStaffSchema = Yup.object().shape({
   staffName: Yup.string()
     .required("Staff name is required")
     .min(3, "Name must be at least 3 characters long"),
-
   openingTime: Yup.string().required("Opening time is required"),
-
   closingTime: Yup.string()
     .required("Closing time is required")
     .test(
@@ -30,48 +29,50 @@ const AddStaffSchema = Yup.object().shape({
         return !openingTime || !value || value > openingTime;
       }
     ),
-
-  breakStartTime: Yup.string().required("Break start time is required"),
-
-  breakEndTime: Yup.string()
-    .required("Break end time is required")
-    .test(
-      "is-after",
-      "Break end time must be after break start time",
-      function (value) {
-        const { breakStartTime } = this.parent;
-        return !breakStartTime || !value || value > breakStartTime;
-      }
-    ),
+  breaks: Yup.array()
+    .of(
+      Yup.object().shape({
+        breakStartTime: Yup.string().required("Break start is required"),
+        breakEndTime: Yup.string()
+          .required("Break end is required")
+          .test("is-after", "End must be after start", function (value) {
+            const { breakStartTime } = this.parent;
+            return !breakStartTime || !value || value > breakStartTime;
+          }),
+      })
+    )
+    .max(5, "You can add up to 5 break times only"),
 });
 
-
 const AddStaff: React.FC<AddStaffProps> = ({ onClose }) => {
-  const initialValues: IStaff = {
+  const [timeBreak, setTimeBreak] = useState<boolean>(false);
+
+  const initialValues = {
     staffName: "",
     openingTime: "",
     closingTime: "",
-    breakStartTime: "",
-    breakEndTime: "",
+    breaks: [{ breakStartTime: "", breakEndTime: "" }],
   };
 
-  const handleSubmit = async (values: IStaff, { resetForm }: any) => {
+  const handleSubmit = async (
+    values: typeof initialValues,
+    { resetForm }: any
+  ) => {
     try {
-      values.staffName = values.staffName.toLocaleLowerCase()
-      const response = await addStaff(values);
+      console.log(values);
+
+      values.staffName = values.staffName.toLocaleLowerCase();
+      const response = await addStaff(values as IStaff);
       if (response?.data?.message) {
         toast.success(response.data.message);
       }
-
       resetForm();
       onClose?.();
     } catch (error: unknown) {
-        if(error instanceof AxiosError){
-            if(error.response?.data.message){
-                toast.error(error.response.data.message)
-            }
-        }
-         onClose?.();
+      if (error instanceof AxiosError && error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      }
+      onClose?.();
     }
   };
 
@@ -89,15 +90,14 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose }) => {
           </button>
         </div>
 
-        {/* Formik Form */}
         <Formik
           initialValues={initialValues}
           validationSchema={AddStaffSchema}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting, isValid }) => (
+          {({ values, isSubmitting, isValid }) => (
             <Form>
-              {/* Staff Name Field */}
+              {/* Staff Name */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-900 mb-2">
                   Staff Name
@@ -106,7 +106,6 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose }) => {
                   as={Input}
                   name="staffName"
                   placeholder="Enter full name"
-                  className="w-full"
                 />
                 <ErrorMessage
                   name="staffName"
@@ -115,42 +114,27 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose }) => {
                 />
               </div>
 
-              {/* Working Schedule Section */}
+              {/* Working Hours */}
               <h3 className="text-base font-semibold text-gray-900 mb-4">
-                Working Schedule
+                Working Hours
               </h3>
-
-              {/* Opening and Closing Time */}
               <div className="grid grid-cols-2 gap-4 mb-6">
-                {/* Opening Time */}
                 <div>
                   <label className="block text-sm font-medium text-gray-900 mb-2">
                     Opening Time
                   </label>
-                  <Field
-                    as={Input}
-                    type="time"
-                    name="openingTime"
-                    className="w-full"
-                  />
+                  <Field as={Input} type="time" name="openingTime" />
                   <ErrorMessage
                     name="openingTime"
                     component="p"
                     className="text-xs text-red-500 mt-1"
                   />
                 </div>
-
-                {/* Closing Time */}
                 <div>
                   <label className="block text-sm font-medium text-gray-900 mb-2">
                     Closing Time
                   </label>
-                  <Field
-                    as={Input}
-                    type="time"
-                    name="closingTime"
-                    className="w-full"
-                  />
+                  <Field as={Input} type="time" name="closingTime" />
                   <ErrorMessage
                     name="closingTime"
                     component="p"
@@ -159,51 +143,145 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose }) => {
                 </div>
               </div>
 
-              {/* Break Time Section */}
-              <h3 className="text-base font-semibold text-gray-900 mb-4">
-                Break Schedule
-              </h3>
-
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                {/* Break Start Time */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Break Start Time
-                  </label>
-                  <Field
-                    as={Input}
-                    type="time"
-                    name="breakStartTime"
-                    className="w-full"
-                  />
-                  <ErrorMessage
-                    name="breakStartTime"
-                    component="p"
-                    className="text-xs text-red-500 mt-1"
-                  />
-                </div>
-
-                {/* Break End Time */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Break End Time
-                  </label>
-                  <Field
-                    as={Input}
-                    type="time"
-                    name="breakEndTime"
-                    className="w-full"
-                  />
-                  <ErrorMessage
-                    name="breakEndTime"
-                    component="p"
-                    className="text-xs text-red-500 mt-1"
-                  />
-                </div>
+              {/* Break Times */}
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-base font-semibold text-gray-900">
+                  Break Times
+                </h3>
+                {/* + Icon for Adding Break */}
+                {values.breaks.length < 5 && (
+                  <button
+                    type="button"
+                    className="bg-blue-100 hover:bg-blue-200 p-2 rounded-full transition"
+                    onClick={() => {
+                      values.breaks.push({
+                        breakStartTime: "",
+                        breakEndTime: "",
+                      });
+                      setTimeBreak(!timeBreak);
+                    }}
+                    title="Add Break"
+                  >
+                    <Plus className="w-5 h-5 text-blue-700" />
+                  </button>
+                )}
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex gap-3 justify-end">
+              {/* <FieldArray name="breaks">
+                {({ remove, push }) => (
+                  <div className="space-y-4">
+                    {values.breaks.map((_, index) => (
+                      <div
+                        key={index}
+                        className="grid grid-cols-2 gap-4 items-end border rounded-md p-3 relative "
+                      >
+                        <div className=" flex gap-x-3">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-900 mb-2">
+                            Start
+                          </label>
+                          <Field as={Input} type="time" name={`breaks[${index}].breakStartTime`} />
+                          <ErrorMessage
+                            name={`breaks[${index}].breakStartTime`}
+                            component="p"
+                            className="text-xs text-red-500 mt-1"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-900 mb-2">
+                            End
+                          </label>
+                          <Field as={Input} type="time" name={`breaks[${index}].breakEndTime`} />
+                          <ErrorMessage
+                            name={`breaks[${index}].breakEndTime`}
+                            component="p"
+                            className="text-xs text-red-500 mt-1"
+                          />
+                        </div>
+                        </div>
+
+                        {values.breaks.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => remove(index)}
+                            className="absolute -right-3 -top-3 bg-red-100 hover:bg-red-200 rounded-full p-1 transition"
+                            title="Remove Break"
+                          >
+                            <Trash2 className="w-4 h-4 text-red-600" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </FieldArray> */}
+
+              <FieldArray name="breaks">
+                {({ remove, push }) => (
+                  <div className="space-y-4">
+                    {values.breaks.map((_, index) => (
+                      <div
+                        key={index}
+                        className="relative border border-gray-200 rounded-xl p-4 shadow-sm bg-gray-50"
+                      >
+                        {/* Break Input Row */}
+                        <div className="grid grid-cols-2 gap-6">
+                          {/* Start Time */}
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              Start
+                            </label>
+                            <Field
+                              as={Input}
+                              type="time"
+                              name={`breaks[${index}].breakStartTime`}
+                              className="w-full"
+                            />
+                            <ErrorMessage
+                              name={`breaks[${index}].breakStartTime`}
+                              component="p"
+                              className="text-xs text-red-500 mt-1"
+                            />
+                          </div>
+
+                          {/* End Time */}
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              End
+                            </label>
+                            <Field
+                              as={Input}
+                              type="time"
+                              name={`breaks[${index}].breakEndTime`}
+                              className="w-full"
+                            />
+                            <ErrorMessage
+                              name={`breaks[${index}].breakEndTime`}
+                              component="p"
+                              className="text-xs text-red-500 mt-1"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Remove Button */}
+                        {values.breaks.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => remove(index)}
+                            className="absolute -top-3 -right-3 bg-red-100 hover:bg-red-200 rounded-full p-1 transition"
+                            title="Remove Break"
+                          >
+                            <Trash2 className="w-4 h-4 text-red-600" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </FieldArray>
+
+              {/* Submit */}
+              <div className="flex justify-end mt-6">
                 <Button
                   type="submit"
                   disabled={isSubmitting || !isValid}

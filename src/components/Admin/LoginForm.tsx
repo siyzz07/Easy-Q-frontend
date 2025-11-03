@@ -20,7 +20,7 @@ const LoginForm = () => {
     password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
   });
 
-  const handleSubmit = async (values: { email: string; password: string }) => {
+  const handleSubmit = async (values: { email: string; password: string,role:string }) => {
     try {
       const response = await loginAdmin(values);
       if (response.data.accesstoken) {
@@ -48,7 +48,7 @@ const LoginForm = () => {
 
         {/* Formik Form */}
         <Formik
-          initialValues={{ email: "", password: "" }}
+          initialValues={{ email: "", password: "",role:'admin' }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >

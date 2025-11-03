@@ -93,11 +93,11 @@ const LoginForm: FC = () => {
       </div>
 
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: "", password: "" ,role:'customer'}}
         validationSchema={LoginSchema}
         onSubmit={submit}
       >
-        {({}) => (
+        {({isSubmitting}) => (
           <Form className="w-full max-w-md mx-auto p-6 space-y-4 bg-white">
             {/* Email */}
             <div>

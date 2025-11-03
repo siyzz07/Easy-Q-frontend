@@ -16,8 +16,13 @@ import {
 } from "lucide-react";
 import { adminDashbordData } from "../../Services/AdminApiService";
 import { vendorDashboard } from "../../Services/VendorApiServices";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import BlookBookisModal from "../../components/Vendor/BlookBookisModal";
 
 const DashboardVendor = () => {
+  const navigate = useNavigate();
+  let hasShop = useSelector((state: any) => state.vendorSlice.hasShop);
   const [totalStaff, setTotalStaff] = useState<number>(0);
   const [availableStaff, setAvailableStaff] = useState<number>(0);
   const [UnavailableStaff, setToalUnavailableStaff] = useState<number>(0);
@@ -25,27 +30,30 @@ const DashboardVendor = () => {
   const [totalServices, setTotalServices] = useState<number>(0);
   const [availabelServices, setTotalAvailabelServices] = useState<number>(0);
   const [unavailabelServices, setUnavailabelServices] = useState<number>(0);
+  const [blokcBookinModal,setBlookBookingModal] = useState<boolean>(false)
+
+
+
   useEffect(() => {
     dashboardDocument();
+    if (hasShop == false) {
+      navigate("/vendor/shop-data");
+    }
   }, []);
 
   const dashboardDocument = async () => {
     try {
-
-      let response = await vendorDashboard()
-      if(response?.data?.data){
-        setTotalStaff(response.data.data.totalStaff)
-        setAvailableStaff(response.data.data.availableStaff)
-        setToalUnavailableStaff(response.data.data.totalUnavailableStaff)
-        setTotalServices(response.data.data.totalService)
-        setTotalAvailabelServices(response.data.data.totalAvailableService)
-        setUnavailabelServices(response.data.data.totalUnavailableService)
-
+      let response = await vendorDashboard();
+      if (response?.data?.data) {
+        setTotalStaff(response.data.data.totalStaff);
+        setAvailableStaff(response.data.data.availableStaff);
+        setToalUnavailableStaff(response.data.data.totalUnavailableStaff);
+        setTotalServices(response.data.data.totalService);
+        setTotalAvailabelServices(response.data.data.totalAvailableService);
+        setUnavailabelServices(response.data.data.totalUnavailableService);
       }
-        
     } catch (error: unknown) {
-      console.log('error to fetch vendor dashbord data');
-      
+      console.log("error to fetch vendor dashbord data");
     }
   };
 
@@ -115,6 +123,12 @@ const DashboardVendor = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
+
+
+      {blokcBookinModal && <BlookBookisModal onClose={()=>setBlookBookingModal(false)}/>}
+
+
+
       <main className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
         {/* Responsive Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -144,6 +158,18 @@ const DashboardVendor = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Buttons Section */}
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button className="w-full :w-fullsm md:w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg shadow transition-all duration-200">
+            Add Staff
+          </button>
+          <button
+            onClick={()=> setBlookBookingModal(true)}
+          className="w-full ms:w-full md:w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2.5 rounded-lg shadow transition-all duration-200">
+            Block Bookings
+          </button>
         </div>
       </main>
     </div>

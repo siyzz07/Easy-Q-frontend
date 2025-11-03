@@ -22,12 +22,13 @@ const ResetPasswordPage = () => {
     }
   }, [token, navigate]);
 
-  const submit = async (password: string) => {
+  const submit = async (password: string, role:string) => {
     try {
       if (token && password) {
         let data = {
           token: token,
           password: password,
+          role
         };
         const response = await resetCustomerPasword(data);
         if (response.data.message) {
@@ -59,7 +60,7 @@ const ResetPasswordPage = () => {
 
       {/* Right side  */}
       <div className="flex-1 bg-slate-800">
-        <ResetPasswordForm onSubmit={submit} />
+        <ResetPasswordForm onSubmit={submit} role='customer' />
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ import Profile from "../components/Customer/Profile";
 import ChangePasswordInProfile from "../components/Customer/ChangePasswordInProfile";
 import CustomerAddress from "../components/Customer/CustomerAddress";
 import ViewServicesPage from "../pages/Customer/ViewServicesPage";
+import VendorProfileView from "../pages/Customer/VendorProfileView";
 
 const CustomerRoutes = () => {
   return (
@@ -84,6 +85,14 @@ const CustomerRoutes = () => {
           element={
             <CustomerProtectedRoute>
               <ViewServicesPage/>
+            </CustomerProtectedRoute>
+          }/>
+
+          <Route 
+            path='/vendor/:id'
+             element={
+            <CustomerProtectedRoute>
+              <VendorProfileView/>
             </CustomerProtectedRoute>
           }/>
 

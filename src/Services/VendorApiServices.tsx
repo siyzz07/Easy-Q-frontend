@@ -50,22 +50,27 @@ export const getShopType = async () => {
 
 // --------------------------get the shop data
 export  const getShopData = async ()  =>{
-
+    
     const response = await VendorAxiosInstance.get("/shop-data");
     return response;
-
+    
 };
+// -------------------------- edit shop data
+export const editShopData = async(formData:any) =>{
+    const response = await VendorAxiosInstance.put('/shop/edit-shop',formData)
+    return response
+}
 
 
 //---------------------------verify email for reset password
-export const verificationForResetPassword =  async (email:string) =>{
+export const verificationForResetPassword =  async (data:{email:string,role:string}) =>{
 
-    const response = await VendorAxiosInstance.post("/reset-password/verify",{email});
+    const response = await VendorAxiosInstance.post("/reset-password/verify",data);
     return response;
 };
 
 //---------------------------reset password
-export const resetPasword = async(data:{token:string;password:string}) =>{
+export const resetPasword = async(data:{token:string;password:string,role:string}) =>{
 
             const response = await VendorAxiosInstance.post("/reset-password",data);
             return response;
@@ -76,7 +81,7 @@ export const resetPasword = async(data:{token:string;password:string}) =>{
 //---------------------------logout vendor
 export const logoutVendor = async () =>{
     
-    const response = await VendorAxiosInstance.post("/logout");
+    const response = await VendorAxiosInstance.post("/logout",{role:'Vendor'});
     return response;
 };
 
@@ -119,6 +124,12 @@ export const editStaff = async (form:IStaff) =>{
     return response
 }
 
+//--------------------------- block staff date
+export const blockStaffDate = async (data:{staffId:string,blockedDates:string[]}) =>{
+
+    const response = VendorAxiosInstance.post('/staff/block-dates',data)
+    return response
+}
 
 
 /***

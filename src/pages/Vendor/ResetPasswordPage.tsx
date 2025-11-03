@@ -21,19 +21,20 @@ const ResetPasswordPage = () => {
     }
   }, [token, navigate]);
 
-  const submit = async (password: string) => {
+  const submit = async (password: string,role:string) => {
     try {
       if (token && password) {
         let data = {
           token: token,
           password: password,
+          role
         };
         const response = await resetPasword(data);
         if (response.data.message) {
           toast.success(response.data.message);
           navigate("/vendor/login");
         }
-      }
+      }k
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.log(error);
@@ -58,7 +59,7 @@ const ResetPasswordPage = () => {
 
       {/* Right side  */}
       <div className="flex-1 bg-slate-800">
-        <ResetPasswordForm onSubmit={submit} />
+        <ResetPasswordForm onSubmit={submit} role='vendor' />
       </div>
     </div>
   );

@@ -68,6 +68,7 @@ const SignupForm: React.FC = () => {
     phone: "",
     password: "",
     confirmPassword: "",
+    role:'customer'
   };
 
   const handleSubmit = async(values: ICustomer) => {
@@ -123,7 +124,7 @@ const SignupForm: React.FC = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {() => (
+          {({isSubmitting}) => (
             <Form className="space-y-4">
               {/* Name */}
               <div>
@@ -258,9 +259,10 @@ const SignupForm: React.FC = () => {
               {/* Submit Button */}
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg cursor-pointer"
               >
-                Submit
+                     {isSubmitting ? "Submitting..." : "Submit"}
               </button>
             </Form>
           )}

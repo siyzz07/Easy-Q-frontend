@@ -14,6 +14,7 @@ export interface ICustomer {
   phone: string;
   password: string | undefined;
   confirmPassword?: string;
+  role?:string
 }
 
 export interface IVendor {
@@ -24,6 +25,7 @@ export interface IVendor {
   proof?:any
   confirmPassword?: string;
   proofImage?:string
+  role?:string
   
 }
 
@@ -73,11 +75,13 @@ export interface Imap {
 export interface IVendorLogin {
   email: string;
   password: string;
+  role?:string
 }
 
 export interface ICustomerLogin {
   email: string;
   password: string;
+  role?:string
 }
 
 export interface IReduxStore {
@@ -125,19 +129,33 @@ export interface IServiceVendorTypes{
   isActive:string
 }
 
+// export interface IStaff {
+//   _id?: string;
+//   shopName?:string
+//   staffName: string;
+//   openingTime: string;
+//   closingTime: string;
+//   breakStartTime: string;
+//   breakEndTime: string;
+//   isActive?: boolean;
+//   bookingBlocks?: string[];
+// }
+
+export interface IBreakTime{
+  breakEndTime:string,
+  breakStartTime:string
+}
+
 export interface IStaff {
   _id?: string;
   shopName?:string
   staffName: string;
   openingTime: string;
   closingTime: string;
-  breakStartTime: string;
-  breakEndTime: string;
+  breaks:IBreakTime[]
   isActive?: boolean;
-  bookingBlocks?: string[];
+  blockedDates?: string[];
 }
-
-
 
 export interface IService {
   _id?:string;
@@ -149,4 +167,13 @@ export interface IService {
   availableStaff:string[]
   isActive?:boolean;
   price:number|string
+}
+
+
+export interface IReview  {
+  customerId?:string;
+  vendorId:string;
+  rating: string;
+  createdAt?: Date;
+  comment:string
 }

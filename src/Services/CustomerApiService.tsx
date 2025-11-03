@@ -19,8 +19,10 @@ export const customerSignup = async(form:ICustomer) =>{
 // -----------------------------------------verifyEmail
 
 export const verifyEmail = async (token:string)=>{
-    
-    const response = await CustomerAxiosInstance.post("/auth/verify-email",{token }   );
+      
+        const response = await CustomerAxiosInstance.post("/auth/verify-email",{token });
+        
+        console.log('get response sended');
     return response;
 };
 
@@ -28,7 +30,7 @@ export const verifyEmail = async (token:string)=>{
 // -----------------------------------------login customer
 
 export const loginCustomer = async (form:ICustomerLogin) =>{
-
+        
 const response = await CustomerAxiosInstance.post("/auth/login",form);
 return response;
 
@@ -43,28 +45,18 @@ export const getShopsData = async () =>{
     return response; 
 };
 
-//---------------------------------------------------- get each shop data
-export const getEachShopData = async (_id:string) =>{
-    const response = await CustomerAxiosInstance.get(`/shop-data/${_id}`,)
-    return response
-}
 
-//---------------------------------------------------- get each shop dservice
-export const getEachShopServices = async (shopId:string) =>{
-    const response = await CustomerAxiosInstance.get(`/shop-data/services/${shopId}`,)
-    return response
-}
 
 //----------------------------------------------------verify Email for reset password
-export const verificationForResetPassword =  async (email:string) =>{
+export const verificationForResetPassword =  async (data:{email:string,role:string}) =>{
 
-    const response = await CustomerAxiosInstance.post("/reset-password/verify",{email});
+    const response = await CustomerAxiosInstance.post("/reset-password/verify",data);
     return response;
 };
 
 
 //------------------------------------------------------reset password
-export const resetCustomerPasword = async(data:{token:string;password:string}) =>{
+export const resetCustomerPasword = async(data:{token:string;password:string,role:string}) =>{
 
             const response = await CustomerAxiosInstance.post("/reset-password",data);
             return response;
@@ -118,7 +110,7 @@ export const editAddress = async (form:ICustomerAddress) =>{
 //------------------------------------------------------logout
 export const logoutCustomer = async () =>{
     
-    const response = await CustomerAxiosInstance.post("/logout");
+    const response = await CustomerAxiosInstance.post("/logout",{role:'Customer'});
     return response;
 };
 
@@ -131,8 +123,31 @@ export const editProfile = async (form:{name:string;email:string;phone:string}) 
 
 //------------------------------------------------------change passwordin in profile
 export const changePassword = async (form:{currentPassword:string,password:string}) =>{
-
+    
     const response = await CustomerAxiosInstance.post("/profile/change-password",form);
     return response;
-
+    
 };
+
+/**
+ * 
+ * shop  
+ * 
+ */
+//---------------------------------------------------- get each shop data
+export const getEachShopData = async (_id:string) =>{
+    const response = await CustomerAxiosInstance.get(`/shop-data/${_id}`,)
+    return response
+}
+
+//---------------------------------------------------- get each shop service
+export const getEachShopServices = async (shopId:string) =>{
+    const response = await CustomerAxiosInstance.get(`/shop-data/services/${shopId}`,)
+    return response
+}
+
+//------------------------------------------------------Add review
+export const addReview = async(form:{rating:string,comment:string,shopId:string}) =>{
+    const respone = await CustomerAxiosInstance.post('/vendor/add-review',form)
+}
+

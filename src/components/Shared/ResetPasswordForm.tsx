@@ -5,17 +5,18 @@ import { Eye, EyeOff } from "lucide-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import type { IVendor } from "../../Shared/types/Types";
-import { verifyEmail } from "../../Services/VendorApiServices";
+
 import { toast } from "react-toastify";
 
 
 interface IResetPasswordForm{
-  onSubmit :(token:string) => void
+  onSubmit :(token:string,role:string) => void;
+  role:string
 }
 
 
 
-const ResetPasswordForm: FC<IResetPasswordForm> = ({onSubmit}) => {
+const ResetPasswordForm: FC<IResetPasswordForm> = ({onSubmit,role}) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -45,6 +46,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({onSubmit}) => {
   interface IResetPassword{
     password:string;
     confirmPassword:string
+    role:string
 }
 
 
@@ -52,10 +54,11 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({onSubmit}) => {
 
     password: "",
     confirmPassword: "",
+    role:role
   };
 
   const handleSubmit = async (values: IResetPassword) => {
-          onSubmit(values.password);
+          onSubmit(values.password,values.role);
   };
 
   return (

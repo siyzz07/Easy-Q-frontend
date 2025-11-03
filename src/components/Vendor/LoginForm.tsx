@@ -43,10 +43,13 @@ const SignupForm: FC = () => {
   const initialValues: IVendorLogin = {
     email: "",
     password: "",
+    role:'vendor'
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
     try {
+
+    
       let response = await loginVendor(values);
       if (response.data.accesstoken) {
 

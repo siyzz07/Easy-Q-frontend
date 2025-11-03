@@ -187,7 +187,7 @@ const ShopdataExtra = () => {
       formData.append("openAt", values.openAt);
       formData.append("closeAt", values.closeAt);
       formData.append("ProfileImage", imageUrl);
-      formData.append("workingDays", JSON.stringify(values.workingDays));
+      formData.append("workingDays",values.workingDays);
       formData.append("latitude", String(values.coordinates.lat));
       formData.append("longitude", String(values.coordinates.lng));
 

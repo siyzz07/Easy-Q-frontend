@@ -9,19 +9,21 @@ interface ViewShopProfileInterface {
 }
 
 const ViewShopProfile: FC<ViewShopProfileInterface> = ({ data }) => {
-  const isTodayWorking = (workingDays: string) => {
-    if (!workingDays) return false;
-    try {
-      workingDays = JSON.parse(workingDays);
-    } catch (error) {
-      return false;
-    }
+
+
+   function isTodayWorking(workingDaysStr?: string[]) {
+
+
+    if (!workingDaysStr) return false;
+
+    let workingDays =workingDaysStr
+  
 
     const daysShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const today = daysShort[new Date().getDay()];
-
+      
     return workingDays.includes(today);
-  };
+  }
 
   const convertRailwayTime = (time24?: string) => {
     if (!time24) return "--";

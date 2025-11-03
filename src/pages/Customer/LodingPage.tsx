@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import type { FC } from "react";
 import Image from "../../components/Shared/Image";
 import image from "../../assets/customer-login-image.png";
@@ -8,22 +8,26 @@ import { verifyEmail } from "../../Services/CustomerApiService";
 import { toast } from "react-toastify";
 
 const LoadingPage: FC = () => {
+  const [searchParams] = useSearchParams();
+  const token: string | null = searchParams.get("token");
+  const hasVerified = useRef(false);
+  const navigate = useNavigate();
 
-const [searchParams] = useSearchParams();
-const token: string | null = searchParams.get("token");
-const navigate = useNavigate();
-useEffect(() => {
+  useEffect(() => {
+    // ✅ Prevent duplicate execution (React Strict Mode)
+    if (hasVerified.current) return;
+    hasVerified.current = true;
 
-  verify();
-});
+    const verify = async () => {
+      try {
+        if (!token) {
+          toast.error("Token not found");
+          navigate("/customer/login");
+          return;
+        }
 
-
-
-  const verify = async () => {
-    try {
-      if (token != null) {
         const response = await verifyEmail(token);
-        
+
         if (response){
 
           setTimeout(()=>{
@@ -31,36 +35,25 @@ useEffect(() => {
           toast.success(response.data);
         },3000);
         }
-
-      }else{
-        toast.error("Token not found");
+      } catch (error: any) {
+        toast.error(error?.response?.data?.message || "Verification failed");
         navigate("/customer/login");
       }
+    };
 
-    } catch (error:any) {
-
-      if(error?.response?.data){
-        toast.error(error.response.data.message);
-      }
-      navigate("/customer/login");
-
-    }
-  };
-
-
+    verify();
+  }, [token, navigate]);
 
   return (
-    <div className="min-h-screen  flex">
+    <div className="min-h-screen flex">
       <Image
         image={image}
-        style={"bg-gradient-to-b from-[#F3F3F3] to-[#E6E0DD]"}
+        style="bg-gradient-to-b from-[#F3F3F3] to-[#E6E0DD]"
       />
 
-      {/* Right side  */}
-      <div className="flex-1  bg-white">
+      <div className="flex-1 bg-white">
         <LoadingVerify style="#666666" />
       </div>
-       
     </div>
   );
 };

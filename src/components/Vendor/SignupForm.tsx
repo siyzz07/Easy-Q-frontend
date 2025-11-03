@@ -41,6 +41,7 @@ const SignupForm: FC = () => {
     password: "",
     confirmPassword: "",
     proof: null, 
+    role:'vendor'
   };
 
   const handleSubmit = async (values: IVendor, { setSubmitting }: any) => {
@@ -57,6 +58,7 @@ const SignupForm: FC = () => {
       formData.append("phone", values.phone);
       formData.append("password", values.password);
       formData.append('proofImage',imageUrl)
+      formData.append('role','vendor')
 
       const response = await verifyEmail(formData);
 

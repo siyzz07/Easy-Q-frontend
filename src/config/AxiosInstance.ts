@@ -41,7 +41,7 @@ export const axiosInstance = (role: string) => {
         try {
           console.log("Access token expired");
 
-          const refreshResponse = await instance.post("/auth/refresh-token");
+          const refreshResponse = await instance.post("/auth/refresh-token",{role});
           const newAccessToken = refreshResponse.data.accessToken;
 
           removeToken();

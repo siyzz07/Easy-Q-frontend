@@ -68,7 +68,7 @@ const ShopDataCard: React.FC<ShopDataCardProps> = ({ shopData }) => {
 
         <div className="flex gap-3 mt-4">
           <Link
-            to={`/shop/${shopData._id}`}
+            to={`/customer/vendor/${shopData._id}`}
             className="flex-1 text-center py-2.5 rounded-md border border-blue-600 text-blue-600 font-medium hover:bg-blue-50 transition-all"
           >
             Visit

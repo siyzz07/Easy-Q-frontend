@@ -4,8 +4,8 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
-import { addShopData } from "../../Services/VendorApiServices";
-import type { IShopData, IVendroShopData } from "../../Shared/types/Types";
+import { editShopData } from "../../Services/VendorApiServices";
+import type { IVendroShopData } from "../../Shared/types/Types";
 import { X } from "lucide-react";
 
 const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -19,6 +19,7 @@ const EditProfileModal: FC<IEditModal> = ({ onClose, vendorData }) => {
   const navigate = useNavigate();
 
   const initialValues: any = {
+    shopName: vendorData.shopName || "",
     state: vendorData.state || "",
     city: vendorData.city || "",
     openAt: vendorData.openAt || "",
@@ -28,6 +29,7 @@ const EditProfileModal: FC<IEditModal> = ({ onClose, vendorData }) => {
   };
 
   const validationSchema = Yup.object({
+    shopName: Yup.string().required("Shop name is required"),
     state: Yup.string().required("State is required"),
     city: Yup.string().required("City is required"),
     openAt: Yup.string().required("Opening time is required"),
@@ -48,19 +50,19 @@ const EditProfileModal: FC<IEditModal> = ({ onClose, vendorData }) => {
           : "";
 
       const formData = new FormData();
+      formData.append("shopName", values.shopName);
       formData.append("state", values.state);
       formData.append("city", values.city);
       formData.append("openAt", values.openAt);
       formData.append("closeAt", values.closeAt);
       formData.append("ProfileImage", imageUrl);
-      formData.append("workingDays", JSON.stringify(values.workingDays));
+      formData.append("workingDays", values.workingDays);
 
-      // const response = await addShopData(formData);
-      // if (response.data.message) {
-      //   toast.success("Shop details updated successfully!");
-      //   navigate("/vendor");
-      //   onClose();
-      // }
+      const response = await editShopData(formData);
+      if (response.data.message) {
+        toast.success(response.data.message);
+        onClose();
+      }
     } catch (error) {
       toast.error("Something went wrong while saving shop details");
     }
@@ -68,16 +70,24 @@ const EditProfileModal: FC<IEditModal> = ({ onClose, vendorData }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl p-8 md:p-12 overflow-y-auto">
+      <div
+        className="
+          relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl 
+          max-h-[90vh] overflow-y-auto 
+          p-6 sm:p-8 md:p-10
+          scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100
+        "
+      >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 transition"
+          className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 transition"
         >
           <X size={24} />
         </button>
 
-        <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
+        {/* Title */}
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 text-gray-800">
           Edit Shop Details
         </h2>
 
@@ -95,7 +105,26 @@ const EditProfileModal: FC<IEditModal> = ({ onClose, vendorData }) => {
             };
 
             return (
-              <Form className="space-y-6">
+              <Form className="space-y-5 sm:space-y-6">
+                {/* Shop Name */}
+                <div className="flex flex-col">
+                  <label className="text-sm font-semibold text-gray-700 mb-1">
+                    Shop Name
+                  </label>
+                  <Field
+                    type="text"
+                    name="shopName"
+                    placeholder="Enter shop name"
+                    className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
+                  />
+                  <ErrorMessage
+                    name="shopName"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+
+                {/* Two-Column Layout */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Left Column */}
                   <div className="space-y-4">
@@ -181,7 +210,7 @@ const EditProfileModal: FC<IEditModal> = ({ onClose, vendorData }) => {
                         key={day}
                         type="button"
                         onClick={() => toggleDay(day)}
-                        className={`px-4 py-2 rounded-xl border ${
+                        className={`px-4 py-2 rounded-xl border text-sm sm:text-base ${
                           values.workingDays.includes(day)
                             ? "bg-blue-500 text-white border-blue-500"
                             : "bg-white text-gray-700 border-gray-300 hover:bg-blue-50"
@@ -204,7 +233,7 @@ const EditProfileModal: FC<IEditModal> = ({ onClose, vendorData }) => {
                     <img
                       src={values.ProfileImage}
                       alt="Profile Preview"
-                      className="w-32 h-32 object-cover rounded-xl border"
+                      className="w-28 h-28 sm:w-32 sm:h-32 object-cover rounded-xl border shadow-sm"
                     />
                   )}
                   <div className="flex-1">
@@ -234,7 +263,7 @@ const EditProfileModal: FC<IEditModal> = ({ onClose, vendorData }) => {
                 <div className="flex justify-end pt-4">
                   <button
                     type="submit"
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-xl transition shadow"
+                    className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 sm:px-8 rounded-xl transition shadow"
                   >
                     Save Changes
                   </button>

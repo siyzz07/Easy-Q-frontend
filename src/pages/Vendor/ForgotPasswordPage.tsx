@@ -10,9 +10,9 @@ import { useNavigate } from "react-router-dom";
 const ForgotPassword = () => {
   const navigate = useNavigate();
 
-  const submit = async (email: string) => {
+  const submit = async (email: string,role:string) => {
     try {
-      const response = await verificationForResetPassword(email);
+      const response = await verificationForResetPassword({email,role});
 
       if (response) {
         toast.info(
@@ -25,6 +25,7 @@ const ForgotPassword = () => {
       if (error instanceof AxiosError) {
         if (error?.response?.data?.message) {
           toast.error(error?.response?.data?.message);
+          navigate("/vendor/login");
         } else {
           console.log("email verify error ");
         }
@@ -45,6 +46,7 @@ const ForgotPassword = () => {
           onSubmit={submit}
           style="bg-slate-800"
           heading="text-white"
+          role='vendor'
         />
       </div>
     </div>

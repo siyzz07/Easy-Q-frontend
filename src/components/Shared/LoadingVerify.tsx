@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import type { FC } from "react";
 import { OrbitProgress } from "react-loading-indicators";
 import { useSearchParams } from "react-router-dom";
-import { verifyEmail } from "../../Services/CustomerApiService";
+
 
 interface LoadingVerifyProps {
   style: string;
