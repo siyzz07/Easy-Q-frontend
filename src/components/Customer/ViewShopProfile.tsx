@@ -6,6 +6,7 @@ import type { IvendroFullData } from "../../pages/Customer/ViewServicesPage";
 
 interface ViewShopProfileInterface {
   data: IvendroFullData;
+
 }
 
 const ViewShopProfile: FC<ViewShopProfileInterface> = ({ data }) => {

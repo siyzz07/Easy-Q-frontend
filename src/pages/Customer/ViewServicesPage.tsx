@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getEachShopData, getEachShopServices } from "../../Services/CustomerApiService";
 import ViewShopProfile from "../../components/Customer/ViewShopProfile";
 import ServicesList from "../../components/Customer/ServicesList";
-import type { IService, IServiceVendorTypes, IVendroShopData } from "../../Shared/types/Types";
+import type { IService, IServiceData, IServiceVendorTypes, IVendroShopData } from "../../Shared/types/Types";
 import { AxiosError } from "axios";
 
 export interface IvendroFullData{
@@ -29,7 +29,7 @@ export interface IvendroFullData{
 
 const ViewServicesPage: React.FC = () => {
   const [shopData, setShopData] = useState<IvendroFullData | null>(null);
-  const [shopServiceData, setShopServiceData] = useState<IService[]>([]);
+  const [shopServiceData, setShopServiceData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -70,6 +70,9 @@ const ViewServicesPage: React.FC = () => {
     }
   };
 
+
+  
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-[#E7F0FF]">
@@ -100,7 +103,7 @@ const ViewServicesPage: React.FC = () => {
       <div className="w-full flex flex-col items-center">
         {shopData && (
           <div className="w-full max-w-5xl">
-            <ViewShopProfile data={shopData} />
+            <ViewShopProfile data={shopData}   />
           </div>
         )}
       </div>
@@ -109,7 +112,7 @@ const ViewServicesPage: React.FC = () => {
       <div className="w-full flex flex-col items-center mt-6">
         {shopServiceData.length > 0 ? (
           <div className="w-full max-w-6xl">
-            <ServicesList services={shopServiceData} />
+            <ServicesList services={shopServiceData} shopId={id as string} />
           </div>
         ) : (
           <div className="text-center py-16 text-gray-500">

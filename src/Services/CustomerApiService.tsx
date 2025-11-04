@@ -1,7 +1,7 @@
 
 
 import {  CustomerAxiosInstance } from "../config/AxiosInstance";
-import type { ICustomer, ICustomerAddress, ICustomerLogin } from "../Shared/types/Types";
+import type { IBookingPayload, ICustomer, ICustomerAddress, ICustomerLogin } from "../Shared/types/Types";
 
 
 
@@ -74,39 +74,6 @@ export const getCustomerData = async () =>{
 };
 
 
-//------------------------------------------------------add Address
-export const postNewAddress = async (form:ICustomerAddress) =>{
-    
-    const response = await CustomerAxiosInstance.post("/profile/add-address",form);
-    return response;
-    
-};
-//------------------------------------------------------add Address
-
-export const deleteCustomerAddress = async (addressId:string) =>{
-
-    const response = await CustomerAxiosInstance.post("/profile/delete-address",{addressId});
-    return response;
-
-
-};
-//------------------------------------------------------get all address
-
-export const getAddress = async () =>{
-    
-    const response = await CustomerAxiosInstance.get("/profile/get-address");
-    return response;
-    
-};
-
-//------------------------------------------------------edit cusotmer address
-export const editAddress = async (form:ICustomerAddress) =>{
-    
-    const reponse = await CustomerAxiosInstance.post("/profile/edit-address",form);
-    return reponse;
-    
-};
-
 //------------------------------------------------------logout
 export const logoutCustomer = async () =>{
     
@@ -129,6 +96,52 @@ export const changePassword = async (form:{currentPassword:string,password:strin
     
 };
 
+
+/**
+ * 
+ * Address
+ * 
+ */
+//------------------------------------------------------add Address
+export const postNewAddress = async (form:ICustomerAddress) =>{
+    
+    const response = await CustomerAxiosInstance.post("/profile/add-address",form);
+    return response;
+    
+};
+//------------------------------------------------------delete Address
+
+export const deleteCustomerAddress = async (addressId:string) =>{
+
+    const response = await CustomerAxiosInstance.post("/profile/delete-address",{addressId});
+    return response;
+
+
+};
+//------------------------------------------------------get all address
+export const getAddress = async () =>{
+    
+    const response = await CustomerAxiosInstance.get("/profile/get-address");
+    return response;
+    
+};
+//------------------------------------------------------edit cusotmer address
+export const editAddress = async (form:ICustomerAddress) =>{
+    
+    const reponse = await CustomerAxiosInstance.post("/profile/edit-address",form);
+    return reponse;
+    
+};
+//------------------------------------------------------ get each address by id
+export const getEachAddress = async (_id:string) =>{
+
+    
+    const response = await CustomerAxiosInstance.get(`/profile/get-each-address`,{
+        params:{_id}
+    })
+    return response
+}
+
 /**
  * 
  * shop  
@@ -145,6 +158,34 @@ export const getEachShopServices = async (shopId:string) =>{
     const response = await CustomerAxiosInstance.get(`/shop-data/services/${shopId}`,)
     return response
 }
+
+//---------------------------------------------------- get selected service
+export const getSelectedSerivce = async (id:string) =>{
+    const response = await CustomerAxiosInstance.get('/service/get-service',{
+        params:{id}
+    })
+    return response
+}
+
+/**
+ * 
+ * Booking  
+ * 
+ */
+//---------------------------------------------------- get checkout data
+export const createBooking = async (data: IBookingPayload) => {
+  const response = await CustomerAxiosInstance.post("/booking/add-booking", data);
+  return response;
+};
+
+
+
+/**
+ * 
+ * Review
+ * 
+ */
+
 
 //------------------------------------------------------Add review
 export const addReview = async(form:{rating:string,comment:string,shopId:string}) =>{

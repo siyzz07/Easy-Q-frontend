@@ -8,9 +8,10 @@ import type { data } from "react-router-dom";
 interface InterfaceServicesList {
 
   services: IService[];
+  shopId:string
 }
 
-const ServicesList: FC<InterfaceServicesList> = ({ services }) => {
+const ServicesList: FC<InterfaceServicesList> = ({ services,shopId }) => {
 
   
     const [bookService,setBookService] = useState<boolean>(false)
@@ -22,7 +23,7 @@ const ServicesList: FC<InterfaceServicesList> = ({ services }) => {
     <>
       {/* book now modal */}
 
-    {bookService && <BookNow onClose={()=>setBookService(false)} data={serviceData as IService}/>}
+    {bookService && <BookNow onClose={()=>setBookService(false)} data={serviceData as IService} shopId={shopId} />}
 
 
     <section className="max-w-7xl mx-auto px-4 py-8">

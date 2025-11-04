@@ -9,6 +9,7 @@ export interface IimageProp {
 }
 
 export interface ICustomer {
+  _id?:string
   name: string;
   email: string;
   phone: string;
@@ -146,6 +147,36 @@ export interface IBreakTime{
   breakStartTime:string
 }
 
+export interface IBooking {
+  _id?:  string
+  customerId: string;
+  userId?:string
+  shopId: string;
+  serviceId: string;
+  customerAddressId: string;
+  staffId?: string; 
+  bookingTime: any; 
+  bookingDate: string; 
+  status:string;
+  totalAmount: number;
+  paymentMethod: string,
+  paymentStatus: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IBookingPayload {
+  customerId: string;
+  shopId: string;
+  serviceId: string;
+  customerAddressId: string;
+  staffId: string;
+  bookingDate: string;
+  totalAmount: string;
+  paymentMethod: string;
+}
+
+
 export interface IStaff {
   _id?: string;
   shopName?:string
@@ -169,6 +200,17 @@ export interface IService {
   price:number|string
 }
 
+export interface IServiceData {
+  _id?:string;
+  shopName?:string;
+  serviceName:string;
+  description:string;
+  duration:number|string;
+  image:string|File|null
+  availableStaff:IStaff[]|[];
+  isActive?:boolean;
+  price:number|string
+}
 
 export interface IReview  {
   customerId?:string;

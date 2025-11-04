@@ -15,6 +15,8 @@ import ChangePasswordInProfile from "../components/Customer/ChangePasswordInProf
 import CustomerAddress from "../components/Customer/CustomerAddress";
 import ViewServicesPage from "../pages/Customer/ViewServicesPage";
 import VendorProfileView from "../pages/Customer/VendorProfileView";
+import CheckoutPage from "../pages/Customer/CheckoutPage";
+import PaymentConfirmPage from "../pages/Customer/PaymentConfirmPage";
 
 const CustomerRoutes = () => {
   return (
@@ -96,6 +98,29 @@ const CustomerRoutes = () => {
             </CustomerProtectedRoute>
           }/>
 
+          <Route
+            path="/service/checkout"
+            element ={
+
+              <CustomerProtectedRoute>
+                <CheckoutPage/>
+            </CustomerProtectedRoute>
+            }
+            />
+
+            <Route
+            path="/service/payment-confirm"
+            element ={
+
+              <CustomerProtectedRoute>
+                <PaymentConfirmPage/>
+            </CustomerProtectedRoute>
+            }
+            />
+
+            
+
+          
         {/* //----------------------------------------------- profile ------------------------ */}
         <Route
           path={CUSTOMER_ROUTES.PROFILE}

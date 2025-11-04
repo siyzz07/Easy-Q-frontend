@@ -1,18 +1,20 @@
-import React, { useState, type FC } from "react";
+import React, { useEffect, useState, type FC } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup"; 
+import * as Yup from "yup";
 import { MapPin, User, X } from "lucide-react";
-import type { IService } from "../../Shared/types/Types";
+import type {
+  ICustomerAddress,
+  IService,
+  IStaff,
+} from "../../Shared/types/Types";
+import { getAddress } from "../../Services/CustomerApiService";
+import { useNavigate } from "react-router-dom";
 
 interface Staff {
   id: number;
   name: string;
   avatar?: string;
 }
-
-const staffList: Staff[] = [
-
-];
 
 const addresses = [
   "123 MG Road, Bangalore",
@@ -23,34 +25,44 @@ const addresses = [
 interface IBookNow {
   onClose: () => void;
   data: IService;
+  shopId:string
 }
-
 
 const initialValues = {
   staff: "",
   address: "",
 };
 
-
 const validationSchema = Yup.object({
   staff: Yup.string().required("Please select a staff member"),
   address: Yup.string().required("Please select an address"),
 });
 
+  const BookNow: FC<IBookNow> = ({ onClose, data,shopId }) => {
 
-const handleSubmit = (
-  values: typeof initialValues,
-  selectedDate: Date,
-  data: IService
-) => {
-  
-};
-
-const BookNow: FC<IBookNow> = ({ onClose, data }) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [addresses, setAddress] = useState<ICustomerAddress[]>([]);
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+    getCustomerAddress();
+  }, []);
+
+  const getCustomerAddress = async () => {
+    try {
+      let response = await getAddress();
+      if (response?.data?.data) {
+        setAddress(response.data.data);
+      }
+    } catch (error: unknown) {
+      console.log("error to get customer address");
+    }
+  };
+
   const today = new Date();
 
-  // Generate the next 5 dates dynamically
+  let staffList: any = data.availableStaff;
+
   const allDates = Array.from({ length: 5 }, (_, i) => {
     const d = new Date(today);
     d.setDate(today.getDate() + i);
@@ -61,13 +73,47 @@ const BookNow: FC<IBookNow> = ({ onClose, data }) => {
     date.toLocaleDateString("en-US", { weekday: "short" });
   const formatDate = (date: Date) => date.getDate();
 
+
+
+const handleSubmit = (
+  values: typeof initialValues,
+  selectedDate: Date,
+  data: IService
+) => {
+  
+  
+  
+  
+  let bookingData = {
+    staffId:values.staff,
+    addressId:values.address,
+    serviceId:data._id,
+    selectedDate:selectedDate,
+    shopId:shopId
+  }
+
+  let encode = btoa(JSON.stringify(bookingData))
+    navigate(`/customer/service/checkout?bookingId=${encode}`)
+  };
+  
+
+
+
+
+
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#00000055] backdrop-blur-sm z-50">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative border border-gray-100">
         {/* Header */}
         <div className="flex items-center justify-between mb-5 border-b pb-3">
-          <h2 className="text-xl font-semibold text-gray-900">Book Your Time</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-800">
+          <h2 className="text-xl font-semibold text-gray-900">
+            Book Your Time
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-800"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -97,7 +143,9 @@ const BookNow: FC<IBookNow> = ({ onClose, data }) => {
                   }`}
                 >
                   <span className="text-xs">{formatDay(date)}</span>
-                  <span className="text-lg font-semibold">{formatDate(date)}</span>
+                  <span className="text-lg font-semibold">
+                    {formatDate(date)}
+                  </span>
                 </button>
               );
             })}
@@ -112,7 +160,6 @@ const BookNow: FC<IBookNow> = ({ onClose, data }) => {
         >
           {() => (
             <Form>
-              
               <div className="mb-5">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Select Staff
@@ -127,9 +174,9 @@ const BookNow: FC<IBookNow> = ({ onClose, data }) => {
                       className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none"
                     >
                       <option value="">Choose Staff</option>
-                      {staffList.map((staff) => (
-                        <option key={staff.id} value={staff.name}>
-                          {staff.name}
+                      {staffList.map((staff: any) => (
+                        <option key={staff._id} value={staff._id}>
+                          {staff.staffName}
                         </option>
                       ))}
                     </Field>
@@ -143,7 +190,6 @@ const BookNow: FC<IBookNow> = ({ onClose, data }) => {
                 />
               </div>
 
-           
               <div className="mb-5">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Select Address
@@ -158,9 +204,9 @@ const BookNow: FC<IBookNow> = ({ onClose, data }) => {
                       className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none"
                     >
                       <option value="">Choose Address</option>
-                      {addresses.map((addr, i) => (
-                        <option key={i} value={addr}>
-                          {addr}
+                      {addresses.map((address, i) => (
+                        <option key={i} value={address._id}>
+                          {`${address.address}-${address.city}`}
                         </option>
                       ))}
                     </Field>
