@@ -11,8 +11,12 @@ interface InterfaceServicesList {
 }
 
 const ServicesList: FC<InterfaceServicesList> = ({ services }) => {
+
+  
     const [bookService,setBookService] = useState<boolean>(false)
     const [serviceData,setServiceData] = useState<IService|null>(null)
+    console.log(serviceData);
+    
   return (
 
     <>
