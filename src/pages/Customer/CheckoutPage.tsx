@@ -85,7 +85,6 @@ const CheckoutPage = () => {
     }
   };
 
-
   const handleProceedToPayment = async () => {
     try {
       if (!serviceData || !customerData || !addressData || !shopData) {
@@ -98,31 +97,31 @@ const CheckoutPage = () => {
         return;
       }
 
-const bookingPayload :IBookingPayload = {
-  customerId: customerData._id as string,
-  shopId: shopData._id as string,
-  serviceId: serviceData._id as string,
-  customerAddressId: addressData._id as string,
-  staffId,
-  bookingDate: selectedDate, 
-  totalAmount: serviceData.price as string,
-  paymentMethod: selectedPayment,
-};
+      const bookingPayload: IBookingPayload = {
+        customerId: customerData._id as string,
+        shopId: shopData._id as string,
+        serviceId: serviceData._id as string,
+        customerAddressId: addressData._id as string,
+        staffId,
+        bookingDate: selectedDate,
+        totalAmount: serviceData.price as string,
+        paymentMethod: selectedPayment,
+      };
 
       const response = await createBooking(bookingPayload);
 
-       if(response.data.data){
+      if (response.data.data) {
         console.log(response.data.data);
-        
-        let data={
-          bookingDate:response.data.data.bookingDate,
-          bookingTime:response.data.data.bookingTime,
-          paymentMethod:response.data.data.paymentMethod,
-          totalAmount:response.data.data.totalAmount
-        }
-        let encode = btoa(JSON.stringify(data))
-           navigate(`/customer/service/payment-confirm?id=${encode}`)
-       }
+
+        let data = {
+          bookingDate: response.data.data.bookingDate,
+          bookingTime: response.data.data.bookingTime,
+          paymentMethod: response.data.data.paymentMethod,
+          totalAmount: response.data.data.totalAmount,
+        };
+        let encode = btoa(JSON.stringify(data));
+        navigate(`/customer/service/payment-confirm?id=${encode}`);
+      }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.log("Error creating booking:", error.message);
@@ -247,9 +246,10 @@ const bookingPayload :IBookingPayload = {
                     type="button"
                     onClick={() => setSelectedPayment(method.id)}
                     className={`w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-4 border-2 rounded-xl transition-all 
-                      ${selectedPayment === method.id
-                        ? "border-blue-600 bg-blue-50"
-                        : "border-gray-200 hover:border-blue-300"
+                      ${
+                        selectedPayment === method.id
+                          ? "border-blue-600 bg-blue-50"
+                          : "border-gray-200 hover:border-blue-300"
                       }`}
                   >
                     <div className="flex items-center gap-3 sm:gap-4">
@@ -286,7 +286,6 @@ const bookingPayload :IBookingPayload = {
                     </p>
                     <p className="text-xs text-orange-800">
                       Booking will only be confirmed after successful payment.
-                      Your selected time slot will be held for 10 minutes.
                     </p>
                   </div>
                 </div>

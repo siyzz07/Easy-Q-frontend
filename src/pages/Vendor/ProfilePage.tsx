@@ -8,11 +8,14 @@ import { getShopData } from "../../Services/VendorApiServices";
 import type { IVendor, IVendroShopData } from "../../Shared/types/Types";
 import { AxiosError } from "axios";
 import EditProfileModal from "../../components/Vendor/EditProfileModal";
+import ShopImageUpload from "../../components/Vendor/ShopImageUpload&Preview";
 // import { shopData, type IVendorState } from "../../Redux/VendorSlice";
 
 const ProfilePage = () => {
   let [vendordata, setVendorData] = useState<IVendroShopData>();
   let [editShopPoppup, setShopPopup] = useState<boolean>(false);
+
+
 
   useEffect(() => {
     getShop();
@@ -59,6 +62,9 @@ const ProfilePage = () => {
         {editShopPoppup && (
           <EditProfileModal onClose={onClose} vendorData={vendordata || {}} />
         )}
+
+       
+
       </div>
       <div className="flex h-screen bg-gray-100">
         <div className="flex-1 flex flex-col">

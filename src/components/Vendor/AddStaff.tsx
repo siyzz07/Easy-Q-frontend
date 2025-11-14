@@ -18,26 +18,37 @@ const AddStaffSchema = Yup.object().shape({
   staffName: Yup.string()
     .required("Staff name is required")
     .min(3, "Name must be at least 3 characters long"),
+
   openingTime: Yup.string().required("Opening time is required"),
+
   closingTime: Yup.string()
     .required("Closing time is required")
-    .test(
-      "is-after",
-      "Closing time must be after opening time",
-      function (value) {
-        const { openingTime } = this.parent;
-        return !openingTime || !value || value > openingTime;
-      }
-    ),
+    .test("is-after", "Closing time must be after opening time", function (value) {
+      const { openingTime } = this.parent;
+      return !openingTime || !value || value > openingTime;
+    }),
+
   breaks: Yup.array()
     .of(
       Yup.object().shape({
-        breakStartTime: Yup.string().required("Break start is required"),
+        breakStartTime: Yup.string()
+          .required("Break start is required")
+          .test("within-hours-start", "Break start must be within working hours", function (value) {
+            const { openingTime, closingTime } = this.options.context || {};
+            if (!openingTime || !closingTime || !value) return true;
+            return value >= openingTime && value < closingTime;
+          }),
+
         breakEndTime: Yup.string()
           .required("Break end is required")
-          .test("is-after", "End must be after start", function (value) {
+          .test("is-after", "Break end must be after break start", function (value) {
             const { breakStartTime } = this.parent;
             return !breakStartTime || !value || value > breakStartTime;
+          })
+          .test("within-hours-end", "Break end must be within working hours", function (value) {
+            const { openingTime, closingTime } = this.options.context || {};
+            if (!openingTime || !closingTime || !value) return true;
+            return value > openingTime && value <= closingTime;
           }),
       })
     )

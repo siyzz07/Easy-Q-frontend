@@ -112,7 +112,7 @@ const ViewServicesPage: React.FC = () => {
       <div className="w-full flex flex-col items-center mt-6">
         {shopServiceData.length > 0 ? (
           <div className="w-full max-w-6xl">
-            <ServicesList services={shopServiceData} shopId={id as string} />
+            <ServicesList services={shopServiceData} shopId={id as string} shopData={shopData as IvendroFullData} />
           </div>
         ) : (
           <div className="text-center py-16 text-gray-500">

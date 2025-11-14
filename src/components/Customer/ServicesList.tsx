@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import type { IService } from "../../Shared/types/Types";
+import type { IService, IShopData, IVendroShopData } from "../../Shared/types/Types";
 import type { FC } from "react";
 import { Clock, DollarSign } from "lucide-react";
 import BookNow from "./BookNow";
 import type { data } from "react-router-dom";
+import type { IvendroFullData } from "../../pages/Customer/ViewServicesPage";
 
 interface InterfaceServicesList {
 
   services: IService[];
   shopId:string
+  shopData:IvendroFullData
 }
 
-const ServicesList: FC<InterfaceServicesList> = ({ services,shopId }) => {
+const ServicesList: FC<InterfaceServicesList> = ({ services,shopId,shopData }) => {
 
   
     const [bookService,setBookService] = useState<boolean>(false)
@@ -23,7 +25,7 @@ const ServicesList: FC<InterfaceServicesList> = ({ services,shopId }) => {
     <>
       {/* book now modal */}
 
-    {bookService && <BookNow onClose={()=>setBookService(false)} data={serviceData as IService} shopId={shopId} />}
+    {bookService && <BookNow onClose={()=>setBookService(false)} data={serviceData as IService} shopId={shopId} shopData={shopData}  />}
 
 
     <section className="max-w-7xl mx-auto px-4 py-8">

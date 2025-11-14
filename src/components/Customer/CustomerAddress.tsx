@@ -128,12 +128,13 @@ const CustomerAddress: React.FC = () => {
                       setEachAddress(data);
                     }}
                     className="h-5 w-5 text-gray-500 hover:text-blue-600 cursor-pointer" />
-                    <Trash
+                    {/* delete address */}
+                    {/* <Trash
                       onClick={() => {
                         setAddresId(data._id), setDeletePopup(true);
                       }}
                       className="h-5 w-5 text-gray-500 hover:text-red-600 cursor-pointer"
-                    />
+                    /> */}
                   </div>
                 </CardHeader>
                 <CardContent className="text-sm text-gray-700">
