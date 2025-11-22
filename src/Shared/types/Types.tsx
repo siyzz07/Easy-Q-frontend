@@ -48,6 +48,7 @@ export interface IVendroShopData{
   openAt?: any;
   closeAt?: any;
   proofImage?:any;
+  images?:IImage[]|[]
   ProfileImage?: any;
   workingDays?: any;
   coordinates?: Coordinates;
@@ -143,9 +144,16 @@ export interface IServiceVendorTypes{
 // }
 
 export interface IBreakTime{
-  breakEndTime:string,
-  breakStartTime:string
+  breakStartTime:string;
+  breakEndTime:string
 }
+
+
+export interface IImage {
+  _id?:string
+    url: string;
+    publicId: string;
+  }
 
 export interface IBooking {
   _id?:  string

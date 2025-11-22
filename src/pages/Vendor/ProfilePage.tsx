@@ -5,21 +5,24 @@ import { MapPin, Phone, Mail, Clock, Star, Pencil } from "lucide-react";
 
 import ShopViews from "../../components/Shared/ShopViews";
 import { getShopData } from "../../Services/VendorApiServices";
-import type { IVendor, IVendroShopData } from "../../Shared/types/Types";
+import type {
+  IImage,
+  IVendor,
+  IVendroShopData,
+} from "../../Shared/types/Types";
 import { AxiosError } from "axios";
 import EditProfileModal from "../../components/Vendor/EditProfileModal";
-import ShopImageUpload from "../../components/Vendor/ShopImageUpload&Preview";
+import ShopImageUpload from "../../components/Shared/ShopImageUpload&Preview";
 // import { shopData, type IVendorState } from "../../Redux/VendorSlice";
 
 const ProfilePage = () => {
   let [vendordata, setVendorData] = useState<IVendroShopData>();
   let [editShopPoppup, setShopPopup] = useState<boolean>(false);
-
-
+  let [update, setUpdate] = useState<boolean>(false);
 
   useEffect(() => {
     getShop();
-  }, [editShopPoppup]);
+  }, [editShopPoppup, update]);
 
   const getShop = async () => {
     try {
@@ -62,9 +65,6 @@ const ProfilePage = () => {
         {editShopPoppup && (
           <EditProfileModal onClose={onClose} vendorData={vendordata || {}} />
         )}
-
-       
-
       </div>
       <div className="flex h-screen bg-gray-100">
         <div className="flex-1 flex flex-col">
@@ -160,7 +160,12 @@ const ProfilePage = () => {
 
             {/* Services List */}
             <div className="w-full md:grid-cols-2 gap-6">
-              <ShopViews isVendor={true} />
+              <ShopViews
+                isVendor={true}
+                vendorImages={vendordata?.images as IImage[]|[]}
+                vendorId={vendordata?._id as string}
+                isUpdate={() => setUpdate(!update)}
+              />
             </div>
           </main>
         </div>

@@ -104,7 +104,7 @@ const AddService: FC<IAddService> = ({ onClose }) => {
         ? await uploadToCloudinary(values.image as File, "service-images")
         : "";
 
-      values.image = imageUrl;
+      values.image = imageUrl.secure_url;
       console.log("values :>> ", values);
       const response = await addService(values);
       if (response.data.message) {

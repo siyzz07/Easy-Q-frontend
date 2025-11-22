@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
@@ -13,12 +13,17 @@ import {
   User,
   MessageSquare,
 } from "lucide-react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, insert } from "formik";
 import * as Yup from "yup";
-import ShopImageUpload from "../Vendor/ShopImageUpload&Preview";
+import ShopImageUpload from "./ShopImageUpload&Preview";
+import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
+import { addImages, imageRemove } from "../../Services/VendorApiServices";
+import { toast } from "react-toastify";
+import { Axios, AxiosError } from "axios";
+import type { IImage, IVendroShopData } from "../../Shared/types/Types";
 
 // --- Mock Data ---
-const PHOTOS = ["/shop-1.jpg", "/shop-2.jpg", "/shop-3.jpg"];
+
 const INITIAL_REVIEWS = [
   {
     id: 1,
@@ -57,27 +62,64 @@ const getRatingDistribution = (reviews: typeof INITIAL_REVIEWS) => {
 
 interface ShopViewsProps {
   isVendor: boolean;
-  addReview?: () => void;
-  addImage?: () => void;
+  vendorImages: IImage[] | [];
+  vendorId: string;
+  isUpdate?: () => void;
+  // addReview?: () => void;
+  // addImage?: () => void;
 }
 
-const ShopViews: React.FC<ShopViewsProps> = ({ isVendor }) => {
-  const [photos, setPhotos] = useState(PHOTOS);
+const ShopViews: React.FC<ShopViewsProps> = ({
+  isVendor,
+  vendorImages,
+  vendorId,
+  isUpdate,
+}) => {
+  const [photos, setPhotos] = useState<IImage[] | []>([]);
   const [reviews, setReviews] = useState(INITIAL_REVIEWS);
-
   const [shopImagePopup, setShopImagePopup] = useState(false);
+  const [preview, setPreview] = useState<IImage | null>(null);
+  const [type, setType] = useState<string>("");
+
+  useEffect(() => {
+    if (vendorImages) {
+      setPhotos(vendorImages);
+    }
+  });
 
   const avgRating = calculateAverageRating(reviews);
   const distribution = getRatingDistribution(reviews);
   const totalReviews = reviews.length;
 
   // Save uploaded image
-  const handleSaveImage = (image: File|null) => {
-    console.log('image :>> ', image);
+  const handleSaveImage = async (image: File | null) => {
+    try {
+      let imageUrl = await uploadToCloudinary(image as File);
+      let imageData = {
+        url: imageUrl.secure_url,
+        publicId: imageUrl.public_id,
+      };
+
+      let response = await addImages(imageData);
+      if (response?.data.message) {
+        toast.success(response.data.message);
+      }
+      setShopImagePopup(false);
+      isUpdate?.();
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log("error to add shop image ");
+        console.log(error.response);
+      }
+      setShopImagePopup(false);
+    }
   };
 
   // Add review
-  const handleReviewForm = async (values: { rating: number; comment: string }, { resetForm }: any) => {
+  const handleReviewForm = async (
+    values: { rating: number; comment: string },
+    { resetForm }: any
+  ) => {
     const newReview = {
       id: Date.now(),
       name: "User",
@@ -90,16 +132,57 @@ const ShopViews: React.FC<ShopViewsProps> = ({ isVendor }) => {
     resetForm();
   };
 
+  const imagePrivew = (p: IImage) => {
+    setType("preview");
+    setPreview(p);
+    setShopImagePopup(true);
+  };
 
+  const deleteImage = async (id: string, imageId: string) => {
+    try{
 
+      const publicId = id
+      const image_id = imageId
+        const data ={
+          publicId,
+          image_id
+        }
+        setShopImagePopup(false)
+      const response = await imageRemove(data)
+        if(response?.data?.message){
+          toast.success(response.data.message)
+        }
+        isUpdate?.()
 
+    }catch(error){
+        if(error instanceof AxiosError){
+          if(error.response?.data.message){
+            toast.error(error.response?.data.message)
+          }else{
+            toast.error('Error to delete image')
+          }
+          setShopImagePopup(false)
+        }
+
+    }
+  };
+
+  const addImage = (val: boolean) => {
+    setType("upload");
+    setShopImagePopup(val);
+  };
   return (
     <>
       {shopImagePopup && (
         <ShopImageUpload
-          use="upload"
+          use={type as "preview" | "upload"}
           onClose={() => setShopImagePopup(false)}
           onSave={handleSaveImage}
+          url={preview?.url}
+          publicId={preview?.publicId}
+          isVendor={isVendor}
+          onDelete={deleteImage}
+          imageId={preview?._id}
         />
       )}
 
@@ -112,7 +195,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({ isVendor }) => {
 
           {isVendor && (
             <Button
-              onClick={() => setShopImagePopup(true)}
+              onClick={() => addImage(true)}
               size="sm"
               className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
             >
@@ -146,10 +229,14 @@ const ShopViews: React.FC<ShopViewsProps> = ({ isVendor }) => {
                   {photos.map((p, i) => (
                     <motion.div
                       key={i}
+                      onClick={() => imagePrivew(p)}
                       whileHover={{ scale: 1.05 }}
                       className="rounded-lg border overflow-hidden shadow-sm"
                     >
-                      <img src={p} className="w-full h-32 sm:h-36 object-cover" />
+                      <img
+                        src={p.url}
+                        className="w-full h-32 sm:h-36 object-cover"
+                      />
                     </motion.div>
                   ))}
                 </div>
@@ -162,7 +249,6 @@ const ShopViews: React.FC<ShopViewsProps> = ({ isVendor }) => {
 
             {/* REVIEWS TAB */}
             <TabsContent value="reviews" className="p-4 sm:p-6 space-y-6">
-
               {/* Rating Summary — Responsive */}
               <div className="rounded-lg border bg-muted/10 p-4 sm:p-5">
                 <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
@@ -170,10 +256,11 @@ const ShopViews: React.FC<ShopViewsProps> = ({ isVendor }) => {
                 </h3>
 
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-
                   {/* Average Rating */}
                   <div className="text-center sm:w-40">
-                    <span className="text-4xl font-bold text-primary">{avgRating}</span>
+                    <span className="text-4xl font-bold text-primary">
+                      {avgRating}
+                    </span>
                     <div className="text-yellow-500 text-lg">
                       {"⭐".repeat(Math.round(Number(avgRating)))}
                     </div>
@@ -190,9 +277,16 @@ const ShopViews: React.FC<ShopViewsProps> = ({ isVendor }) => {
 
                       return (
                         <div key={star} className="flex items-center gap-2">
-                          <span className="w-10 text-sm font-medium">{star}★</span>
-                          <Progress value={percent} className="h-2 flex-1 [&>div]:bg-yellow-400" />
-                          <span className="w-6 text-xs text-muted-foreground text-right">{count}</span>
+                          <span className="w-10 text-sm font-medium">
+                            {star}★
+                          </span>
+                          <Progress
+                            value={percent}
+                            className="h-2 flex-1 [&>div]:bg-yellow-400"
+                          />
+                          <span className="w-6 text-xs text-muted-foreground text-right">
+                            {count}
+                          </span>
                         </div>
                       );
                     })}
@@ -214,7 +308,6 @@ const ShopViews: React.FC<ShopViewsProps> = ({ isVendor }) => {
                   >
                     {({ values, setFieldValue }) => (
                       <Form className="space-y-3">
-
                         {/* Rating Selector */}
                         <div className="flex items-center gap-1">
                           {[1, 2, 3, 4, 5].map((star) => (
@@ -241,13 +334,28 @@ const ShopViews: React.FC<ShopViewsProps> = ({ isVendor }) => {
                           ))}
                         </div>
 
-                        <ErrorMessage name="rating" component="p" className="text-xs text-red-500" />
+                        <ErrorMessage
+                          name="rating"
+                          component="p"
+                          className="text-xs text-red-500"
+                        />
 
                         {/* Comment */}
-                        <Field as={Textarea} name="comment" placeholder="Write your experience..." />
-                        <ErrorMessage name="comment" component="p" className="text-xs text-red-500" />
+                        <Field
+                          as={Textarea}
+                          name="comment"
+                          placeholder="Write your experience..."
+                        />
+                        <ErrorMessage
+                          name="comment"
+                          component="p"
+                          className="text-xs text-red-500"
+                        />
 
-                        <Button type="submit" className="bg-blue-600 text-white hover:bg-blue-700">
+                        <Button
+                          type="submit"
+                          className="bg-blue-600 text-white hover:bg-blue-700"
+                        >
                           Submit Review
                         </Button>
                       </Form>
@@ -259,20 +367,30 @@ const ShopViews: React.FC<ShopViewsProps> = ({ isVendor }) => {
               {/* REVIEW LIST */}
               <div className="flex flex-col gap-4">
                 {reviews.map((r) => (
-                  <div key={r.id} className="rounded-lg border bg-muted/10 p-4 sm:p-5">
+                  <div
+                    key={r.id}
+                    className="rounded-lg border bg-muted/10 p-4 sm:p-5"
+                  >
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
                       <h3 className="font-medium flex items-center gap-1">
-                        <User className="h-4 w-4 text-muted-foreground" /> {r.name}
+                        <User className="h-4 w-4 text-muted-foreground" />{" "}
+                        {r.name}
                       </h3>
-                      <span className="text-xs text-muted-foreground">{r.date}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {r.date}
+                      </span>
                     </div>
 
                     <div className="text-yellow-500 text-sm mt-1">
                       {"⭐".repeat(r.rating)}
-                      <span className="text-muted-foreground text-xs ml-1">({r.rating}/5)</span>
+                      <span className="text-muted-foreground text-xs ml-1">
+                        ({r.rating}/5)
+                      </span>
                     </div>
 
-                    <p className="mt-2 text-sm text-muted-foreground">{r.comment}</p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {r.comment}
+                    </p>
                   </div>
                 ))}
               </div>

@@ -57,7 +57,7 @@ const SignupForm: FC = () => {
       formData.append("email", values.email);
       formData.append("phone", values.phone);
       formData.append("password", values.password);
-      formData.append('proofImage',imageUrl)
+      formData.append('proofImage',imageUrl.secure_url)
       formData.append('role','vendor')
 
       const response = await verifyEmail(formData);

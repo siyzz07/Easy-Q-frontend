@@ -17,6 +17,7 @@ import ViewServicesPage from "../pages/Customer/ViewServicesPage";
 import VendorProfileView from "../pages/Customer/VendorProfileView";
 import CheckoutPage from "../pages/Customer/CheckoutPage";
 import PaymentConfirmPage from "../pages/Customer/PaymentConfirmPage";
+import BookingsPage from "../pages/Customer/BookingsPage";
 
 const CustomerRoutes = () => {
   return (
@@ -119,7 +120,7 @@ const CustomerRoutes = () => {
             />
 
             
-
+           
           
         {/* //----------------------------------------------- profile ------------------------ */}
         <Route
@@ -138,7 +139,10 @@ const CustomerRoutes = () => {
               </CustomerProtectedRoute>
             }
           />
-
+            <Route
+              path={CUSTOMER_ROUTES.BOOKINGS}
+              element={<BookingsPage/>}
+          />
           <Route
             path={CUSTOMER_ROUTES.CHANGE_PASSWORD_IN_PROFILE}
             element={

@@ -32,7 +32,7 @@ const HomePage = () => {
   
   
   return (
-    <main className="min-h-screen bg-[#EFF6FF] py-5 px-4">
+    <main className="min-h-screen bg-[#EFF6FF]  ">
       {/* Top Search Bar */}
       <section className="bg-white shadow rounded-xl justify-center shadow-gray-200 p-5 max-w-8xl mx-auto flex flex-col md:flex-row gap-5 items-center">
         <div className="relative w-full md:w-1/3">
@@ -67,7 +67,7 @@ const HomePage = () => {
       </section>
 
       {/* Main Content Area */}
-      <section className="mt-6 max-w-8xl mx-auto grid md:grid-cols-[260px_1fr] gap-4">
+      <section className="mt-6 max-w-8xl mx-auto grid md:grid-cols-[260px_1fr] gap-4 px-4">
         <aside>
           <Filter />
         </aside>

@@ -25,13 +25,14 @@ const ConfirmationModal: FC<IConfirmationModal> = ({
 
 
   const handleSubmit = () =>{
+
       if(submit) submit(payload);
         if(close)close();
 
 
   };
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-70 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md relative p-6">
         {/* Close Button */}
         <button

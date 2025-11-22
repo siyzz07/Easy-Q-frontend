@@ -1,6 +1,6 @@
 
 import {  VendorAxiosInstance } from "../config/AxiosInstance";
-import type { IService, IStaff, IVendor, IVendorLogin } from "../Shared/types/Types";
+import type { IImage, IService, IStaff, IVendor, IVendorLogin } from "../Shared/types/Types";
 
 
 
@@ -85,6 +85,19 @@ export const logoutVendor = async () =>{
     return response;
 };
 
+
+
+//--------------------------- add shop images
+export const addImages = async(data:IImage)=>{
+    const response = await VendorAxiosInstance.put('/shop/image',{data})
+    return response
+}
+
+//--------------------------- remove shop images
+export const imageRemove = async (data:{publicId:string,image_id:string}) =>{
+        const response = await VendorAxiosInstance.put('/shop/delete-image',data)
+        return response
+}
 
 /**
  * 

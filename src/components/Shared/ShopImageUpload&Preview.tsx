@@ -2,12 +2,19 @@ import React, { useState, type FC } from "react";
 import { Trash2 } from "lucide-react";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import ConfirmationModal from "./ConfirmationModal";
+import { toast } from "react-toastify";
 
 interface IShopImageUpdate {
   use: "upload" | "preview";
   data?: string;
+  imageId?:string
+  url?:string
+  publicId?:string
   onClose: () => void;
   onSave: (image: File | null) => void; 
+  isVendor:boolean
+  onDelete?:(id:string,imageId:string)=>void
 }
 
 
@@ -26,9 +33,21 @@ const ImageSchema = Yup.object().shape({
     }),
 });
 
-const ShopImageUpload: FC<IShopImageUpdate> = ({ use, data, onClose, onSave }) => {
+const ShopImageUpload: FC<IShopImageUpdate> = ({ isVendor,use, data, onClose, onSave ,url,publicId,onDelete,imageId}) => {
   const [preview, setPreview] = useState<string | null>(data || null);
-  const [imageFile, setImageFile] = useState<File | null>(null); // <-- NEW
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [confirmation,setComfirmation] = useState<boolean>(false) 
+
+
+    const dedteImage = (id:string|undefined) =>{
+      if(id && imageId){
+        onDelete?.(id,imageId)
+      }else{
+        toast.error('Error to delete image')
+      }
+
+    }
+
 
   const ModalWrapper = ({ children }: { children: React.ReactNode }) => (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
@@ -37,6 +56,10 @@ const ShopImageUpload: FC<IShopImageUpdate> = ({ use, data, onClose, onSave }) =
       </div>
     </div>
   );
+
+
+
+
 
   // ---------------- UPLOAD MODE ----------------
   if (use === "upload") {
@@ -48,7 +71,7 @@ const ShopImageUpload: FC<IShopImageUpdate> = ({ use, data, onClose, onSave }) =
           onSave(imageFile); 
         }}
       >
-        {({ setFieldValue, handleSubmit, isValid }) => (
+        {({ setFieldValue, handleSubmit, isValid,isSubmitting }) => (
           <Form>
             <ModalWrapper>
               {/* Header */}
@@ -130,7 +153,7 @@ const ShopImageUpload: FC<IShopImageUpdate> = ({ use, data, onClose, onSave }) =
                 <div className="flex justify-center mt-5">
                   <button
                     type="button"
-                    disabled={!isValid}
+                    disabled={!isValid||isSubmitting}
                     onClick={() => handleSubmit()}
                     className={`px-6 py-2.5 rounded-lg shadow text-white ${
                       isValid
@@ -138,7 +161,7 @@ const ShopImageUpload: FC<IShopImageUpdate> = ({ use, data, onClose, onSave }) =
                         : "bg-gray-400 cursor-not-allowed"
                     } transition`}
                   >
-                    Save
+                    {isSubmitting?'Saving...':'Save'}
                   </button>
                 </div>
               )}
@@ -152,6 +175,16 @@ const ShopImageUpload: FC<IShopImageUpdate> = ({ use, data, onClose, onSave }) =
   // ---------------- PREVIEW MODE ----------------
   if (use === "preview") {
     return (
+
+      <>
+      {confirmation && 
+      <ConfirmationModal
+          text="Delete Image?"
+          description="Are you sure you want to delete this image? This action cannot be undone."
+          close={()=>setComfirmation(false)}
+          payload={publicId}
+          submit={dedteImage}
+      />}
       <ModalWrapper>
         <div className="flex items-center justify-between mb-4 border-b pb-3">
           <h2 className="text-lg font-semibold text-gray-700">Image Preview</h2>
@@ -163,17 +196,18 @@ const ShopImageUpload: FC<IShopImageUpdate> = ({ use, data, onClose, onSave }) =
 
         <div className="relative rounded-xl overflow-hidden border bg-gray-50">
           <img
-            src={preview || data}
+            src={url}
             alt="Preview"
             className="w-full max-h-[70vh] object-contain rounded-xl"
           />
-
+          { isVendor &&
           <button
-            onClick={() => setPreview(null)}
-            className="absolute top-3 right-3 bg-white/90 p-2 rounded-full shadow hover:bg-gray-100 transition"
+            onClick={() => setComfirmation(true)}
+            className="absolute top-3 right-3 bg-white/90 p-2 cursor-pointer rounded-full shadow hover:bg-gray-100 transition"
           >
             <Trash2 size={20} className="text-red-600" />
           </button>
+           }
         </div>
 
         {preview && (
@@ -187,6 +221,7 @@ const ShopImageUpload: FC<IShopImageUpdate> = ({ use, data, onClose, onSave }) =
           </div>
         )}
       </ModalWrapper>
+      </>
     );
   }
 

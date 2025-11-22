@@ -7,7 +7,7 @@ import LandingPageBody from "../../../components/Customer/LandingPageBody";
 const HomePageLayout = () => {
   const menuItems = [
     { label: "Home", path: "/customer" },
-    { label: "Booking", path: "/customer/booking" },
+    { label: "Bookings", path: "/customer/bookings" },
     { label: "Contract", path: "/customer/contract" },
     { label: "Favorite", path: "/customer/favorite" },
     { label: "About", path: "/customer/about" },

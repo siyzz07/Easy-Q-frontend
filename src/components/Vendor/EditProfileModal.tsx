@@ -55,7 +55,7 @@ const EditProfileModal: FC<IEditModal> = ({ onClose, vendorData }) => {
       formData.append("city", values.city);
       formData.append("openAt", values.openAt);
       formData.append("closeAt", values.closeAt);
-      formData.append("ProfileImage", imageUrl);
+      formData.append("ProfileImage", imageUrl.secure_url);
       formData.append("workingDays", values.workingDays);
 
       const response = await editShopData(formData);

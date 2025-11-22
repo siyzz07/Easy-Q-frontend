@@ -15,10 +15,13 @@ const items = [
   { label: "Edit Profile", Icon: PencilLine , path:"/customer/profile" , route:"profile"},
   { label: "Addresses", Icon: MapPin, path:"/customer/profile/customer-address", route:"customer-address" },
   { label: "Wallet", Icon: Wallet , path:"/profile" , route:"Profile"},
-  { label: "Payments", Icon: CreditCard , path:"/profile" , route:"Profile" },
+  { label: "Bookings", Icon: CreditCard , path:"/customer/profile/bookings" , route:"bookings" },
   { label: "Notifications", Icon: Bell , path:"/profile" , route:"Profile" },
   { label: "Sucurity", Icon: Lock , path:"/customer/profile/security", route:"security" },
 ];
+
+
+
 
 function ProfileTabs() {
     

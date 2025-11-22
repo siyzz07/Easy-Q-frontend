@@ -6,7 +6,8 @@ export default defineConfig({
     './src/**/*.{ts,tsx,js,jsx}', 
   ],
   theme: {
-    extend: {},
+    extend: {
+    },
   },
   plugins: [
     require('@tailwindcss/line-clamp'), 
