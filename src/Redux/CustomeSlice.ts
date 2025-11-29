@@ -3,7 +3,7 @@ import {
   customerGetAccessToken,
   decodeToken,
   getAccessToken,
-} from "../Utils/tokenUtils";
+} from "../utils/tokenUtils";
 import type { ITokenDdecode } from "../Shared/types/Types";
 
 const tokenDecode: ITokenDdecode | null = decodeToken();

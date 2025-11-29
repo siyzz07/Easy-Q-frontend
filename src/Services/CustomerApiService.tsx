@@ -178,6 +178,11 @@ export const createBooking = async (data: IBookingPayload) => {
   return response;
 };
 
+export const bookAvailableTime = async(data:{staffId:string,timePreffer:string,date:Date,serviceId:string,addressId:string,shopId:string}) =>{
+    
+    const response = await CustomerAxiosInstance.post('/booking/check-time',data)
+    return response
+}
 
 
 /**
@@ -192,3 +197,25 @@ export const addReview = async(form:{rating:string,comment:string,shopId:string}
     const respone = await CustomerAxiosInstance.post('/vendor/add-review',form)
 }
 
+/**
+ * 
+ * Favorite
+ * 
+ */
+//-------------------------------------------------------- update favorite
+export const favoriteUpdate = async (shopId:string,action:'add'|'remove') =>{
+
+    const response = await CustomerAxiosInstance.post('/favorite',{shopId,action})
+    return response
+}
+
+//-------------------------------------------------------- get favorite
+export const getFavorite = async () =>{
+    const response = await CustomerAxiosInstance.get('/favorite')
+    return response
+}
+//-------------------------------------------------------- get favorite shopes
+export const getFavoriteShopes = async () =>{
+    const response = await CustomerAxiosInstance.get('/favorite/shopes')
+    return response
+}

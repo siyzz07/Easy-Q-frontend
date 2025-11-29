@@ -3,7 +3,7 @@ import {
   decodeToken,
   getAccessToken,
   vendorGetAccessToken,
-} from "../Utils/tokenUtils";
+} from "../utils/tokenUtils";
 import { act } from "react";
 import type { ITokenDdecode } from "../Shared/types/Types";
 
