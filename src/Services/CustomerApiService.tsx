@@ -1,5 +1,6 @@
 
 
+import type { IAddContractInitialValues } from "../components/Customer/AddContractModal";
 import {  CustomerAxiosInstance } from "../config/AxiosInstance";
 import type { IBookingPayload, ICustomer, ICustomerAddress, ICustomerLogin } from "../Shared/types/Types";
 
@@ -45,6 +46,15 @@ export const getShopsData = async () =>{
     return response; 
 };
 
+
+
+export const getShopDataWithPagination = async (page:number,limit:number,shopName?:string,location?:string ,filter?:string) =>{
+
+    console.log('--',page,'--',limit,'---',shopName,'---',location);
+    
+    const response = await CustomerAxiosInstance.get( `/shops/data?page=${page}&limit=${limit}&shopName=${shopName}&location=${location}&filter=${filter}`)
+    return response
+}
 
 
 //----------------------------------------------------verify Email for reset password
@@ -189,6 +199,7 @@ export const createBooking = async (data: IBookingPayload) => {
 
 //------------------------------------------------------Add review
 export const addReview = async(form:{rating:string,comment:string,shopId:string}) =>{
-    const respone = await CustomerAxiosInstance.post('/vendor/add-review',form)
+    const response = await CustomerAxiosInstance.post('/vendor/add-review',form)
 }
+
 

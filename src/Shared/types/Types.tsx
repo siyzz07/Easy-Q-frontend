@@ -227,3 +227,34 @@ export interface IReview  {
   createdAt?: Date;
   comment:string
 }
+
+
+export interface IContractAddress {
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  phone: string;
+  coordinates: {
+    lat: string;
+    lng: string;
+  };
+}
+
+
+export interface IContractData {
+  customerId:string;
+  contractName:string;
+  description :string;
+  phone:string;
+  address:IContractAddress,
+  serviceType: {
+    _id: string;
+    serviceName: string;
+  };
+  status: 'inprogress'|'completed'|'cancelled';
+  workers:[string]|[];
+  isHiring:boolean
+  createdAt: string;
+  updatedAt: Date;
+}

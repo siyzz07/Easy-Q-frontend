@@ -32,6 +32,7 @@ export const CUSTOMER_ROUTES ={
     ADDRESS:"/profile/customer-address",
     SHOP_SERVICES:"/services/:id",  
     BOOKINGS:'/profile/bookings'
+    
 
 
 };

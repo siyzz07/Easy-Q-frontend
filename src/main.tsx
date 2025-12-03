@@ -8,12 +8,9 @@ import Store from "./Redux/Store.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
- 
-      
     <Provider store={Store}>
       <App />
     </Provider>
-  
 
     <ToastContainer
       position="bottom-center"
@@ -23,9 +20,9 @@ createRoot(document.getElementById("root")!).render(
       closeOnClick={false}
       rtl={false}
       pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="light"
+      pauseOnHover={false}
+      draggable={true}
+      theme="colored"
       transition={Bounce}
     />
   </StrictMode>
