@@ -7,7 +7,7 @@ import {
   getAccessToken,
   removeToken,
   setAccessToken,
-} from "../Utils/tokenUtils";
+} from "../utils/tokenUtils";
 import { toast } from "react-toastify";
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {

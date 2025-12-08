@@ -9,7 +9,7 @@ import { loginVendor } from "../../Services/VendorApiServices";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { hasShopData, shopData, vendorLoginSuccess } from "../../Redux/VendorSlice";
-import { setAccessToken } from "../../Utils/tokenUtils";
+import { setAccessToken } from "../../utils/tokenUtils";
 
 const SignupForm: FC = () => {
   const navigate = useNavigate();

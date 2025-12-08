@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import type { IVendor } from "../../Shared/types/Types";
 import { verifyEmail } from "../../Services/VendorApiServices";
 import { toast } from "react-toastify";
-import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
+import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
 
 const SignupForm: FC = () => {
   const navigate = useNavigate();

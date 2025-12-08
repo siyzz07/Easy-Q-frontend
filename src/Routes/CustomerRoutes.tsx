@@ -19,6 +19,7 @@ import CheckoutPage from "../pages/Customer/CheckoutPage";
 import PaymentConfirmPage from "../pages/Customer/PaymentConfirmPage";
 import BookingsPage from "../pages/Customer/BookingsPage";
 import ContractPage from "../pages/Customer/ContractPage";
+import FavoritePage from "../pages/Customer/FavoritePage";
 
 const CustomerRoutes = () => {
   return (
@@ -128,6 +129,13 @@ const CustomerRoutes = () => {
                   <ContractPage/>
                 </CustomerProtectedRoute>
               }/>
+           <Route
+            path={CUSTOMER_ROUTES.FAVORITE}
+            element={
+              <CustomerProtectedRoute>
+                <FavoritePage/>
+              </CustomerProtectedRoute>
+            }/>
           
         {/* //----------------------------------------------- profile ------------------------ */}
         <Route

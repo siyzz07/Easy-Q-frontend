@@ -3,7 +3,7 @@ import Navbar from "../../components/Shared/Navbar";
 import Footer from "../../components/Shared/Footer";
 import LandingPageBody from "../../components/Customer/LandingPageBody";
 import { useEffect } from "react";
-import { customerGetAccessToken, vendorGetAccessToken } from "../../Utils/tokenUtils";
+import { customerGetAccessToken, vendorGetAccessToken } from "../../utils/tokenUtils";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {

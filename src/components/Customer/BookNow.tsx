@@ -1,27 +1,20 @@
 import React, { useEffect, useState, type FC } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { MapPin, User, X } from "lucide-react";
+import { MapPin, User, X, Clock } from "lucide-react";
 import type {
   ICustomerAddress,
   IService,
   IStaff,
 } from "../../Shared/types/Types";
-import { getAddress } from "../../Services/CustomerApiService";
+import {
+  bookAvailableTime,
+  getAddress,
+} from "../../Services/CustomerApiService";
 import { useNavigate } from "react-router-dom";
 import type { IvendroFullData } from "../../pages/Customer/ViewServicesPage";
-
-interface Staff {
-  id: number;
-  name: string;
-  avatar?: string;
-}
-
-const addresses = [
-  "123 MG Road, Bangalore",
-  "456 Marine Drive, Mumbai",
-  "789 Anna Nagar, Chennai",
-];
+import { convertRailwayTime } from "../../utils/convertRailwayTime";
+import { toast } from "react-toastify";
 
 interface IBookNow {
   onClose: () => void;
@@ -33,16 +26,22 @@ interface IBookNow {
 const initialValues = {
   staff: "",
   address: "",
+  preferredTime: "",
 };
 
 const validationSchema = Yup.object({
   staff: Yup.string().required("Please select a staff member"),
   address: Yup.string().required("Please select an address"),
+  preferredTime: Yup.string().required("Please select a preferred time"),
 });
 
 const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData }) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [addresses, setAddress] = useState<ICustomerAddress[]>([]);
+  const [selectedStaff, setSelectedStaff] = useState<IStaff | null>(null);
+  const [staffAvailable, setStaffAvailable] = useState(true);
+
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,17 +51,12 @@ const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData }) => {
   const getCustomerAddress = async () => {
     try {
       let response = await getAddress();
-      if (response?.data?.data) {
-        setAddress(response.data.data);
-      }
-    } catch (error: unknown) {
-      console.log("error to get customer address");
-    }
+      if (response?.data?.data) setAddress(response.data.data);
+    } catch {}
   };
 
   const today = new Date();
-
-  let staffList: any = data.availableStaff;
+  const staffList: any = data.availableStaff || [];
 
   const allDates = Array.from({ length: 5 }, (_, i) => {
     const d = new Date(today);
@@ -70,170 +64,250 @@ const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData }) => {
     return d;
   });
 
-  const formatDay = (date: Date) =>
-    date.toLocaleDateString("en-US", { weekday: "short" });
-  const formatDate = (date: Date) => date.getDate();
+  const isWorkingDay = (date: Date, workingDays?: string[]) => {
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    return workingDays?.includes(days[date.getDay()]) ?? false;
+  };
+
+  // ---- staff availability check ----
+  const checkStaffAvailability = (date: Date, staff: IStaff | null) => {
+    if (!date || !staff) {
+      setStaffAvailable(true);
+      return;
+    }
+
+    const day = date.toISOString().split("T")[0];
+
+    const isBlocked = (staff.blockedDates ?? []).some((bd) => {
+      return new Date(bd).toISOString().split("T")[0] === day;
+    });
+
+    setStaffAvailable(!isBlocked);
+  };
+
+  useEffect(() => {
+    checkStaffAvailability(selectedDate, selectedStaff);
+  }, [selectedDate, selectedStaff]);
 
 
 
-  function isWorkingDay(date: Date, workingDays?: string[]) {
-    if (!workingDays) return false;
 
-    const daysShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const dayName = daysShort[date.getDay()]; 
-
-    return workingDays.includes(dayName);
-  }
-
-  const handleSubmit = (
-    values: typeof initialValues,
-    selectedDate: Date,
-    data: IService
+  const handleSubmit = async (
+       values: typeof initialValues,
+    date: Date,
+    service: IService
   ) => {
-    let bookingData = {
+    try{
+
+      // if (!selectedStaff || !selectedDate || !value) return;
+      
+      const bookingData = {
       staffId: values.staff,
       addressId: values.address,
-      serviceId: data._id,
-      selectedDate: selectedDate,
-      shopId: shopId,
+      timePreffer: values.preferredTime,
+      serviceId: service._id!,
+      date: date,
+      shopId,
     };
 
-    let encode = btoa(JSON.stringify(bookingData));
-    navigate(`/customer/service/checkout?bookingId=${encode}`);
+    console .log(values)
+      let response = await bookAvailableTime(bookingData)
+
+
+
+
+    //  let response = await checkTimeAvailable({
+    //     staffId: selectedStaff._id!,
+    //     timePreffer: value,
+    //     date: selectedDate,
+    //     serviceId: data._id!,
+    //   });
+
+
+
+      if(response?.data.success == false){
+        
+          toast.info(response.data.message,{autoClose:3000})
+      }
+    }catch(error:unknown){
+
+    }
   };
+
+  // const handleSubmit = (
+  //   values: typeof initialValues,
+  //   date: Date,
+  //   service: IService
+  // ) => {
+  //   const bookingData = {
+  //     staffId: values.staff,
+  //     addressId: values.address,
+  //     preferredTime: values.preferredTime,
+  //     serviceId: service._id,
+  //     selectedDate: date,
+  //     shopId,
+  //   };
+
+  //   console.log('---',bookingData);
+    
+
+  //   navigate( `/customer/service/checkout?bookingId=${btoa(JSON.stringify(bookingData))}`);
+  // };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#00000055] backdrop-blur-sm z-50">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative border border-gray-100">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-5 border-b pb-3">
-          <h2 className="text-xl font-semibold text-gray-900">
-            Book Your Time
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-800"
-          >
-            <X className="w-5 h-5" />
-          </button>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative">
+        <div className="flex justify-between mb-4">
+          <h2 className="text-xl font-semibold">Book Your Time</h2>
+          <X onClick={onClose} className="cursor-pointer" />
         </div>
 
-        {/* Service Name */}
-        <div className="mb-5 text-center">
-          <h3 className="text-lg font-semibold text-blue-700">
-            {data?.serviceName || "Selected Service"}
-          </h3>
+        <div className="text-center mb-4 font-semibold text-blue-600">
+          {data.serviceName}
         </div>
 
-        {/* Date Selector */}
-        <div className="flex items-center justify-center mb-6">
-          <div className="flex items-center gap-3 overflow-hidden">
-            {allDates.map((date) => {
-              const isSelected =
-                date.toDateString() === selectedDate.toDateString();
-
-              return (
-                <button
-                  key={date.toISOString()}
-                  onClick={() => setSelectedDate(date)}
-                  className={`flex flex-col items-center justify-center w-12 h-16 rounded-xl border transition-all ${
-                    isSelected
-                      ? "bg-blue-600 text-white border-blue-600 shadow-md"
-                      : "border-gray-200 text-gray-700 hover:bg-gray-100"
-                  }`}
-                >
-                  <span className="text-xs">{formatDay(date)}</span>
-                  <span className="text-lg font-semibold">
-                    {formatDate(date)}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+        {/* Date Select */}
+        <div className="flex justify-center gap-3 mb-5">
+          {allDates.map((date) => {
+            const isSelected =
+              date.toDateString() === selectedDate.toDateString();
+            return (
+              <button
+                key={date.toISOString()}
+                onClick={() => setSelectedDate(date)}
+                className={`w-12 h-16 flex flex-col items-center justify-center rounded-xl border ${
+                  isSelected ? "bg-blue-600 text-white" : ""
+                }`}
+              >
+                <span className="text-xs">
+                  {date.toLocaleDateString("en-US", { weekday: "short" })}
+                </span>
+                <span className="text-lg font-bold">{date.getDate()}</span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Formik Form */}
         {!isWorkingDay(selectedDate, shopData.workingDays) ? (
-          <div className="text-center text-red-500 font-medium mt-4 h-45 p-8">
-            No booking available on this day
-          </div>
+          <div className="text-center text-red-500 font-medium mt-4 h-45 p-8"> No booking available on this day </div>
         ) : (
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={(values) => handleSubmit(values, selectedDate, data)}
+            onSubmit={(v) => handleSubmit(v, selectedDate, data)}
           >
-            {() => (
+            {({ setFieldValue }) => (
               <Form>
-                {/* Select Staff */}
-                <div className="mb-5">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Select Staff
-                  </label>
-                  {staffList.length === 0 ? (
-                    <p className="text-gray-500 text-sm">No staff found</p>
-                  ) : (
-                    <div className="relative">
-                      <Field
-                        as="select"
-                        name="staff"
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none"
-                      >
-                        <option value="">Choose Staff</option>
-                        {staffList.map((staff: any) => (
-                          <option key={staff._id} value={staff._id}>
-                            {staff.staffName}
-                          </option>
-                        ))}
-                      </Field>
-                      <User className="absolute right-3 top-3 text-gray-400 w-4 h-4" />
-                    </div>
-                  )}
-                  <ErrorMessage
-                    name="staff"
-                    component="div"
-                    className="text-red-500 text-sm mt-1"
-                  />
+                {/* Staff */}
+                <div className="mb-4">
+                  <label>Select Staff</label>
+                  <div className="relative">
+                    <Field
+                      as="select"
+                      name="staff"
+                      onChange={(e: any) => {
+                        const staffId = e.target.value;
+                        setFieldValue("staff", staffId);
+
+                        const staffObj = staffList.find(
+                          (s:IStaff) => s._id === staffId
+                        );
+                        setSelectedStaff(staffObj || null);
+                      }}
+                      className="w-full border px-3 py-2 rounded-lg appearance-none"
+                    >
+                      <option value="">Choose Staff</option>
+                      {staffList.map((s:IStaff) => (
+                        <option key={s._id} value={s._id}>
+                          {s.staffName}
+                        </option>
+                      ))}
+                    </Field>
+                    <User size={19} className="absolute right-3 top-3 text-gray-400" />
+                  </div>
+                  <ErrorMessage name="staff" className="text-red-500" component="div" />
                 </div>
 
-                {/* Select Address */}
-                <div className="mb-5">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Select Address
-                  </label>
-                  {addresses.length === 0 ? (
-                    <p className="text-gray-500 text-sm">No address added</p>
-                  ) : (
-                    <div className="relative">
-                      <Field
-                        as="select"
+                {/* If staff available */}
+                {staffAvailable ? (
+                  <>
+                    {/* Preferred Time */}
+                    <div className="mb-4">
+                      <label>Choose Time Preference</label>
+                      <div className="relative">
+                        <Field
+                          as="select"
+                          name="preferredTime"
+                          onChange={(e: any) => {
+                            const val = e.target.value;
+                            setFieldValue("preferredTime", val); 
+                            // checkAvailableTime(val);
+                          }}
+                          className="w-full border px-3 py-2 rounded-lg appearance-none"
+                        >
+                          <option value="">Preferred Time</option>
+
+                          {selectedStaff?.breaks?.map((b, i) => (
+                            <option key={i} value={b.breakStartTime}>
+                              Before {convertRailwayTime(b.breakStartTime)}
+                            </option>
+                          ))}
+
+                          {selectedStaff?.closingTime && (
+                            <option value={selectedStaff.closingTime}>
+                              Before {convertRailwayTime(selectedStaff.closingTime)}
+                            </option>
+                          )}
+                        </Field>
+                        <Clock size={19} className="absolute right-3 top-3 text-gray-400" />
+                      </div>
+                      <ErrorMessage
+                        name="preferredTime"
+                        className="text-red-500"
+                        component="div"
+                      />
+                    </div>
+
+                    {/* Address */}
+                    <div className="mb-4">
+                      <label>Select Address</label>
+                      <div className="relative">
+                        <Field
+                          as="select"
+                          name="address"
+                          className="w-full border px-3 py-2 rounded-lg appearance-none"
+                        >
+                          <option value="">Choose Address</option>
+                          {addresses.map((a) => (
+                            <option key={a._id} value={a._id}>
+                              {a.address}-{a.city}
+                            </option>
+                          ))}
+                        </Field>
+                        <MapPin size={19} className="absolute right-3 top-3 text-gray-400" />
+                      </div>
+
+                      <ErrorMessage
                         name="address"
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none"
-                      >
-                        <option value="">Choose Address</option>
-                        {addresses.map((address, i) => (
-                          <option key={i} value={address._id}>
-                            {`${address.address}-${address.city}`}
-                          </option>
-                        ))}
-                      </Field>
-                      <MapPin className="absolute right-3 top-3 text-gray-400 w-4 h-4" />
+                        className="text-red-500"
+                        component="div"
+                      />
                     </div>
-                  )}
-                  <ErrorMessage
-                    name="address"
-                    component="div"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div>
 
-                {/* Confirm Button */}
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 rounded-lg shadow-md transition disabled:opacity-50"
-                >
-                  Confirm Booking
-                </button>
+                    <button
+                      className="w-full py-3 bg-blue-600 text-white rounded-lg"
+                      type="submit"
+                    >
+                      Confirm Booking
+                    </button>
+                  </>
+                ) : (
+                  <div className="text-center text-red-500 font-medium mt-4 h-45 p-8">
+
+                    Staff not available on this date
+                  </div>
+                
+                )}
               </Form>
             )}
           </Formik>

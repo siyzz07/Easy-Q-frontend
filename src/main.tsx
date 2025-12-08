@@ -12,18 +12,15 @@ createRoot(document.getElementById("root")!).render(
       <App />
     </Provider>
 
-    <ToastContainer
-      position="bottom-center"
-      autoClose={3000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick={false}
-      rtl={false}
-      pauseOnFocusLoss
-      pauseOnHover={false}
-      draggable={true}
-      theme="colored"
-      transition={Bounce}
-    />
+ <ToastContainer
+  position="bottom-center"
+  autoClose={2500}
+  closeOnClick
+  pauseOnHover={false}
+  draggable={false}
+  theme="colored"
+  transition={Bounce}
+  limit={3}
+/>
   </StrictMode>
 );

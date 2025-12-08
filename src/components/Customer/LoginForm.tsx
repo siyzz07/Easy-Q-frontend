@@ -8,7 +8,7 @@ import type { ICustomerLogin } from "../../Shared/types/Types";
 import { loginCustomer } from "../../Services/CustomerApiService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { setAccessToken } from "../../Utils/tokenUtils";
+import { setAccessToken } from "../../utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import { customerLoginSuccess } from "../../Redux/CustomeSlice";
 

@@ -12,7 +12,7 @@ import {
 import { NavLink, Route, useLocation, useNavigate } from "react-router-dom";
 import { boolean } from "yup";
 import { logoutVendor } from "../../Services/VendorApiServices";
-import { removeToken, vendorRemoveAccessToken } from "../../Utils/tokenUtils";
+import { removeToken, vendorRemoveAccessToken } from "../../utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import { vendorLogout } from "../../Redux/VendorSlice";
 

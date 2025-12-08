@@ -54,7 +54,8 @@ const CheckoutPage = () => {
         !decode.selectedDate ||
         !decode.serviceId ||
         !decode.staffId ||
-        !decode.shopId
+        !decode.shopId||
+        !decode.preferredTime
       ) {
         navigate("/customer");
         return;
@@ -71,13 +72,11 @@ const CheckoutPage = () => {
           getEachShopData(decode.shopId),
         ]);
 
-      if (serviceResponse?.data?.data)
-        setServiceData(serviceResponse.data.data);
-      if (customerResponse?.data?.data)
-        setCustomerData(customerResponse.data.data);
-      if (addressResponse?.data?.data)
-        setAddressData(addressResponse.data.data);
-      if (shopResponse?.data?.data) setShopData(shopResponse.data.data);
+        
+    serviceResponse?.data?.data && setServiceData(serviceResponse.data.data);
+    customerResponse?.data?.data && setCustomerData(customerResponse.data.data);
+    addressResponse?.data?.data && setAddressData(addressResponse.data.data);
+    shopResponse?.data?.data && setShopData(shopResponse.data.data);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.log("Error fetching checkout info");

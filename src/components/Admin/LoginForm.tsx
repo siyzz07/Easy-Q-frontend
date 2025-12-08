@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { AxiosError } from "axios";
 import { loginAdmin } from "../../Services/AdminApiService";
 import { toast } from "react-toastify";
-import { setAccessToken } from "../../Utils/tokenUtils";
+import { setAccessToken } from "../../utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import { adminLoginSuccess } from "../../Redux/AdminAuthSlice";
 
