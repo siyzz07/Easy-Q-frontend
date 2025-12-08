@@ -85,4 +85,5 @@ export const axiosInstance = (role: string) => {
 export const adminAxiosInstance = axiosInstance("admin");
 export const VendorAxiosInstance = axiosInstance("vendor");
 export const CustomerAxiosInstance = axiosInstance("customer");
+// ----------- contract
 export const ContractAxiosInstance = axiosInstance('contract')
