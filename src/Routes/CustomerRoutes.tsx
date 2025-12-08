@@ -18,6 +18,7 @@ import VendorProfileView from "../pages/Customer/VendorProfileView";
 import CheckoutPage from "../pages/Customer/CheckoutPage";
 import PaymentConfirmPage from "../pages/Customer/PaymentConfirmPage";
 import BookingsPage from "../pages/Customer/BookingsPage";
+import FavoritePage from "../pages/Customer/FavoritePage";
 
 const CustomerRoutes = () => {
   return (
@@ -120,7 +121,13 @@ const CustomerRoutes = () => {
             />
 
             
-           
+           <Route
+            path={CUSTOMER_ROUTES.FAVORITE}
+            element={
+              <CustomerProtectedRoute>
+                <FavoritePage/>
+              </CustomerProtectedRoute>
+            }/>
           
         {/* //----------------------------------------------- profile ------------------------ */}
         <Route

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Bell, Menu, X,User } from "lucide-react";
-import { customerGetAccessToken, getAccessToken } from "../../Utils/tokenUtils";
+import { customerGetAccessToken, getAccessToken } from "../../utils/tokenUtils";
 
 interface NavbarProps {
   menu: { label: string; path: string }[];
