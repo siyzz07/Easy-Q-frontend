@@ -41,7 +41,16 @@ export const axiosInstance = (role: string) => {
         try {
           console.log("Access token expired");
 
-          const refreshResponse = await instance.post("/auth/refresh-token",{role});
+          let roleType 
+          if(role == 'customer' || role == 'contract' ){
+            roleType = 'customer'
+          }else if (role == 'vendor'){
+            roleType = 'vendor'
+          }else{
+            roleType = 'admin'
+          }
+
+          const refreshResponse = await instance.post("/auth/refresh-token",{role:roleType});
           const newAccessToken = refreshResponse.data.accessToken;
 
           removeToken();
@@ -76,3 +85,5 @@ export const axiosInstance = (role: string) => {
 export const adminAxiosInstance = axiosInstance("admin");
 export const VendorAxiosInstance = axiosInstance("vendor");
 export const CustomerAxiosInstance = axiosInstance("customer");
+// ----------- contract
+export const ContractAxiosInstance = axiosInstance('contract')

@@ -17,6 +17,8 @@ interface ShopDataCardProps {
 }
 
 const ShopDataCard: React.FC<ShopDataCardProps> = ({ shopData }) => {
+  console.log('rerender');
+  
   console.log(shopData);
 
   const navigate = useNavigate();
@@ -86,4 +88,4 @@ const ShopDataCard: React.FC<ShopDataCardProps> = ({ shopData }) => {
   );
 };
 
-export default ShopDataCard;
+export default React.memo( ShopDataCard)
