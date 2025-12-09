@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Filter from "../../components/Customer/Filter";
 import { Search, MapPin } from "lucide-react";
 import ShopDataCard from "../../components/Customer/ShopDataCard";
-import { getShopData as fetchShopDataApi } from "../../Services/VendorApiServices";
-import { getShopsData } from "../../Services/CustomerApiService";
+import { getShopData as fetchShopDataApi } from "../../Services/ApiService/VendorApiServices";
+import { getShopsData } from "../../Services/ApiService/CustomerApiService";
 
 const HomePage = () => {
   const [shops, setShops] = useState<any[]>([]);

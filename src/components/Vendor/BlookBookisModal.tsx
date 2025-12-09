@@ -14,7 +14,7 @@ import { Calendar } from "../ui/calendar";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import type { IStaff } from "../../Shared/types/Types";
-import { blockStaffDate, getAllStffs } from "../../Services/VendorApiServices";
+import { blockStaffDate, getAllStffs } from "../../Services/ApiService/VendorApiServices";
 import { AxiosError } from "axios";
 
 interface AddStaffProps {

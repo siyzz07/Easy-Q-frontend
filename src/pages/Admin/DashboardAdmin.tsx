@@ -13,7 +13,7 @@ import {
   DollarSign,
   Clock,
 } from "lucide-react";
-import { adminDashbordData } from "../../Services/AdminApiService";
+import { adminDashbordData } from "../../Services/ApiService/AdminApiService";
 
 const DashboardAdmin = () => {
 

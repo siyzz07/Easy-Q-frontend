@@ -5,7 +5,7 @@ import { Eye, EyeOff, Upload } from "lucide-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import type { IVendor } from "../../Shared/types/Types";
-import { verifyEmail } from "../../Services/VendorApiServices";
+import { verifyEmail } from "../../Services/ApiService/VendorApiServices";
 import { toast } from "react-toastify";
 import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
 

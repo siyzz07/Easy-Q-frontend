@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import EditProfileModal from "./EditProfileModal";
-import { getCustomerData } from "../../Services/CustomerApiService";
+import { getCustomerData } from "../../Services/ApiService/CustomerApiService";
 import type { ICustomer } from "../../Shared/types/Types";
 
 function Profile() {

@@ -1,7 +1,7 @@
 import React, { type FC } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { addServiceType, editServiceType } from "../../Services/AdminApiService";
+import { addServiceType, editServiceType } from "../../Services/ApiService/AdminApiService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import type { IServiceVendorTypes } from "../../Shared/types/Types";

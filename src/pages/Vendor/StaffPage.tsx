@@ -10,7 +10,7 @@ import {
 import { Button } from "../../components/ui/button";
 import ReusableTable from "../../components/Shared/Table";
 import type { IStaff } from "../../Shared/types/Types";
-import { getAllStffs } from "../../Services/VendorApiServices";
+import { getAllStffs } from "../../Services/ApiService/VendorApiServices";
 import { AxiosError } from "axios";
 import EditStaff from "../../components/Vendor/EditStaff";
 import { data } from "react-router-dom";

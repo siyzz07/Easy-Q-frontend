@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import DeleteButton from "./DeleteButton";
 import Map from "../Shared/Map";
-import { addShopData, getShopType } from "../../Services/VendorApiServices";
+import { addShopData, getShopType } from "../../Services/ApiService/VendorApiServices";
 import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
 import type {
   IServiceVendorTypes,

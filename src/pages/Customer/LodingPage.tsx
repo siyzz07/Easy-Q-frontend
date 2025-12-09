@@ -4,7 +4,7 @@ import Image from "../../components/Shared/Image";
 import image from "../../assets/customer-login-image.png";
 import LoadingVerify from "../../components/Shared/LoadingVerify";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { verifyEmail } from "../../Services/CustomerApiService";
+import { verifyEmail } from "../../Services/ApiService/CustomerApiService";
 import { toast } from "react-toastify";
 
 const LoadingPage: FC = () => {

@@ -4,7 +4,7 @@ import image from "../../assets/customer-login-image.png";
 import ForgotMailForm from "../../components/Shared/ForgotMailForm";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { verificationForResetPassword } from "../../Services/CustomerApiService";
+import { verificationForResetPassword } from "../../Services/ApiService/CustomerApiService";
 import { AxiosError } from "axios";
 
 const ForgotPasswordPage = () => {

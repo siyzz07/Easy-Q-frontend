@@ -10,7 +10,7 @@ import {
   MessageCirclePlus 
 } from "lucide-react";
 import { NavLink, Route, useLocation, useNavigate } from "react-router-dom";
-import { logoutAdmin } from "../../Services/AdminApiService";
+import { logoutAdmin } from "../../Services/ApiService/AdminApiService";
 import { useDispatch } from "react-redux";
 import { adminLogOut } from "../../Redux/AdminAuthSlice";
 import { adminRemoveAccessToken, removeToken } from "../../Utils/tokenUtils";

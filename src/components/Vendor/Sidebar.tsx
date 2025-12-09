@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { NavLink, Route, useLocation, useNavigate } from "react-router-dom";
 import { boolean } from "yup";
-import { logoutVendor } from "../../Services/VendorApiServices";
+import { logoutVendor } from "../../Services/ApiService/VendorApiServices";
 import { removeToken, vendorRemoveAccessToken } from "../../Utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import { vendorLogout } from "../../Redux/VendorSlice";

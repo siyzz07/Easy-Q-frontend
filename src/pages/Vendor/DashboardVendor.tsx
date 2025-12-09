@@ -14,8 +14,8 @@ import {
   Clock,
   PencilRuler,
 } from "lucide-react";
-import { adminDashbordData } from "../../Services/AdminApiService";
-import { vendorDashboard } from "../../Services/VendorApiServices";
+import { adminDashbordData } from "../../Services/ApiService/AdminApiService";
+import { vendorDashboard } from "../../Services/ApiService/VendorApiServices";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import BlookBookisModal from "../../components/Vendor/BlookBookisModal";

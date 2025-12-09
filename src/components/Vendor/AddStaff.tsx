@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { addStaff } from "../../Services/VendorApiServices";
+import { addStaff } from "../../Services/ApiService/VendorApiServices";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import type { IStaff } from "../../Shared/types/Types";

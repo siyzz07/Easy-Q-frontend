@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import type { IVendorLogin } from "../../Shared/types/Types";
-import { loginVendor } from "../../Services/VendorApiServices";
+import { loginVendor } from "../../Services/ApiService/VendorApiServices";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { hasShopData, shopData, vendorLoginSuccess } from "../../Redux/VendorSlice";

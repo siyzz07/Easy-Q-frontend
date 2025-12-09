@@ -2,7 +2,7 @@ import { useEffect, type ReactNode } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import type { IVendorState } from "../../Redux/VendorAuthSlice";
 import { data, Navigate } from "react-router-dom";
-import { getShopData } from "../../Services/VendorApiServices";
+import { getShopData } from "../../Services/ApiService/VendorApiServices";
 import { hasShopData, shopData } from "../../Redux/VendorSlice";
 
 interface IVProtectedRoute {

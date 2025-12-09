@@ -2,7 +2,7 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Map from "../Shared/Map"; 
-import { editAddress, postNewAddress } from "../../Services/CustomerApiService";
+import { editAddress, postNewAddress } from "../../Services/ApiService/CustomerApiService";
 import { toast } from "react-toastify";
 import { Axios, AxiosError } from "axios";
 import type { ICustomerAddress } from "../../Shared/types/Types";

@@ -1,6 +1,6 @@
 
-import {  VendorAxiosInstance } from "../config/AxiosInstance";
-import type { IImage, IService, IStaff, IVendor, IVendorLogin } from "../Shared/types/Types";
+import {  VendorAxiosInstance } from "../../config/AxiosInstance";
+import type { IImage, IService, IStaff, IVendor, IVendorLogin } from "../../Shared/types/Types";
 
 
 

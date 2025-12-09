@@ -5,7 +5,7 @@ import Footer from "../../../components/Shared/Footer";
 import LandingPageBody from "../../../components/Customer/LandingPageBody";
 import ProfileTabs from "../../../components/Customer/ProfileTabs";
 import { LogOut,User } from "lucide-react";
-import { loginCustomer, logoutCustomer } from "../../../Services/CustomerApiService";
+import { loginCustomer, logoutCustomer } from "../../../Services/ApiService/CustomerApiService";
 import { useDispatch } from "react-redux";
 import { customerLogOut } from "../../../Redux/CustomeSlice";
 import { removeToken } from "../../../Utils/tokenUtils";

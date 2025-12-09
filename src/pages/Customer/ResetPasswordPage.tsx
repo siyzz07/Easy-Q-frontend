@@ -6,10 +6,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   resetPasword,
   verificationForResetPassword,
-} from "../../Services/VendorApiServices";
+} from "../../Services/ApiService/VendorApiServices";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { resetCustomerPasword } from "../../Services/CustomerApiService";
+import { resetCustomerPasword } from "../../Services/ApiService/CustomerApiService";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();

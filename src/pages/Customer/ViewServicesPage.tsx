@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getEachShopData, getEachShopServices } from "../../Services/CustomerApiService";
+import { getEachShopData, getEachShopServices } from "../../Services/ApiService/CustomerApiService";
 import ViewShopProfile from "../../components/Customer/ViewShopProfile";
 import ServicesList from "../../components/Customer/ServicesList";
 import type { IService, IServiceData, IServiceVendorTypes, IVendroShopData } from "../../Shared/types/Types";

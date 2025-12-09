@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import type { IService, IStaff } from "../../Shared/types/Types";
 import { AxiosError } from "axios";
-import { addService, getAllStffs } from "../../Services/VendorApiServices";
+import { addService, getAllStffs } from "../../Services/ApiService/VendorApiServices";
 import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
 import { toast } from "react-toastify";
 

@@ -1,7 +1,7 @@
 
 
-import {  CustomerAxiosInstance } from "../config/AxiosInstance";
-import type { IBookingPayload, ICustomer, ICustomerAddress, ICustomerLogin } from "../Shared/types/Types";
+import {  CustomerAxiosInstance } from "../../config/AxiosInstance";
+import type { IBookingPayload, ICustomer, ICustomerAddress, ICustomerLogin } from "../../Shared/types/Types";
 
 
 

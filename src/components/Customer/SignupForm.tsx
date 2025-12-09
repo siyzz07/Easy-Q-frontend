@@ -4,7 +4,7 @@ import { Eye, EyeOff, Palette } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import type { ICustomer } from "../../Shared/types/Types";
 import * as Yup from "yup";
-import { customerSignup } from "../../Services/CustomerApiService";
+import { customerSignup } from "../../Services/ApiService/CustomerApiService";
 import { toast } from "react-toastify";
 
 

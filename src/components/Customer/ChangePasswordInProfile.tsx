@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Eye, EyeOff } from "lucide-react";
 import { AxiosError } from "axios";
-import { changePassword } from "../../Services/CustomerApiService";
+import { changePassword } from "../../Services/ApiService/CustomerApiService";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({

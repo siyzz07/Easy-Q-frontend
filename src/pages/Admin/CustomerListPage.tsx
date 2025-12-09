@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   blockCustomer,
   getCustomersData,
-} from "../../Services/AdminApiService";
+} from "../../Services/ApiService/AdminApiService";
 import type { ICustomer } from "../../Shared/types/Types";
 import ReusableTable from "../../components/Shared/Table";
 import { toast } from "react-toastify";

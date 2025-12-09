@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
-import { vendorsRequests, vendrRequestReject, vendrRequestVerified } from "../../Services/AdminApiService";
+import { vendorsRequests, vendrRequestReject, vendrRequestVerified } from "../../Services/ApiService/AdminApiService";
 import type { IVendor } from "../../Shared/types/Types";
 import ReusableTable from "../../components/Shared/Table";
 import { AspectRatio } from "../../components/ui/aspect-ratio";

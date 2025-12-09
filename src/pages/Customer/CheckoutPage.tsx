@@ -14,7 +14,7 @@ import {
   getEachAddress,
   getEachShopData,
   getSelectedSerivce,
-} from "../../Services/CustomerApiService";
+} from "../../Services/ApiService/CustomerApiService";
 import type {
   IBookingPayload,
   ICustomer,

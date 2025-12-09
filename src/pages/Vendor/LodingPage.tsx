@@ -6,7 +6,7 @@ import LoadingVerify from "../../components/Shared/LoadingVerify";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { toast } from "react-toastify";
-import { addVendor } from "../../Services/VendorApiServices";
+import { addVendor } from "../../Services/ApiService/VendorApiServices";
 
 const LoadingPage: FC = () => {
   const [searchParams] = useSearchParams();

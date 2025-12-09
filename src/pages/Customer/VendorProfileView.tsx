@@ -4,12 +4,12 @@ import { Card, CardContent, CardHeader } from "../../components/ui/card";
 import { MapPin, Phone, Mail, Clock, Star, Pencil } from "lucide-react";
 
 import ShopViews from "../../components/Shared/ShopViews";
-import { getShopData } from "../../Services/VendorApiServices";
+import { getShopData } from "../../Services/ApiService/VendorApiServices";
 import type { IImage, IVendor, IVendroShopData } from "../../Shared/types/Types";
 import { AxiosError } from "axios";
 import EditProfileModal from "../../components/Vendor/EditProfileModal";
 import { useParams } from "react-router-dom";
-import { getEachShopData } from "../../Services/CustomerApiService";
+import { getEachShopData } from "../../Services/ApiService/CustomerApiService";
 // import { shopData, type IVendorState } from "../../Redux/VendorSlice";
 
 const VendorProfileView = () => {

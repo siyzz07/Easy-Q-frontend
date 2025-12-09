@@ -8,7 +8,7 @@ import {
 import { Button } from "../../components/ui/button";
 import { Plus } from "lucide-react";
 import AddServicesAdmin from "../../components/Admin/AddServicesAdmin";
-import { getServiceTypes } from "../../Services/AdminApiService";
+import { getServiceTypes } from "../../Services/ApiService/AdminApiService";
 import type { IServiceVendorTypes } from "../../Shared/types/Types";
 import { AxiosError } from "axios";
 import { Table } from "../../components/ui/table";

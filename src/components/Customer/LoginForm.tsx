@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import type { ICustomerLogin } from "../../Shared/types/Types";
-import { loginCustomer } from "../../Services/CustomerApiService";
+import { loginCustomer } from "../../Services/ApiService/CustomerApiService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { setAccessToken } from "../../Utils/tokenUtils";

@@ -8,7 +8,7 @@ import {
   addService,
   editServices,
   getAllStffs,
-} from "../../Services/VendorApiServices";
+} from "../../Services/ApiService/VendorApiServices";
 import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
 import { toast } from "react-toastify";
 

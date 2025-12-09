@@ -5,7 +5,7 @@ import AddAddressModal from "./AddAddressModal";
 import {
   deleteCustomerAddress,
   getAddress,
-} from "../../Services/CustomerApiService";
+} from "../../Services/ApiService/CustomerApiService";
 import ConfirmationModal from "../Shared/ConfirmationModal";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";

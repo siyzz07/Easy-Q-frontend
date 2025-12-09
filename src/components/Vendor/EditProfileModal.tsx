@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
-import { editShopData } from "../../Services/VendorApiServices";
+import { editShopData } from "../../Services/ApiService/VendorApiServices";
 import type { IVendroShopData } from "../../Shared/types/Types";
 import { X } from "lucide-react";
 

@@ -5,7 +5,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import type { IBreakTime, IStaff } from "../../Shared/types/Types";
-import { editStaff } from "../../Services/VendorApiServices";
+import { editStaff } from "../../Services/ApiService/VendorApiServices";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 

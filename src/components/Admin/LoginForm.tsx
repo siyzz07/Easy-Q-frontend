@@ -4,7 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { AxiosError } from "axios";
-import { loginAdmin } from "../../Services/AdminApiService";
+import { loginAdmin } from "../../Services/ApiService/AdminApiService";
 import { toast } from "react-toastify";
 import { setAccessToken } from "../../Utils/tokenUtils";
 import { useDispatch } from "react-redux";

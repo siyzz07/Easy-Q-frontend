@@ -1,7 +1,7 @@
 import { Plus, Edit, Clock, IndianRupee, ImageOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddService from "../Vendor/AddService";
-import { getServices } from "../../Services/VendorApiServices";
+import { getServices } from "../../Services/ApiService/VendorApiServices";
 import { AxiosError } from "axios";
 import EditService from "./EditService";
 import type { IService } from "../../Shared/types/Types";

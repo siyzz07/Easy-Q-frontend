@@ -2,7 +2,7 @@ import React from "react";
 import Image from "../../components/Shared/Image";
 import image from "../../assets/vendor-login-image.png";
 import ForgotMailForm from "../../components/Shared/ForgotMailForm";
-import { verificationForResetPassword } from "../../Services/VendorApiServices";
+import { verificationForResetPassword } from "../../Services/ApiService/VendorApiServices";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";

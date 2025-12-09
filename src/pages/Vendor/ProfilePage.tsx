@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from "../../components/ui/card";
 import { MapPin, Phone, Mail, Clock, Star, Pencil } from "lucide-react";
 
 import ShopViews from "../../components/Shared/ShopViews";
-import { getShopData } from "../../Services/VendorApiServices";
+import { getShopData } from "../../Services/ApiService/VendorApiServices";
 import type {
   IImage,
   IVendor,

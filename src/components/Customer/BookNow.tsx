@@ -7,7 +7,7 @@ import type {
   IService,
   IStaff,
 } from "../../Shared/types/Types";
-import { getAddress } from "../../Services/CustomerApiService";
+import { getAddress } from "../../Services/ApiService/CustomerApiService";
 import { useNavigate } from "react-router-dom";
 import type { IvendroFullData } from "../../pages/Customer/ViewServicesPage";
 

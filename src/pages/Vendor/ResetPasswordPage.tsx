@@ -6,7 +6,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   resetPasword,
   verificationForResetPassword,
-} from "../../Services/VendorApiServices";
+} from "../../Services/ApiService/VendorApiServices";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 
