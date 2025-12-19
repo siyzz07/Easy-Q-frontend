@@ -16,7 +16,7 @@ import {
 import { Formik, Form, Field, ErrorMessage, insert } from "formik";
 import * as Yup from "yup";
 import ShopImageUpload from "./ShopImageUpload&Preview";
-import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
+import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
 import { addImages, imageRemove } from "../../Services/ApiService/VendorApiServices";
 import { toast } from "react-toastify";
 import { Axios, AxiosError } from "axios";

@@ -4,7 +4,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 interface IData{
     bookingDate:string;
-    bookingTime:string;
+    bookingTimeStart:string;
     paymentMethod:string;
     totalAmount:string
 }
@@ -89,7 +89,7 @@ function PaymentConfirmPage() {
             <Clock className="w-5 h-5 text-orange-500 mt-1" />
             <div>
               <p className="text-sm text-gray-600 mb-1">Time</p>
-              <p className="text-lg font-semibold text-gray-900">{data?.bookingTime}</p>
+              <p className="text-lg font-semibold text-gray-900">{data?.bookingTimeStart}</p>
             </div>
           </div>
 

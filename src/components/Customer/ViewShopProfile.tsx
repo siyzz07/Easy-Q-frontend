@@ -1,38 +1,62 @@
-import React, { type FC } from "react";
+import React, { useEffect, useState, type FC } from "react";
 import { MapPin, Star, Heart, Mail, Clock } from "lucide-react";
 import type { IVendroShopData } from "../../Shared/types/Types";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import type { IvendroFullData } from "../../pages/Customer/ViewServicesPage";
+import { convertRailwayTime } from "../../utils/convertRailwayTime";
+import { favoriteUpdate, getFavorite } from "../../Services/ApiService/CustomerApiService";
+import { toast } from "react-toastify";
 
 interface ViewShopProfileInterface {
   data: IvendroFullData;
-
 }
 
 const ViewShopProfile: FC<ViewShopProfileInterface> = ({ data }) => {
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
+  useEffect(() => {
+    fetchFavorites();
+  }, [isFavorite]);
 
-   function isTodayWorking(workingDaysStr?: string[]) {
-
-
+  function isTodayWorking(workingDaysStr?: string[]) {
     if (!workingDaysStr) return false;
-
-    let workingDays =workingDaysStr
-  
-
+    let workingDays = workingDaysStr;
     const daysShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const today = daysShort[new Date().getDay()];
-      
     return workingDays.includes(today);
   }
 
-  const convertRailwayTime = (time24?: string) => {
-    if (!time24) return "--";
-    const [hours, minutes] = time24.split(":");
-    const h = parseInt(hours, 10);
-    const ampm = h >= 12 ? "PM" : "AM";
-    const hours12 = h % 12 || 12;
-    return `${hours12}:${minutes} ${ampm}`;
+  const fetchFavorites = async () => {
+    try {
+      const response = await getFavorite();
+      if (response?.data?.data) {
+        let bool = response.data.data.vendors.includes(data._id);
+        setIsFavorite(bool);
+      }
+    } catch (error) {
+      console.log("error to fetch favorites", error);
+    }
+  };
+
+  const updateFavorite = async () => {
+    try {
+      let shopId = data?._id;
+      if (shopId) {
+        let action: "add" | "remove" = isFavorite ? "remove" : "add";
+
+        let response = await favoriteUpdate(shopId, action);
+        if(response?.data){
+          if(response.data.success == true){
+            toast.success(response.data.message)
+            setIsFavorite(!isFavorite)
+          }
+        }
+        
+      }
+    } catch (error: unknown) {
+      console.log('error to update favorite',error);
+      
+    }
   };
 
   return (
@@ -106,8 +130,17 @@ const ViewShopProfile: FC<ViewShopProfileInterface> = ({ data }) => {
               <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-all text-sm sm:text-base">
                 Add Review
               </button>
-              <button className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
-                <Heart size={22} className="text-gray-400" />
+              <button
+                onClick={updateFavorite}
+                className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition hover:cursor-pointer"
+              >
+                <Heart
+                  size={22}
+                  className={`
+                         transition-all duration-300
+                         ${isFavorite ? "text-red-500 fill-red-500" : "text-gray-400"}
+                       `}
+                />
               </button>
             </div>
           </div>

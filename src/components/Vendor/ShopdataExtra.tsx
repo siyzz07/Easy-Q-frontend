@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import DeleteButton from "./DeleteButton";
 import Map from "../Shared/Map";
 import { addShopData, getShopType } from "../../Services/ApiService/VendorApiServices";
-import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
+import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
 import type {
   IServiceVendorTypes,
   IShopData,

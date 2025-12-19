@@ -34,7 +34,7 @@ const ResetPasswordPage = () => {
           toast.success(response.data.message);
           navigate("/vendor/login");
         }
-      }k
+      }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.log(error);

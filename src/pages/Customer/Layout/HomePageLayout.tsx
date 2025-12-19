@@ -7,7 +7,7 @@ import LandingPageBody from "../../../components/Customer/LandingPageBody";
 const HomePageLayout = () => {
   const menuItems = [
     { label: "Home", path: "/customer" },
-    { label: "Bookings", path: "/customer/bookings" },
+    // { label: "Bookings", path: "/customer/bookings" },
     { label: "Contract", path: "/customer/contract" },
     { label: "Favorite", path: "/customer/favorite" },
     { label: "About", path: "/customer/about" },
@@ -17,7 +17,7 @@ const HomePageLayout = () => {
       <div className="flex flex-col min-h-screen bg-surface">
         <Navbar menu={menuItems} />
 
-        <main className="flex-1 ">
+        <main className="flex-1  ">
           <Outlet />
         </main>
 

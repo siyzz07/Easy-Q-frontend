@@ -33,6 +33,7 @@ const CheckoutPage = () => {
   const [staffId, setStaffId] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedPayment, setSelectedPayment] = useState<string>("");
+  const [bookingId,setBookingId] = useState<string>('')
 
   const navigate = useNavigate();
   let bookingData = serarchParams.get("bookingId");
@@ -48,20 +49,24 @@ const CheckoutPage = () => {
   const decodeData = async () => {
     try {
       const decode = JSON.parse(atob(bookingData as string));
+      console.log('decode :>> ', decode);
       if (
         !decode ||
         !decode.addressId ||
         !decode.selectedDate ||
         !decode.serviceId ||
         !decode.staffId ||
-        !decode.shopId
+        !decode.shopId||
+        !decode.bookingId
       ) {
+
         navigate("/customer");
         return;
       }
 
       setStaffId(decode.staffId);
       setSelectedDate(decode.selectedDate);
+      setBookingId(decode.bookingId)
 
       const [serviceResponse, customerResponse, addressResponse, shopResponse] =
         await Promise.all([
@@ -71,13 +76,11 @@ const CheckoutPage = () => {
           getEachShopData(decode.shopId),
         ]);
 
-      if (serviceResponse?.data?.data)
-        setServiceData(serviceResponse.data.data);
-      if (customerResponse?.data?.data)
-        setCustomerData(customerResponse.data.data);
-      if (addressResponse?.data?.data)
-        setAddressData(addressResponse.data.data);
-      if (shopResponse?.data?.data) setShopData(shopResponse.data.data);
+        
+    serviceResponse?.data?.data && setServiceData(serviceResponse.data.data);
+    customerResponse?.data?.data && setCustomerData(customerResponse.data.data);
+    addressResponse?.data?.data && setAddressData(addressResponse.data.data);
+    shopResponse?.data?.data && setShopData(shopResponse.data.data);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.log("Error fetching checkout info");
@@ -99,13 +102,9 @@ const CheckoutPage = () => {
 
       const bookingPayload: IBookingPayload = {
         customerId: customerData._id as string,
-        shopId: shopData._id as string,
-        serviceId: serviceData._id as string,
-        customerAddressId: addressData._id as string,
-        staffId,
-        bookingDate: selectedDate,
         totalAmount: serviceData.price as string,
         paymentMethod: selectedPayment,
+        bookingId:bookingId
       };
 
       const response = await createBooking(bookingPayload);

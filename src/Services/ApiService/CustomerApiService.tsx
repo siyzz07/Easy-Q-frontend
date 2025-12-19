@@ -47,6 +47,15 @@ export const getShopsData = async () =>{
 
 
 
+export const getShopDataWithPagination = async (page:number,limit:number,shopName?:string,location?:string ,filter?:string) =>{
+
+    console.log('--',page,'--',limit,'---',shopName,'---',location);
+    
+    const response = await CustomerAxiosInstance.get( `/shops/data?page=${page}&limit=${limit}&shopName=${shopName}&location=${location}&filter=${filter}`)
+    return response
+}
+
+
 //----------------------------------------------------verify Email for reset password
 export const verificationForResetPassword =  async (data:{email:string,role:string}) =>{
 
@@ -178,6 +187,11 @@ export const createBooking = async (data: IBookingPayload) => {
   return response;
 };
 
+export const bookAvailableTime = async(data:{staffId:string,timePreffer:string,date:Date,serviceId:string,addressId:string,shopId:string}) =>{
+    
+    const response = await CustomerAxiosInstance.post('/booking/check-time',data)
+    return response
+}
 
 
 /**
@@ -189,6 +203,29 @@ export const createBooking = async (data: IBookingPayload) => {
 
 //------------------------------------------------------Add review
 export const addReview = async(form:{rating:string,comment:string,shopId:string}) =>{
-    const respone = await CustomerAxiosInstance.post('/vendor/add-review',form)
+    const response = await CustomerAxiosInstance.post('/vendor/add-review',form)
 }
 
+
+/**
+ * 
+ * Favorite
+ * 
+ */
+//-------------------------------------------------------- update favorite
+export const favoriteUpdate = async (shopId:string,action:'add'|'remove') =>{
+
+    const response = await CustomerAxiosInstance.post('/favorite',{shopId,action})
+    return response
+}
+
+//-------------------------------------------------------- get favorite
+export const getFavorite = async () =>{
+    const response = await CustomerAxiosInstance.get('/favorite')
+    return response
+}
+//-------------------------------------------------------- get favorite shopes
+export const getFavoriteShopes = async () =>{
+    const response = await CustomerAxiosInstance.get('/favorite/shopes')
+    return response
+}

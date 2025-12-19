@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import type { IService, IStaff } from "../../Shared/types/Types";
 import { AxiosError } from "axios";
 import { addService, getAllStffs } from "../../Services/ApiService/VendorApiServices";
-import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
+import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
 import { toast } from "react-toastify";
 
 interface StaffMember {

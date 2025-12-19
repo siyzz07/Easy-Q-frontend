@@ -7,8 +7,18 @@ import LandingPage from "./pages/Customer/LandingPage";
 
 import PublicdRoute from "./Routes/PublicRoutes/PublicRoute";
 import { ADMIN_ROUTES, CUSTOMER_ROUTES, VENDOR_ROUTES } from "./Shared/Constants/RouteConstants";
+import { useEffect } from "react";
+import { connectSocket } from "./Services/Socket/Socket";
+import { getAccessToken } from "./utils/tokenUtils";
 
 const App = () => {
+  useEffect(() => {
+  const token = getAccessToken()
+  if (token) {
+    connectSocket(token);
+  }
+}, []);
+
   return (
     <BrowserRouter>
       <Routes>

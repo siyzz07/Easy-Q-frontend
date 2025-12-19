@@ -9,7 +9,9 @@ import { loginVendor } from "../../Services/ApiService/VendorApiServices";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { hasShopData, shopData, vendorLoginSuccess } from "../../Redux/VendorSlice";
-import { setAccessToken } from "../../Utils/tokenUtils";
+import { setAccessToken } from "../../utils/tokenUtils";
+import { connectSocket } from "../../Services/Socket/Socket";
+import { connectSocketAction } from "../../Redux/SocketSlice";
 
 const SignupForm: FC = () => {
   const navigate = useNavigate();
@@ -55,6 +57,7 @@ const SignupForm: FC = () => {
 
 
         setAccessToken(response.data.accesstoken);
+        dispatch(connectSocketAction(response.data.accesstoken))// socket io
         dispatch(vendorLoginSuccess(response.data.accesstoken));
         if(response.data.data){
 

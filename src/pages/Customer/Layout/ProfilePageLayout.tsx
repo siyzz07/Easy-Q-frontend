@@ -8,7 +8,7 @@ import { LogOut,User } from "lucide-react";
 import { loginCustomer, logoutCustomer } from "../../../Services/ApiService/CustomerApiService";
 import { useDispatch } from "react-redux";
 import { customerLogOut } from "../../../Redux/CustomeSlice";
-import { removeToken } from "../../../Utils/tokenUtils";
+import { removeToken } from "../../../utils/tokenUtils";
 
 const ProfilePageLayout = () => {
 

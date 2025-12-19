@@ -8,9 +8,10 @@ import type { ICustomerLogin } from "../../Shared/types/Types";
 import { loginCustomer } from "../../Services/ApiService/CustomerApiService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { setAccessToken } from "../../Utils/tokenUtils";
+import { setAccessToken } from "../../utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import { customerLoginSuccess } from "../../Redux/CustomeSlice";
+import { connectSocketAction } from "../../Redux/SocketSlice";
 
 const LoginForm: FC = () => {
   let dispatch = useDispatch();
@@ -47,6 +48,7 @@ const LoginForm: FC = () => {
       if (response.data.accesstoken) {
         setAccessToken(response.data.accesstoken);
         dispatch(customerLoginSuccess(response.data.accesstoken));
+        dispatch(connectSocketAction(response.data.accesstoken))// socket io
         navigate("/customer");
       }
     } catch (error: unknown) {

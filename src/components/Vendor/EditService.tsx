@@ -9,7 +9,7 @@ import {
   editServices,
   getAllStffs,
 } from "../../Services/ApiService/VendorApiServices";
-import { uploadToCloudinary } from "../../Utils/cloudinaryUtils";
+import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
 import { toast } from "react-toastify";
 
 interface IAddService {
