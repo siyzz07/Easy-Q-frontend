@@ -84,36 +84,34 @@ const SignupForm: FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 text-white">
-      <div className="mb-8 text-center">
-        <div className="flex items-center justify-center mb-4">
-          <div className="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center mr-3">
-            <span className="text-white font-bold text-xl">Q</span>
+    <div className="flex flex-col items-center justify-center p-8 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40">
+      <div className="mb-6 text-center">
+        <div className="flex items-center justify-center mb-3">
+          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center mr-2 shadow-lg shadow-primary/30">
+            <span className="text-white font-bold text-lg">Q</span>
           </div>
-          <h1 className="text-2xl font-bold">Easy Q</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Easy Q Vendor</h1>
         </div>
-        <p className="text-gray-300 text-sm">
-          Manage your bookings effortlessly and
-          <br />
-          serve customers faster!
+        <p className="text-gray-500 text-sm font-medium">
+          Manage your business efficiently.
         </p>
       </div>
 
-      <div className="mb-6 relative">
-        <div className="flex bg-slate-700 rounded-lg p-1 relative">
+      <div className="mb-6 relative w-full">
+        <div className="flex bg-gray-100/50 rounded-xl p-1 relative border border-gray-200">
           <button
             onClick={() => navigate("/customer/login")}
-            className="px-8 py-2 text-sm font-medium rounded-md transition-colors relative z-10 cursor-pointer"
+             className="flex-1 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
           >
             Customer
           </button>
-          <button className="px-8 py-2 text-sm font-medium rounded-md transition-colors relative z-10 text-slate-800 bg-white">
+          <button className="flex-1 py-2 text-sm font-semibold rounded-lg shadow-sm bg-white text-gray-900 transition-all">
             Vendor
           </button>
         </div>
       </div>
 
-      <div className="w-full max-w-md mx-auto p-6 space-y-4 bg-slate-800 rounded-3xl shadow-md">
+      <div className="w-full">
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -126,29 +124,29 @@ const SignupForm: FC = () => {
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="Enter your email"
-                  className="w-full mt-1 px-3 h-12 rounded-lg bg-white border-2 border-gray-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Business Email"
+                  className="w-full px-4 h-12 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
                 />
                 <ErrorMessage
                   name="email"
                   component="div"
-                  className="text-red-400 text-sm mt-1"
+                  className="text-red-500 text-xs mt-1 ml-1 font-medium"
                 />
               </div>
 
               <div>
-                <div className="relative mt-1">
+                <div className="relative">
                   <Field
                     id="password"
                     name="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    className="w-full h-12 pr-12 px-3 rounded-lg border-2 bg-white border-gray-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Password"
+                    className="w-full h-12 px-4 pr-12 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? (
                       <Eye className="w-5 h-5" />
@@ -160,11 +158,11 @@ const SignupForm: FC = () => {
                 <ErrorMessage
                   name="password"
                   component="div"
-                  className="text-red-400 text-sm mt-1"
+                  className="text-red-500 text-xs mt-1 ml-1 font-medium"
                 />
                <Link
                 to="/vendor/forgot-password"
-                className="text-blue-400 text-sm hover:underline "
+                className="text-primary text-xs font-semibold hover:underline block text-right mt-2"
               >
                 Forgot Password?
               </Link>
@@ -172,26 +170,32 @@ const SignupForm: FC = () => {
 
               <button
                 type="submit"
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg cursor-pointer"
+                className="w-full bg-primary hover:bg-primary/90 text-white h-12 text-sm font-bold rounded-xl shadow-lg shadow-primary/25 transition-all transform hover:scale-[1.02] active:scale-[0.98] mt-2"
               >
                 Log In
               </button>
 
+               <div className="flex items-center my-4">
+                  <div className="flex-grow border-t border-gray-200"></div>
+                  <span className="mx-4 text-xs text-gray-400 font-medium">OR</span>
+                  <div className="flex-grow border-t border-gray-200"></div>
+              </div>
+
               <button
                 type="button"
-                className="w-full border border-gray-500 text-white hover:bg-slate-700 h-12 text-base font-medium bg-transparent rounded-lg cursor-pointer" 
+                className="w-full bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 h-12 text-sm font-bold rounded-xl transition-all"
                 onClick={()=> navigate("/vendor/signup")}
               >
-                Create an Account
+                Register as Vendor
               </button>
 
-              <p className="text-center text-xs text-gray-400 mt-4">
+              <p className="text-center text-[10px] text-gray-400 mt-4 leading-relaxed">
                 By logging in, you agree to our{" "}
-                <a href="#" className="text-blue-400 hover:underline">
+                <a href="#" className="text-primary hover:underline font-medium">
                   Terms
                 </a>{" "}
                 &{" "}
-                <a href="#" className="text-blue-400 hover:underline">
+                <a href="#" className="text-primary hover:underline font-medium">
                   Privacy Policy
                 </a>
               </p>

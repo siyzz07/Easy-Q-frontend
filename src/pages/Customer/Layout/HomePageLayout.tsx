@@ -13,17 +13,13 @@ const HomePageLayout = () => {
     { label: "About", path: "/customer/about" },
   ];
   return (
-    <>
-      <div className="flex flex-col min-h-screen bg-surface">
-        <Navbar menu={menuItems} />
-
-        <main className="flex-1  ">
-          <Outlet />
-        </main>
-
-        <Footer />
-      </div>
-    </>
+<div className="flex flex-col min-h-screen bg-surface">
+  <Navbar menu={menuItems} />
+  <main className="flex-1 pt-16">
+    <Outlet />
+  </main>
+  <Footer />
+</div>
   );
 };
 

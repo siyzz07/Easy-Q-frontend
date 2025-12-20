@@ -1,6 +1,7 @@
 import React from "react";
-import { MapPin, Clock, Star } from "lucide-react";
+import { MapPin, Clock, Star, ExternalLink, ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 interface Shop {
   ProfileImage?: string;
@@ -20,68 +21,72 @@ const ShopDataCard: React.FC<ShopDataCardProps> = ({ shopData }) => {
   const navigate = useNavigate();
 
   return (
-    <article className="rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl border border-gray-100 transition-transform transform hover:-translate-y-1 duration-300">
-      <div className="relative">
+    <motion.article 
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -5 }}
+      transition={{ duration: 0.3 }}
+      className="group relative rounded-2xl overflow-hidden glass-card hover:shadow-2xl hover:border-primary/30 transition-all duration-300"
+    >
+      <div className="relative overflow-hidden aspect-[4/3]">
         <img
           src={shopData.ProfileImage || "/placeholder.svg"}
           alt={shopData.shopName}
-          className="w-full h-52 object-cover"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
-
-        {/* subtle gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+        
+        {/* Floating Tag */}
+        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-gray-800 shadow-lg">
+          Open Now
+        </div>
       </div>
 
-      <div className="p-5">
-        <h3 className="text-lg font-semibold text-gray-900 mb-1 truncate">
-          {shopData.shopName}
-        </h3>
-
-        <div className="flex items-center text-gray-600 text-sm mb-2">
-          <MapPin size={16} className="mr-1 text-gray-500" />
-          <span>
-            {shopData.city}, {shopData.state}
-          </span>
+      <div className="p-5 relative">
+        <div className="flex justify-between items-start mb-2">
+           <h3 className="text-xl font-bold text-gray-900 line-clamp-1 group-hover:text-primary transition-colors">
+            {shopData.shopName}
+           </h3>
+           <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-lg border border-yellow-100">
+             <Star size={14} className="fill-yellow-400 text-yellow-400" />
+             <span className="text-xs font-bold text-yellow-700">4.5</span>
+           </div>
         </div>
 
-        <div className="flex items-center text-gray-500 text-sm mb-3">
-          <Clock size={14} className="mr-1" />
-          <span>
-            {shopData.openAt} - {shopData.closeAt}
-          </span>
+        <div className="space-y-2 mb-6">
+          <div className="flex items-center text-muted-foreground text-sm">
+            <MapPin size={14} className="mr-2 text-primary" />
+            <span className="truncate">
+              {shopData.city}, {shopData.state}
+            </span>
+          </div>
+
+          <div className="flex items-center text-muted-foreground text-sm">
+            <Clock size={14} className="mr-2 text-primary" />
+            <span>
+              {shopData.openAt} - {shopData.closeAt}
+            </span>
+          </div>
         </div>
 
-        <div className="flex items-center mb-4">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <Star
-              key={i}
-              size={16}
-              className={
-                i <= 4 ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-              }
-            />
-          ))}
-          <span className="ml-2 text-sm text-gray-600">(4.0)</span>
-        </div>
-
-        <div className="flex gap-3 mt-4">
+        <div className="flex gap-3">
           <Link
             to={`/customer/vendor/${shopData._id}`}
-            className="flex-1 text-center py-2.5 rounded-md border border-blue-600 text-blue-600 font-medium hover:bg-blue-50 transition-all"
+            className="flex-1 inline-flex items-center justify-center py-2.5 rounded-xl border border-border bg-transparent text-gray-700 font-semibold hover:bg-gray-50 transition-all"
           >
-            Visit
+            Visit <ExternalLink size={14} className="ml-2" />
           </Link>
 
           <Link
             to={`/customer/services/${shopData._id}`}
-            className="flex-1 text-center py-2.5 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition-all shadow-sm hover:shadow-md"
+            className="flex-1 inline-flex items-center justify-center py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 transition-all"
           >
-            Services
+            Services <ArrowRight size={14} className="ml-2" />
           </Link>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 };
 
-export default React.memo( ShopDataCard)
+export default React.memo(ShopDataCard);
