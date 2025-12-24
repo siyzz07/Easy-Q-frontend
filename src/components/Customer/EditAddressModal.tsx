@@ -42,7 +42,7 @@ const validationSchema = Yup.object({
     ),
   phone: Yup.string()
     .matches(/^[0-9]+$/, "Phone must be numbers only")
-    .min(10, "Phone must be at least 10 digits")
+    .min(1, "Phone must be at least 10 digits")
     .max(15, "Phone can't exceed 15 digits")
     .required("Phone is required"),
 });
@@ -78,7 +78,7 @@ const EditAddressModal: React.FC<Props> = ({ onClose, data }) => {
         onClose();
         return;
       }
-
+      values.phone = values.phone.toString()
       let response = await editAddress(values);
       if (response.data.message) {
         toast.success(response.data.message);

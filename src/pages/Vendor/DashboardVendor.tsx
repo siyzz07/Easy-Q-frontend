@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardContent,
-  CardDescription,
 } from "../../components/ui/card";
 import {
   Users,
-  Store,
   ShoppingCart,
   DollarSign,
   Clock,
   PencilRuler,
 } from "lucide-react";
-import { adminDashbordData } from "../../Services/ApiService/AdminApiService";
+
 import { vendorDashboard } from "../../Services/ApiService/VendorApiServices";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -122,55 +120,112 @@ const DashboardVendor = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50/50">
+      {blokcBookinModal && (
+        <BlookBookisModal onClose={() => setBlookBookingModal(false)} />
+      )}
 
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+            <p className="text-gray-500 mt-1">
+              Overview of your business performance and staff.
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate("/vendor/add-staff")} 
+              className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2"
+            >
+              <Users size={18} />
+              <span>Manage Staff</span>
+            </button>
+            <button
+               onClick={() => setBlookBookingModal(true)}
+              className="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-medium px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2"
+            >
+              <Clock size={18} />
+              <span>Block Time</span>
+            </button>
+          </div>
+        </div>
 
-      {blokcBookinModal && <BlookBookisModal onClose={()=>setBlookBookingModal(false)}/>}
-
-
-
-      <main className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
-        {/* Responsive Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((item, index) => (
             <Card
               key={index}
-              className="bg-white shadow-sm hover:shadow-md transition-all duration-200 rounded-xl border border-gray-200 p-4 flex flex-col justify-between"
+              className="border-none shadow-sm ring-1 ring-gray-900/5 bg-white hover:shadow-md transition-all duration-300 rounded-xl overflow-hidden group"
             >
-              <CardHeader className="flex items-center justify-between p-0 mb-1">
-                <CardTitle className="text-sm sm:text-base font-medium text-gray-500">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-5">
+                <CardTitle className="text-sm font-medium text-gray-500 group-hover:text-gray-700 transition-colors">
                   {item.title}
                 </CardTitle>
-                <span
-                  className={`${item.iconBg} p-1.5 sm:p-2 rounded-md flex items-center justify-center`}
+                <div
+                  className={`${item.iconBg} p-2 rounded-lg transition-transform group-hover:scale-110 duration-300`}
                 >
                   {item.icon}
-                </span>
+                </div>
               </CardHeader>
-
-              <CardContent className="p-0">
-                <p className="text-lg sm:text-xl font-semibold text-gray-900 leading-tight">
+              <CardContent className="p-5 pt-0">
+                <div className="text-2xl font-bold text-gray-900">
                   {item.value}
-                </p>
-                <CardDescription className="text-xs sm:text-sm text-gray-500 mt-0.5">
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
                   {item.description}
-                </CardDescription>
+                </p>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* Buttons Section */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button className="w-full :w-fullsm md:w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg shadow transition-all duration-200">
-            Add Staff
-          </button>
-          <button
-            onClick={()=> setBlookBookingModal(true)}
-          className="w-full ms:w-full md:w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2.5 rounded-lg shadow transition-all duration-200">
-            Block Bookings
-          </button>
+        {/* Quick Actions / Featured Section could go here if needed, for instance Recent Bookings or Top Staff */}
+        
+        {/* Buttons Section - Legacy support if preferred, but Header buttons are better */}
+        {/* Quick Actions - Compact Style */}
+        <div className="mt-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div
+              onClick={() => navigate("/vendor/staffs")}
+              className="bg-white hover:bg-gray-50 border border-gray-200 rounded-xl p-4 flex items-center justify-between cursor-pointer transition-all shadow-sm hover:shadow"
+            >
+              <div className="flex items-center gap-4">
+                <div className="bg-blue-100 p-2.5 rounded-lg text-blue-600">
+                  <Users size={20} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">Staff Management</h3>
+                  <p className="text-sm text-gray-500">Manage staff and schedules</p>
+                </div>
+              </div>
+              <div className="bg-gray-100 p-1.5 rounded-full text-gray-400">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </div>
+            </div>
+
+            <div
+              onClick={() => setBlookBookingModal(true)}
+              className="bg-white hover:bg-gray-50 border border-gray-200 rounded-xl p-4 flex items-center justify-between cursor-pointer transition-all shadow-sm hover:shadow"
+            >
+              <div className="flex items-center gap-4">
+                <div className="bg-red-100 p-2.5 rounded-lg text-red-600">
+                  <Clock size={20} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">Unavailable Time</h3>
+                  <p className="text-sm text-gray-500">Block dates for maintenance</p>
+                </div>
+              </div>
+              <div className="bg-gray-100 p-1.5 rounded-full text-gray-400">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </div>
+            </div>
+          </div>
         </div>
+
       </main>
     </div>
   );

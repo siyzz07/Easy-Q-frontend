@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { ToastContainer, Bounce } from "react-toastify";
+import { ToastContainer,Slide, Bounce } from "react-toastify";
 import "./index.css";
 import App from "./App.tsx";
 import { Provider } from "react-redux";
@@ -26,7 +26,7 @@ createRoot(document.getElementById("root")!).render(
       <App />
     </Provider>
 
-    <ToastContainer
+    {/* <ToastContainer
       position="top-center"
       autoClose={2500}
       closeOnClick
@@ -35,6 +35,32 @@ createRoot(document.getElementById("root")!).render(
       theme="light"
       transition={Bounce}
       limit={3}
-    />
+    /> */}
+
+    <ToastContainer
+  position="bottom-right"
+  autoClose={2000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss={false}
+  draggable={false}
+  pauseOnHover={false}
+  //  transition={Slide}
+  theme="light"
+/>
+
+{/* <ToastContainer
+  position="top-right"
+  autoClose={2500}
+  hideProgressBar={false}
+  closeOnClick
+  pauseOnHover={false}
+  draggable={false}
+  theme="light"
+  transition={Slide}
+  limit={3}
+/> */}
   </StrictMode>
 );

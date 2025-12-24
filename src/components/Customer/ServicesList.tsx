@@ -1,109 +1,126 @@
-import React, { useState } from "react";
-import type { IService, IShopData, IVendroShopData } from "../../Shared/types/Types";
-import type { FC } from "react";
+import { useState, type FC } from "react";
+import type { IService } from "../../Shared/types/Types";
 import { Clock, DollarSign } from "lucide-react";
 import BookNow from "./BookNow";
-import type { data } from "react-router-dom";
-import type { IvendroFullData } from "../../pages/Customer/ViewServicesPage";
+import type { IvendroFullData } from "../../Shared/types/Types";
 
 interface InterfaceServicesList {
-
   services: IService[];
-  shopId:string
-  shopData:IvendroFullData
+  shopId: string;
+  shopData: IvendroFullData;
 }
 
-const ServicesList: FC<InterfaceServicesList> = ({ services,shopId,shopData }) => {
+const ServicesList: FC<InterfaceServicesList> = ({ services, shopId, shopData }) => {
+  const [bookService, setBookService] = useState<boolean>(false);
+  const [serviceData, setServiceData] = useState<IService | null>(null);
 
-  
-    const [bookService,setBookService] = useState<boolean>(false)
-    const [serviceData,setServiceData] = useState<IService|null>(null)
-    console.log(serviceData);
-    
   return (
-
     <>
       {/* book now modal */}
+      {bookService && (
+        <BookNow
+          onClose={() => setBookService(false)}
+          data={serviceData as IService}
+          shopId={shopId}
+          shopData={shopData}
+        />
+      )}
 
-    {bookService && <BookNow onClose={()=>setBookService(false)} data={serviceData as IService} shopId={shopId} shopData={shopData}  />}
+      <section className="py-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-baseline justify-between mb-8 gap-4 px-2">
+          <div>
+            <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
+              Our Services
+            </h2>
+            <p className="text-muted-foreground mt-1">
+              Choose from our wide range of professional services
+            </p>
+          </div>
+          <span className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold border border-primary/20">
+            {services.filter((s) => s.isActive).length} Available
+          </span>
+        </div>
 
-
-    <section className="max-w-7xl mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-2">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Services</h2>
-        <span className="text-gray-600 text-sm sm:text-base">
-          {services.filter((s: IService) => s.isActive).length} services available
-        </span>
-      </div>
-
-      {/* Service List */}
-      <div className="space-y-4">
-        {services.map((service) => (
-          <div
-            key={service._id}
-            className="bg-white rounded-lg p-4 sm:p-6 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start border border-gray-200 shadow-sm hover:shadow-md transition"
-          >
-            {/* Service Image */}
-            <div className="flex-shrink-0 w-full sm:w-auto">
-              <img
-                src={(service.image as string) || "/placeholder.svg"}
-                alt={service.serviceName}
-                className="w-full sm:w-24 h-40 sm:h-24 rounded-lg object-cover"
-              />
-            </div>
-
-            {/* Service Details */}
-            <div className="flex-1 w-full">
-              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2">
-                {service.serviceName}
-              </h3>
-
-              <div className="flex flex-wrap items-center gap-3 mb-2 text-gray-600 text-xs sm:text-sm">
-                <div className="flex items-center gap-1">
-                  <Clock size={14} />
-                  <span>{service.duration} min</span>
+        {/* Service Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {services.map((service) => (
+            <div
+              key={service._id}
+              className="glass-card rounded-2xl overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 border border-border/50 hover:border-primary/20 flex flex-col"
+            >
+              {/* Service Image */}
+              <div className="relative h-48 sm:h-56 overflow-hidden">
+                <img
+                  src={(service.image as string) || "/placeholder.svg"}
+                  alt={service.serviceName}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                <div className="absolute top-3 right-3">
+                   <span
+                    className={`px-3 py-1 rounded-full text-xs font-bold backdrop-blur-md shadow-sm ${
+                      service.isActive
+                        ? "bg-white/90 text-green-700 dark:bg-black/80 dark:text-green-400"
+                        : "bg-white/90 text-red-700 dark:bg-black/80 dark:text-red-400"
+                    }`}
+                  >
+                    {service.isActive ? "Available" : "Unavailable"}
+                  </span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <DollarSign size={14} />
-                  <span>${service.price}</span>
-                </div>
-                <span
-                  className={`px-2 py-1 rounded text-xs font-medium ${
-                    service.isActive
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {service.isActive ? "✓ Active" : "Inactive"}
-                </span>
               </div>
 
-              <p className="text-gray-600 text-sm line-clamp-3 sm:line-clamp-none">
-                {service.description}
-              </p>
-            </div>
+              {/* Content */}
+              <div className="p-5 flex flex-col flex-1">
+                <div className="flex justify-between items-start mb-3 gap-2">
+                   <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                    {service.serviceName}
+                  </h3>
+                  <div className="flex items-center gap-1 text-primary font-bold bg-primary/5 px-2 py-1 rounded-lg shrink-0">
+                    <DollarSign size={16} />
+                    <span>{service.price}</span>
+                  </div>
+                </div>
 
-            {/* Book Button */}
-            <div className="w-full sm:w-auto">
-              {service.isActive ? (
-                <button
-                  onClick={()=>{
-                    setBookService(true)
-                    setServiceData(service)}}
-                className="w-full sm:w-auto px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition">
-                  Book Now
-                </button>
-              ) : (
-                <button className="w-full sm:w-auto px-5 py-2 bg-gray-300 text-gray-600 rounded-lg font-medium cursor-not-allowed">
-                  Unavailable
-                </button>
-              )}
+                <div className="flex items-center gap-2 text-muted-foreground text-sm mb-4">
+                  <Clock size={16} className="text-blue-500" />
+                  <span>{service.duration} mins</span>
+                </div>
+
+                <p className="text-muted-foreground text-sm line-clamp-2 md:line-clamp-3 mb-6 flex-1">
+                  {service.description}
+                </p>
+
+                {/* Book Button */}
+                <div className="mt-auto">
+                  {service.isActive ? (
+                    <button
+                      onClick={() => {
+                        setBookService(true);
+                        setServiceData(service);
+                      }}
+                      className="w-full py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-bold transition-all shadow-lg shadow-primary/20 hover:translate-y-[-2px] active:translate-y-[0px]"
+                    >
+                      Book Appointment
+                    </button>
+                  ) : (
+                    <button disabled className="w-full py-3 bg-muted text-muted-foreground rounded-xl font-medium cursor-not-allowed border border-border">
+                      Currently Unavailable
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </section>
+          ))}
+        </div>
+        
+        {services.length === 0 && (
+           <div className="col-span-full py-12 text-center text-muted-foreground">
+              No services found.
+           </div>
+        )}
+      </section>
     </>
   );
 };

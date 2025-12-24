@@ -16,6 +16,10 @@ interface IEditModal {
 }
 
 const EditProfileModal: FC<IEditModal> = ({ onClose, vendorData }) => {
+
+  console.log('vendorData :>> ', vendorData);
+
+
   const navigate = useNavigate();
 
   const initialValues: any = {
@@ -42,20 +46,22 @@ const EditProfileModal: FC<IEditModal> = ({ onClose, vendorData }) => {
 
   const handleSubmit = async (values: typeof initialValues) => {
     try {
-      const imageUrl =
-        values.ProfileImage && typeof values.ProfileImage !== "string"
+
+  
+      const imageUrl = values.ProfileImage && typeof values.ProfileImage !== "string"
           ? await uploadToCloudinary(values.ProfileImage, "shop-images")
           : typeof values.ProfileImage === "string"
           ? values.ProfileImage
           : "";
 
+        
       const formData = new FormData();
       formData.append("shopName", values.shopName);
       formData.append("state", values.state);
       formData.append("city", values.city);
       formData.append("openAt", values.openAt);
       formData.append("closeAt", values.closeAt);
-      formData.append("ProfileImage", imageUrl.secure_url);
+      formData.append("ProfileImage", imageUrl.secure_url?imageUrl.secure_url:imageUrl);
       formData.append("workingDays", values.workingDays);
 
       const response = await editShopData(formData);

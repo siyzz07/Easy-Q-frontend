@@ -13,7 +13,7 @@ import { NavLink, Route, useLocation, useNavigate } from "react-router-dom";
 import { logoutAdmin } from "../../Services/ApiService/AdminApiService";
 import { useDispatch } from "react-redux";
 import { adminLogOut } from "../../Redux/AdminAuthSlice";
-import { adminRemoveAccessToken, removeToken } from "../../utils/tokenUtils";
+import {  removeToken } from "../../utils/tokenUtils";
 
 
 const Sidebar = () => {

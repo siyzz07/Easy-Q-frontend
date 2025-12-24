@@ -1,6 +1,6 @@
-import React, { use, useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Progress } from "../ui/progress";
@@ -9,18 +9,16 @@ import {
   Star,
   ImagePlus,
   Upload,
-  Camera,
-  User,
-  MessageSquare,
+  MessageSquare
 } from "lucide-react";
-import { Formik, Form, Field, ErrorMessage, insert } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import ShopImageUpload from "./ShopImageUpload&Preview";
 import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
 import { addImages, imageRemove } from "../../Services/ApiService/VendorApiServices";
 import { toast } from "react-toastify";
-import { Axios, AxiosError } from "axios";
-import type { IImage, IVendroShopData } from "../../Shared/types/Types";
+import { AxiosError } from "axios";
+import type { IImage } from "../../Shared/types/Types";
 
 // --- Mock Data ---
 
@@ -63,16 +61,12 @@ const getRatingDistribution = (reviews: typeof INITIAL_REVIEWS) => {
 interface ShopViewsProps {
   isVendor: boolean;
   vendorImages: IImage[] | [];
-  vendorId: string;
   isUpdate?: () => void;
-  // addReview?: () => void;
-  // addImage?: () => void;
 }
 
 const ShopViews: React.FC<ShopViewsProps> = ({
   isVendor,
   vendorImages,
-  vendorId,
   isUpdate,
 }) => {
   const [photos, setPhotos] = useState<IImage[] | []>([]);
@@ -85,7 +79,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
     if (vendorImages) {
       setPhotos(vendorImages);
     }
-  });
+  }, [vendorImages]);
 
   const avgRating = calculateAverageRating(reviews);
   const distribution = getRatingDistribution(reviews);
@@ -171,8 +165,10 @@ const ShopViews: React.FC<ShopViewsProps> = ({
     setType("upload");
     setShopImagePopup(val);
   };
+  
   return (
     <>
+      <AnimatePresence>
       {shopImagePopup && (
         <ShopImageUpload
           use={type as "preview" | "upload"}
@@ -185,219 +181,205 @@ const ShopViews: React.FC<ShopViewsProps> = ({
           imageId={preview?._id}
         />
       )}
+      </AnimatePresence>
 
-      <Card className="mt-6 w-full rounded-xl border bg-card shadow-sm overflow-hidden">
-        {/* HEADER — Responsive */}
-        <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 px-4 sm:px-6">
-          <CardTitle className="text-lg font-semibold flex items-center gap-2">
-            <Camera className="h-5 w-5 text-primary" /> Shop Overview
-          </CardTitle>
-
-          {isVendor && (
-            <Button
-              onClick={() => addImage(true)}
-              size="sm"
-              className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
-            >
-              <Upload className="mr-2 h-4 w-4" /> Upload Photo
-            </Button>
-          )}
-        </CardHeader>
-
-        <CardContent className="p-0 overflow-hidden">
-          <Tabs defaultValue="photos" className="w-full">
-            <TabsList className="flex w-full border-b bg-muted/20 px-3 sm:px-6 overflow-x-auto">
-              <TabsTrigger
-                value="photos"
-                className="flex-1 py-3 text-sm data-[state=active]:border-b-2 data-[state=active]:border-primary"
-              >
-                <ImagePlus className="mr-2 h-4 w-4" /> Photos
-              </TabsTrigger>
-
-              <TabsTrigger
-                value="reviews"
-                className="flex-1 py-3 text-sm data-[state=active]:border-b-2 data-[state=active]:border-primary"
-              >
-                <MessageSquare className="mr-2 h-4 w-4" /> Reviews
-              </TabsTrigger>
-            </TabsList>
-
-            {/* PHOTOS TAB */}
-            <TabsContent value="photos" className="p-4 sm:p-6">
-              {photos.length ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                  {photos.map((p, i) => (
-                    <motion.div
-                      key={i}
-                      onClick={() => imagePrivew(p)}
-                      whileHover={{ scale: 1.05 }}
-                      className="rounded-lg border overflow-hidden shadow-sm"
-                    >
-                      <img
-                        src={p.url}
-                        className="w-full h-32 sm:h-36 object-cover"
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-center text-sm text-muted-foreground py-6">
-                  No photos uploaded yet.
-                </p>
-              )}
-            </TabsContent>
-
-            {/* REVIEWS TAB */}
-            <TabsContent value="reviews" className="p-4 sm:p-6 space-y-6">
-              {/* Rating Summary — Responsive */}
-              <div className="rounded-lg border bg-muted/10 p-4 sm:p-5">
-                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Star className="h-5 w-5 text-yellow-500" /> Overall Ratings
-                </h3>
-
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                  {/* Average Rating */}
-                  <div className="text-center sm:w-40">
-                    <span className="text-4xl font-bold text-primary">
-                      {avgRating}
-                    </span>
-                    <div className="text-yellow-500 text-lg">
-                      {"⭐".repeat(Math.round(Number(avgRating)))}
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      {totalReviews} total reviews
-                    </p>
-                  </div>
-
-                  {/* Distribution Bars */}
-                  <div className="flex-1 space-y-1">
-                    {[5, 4, 3, 2, 1].map((star) => {
-                      const count = distribution[star - 1];
-                      const percent = (count / totalReviews) * 100 || 0;
-
-                      return (
-                        <div key={star} className="flex items-center gap-2">
-                          <span className="w-10 text-sm font-medium">
-                            {star}★
-                          </span>
-                          <Progress
-                            value={percent}
-                            className="h-2 flex-1 [&>div]:bg-yellow-400"
-                          />
-                          <span className="w-6 text-xs text-muted-foreground text-right">
-                            {count}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-
-              {/* ADD REVIEW */}
-              {!isVendor && (
-                <div className="rounded-lg border bg-muted/10 p-4 sm:p-5 space-y-3">
-                  <h3 className="font-semibold text-base flex items-center gap-2">
-                    <User className="h-4 w-4 text-primary" /> Add Your Review
-                  </h3>
-
-                  <Formik
-                    initialValues={{ rating: 0, comment: "" }}
-                    validationSchema={reviewSchema}
-                    onSubmit={handleReviewForm}
-                  >
-                    {({ values, setFieldValue }) => (
-                      <Form className="space-y-3">
-                        {/* Rating Selector */}
-                        <div className="flex items-center gap-1">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <Button
-                              key={star}
-                              size="sm"
-                              type="button"
-                              variant="ghost"
-                              onClick={() => setFieldValue("rating", star)}
-                              className={`rounded-full p-2 ${
-                                values.rating >= star
-                                  ? "text-yellow-400"
-                                  : "text-gray-400"
-                              }`}
-                            >
-                              <Star
-                                className={`h-4 w-4 ${
-                                  values.rating >= star
-                                    ? "text-yellow-400 fill-yellow-400"
-                                    : "text-gray-400"
-                                }`}
-                              />
-                            </Button>
-                          ))}
-                        </div>
-
-                        <ErrorMessage
-                          name="rating"
-                          component="p"
-                          className="text-xs text-red-500"
-                        />
-
-                        {/* Comment */}
-                        <Field
-                          as={Textarea}
-                          name="comment"
-                          placeholder="Write your experience..."
-                        />
-                        <ErrorMessage
-                          name="comment"
-                          component="p"
-                          className="text-xs text-red-500"
-                        />
-
-                        <Button
-                          type="submit"
-                          className="bg-blue-600 text-white hover:bg-blue-700"
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-full"
+        >
+        <Card className=" border-0 bg-transparent shadow-none">
+            {/* HEADER removed from here as it likely controlled by parent, but keeping actions if needed */}
+            <CardContent className="p-0">
+            <Tabs defaultValue="photos" className="w-full">
+                <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+                    <TabsList className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-md border border-gray-200/50 p-1 rounded-full w-full sm:w-auto self-start">
+                        <TabsTrigger
+                            value="photos"
+                            className="rounded-full px-6 data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all"
                         >
-                          Submit Review
+                            <ImagePlus className="mr-2 h-4 w-4" /> Photos
+                        </TabsTrigger>
+
+                        <TabsTrigger
+                            value="reviews"
+                            className="rounded-full px-6 data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all"
+                        >
+                            <MessageSquare className="mr-2 h-4 w-4" /> Reviews
+                        </TabsTrigger>
+                    </TabsList>
+                    
+                    {isVendor && (
+                        <Button
+                        onClick={() => addImage(true)}
+                        className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 shadow-lg shadow-primary/20 transition-all hover:scale-105"
+                        >
+                        <Upload className="mr-2 h-4 w-4" /> Upload Photo
                         </Button>
-                      </Form>
                     )}
-                  </Formik>
                 </div>
-              )}
 
-              {/* REVIEW LIST */}
-              <div className="flex flex-col gap-4">
-                {reviews.map((r) => (
-                  <div
-                    key={r.id}
-                    className="rounded-lg border bg-muted/10 p-4 sm:p-5"
-                  >
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                      <h3 className="font-medium flex items-center gap-1">
-                        <User className="h-4 w-4 text-muted-foreground" />{" "}
-                        {r.name}
-                      </h3>
-                      <span className="text-xs text-muted-foreground">
-                        {r.date}
-                      </span>
+                {/* PHOTOS TAB */}
+                <TabsContent value="photos" className="mt-0">
+                    <div className="glass-card rounded-2xl p-6 min-h-[300px]">
+                        {photos.length ? (
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            {photos.map((p, i) => (
+                                <motion.div
+                                key={i}
+                                onClick={() => imagePrivew(p)}
+                                layoutId={`image-${p.publicId}`}
+                                whileHover={{ scale: 1.03, y: -5 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="group relative aspect-square rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all bg-gray-100"
+                                >
+                                <img
+                                    src={p.url}
+                                    alt="Shop interior"
+                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                                </motion.div>
+                            ))}
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+                                <ImagePlus className="w-16 h-16 mb-4 opacity-20" />
+                                <p>No photos uploaded yet.</p>
+                            </div>
+                        )}
                     </div>
+                </TabsContent>
 
-                    <div className="text-yellow-500 text-sm mt-1">
-                      {"⭐".repeat(r.rating)}
-                      <span className="text-muted-foreground text-xs ml-1">
-                        ({r.rating}/5)
-                      </span>
+                {/* REVIEWS TAB */}
+                <TabsContent value="reviews" className="mt-0">
+                    <div className="grid lg:grid-cols-3 gap-8">
+                        {/* Rating Summary */}
+                        <div className="lg:col-span-1 space-y-6">
+                            <div className="glass-card rounded-2xl p-6 text-center">
+                                <h3 className="text-lg font-semibold mb-2">Overall Rating</h3>
+                                <div className="text-5xl font-bold text-gray-900 dark:text-white mb-2">
+                                {avgRating}
+                                </div>
+                                <div className="flex justify-center gap-1 mb-2 text-yellow-400">
+                                {[1, 2, 3, 4, 5].map((s) => (
+                                    <Star key={s} className={`w-5 h-5 ${s <= Number(avgRating) ? "fill-current" : "text-gray-300 dark:text-gray-600"}`} />
+                                ))}
+                                </div>
+                                <p className="text-sm text-muted-foreground">{totalReviews} reviews</p>
+                            </div>
+
+                            <div className="glass-card rounded-2xl p-6">
+                                <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-muted-foreground">Rating Distribution</h4>
+                                <div className="space-y-3">
+                                {[5, 4, 3, 2, 1].map((star) => {
+                                    const count = distribution[star - 1];
+                                    const percent = (count / totalReviews) * 100 || 0;
+
+                                    return (
+                                    <div key={star} className="flex items-center gap-3 text-sm">
+                                        <div className="w-8 font-medium flex items-center gap-1">
+                                            {star} <Star className="w-3 h-3 fill-current text-gray-400" />
+                                        </div>
+                                        <Progress
+                                        value={percent}
+                                        className="h-2 flex-1"
+                                        // indicatorClassName="bg-yellow-400" // using default styling for now, usually handled by CSS or library
+                                        />
+                                        <div className="w-8 text-right text-muted-foreground">{count}</div>
+                                    </div>
+                                    );
+                                })}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Reviews List & Form */}
+                        <div className="lg:col-span-2 space-y-6">
+                            {!isVendor && (
+                            <div className="glass-card rounded-2xl p-6">
+                                <h3 className="font-semibold text-lg mb-4">Write a Review</h3>
+                                <Formik
+                                initialValues={{ rating: 0, comment: "" }}
+                                validationSchema={reviewSchema}
+                                onSubmit={handleReviewForm}
+                                >
+                                {({ values, setFieldValue }) => (
+                                    <Form className="space-y-4">
+                                    <div className="flex gap-2 mb-2">
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                        <button
+                                            key={star}
+                                            type="button"
+                                            onClick={() => setFieldValue("rating", star)}
+                                            className="focus:outline-none transition-transform hover:scale-110"
+                                        >
+                                            <Star
+                                            className={`w-8 h-8 ${
+                                                values.rating >= star
+                                                ? "text-yellow-400 fill-yellow-400"
+                                                : "text-gray-300 hover:text-yellow-200"
+                                            }`}
+                                            />
+                                        </button>
+                                        ))}
+                                    </div>
+                                    <ErrorMessage name="rating" component="p" className="text-destructive text-sm" />
+
+                                    <Field
+                                        as={Textarea}
+                                        name="comment"
+                                        placeholder="Share your experience..."
+                                        className="min-h-[100px] bg-white/50"
+                                    />
+                                    <ErrorMessage name="comment" component="p" className="text-destructive text-sm" />
+
+                                    <div className="flex justify-end">
+                                        <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                                        Post Review
+                                        </Button>
+                                    </div>
+                                    </Form>
+                                )}
+                                </Formik>
+                            </div>
+                            )}
+
+                            <div className="space-y-4">
+                                {reviews.map((r) => (
+                                <motion.div
+                                    key={r.id}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="glass-card rounded-2xl p-6"
+                                >
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center text-primary font-bold">
+                                                {r.name.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-gray-900">{r.name}</h4>
+                                                <span className="text-xs text-muted-foreground">{r.date}</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex text-yellow-400">
+                                            {[...Array(5)].map((_, i) => (
+                                                <Star key={i} className={`w-4 h-4 ${i < r.rating ? "fill-current" : "text-gray-200"}`} />
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <p className="text-gray-700 leading-relaxed pl-13">{r.comment}</p>
+                                </motion.div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
-
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      {r.comment}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+                </TabsContent>
+            </Tabs>
+            </CardContent>
+        </Card>
+        </motion.div>
     </>
   );
 };

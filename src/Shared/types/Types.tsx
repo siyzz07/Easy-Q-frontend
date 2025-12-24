@@ -44,7 +44,7 @@ export interface IVendroShopData{
   confirmPassword?: string;
   state?: string;
   city?: string;
-  shopType?: string;
+  shopType?: string | IServiceVendorTypes;
   openAt?: any;
   closeAt?: any;
   proofImage?:any;
@@ -250,7 +250,27 @@ export interface IContractData {
   };
   status: 'inprogress'|'completed'|'cancelled';
   workers:[string]|[];
-  isHiring:boolean
   createdAt: string;
   updatedAt: Date;
+}
+
+export interface IvendroFullData {
+  _id?: string;
+  shopName?: string;
+  email?: string;
+  isActive?: boolean;
+  phone?: string;
+  password?: string;
+  confirmPassword?: string;
+  state?: string;
+  city?: string;
+  shopType?: IServiceVendorTypes;
+  openAt?: any;
+  closeAt?: any;
+  proofImage?: any;
+  ProfileImage?: any;
+  images?: IImage[] | [];
+  workingDays?: any;
+  coordinates?: any;
+  isVerified?: "pending" | "verified" | "rejected";
 }

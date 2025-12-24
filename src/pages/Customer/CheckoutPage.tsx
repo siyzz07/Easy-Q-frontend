@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
-  createBooking,
+  
   getCustomerData,
   getEachAddress,
   getEachShopData,
@@ -23,6 +23,7 @@ import type {
   IVendroShopData,
 } from "../../Shared/types/Types";
 import { toast } from "react-toastify";
+import { createBooking } from "../../Services/ApiService/BookingApiService";
 
 const CheckoutPage = () => {
   const [serarchParams] = useSearchParams();
@@ -110,14 +111,13 @@ const CheckoutPage = () => {
       const response = await createBooking(bookingPayload);
 
       if (response.data.data) {
-        console.log(response.data.data);
-
         let data = {
           bookingDate: response.data.data.bookingDate,
-          bookingTime: response.data.data.bookingTime,
+          bookingTime: response.data.data.bookingTimeStart,
           paymentMethod: response.data.data.paymentMethod,
           totalAmount: response.data.data.totalAmount,
         };
+
         let encode = btoa(JSON.stringify(data));
         navigate(`/customer/service/payment-confirm?id=${encode}`);
       }

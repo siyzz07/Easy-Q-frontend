@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  customerGetAccessToken,
   decodeToken,
   getAccessToken,
 } from "../utils/tokenUtils";

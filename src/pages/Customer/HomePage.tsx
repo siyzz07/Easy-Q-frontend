@@ -140,11 +140,16 @@ const HomePage = () => {
                 </button>
               </div>
             ) : (
+
               <motion.div 
                  initial="hidden"
                  animate="visible"
                  variants={{
-                   visible: { transition: { staggerChildren: 0.1 } }
+                   hidden: { opacity: 0 },
+                   visible: { 
+                     opacity: 1,
+                     transition: { staggerChildren: 0.1 } 
+                   }
                  }}
                  className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
               >

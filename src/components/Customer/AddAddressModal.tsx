@@ -74,6 +74,7 @@ const AddAddressModal: React.FC<Props> = ({ onClose }) => {
     { setSubmitting }: any
   ) => {
     try {
+      values.phone=values.phone.toString()
       const response = await postNewAddress(values);
       onClose();
 

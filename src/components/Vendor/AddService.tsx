@@ -1,5 +1,5 @@
 import { useEffect, useState, type FC } from "react";
-import { X, Plus, Image as ImageIcon } from "lucide-react";
+import { X, Image as ImageIcon, Check } from "lucide-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import type { IService, IStaff } from "../../Shared/types/Types";
@@ -7,20 +7,13 @@ import { AxiosError } from "axios";
 import { addService, getAllStffs } from "../../Services/ApiService/VendorApiServices";
 import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
 import { toast } from "react-toastify";
-
-interface StaffMember {
-  id: string;
-  name: string;
-  title: string;
-}
-
-
+import { motion } from "framer-motion";
 
 interface IAddService {
   onClose: () => void;
 }
 
-let initialValues: IService = {
+const initialValues: IService = {
   serviceName: "",
   duration: "",
   price: "",
@@ -61,24 +54,13 @@ const validationSchema = Yup.object({
       "fileType",
       "Only JPG/PNG allowed",
       (value: any) =>
-        !value || (value && ["image/jpeg",
-              "image/png",
-              "image/jpg",
-              "image/webp",
-              "image/gif",
-              "image/bmp",
-              "image/tiff",
-              "image/svg+xml",
-              "image/x-icon",
-              "image/heic",
-              "image/heif",
-              "image/avif",].includes(value.type))
+        !value || (value && ["image/jpeg", "image/png", "image/webp"].includes(value.type))
     ),
 });
 
 const AddService: FC<IAddService> = ({ onClose }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [staffMembers, setStaffMembers] = useState<IStaff[] | []>([]);
+  const [staffMembers, setStaffMembers] = useState<IStaff[]>([]);
 
   useEffect(() => {
     getStaffs();
@@ -90,7 +72,6 @@ const AddService: FC<IAddService> = ({ onClose }) => {
       if (response?.data?.data) {
         setStaffMembers(response.data.data);
       }
-      console.log(response);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.log("error to fetch the staffs data");
@@ -105,7 +86,6 @@ const AddService: FC<IAddService> = ({ onClose }) => {
         : "";
 
       values.image = imageUrl.secure_url;
-      console.log("values :>> ", values);
       const response = await addService(values);
       if (response.data.message) {
         toast.success(response.data.message);
@@ -113,8 +93,8 @@ const AddService: FC<IAddService> = ({ onClose }) => {
       onClose();
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        if (error.request.data.message) {
-          toast.error(error.request.data.message);
+        if (error.response?.data?.message) {
+          toast.error(error.response.data.message);
         }
         onClose();
       }
@@ -122,219 +102,223 @@ const AddService: FC<IAddService> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hide">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col"
+      >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">Add Service</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            <X size={24} />
-          </button>
+        <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100 bg-gray-50/50">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Add New Service</h2>
+              <p className="text-sm text-gray-500 mt-1">Create a new service offering for your customers.</p>
+            </div>
+            <button
+                onClick={onClose}
+                className="p-2 bg-white text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all shadow-sm border border-gray-100"
+            >
+                <X size={20} />
+            </button>
         </div>
 
-        {/* ✅ Formik Section */}
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {({ setFieldValue, values, isValid ,isSubmitting}) => (
-            <Form className="p-6 space-y-6">
-              {/* Service Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Service Name<span className="text-red-500">*</span>
-                </label>
-                <Field
-                  name="serviceName"
-                  placeholder="Enter service name"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                />
-                <ErrorMessage
-                  name="serviceName"
-                  component="p"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              {/* Duration and Price in one row */}
-              <div className="grid grid-cols-2 gap-4">
-                {/* Duration */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Duration
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <Field
-                      name="duration"
-                      type="number"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span className="text-sm text-gray-700">min</span>
-                  </div>
-                  <ErrorMessage
-                    name="duration"
-                    component="p"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div>
-
-                {/* ✅ Price */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Price<span className="text-red-500">*</span>
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-700">₹</span>
-                    <Field
-                      name="price"
-                      type="number"
-                      placeholder="Enter price"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <ErrorMessage
-                    name="price"
-                    component="p"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Description
-                </label>
-                <Field
-                  as="textarea"
-                  name="description"
-                  rows={5}
-                  placeholder="Describe this service..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 resize-none"
-                />
-                <ErrorMessage
-                  name="description"
-                  component="p"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              {/* Image Upload */}
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Service Image<span className="text-red-500">*</span>
-                </label>
-                <div className="flex items-center gap-3">
-                  <label
-                    htmlFor="image-upload"
-                    className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100 transition"
-                  >
-                    <ImageIcon size={18} />
-                    Upload
-                  </label>
-                  <input
-                    id="image-upload"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => {
-                      const file = e.currentTarget.files?.[0] || null;
-                      setFieldValue("image", file);
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onload = () =>
-                          setImagePreview(reader.result as string);
-                        reader.readAsDataURL(file);
-                      } else {
-                        setImagePreview(null);
-                      }
-                    }}
-                  />
-                  {imagePreview && (
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="w-20 h-20 rounded-md border object-cover"
-                    />
-                  )}
-                </div>
-                <ErrorMessage
-                  name="image"
-                  component="p"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              {/* Available Staff */}
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-3">
-                  Available Staff<span className="text-red-500">*</span>
-                </label>
-                <div className="border border-gray-300 rounded-md p-4 space-y-3 max-h-48 overflow-y-auto">
-                  {staffMembers.map((staff) => (
-                    <div key={staff._id} className="flex items-start gap-3">
-                      <input
-                        type="checkbox"
-                        id={`staff-${staff._id}`}
-                        checked={values.availableStaff.includes(
-                          staff._id ?? ""
-                        )}
-                        onChange={() => {
-                          const updated = values.availableStaff.includes(
-                            staff._id ?? ""
-                          )
-                            ? values.availableStaff.filter(
-                                (id) => id !== staff._id
-                              )
-                            : [...values.availableStaff, staff._id];
-                          setFieldValue("availableStaff", updated);
-                        }}
-                        className="mt-1 w-4 h-4 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                      />
-                      <label
-                        htmlFor={`staff-${staff._id}`}
-                        className="flex-1 cursor-pointer"
-                      >
-                        <div className="text-sm font-medium text-gray-900">
-                          {staff.staffName}
-                        </div>
-                        {/* <div className="text-xs text-gray-500">
-                          {staff.title}
-                        </div> */}
-                      </label>
+        {/* Scrollable Content */}
+        <div className="overflow-y-auto p-8 custom-scrollbar">
+            <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+            >
+            {({ setFieldValue, values, isValid ,isSubmitting}) => (
+                <Form className="space-y-8">
+                
+                {/* Section 1: Basic Info */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div className="md:col-span-2">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Service Name <span className="text-red-500">*</span>
+                        </label>
+                        <Field
+                            name="serviceName"
+                            placeholder="e.g. Haircut & Beard Trim"
+                            className="w-full px-4 h-12 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                        />
+                         <ErrorMessage name="serviceName" component="div" className="text-red-500 text-xs mt-1 font-medium" />
                     </div>
-                  ))}
-                </div>
-                <ErrorMessage
-                  name="availableStaff"
-                  component="p"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
 
-              {/* Footer */}
-              <div className="flex justify-center p-6 border-t border-gray-200">
-                <button
-                  type="submit"
-                  disabled={!isValid ||isSubmitting}
-                  className={`flex items-center gap-2 px-6 py-2 font-medium rounded-md transition-colors
-                     ${
-                       isValid
-                         ? "bg-blue-600 hover:bg-blue-700 text-white"
-                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                     }`}
-                >
-                  {isSubmitting? 'submitting...':'Add Service'} 
-                </button>
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
+                    <div>
+                         <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Duration (min) <span className="text-red-500">*</span>
+                        </label>
+                        <div className="relative">
+                            <Field
+                            name="duration"
+                            type="number"
+                            placeholder="30"
+                            className="w-full px-4 h-12 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                            />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">min</span>
+                        </div>
+                        <ErrorMessage name="duration" component="div" className="text-red-500 text-xs mt-1 font-medium" />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Price (₹) <span className="text-red-500">*</span>
+                        </label>
+                         <div className="relative">
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold">₹</span>
+                            <Field
+                            name="price"
+                            type="number"
+                            placeholder="500"
+                            className="w-full pl-10 pr-4 h-12 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400"
+                            />
+                        </div>
+                        <ErrorMessage name="price" component="div" className="text-red-500 text-xs mt-1 font-medium" />
+                    </div>
+
+                     <div className="md:col-span-2">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Description <span className="text-red-500">*</span>
+                        </label>
+                        <Field
+                            as="textarea"
+                            name="description"
+                            rows={4}
+                            placeholder="Describe what's included in this service..."
+                            className="w-full p-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400 resize-none"
+                        />
+                         <ErrorMessage name="description" component="div" className="text-red-500 text-xs mt-1 font-medium" />
+                    </div>
+                </div>
+
+                <div className="h-px bg-gray-100 w-full" />
+
+                {/* Section 2: Media & Staff */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                     {/* Image Upload */}
+                    <div>
+                         <label className="block text-sm font-semibold text-gray-700 mb-3">
+                            Service Image <span className="text-red-500">*</span>
+                        </label>
+                        <div className="relative group">
+                            <input
+                                id="image-upload"
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => {
+                                const file = e.currentTarget.files?.[0] || null;
+                                setFieldValue("image", file);
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = () => setImagePreview(reader.result as string);
+                                    reader.readAsDataURL(file);
+                                } else {
+                                    setImagePreview(null);
+                                }
+                                }}
+                            />
+                            <label
+                                htmlFor="image-upload"
+                                className={`flex flex-col items-center justify-center w-full h-48 rounded-2xl border-2 border-dashed transition-all cursor-pointer ${imagePreview ? 'border-primary/50 bg-primary/5' : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'}`}
+                            >
+                                {imagePreview ? (
+                                     <div className="relative w-full h-full p-2">
+                                        <img
+                                        src={imagePreview}
+                                        alt="Preview"
+                                        className="w-full h-full object-cover rounded-xl shadow-sm"
+                                        />
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl mx-2 my-2">
+                                            <span className="text-white font-medium text-sm">Change Image</span>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="text-center p-4">
+                                        <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mx-auto mb-3">
+                                            <ImageIcon size={24} />
+                                        </div>
+                                        <p className="text-sm font-bold text-gray-700">Click to upload</p>
+                                        <p className="text-xs text-gray-400 mt-1">SVG, PNG, JPG (max 4MB)</p>
+                                    </div>
+                                )}
+                            </label>
+                             <ErrorMessage name="image" component="div" className="text-red-500 text-xs mt-2 font-medium" />
+                        </div>
+                    </div>
+
+                    {/* Available Staff */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-3">
+                            Assign Staff <span className="text-red-500">*</span>
+                        </label>
+                        <div className="border border-gray-200 rounded-2xl p-4 h-48 overflow-y-auto custom-scrollbar bg-gray-50/50">
+                            {staffMembers.length > 0 ? (
+                                <div className="space-y-2">
+                                    {staffMembers.map((staff) => {
+                                        const isSelected = values.availableStaff.includes(staff._id ?? "");
+                                        return (
+                                            <div 
+                                                key={staff._id} 
+                                                onClick={() => {
+                                                    const updated = isSelected
+                                                        ? values.availableStaff.filter((id) => id !== staff._id)
+                                                        : [...values.availableStaff, staff._id];
+                                                    setFieldValue("availableStaff", updated);
+                                                }}
+                                                className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                                                    isSelected 
+                                                    ? "bg-white border-primary shadow-sm" 
+                                                    : "bg-white border-gray-100 hover:border-gray-300"
+                                                }`}
+                                            >
+                                                <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${isSelected ? 'bg-primary border-primary' : 'border-gray-300 bg-white'}`}>
+                                                    {isSelected && <Check size={12} className="text-white" />}
+                                                </div>
+                                                <span className={`text-sm font-medium ${isSelected ? 'text-primary' : 'text-gray-700'}`}>
+                                                    {staff.staffName}
+                                                </span>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center h-full text-center text-gray-400">
+                                    <p className="text-sm">No staff members found.</p>
+                                    <p className="text-xs mt-1">Add staff from the Staff page first.</p>
+                                </div>
+                            )}
+                        </div>
+                        <ErrorMessage name="availableStaff" component="div" className="text-red-500 text-xs mt-2 font-medium" />
+                    </div>
+                </div>
+
+                {/* Footer Buttons */}
+                <div className="pt-4 flex items-center justify-end gap-3">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="px-6 py-2.5 text-sm font-bold text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all"
+                    >
+                        Cancel
+                    </button>
+                     <button
+                        type="submit"
+                        disabled={!isValid || isSubmitting}
+                        className="px-6 py-2.5 text-sm font-bold text-white bg-primary rounded-xl shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
+                        {isSubmitting ? 'Adding Service...' : 'Create Service'}
+                    </button>
+                </div>
+
+                </Form>
+            )}
+            </Formik>
+        </div>
+      </motion.div>
     </div>
   );
 };

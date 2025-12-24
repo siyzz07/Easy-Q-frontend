@@ -1,30 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getEachShopData, getEachShopServices } from "../../Services/ApiService/CustomerApiService";
-import ViewShopProfile from "../../components/Customer/ViewShopProfile";
+import ViewShopProfile from "../../components/Shared/ViewShopProfile";
 import ServicesList from "../../components/Customer/ServicesList";
-import type { IService, IServiceData, IServiceVendorTypes, IVendroShopData } from "../../Shared/types/Types";
+import type { IService, IServiceData, IVendroShopData, IvendroFullData } from "../../Shared/types/Types";
 import { AxiosError } from "axios";
-
-export interface IvendroFullData{
-  _id?:string
-  shopName?: string;
-  email?: string;
-  isActive?:boolean
-  phone?: string;
-  password?: string;
-  confirmPassword?: string;
-  state?: string;
-  city?: string;
-  shopType?: IServiceVendorTypes;
-  openAt?: any;
-  closeAt?: any;
-  proofImage?:any;
-  ProfileImage?: any;
-  workingDays?: any;
-  coordinates?: any
-  isVerified?:"pending" | "verified" | "rejected"; 
-}
 
 
 const ViewServicesPage: React.FC = () => {
@@ -59,7 +39,6 @@ const ViewServicesPage: React.FC = () => {
         }
       }
       
-      
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         setError("Failed to fetch shop details. Please try again later.");
@@ -70,13 +49,11 @@ const ViewServicesPage: React.FC = () => {
     }
   };
 
-
-  
-
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-[#E7F0FF]">
-        <p className="text-gray-700 text-base sm:text-lg font-medium animate-pulse">
+      <div className="flex flex-col justify-center items-center min-h-screen bg-background">
+        <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-muted-foreground text-lg font-medium animate-pulse">
           Loading shop details...
         </p>
       </div>
@@ -85,43 +62,48 @@ const ViewServicesPage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#EAF2FF] px-4">
-        <p className="text-red-500 text-center font-medium mb-4">{error}</p>
-        <button
-          onClick={() => navigate(-1)}
-          className="px-5 sm:px-6 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm sm:text-base transition-all shadow-md hover:shadow-lg"
-        >
-          Go Back
-        </button>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background px-4">
+        <div className="p-8 glass-card rounded-2xl text-center max-w-md w-full">
+            <h2 className="text-2xl font-bold text-destructive mb-2">Oops!</h2>
+            <p className="text-muted-foreground font-medium mb-6">{error}</p>
+            <button
+            onClick={() => navigate(-1)}
+            className="px-6 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-medium transition-all shadow-lg shadow-primary/20"
+            >
+            Go Back
+            </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#e1ebfa] px-3 sm:px-6 md:px-10 lg:px-20 py-6">
+    <div className="min-h-screen bg-background/50 pb-12">
       {/* Shop Profile Section */}
-      <div className="w-full flex flex-col items-center">
+      <div className="w-full">
         {shopData && (
-          <div className="w-full max-w-5xl">
-            <ViewShopProfile data={shopData}   />
+          <div className="w-full">
+            <ViewShopProfile data={shopData} />
           </div>
         )}
       </div>
 
       {/* Services List Section */}
-      <div className="w-full flex flex-col items-center mt-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         {shopServiceData.length > 0 ? (
-          <div className="w-full max-w-6xl">
-            <ServicesList services={shopServiceData} shopId={id as string} shopData={shopData as IvendroFullData} />
-          </div>
+          <ServicesList services={shopServiceData} shopId={id as string} shopData={shopData as IvendroFullData} />
         ) : (
-          <div className="text-center py-16 text-gray-500">
-            <p className="text-base sm:text-lg font-medium">
+          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground bg-white/50 dark:bg-black/20 rounded-3xl border border-dashed border-border mx-auto max-w-4xl">
+             <div className="h-20 w-20 bg-muted rounded-full flex items-center justify-center mb-4">
+                 <span className="text-4xl">🏷️</span>
+             </div>
+            <p className="text-lg font-medium">
               No services available yet
             </p>
+            <p className="text-sm opacity-70">Check back later for updates</p>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };

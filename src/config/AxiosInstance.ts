@@ -4,6 +4,7 @@ import axios, {
   type InternalAxiosRequestConfig,
 } from "axios";
 import {
+  decodeToken,
   getAccessToken,
   removeToken,
   setAccessToken,
@@ -14,9 +15,9 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
-export const axiosInstance = (role: string) => {
+export const axiosInstance = () => {
   const instance = axios.create({
-    baseURL: `${import.meta.env.VITE_BASE_URL}/api/${role}`,
+    baseURL: `${import.meta.env.VITE_BASE_URL}/api`,
     headers: { "Content-Type": "application/json" },
     withCredentials: true,
   });
@@ -39,18 +40,10 @@ export const axiosInstance = (role: string) => {
         originalRequest._retry = true;
 
         try {
-          console.log("Access token expired");
 
-          let roleType 
-          if(role == 'customer' || role == 'contract' ){
-            roleType = 'customer'
-          }else if (role == 'vendor'){
-            roleType = 'vendor'
-          }else{
-            roleType = 'admin'
-          }
-
-          const refreshResponse = await instance.post("/auth/refresh-token",{role:roleType});
+          const tokenDecode = decodeToken()
+        
+          const refreshResponse = await instance.post("/auth/refresh-token",{role:tokenDecode?.role});
           const newAccessToken = refreshResponse.data.accessToken;
 
           removeToken();
@@ -61,7 +54,7 @@ export const axiosInstance = (role: string) => {
         } catch (refreshError) {
           console.log("Refresh token error");
           removeToken();
-          window.location.href = `/${role}/login`;
+          window.location.href = `/customer/login`;
           return Promise.reject(refreshError);
         }
       }
@@ -72,7 +65,7 @@ export const axiosInstance = (role: string) => {
       ) {
         toast.error("Your account has been blocked by admin.");
         removeToken();
-        window.location.href = `/${role}/login`;
+        window.location.href = `/customer/login`;
       }
 
       return Promise.reject(error);
@@ -82,8 +75,14 @@ export const axiosInstance = (role: string) => {
   return instance;
 };
 
-export const adminAxiosInstance = axiosInstance("admin");
-export const VendorAxiosInstance = axiosInstance("vendor");
-export const CustomerAxiosInstance = axiosInstance("customer");
+
+// ""'contract
+
+export const adminAxiosInstance = axiosInstance();
+export const VendorAxiosInstance = axiosInstance();
+export const CustomerAxiosInstance = axiosInstance();
+export const BookingAxiosInstance =axiosInstance()
 // ----------- contract
-export const ContractAxiosInstance = axiosInstance('contract')
+export const ContractAxiosInstance = axiosInstance()
+
+export const authAxiosInstance = axiosInstance()

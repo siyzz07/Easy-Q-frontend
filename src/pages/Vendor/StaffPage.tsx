@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Plus, Edit } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Plus } from "lucide-react";
 import AddStaff from "../../components/Vendor/AddStaff";
 import {
   InputGroup,
@@ -13,7 +13,7 @@ import type { IStaff } from "../../Shared/types/Types";
 import { getAllStffs } from "../../Services/ApiService/VendorApiServices";
 import { AxiosError } from "axios";
 import EditStaff from "../../components/Vendor/EditStaff";
-import { data } from "react-router-dom";
+
 
 const StaffPage = () => {
   const [addStaffPopup, setAddStaffPopup] = useState<boolean>(false);
@@ -58,32 +58,32 @@ const StaffPage = () => {
 
       <div className="flex h-screen bg-gray-200 border-2 ">
         <div className="flex-1 flex flex-col">
-          <main className="flex-1  md:p-8 overflow-y-auto">
-            <div className="border-2 rounded-xl  bg-white p-3">
-              <div className="flex items-center justify-between w-full">
-                <InputGroup className="bg-white border border-gray-300 w-1/2 rounded-lg overflow-hidden focus-within:ring-1 focus-within:ring-blue-500">
+          <main className="flex-1 p-6 md:p-8 overflow-y-auto">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div className="flex items-center justify-between w-full mb-6">
+                <div className="w-full max-w-md">
+                   <InputGroup className="bg-white border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500/20 shadow-sm transition-all">
                   <InputGroupInput
-                    placeholder="Type to search..."
-                    className="text-gray-900 placeholder-gray-400 px-3 py-2 outline-none"
+                    placeholder="Search staff..."
+                    className="text-gray-900 placeholder-gray-400 px-4 py-2.5 outline-none"
                   />
                   <InputGroupAddon align="inline-end">
                     <InputGroupButton
-                      variant="secondary"
-                      className="bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors font-medium px-4"
+                      variant="ghost"
+                      className="bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors font-medium px-4 border-l border-gray-100"
                     >
                       Search
                     </InputGroupButton>
                   </InputGroupAddon>
                 </InputGroup>
+                </div>
 
                 <Button
-                  variant="outline"
-                  size="sm"
                   onClick={() => setAddStaffPopup(true)}
-                  className="flex items-center p-5 gap-2 bg-blue-600 hover:bg-blue-700 hover:text-white text-white "
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all font-medium"
                 >
-                  <Plus size={16} />
-                  Add Service
+                  <Plus size={18} />
+                  Add Staff
                 </Button>
               </div>
 

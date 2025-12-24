@@ -1,5 +1,5 @@
 
-import {  VendorAxiosInstance } from "../../config/AxiosInstance";
+import {  authAxiosInstance, VendorAxiosInstance } from "../../config/AxiosInstance";
 import type { IImage, IService, IStaff, IVendor, IVendorLogin } from "../../Shared/types/Types";
 
 
@@ -8,7 +8,7 @@ import type { IImage, IService, IStaff, IVendor, IVendorLogin } from "../../Shar
 //---------------------email verification in signup page
 export const verifyEmail = async (data:any) =>{
   
-    let response = await VendorAxiosInstance.post("/auth/verify-email",data);
+    let response = await authAxiosInstance.post("/auth/verify-email",data);
     return response;
 
 }; 
@@ -16,7 +16,7 @@ export const verifyEmail = async (data:any) =>{
 //----------------------add vendor after verifing
 export const addVendor =async (token:string) =>{
 
-    let response = await VendorAxiosInstance.post("/auth/add-vendor",{token});
+    let response = await authAxiosInstance.post("/auth/add-vendor",{token});
 
     return response;
 };
@@ -24,7 +24,7 @@ export const addVendor =async (token:string) =>{
 //-----------------------login vendor
 export const loginVendor = async (form:IVendorLogin)=>{
 
-    const response = await VendorAxiosInstance.post("/auth/login",form);
+    const response = await authAxiosInstance.post("/auth/login",form);
     return response;
 
 };
@@ -34,7 +34,7 @@ export const loginVendor = async (form:IVendorLogin)=>{
 export const addShopData = async (form:any) => {
     
     
-    const response = await VendorAxiosInstance.post("/shop-data",form);
+    const response = await VendorAxiosInstance.post("/vendor/shop-data",form);
     return response;
     
     
@@ -42,7 +42,7 @@ export const addShopData = async (form:any) => {
 //------------------------ get vendors service types that added by admin 
 export const getShopType = async () => {
     
-    const response = await VendorAxiosInstance.get("/shop-type");
+    const response = await VendorAxiosInstance.get("/vendor/shop-type");
     return response;
     
     
@@ -51,13 +51,13 @@ export const getShopType = async () => {
 // --------------------------get the shop data
 export  const getShopData = async ()  =>{
     
-    const response = await VendorAxiosInstance.get("/shop-data");
+    const response = await VendorAxiosInstance.get("/vendor/shop-data");
     return response;
     
 };
 // -------------------------- edit shop data
 export const editShopData = async(formData:any) =>{
-    const response = await VendorAxiosInstance.put('/shop/edit-shop',formData)
+    const response = await VendorAxiosInstance.put('/vendor/shop/edit-shop',formData)
     return response
 }
 
@@ -65,14 +65,14 @@ export const editShopData = async(formData:any) =>{
 //---------------------------verify email for reset password
 export const verificationForResetPassword =  async (data:{email:string,role:string}) =>{
 
-    const response = await VendorAxiosInstance.post("/reset-password/verify",data);
+    const response = await authAxiosInstance.post("/auth/reset-password/verify",data);
     return response;
 };
 
 //---------------------------reset password
 export const resetPasword = async(data:{token:string;password:string,role:string}) =>{
 
-            const response = await VendorAxiosInstance.post("/reset-password",data);
+            const response = await authAxiosInstance.post("/auth/reset-password",data);
             return response;
 
 };
@@ -81,7 +81,7 @@ export const resetPasword = async(data:{token:string;password:string,role:string
 //---------------------------logout vendor
 export const logoutVendor = async () =>{
     
-    const response = await VendorAxiosInstance.post("/logout",{role:'Vendor'});
+    const response = await authAxiosInstance.post("/auth/logout",{role:'Vendor'});
     return response;
 };
 
@@ -89,13 +89,13 @@ export const logoutVendor = async () =>{
 
 //--------------------------- add shop images
 export const addImages = async(data:IImage)=>{
-    const response = await VendorAxiosInstance.put('/shop/image',{data})
+    const response = await VendorAxiosInstance.put('/vendor/shop/image',{data})
     return response
 }
 
 //--------------------------- remove shop images
 export const imageRemove = async (data:{publicId:string,image_id:string}) =>{
-        const response = await VendorAxiosInstance.put('/shop/delete-image',data)
+        const response = await VendorAxiosInstance.put('/vendor/shop/delete-image',data)
         return response
 }
 
@@ -106,7 +106,7 @@ export const imageRemove = async (data:{publicId:string,image_id:string}) =>{
  * 
  */
 export const vendorDashboard = async () =>{
-    const response = await VendorAxiosInstance.get('/dashboard/data')
+    const response = await VendorAxiosInstance.get('/vendor/dashboard/data')
     return response
 }
 
@@ -122,25 +122,25 @@ export const vendorDashboard = async () =>{
 //--------------------------- add new Staff
 export const addStaff = async (form :IStaff) =>{
     
-    const response = await VendorAxiosInstance.post('/staff/add-staff',form)
+    const response = await VendorAxiosInstance.post('/vendor/staff/add-staff',form)
     return response
 }
 
 //--------------------------- get Staff data
 export const getAllStffs = async() =>{
-    const response = await VendorAxiosInstance.get('/staff')
+    const response = await VendorAxiosInstance.get('/vendor/staff')
     return response
 } 
 //--------------------------- edit Staff data
 export const editStaff = async (form:IStaff) =>{
-    const response =  await VendorAxiosInstance.put('/staff/edit-staff',form)
+    const response =  await VendorAxiosInstance.put('/vendor/staff/edit-staff',form)
     return response
 }
 
 //--------------------------- block staff date
 export const blockStaffDate = async (data:{staffId:string,blockedDates:string[]}) =>{
 
-    const response = VendorAxiosInstance.post('/staff/block-dates',data)
+    const response = VendorAxiosInstance.post('/vendor/staff/block-dates',data)
     return response
 }
 
@@ -154,18 +154,18 @@ export const blockStaffDate = async (data:{staffId:string,blockedDates:string[]}
 
 //--------------------------- add new shop service
 export const addService = async (formData:IService) =>{
-    const response = await VendorAxiosInstance.post('/service/add-service',formData)
+    const response = await VendorAxiosInstance.post('/vendor/service/add-service',formData)
     return response
 }
 
 //--------------------------- get services
 export const getServices = async () =>{
-    const response = await VendorAxiosInstance.get('/service/get-service')
+    const response = await VendorAxiosInstance.get('/vendor/service/get-service')
     return response
 }
 
 //--------------------------- edit services
 export const editServices = async (form:IService) =>{
-    const response = await VendorAxiosInstance.put('/service/edit-service',form)
+    const response = await VendorAxiosInstance.put('/vendor/service/edit-service',form)
     return response
 }

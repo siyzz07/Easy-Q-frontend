@@ -2,6 +2,7 @@ import React from "react";
 import { MapPin, Clock, Star, ExternalLink, ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { convertRailwayTime } from "../../utils/convertRailwayTime";
 
 interface Shop {
   ProfileImage?: string;
@@ -37,9 +38,9 @@ const ShopDataCard: React.FC<ShopDataCardProps> = ({ shopData }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
         
         {/* Floating Tag */}
-        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-gray-800 shadow-lg">
+        {/* <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-gray-800 shadow-lg">
           Open Now
-        </div>
+        </div> */}
       </div>
 
       <div className="p-5 relative">
@@ -64,7 +65,7 @@ const ShopDataCard: React.FC<ShopDataCardProps> = ({ shopData }) => {
           <div className="flex items-center text-muted-foreground text-sm">
             <Clock size={14} className="mr-2 text-primary" />
             <span>
-              {shopData.openAt} - {shopData.closeAt}
+              {convertRailwayTime(shopData.openAt) } - {convertRailwayTime(shopData.closeAt) }
             </span>
           </div>
         </div>

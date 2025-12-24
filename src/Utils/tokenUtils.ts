@@ -70,8 +70,8 @@ export const customerRemoveAccessToken = () => sessionStorage.removeItem("custom
 //     sessionStorage.setItem('adminToken',token)
 // }
 
-export const adminGetAccessToken = () => sessionStorage.getItem("adminToken");
-export const adminRemoveAccessToken = () => sessionStorage.removeItem("adminToken");
+// export const adminGetAccessToken = () => sessionStorage.getItem("adminToken");
+// export const adminRemoveAccessToken = () => sessionStorage.removeItem("adminToken");
 
 
 

@@ -1,6 +1,6 @@
 
 
-import {  CustomerAxiosInstance } from "../../config/AxiosInstance";
+import {  authAxiosInstance, CustomerAxiosInstance } from "../../config/AxiosInstance";
 import type { IBookingPayload, ICustomer, ICustomerAddress, ICustomerLogin } from "../../Shared/types/Types";
 
 
@@ -10,7 +10,7 @@ import type { IBookingPayload, ICustomer, ICustomerAddress, ICustomerLogin } fro
 
 
 export const customerSignup = async(form:ICustomer) =>{
-    const response = await CustomerAxiosInstance.post("/auth/signup",form);
+    const response = await authAxiosInstance.post("/auth/verify-email",form);
     
     return response;
     
@@ -20,10 +20,8 @@ export const customerSignup = async(form:ICustomer) =>{
 
 export const verifyEmail = async (token:string)=>{
       
-        const response = await CustomerAxiosInstance.post("/auth/verify-email",{token });
-        
-        console.log('get response sended');
-    return response;
+        const response = await authAxiosInstance.post("/auth/add-customer",{token });
+         return response;
 };
 
 
@@ -31,7 +29,7 @@ export const verifyEmail = async (token:string)=>{
 
 export const loginCustomer = async (form:ICustomerLogin) =>{
         
-const response = await CustomerAxiosInstance.post("/auth/login",form);
+const response = await authAxiosInstance.post("/auth/login",form);
 return response;
 
 };
@@ -41,7 +39,7 @@ return response;
 
 export const getShopsData = async () =>{
     
-    const response = await CustomerAxiosInstance.get("/shops-data");
+    const response = await CustomerAxiosInstance.get("/customer/shops-data");
     return response; 
 };
 
@@ -51,7 +49,7 @@ export const getShopDataWithPagination = async (page:number,limit:number,shopNam
 
     console.log('--',page,'--',limit,'---',shopName,'---',location);
     
-    const response = await CustomerAxiosInstance.get( `/shops/data?page=${page}&limit=${limit}&shopName=${shopName}&location=${location}&filter=${filter}`)
+    const response = await CustomerAxiosInstance.get( `/customer/shops/data?page=${page}&limit=${limit}&shopName=${shopName}&location=${location}&filter=${filter}`)
     return response
 }
 
@@ -59,7 +57,7 @@ export const getShopDataWithPagination = async (page:number,limit:number,shopNam
 //----------------------------------------------------verify Email for reset password
 export const verificationForResetPassword =  async (data:{email:string,role:string}) =>{
 
-    const response = await CustomerAxiosInstance.post("/reset-password/verify",data);
+    const response = await authAxiosInstance.post("/auth/reset-password/verify",data);
     return response;
 };
 
@@ -67,7 +65,7 @@ export const verificationForResetPassword =  async (data:{email:string,role:stri
 //------------------------------------------------------reset password
 export const resetCustomerPasword = async(data:{token:string;password:string,role:string}) =>{
 
-            const response = await CustomerAxiosInstance.post("/reset-password",data);
+            const response = await authAxiosInstance.post("/auth/reset-password",data);
             return response;
 
 };
@@ -77,7 +75,7 @@ export const resetCustomerPasword = async(data:{token:string;password:string,rol
 
 export const getCustomerData = async () =>{
     
-    const response = await CustomerAxiosInstance.get("/profile/customer-data");
+    const response = await CustomerAxiosInstance.get("/customer/profile/customer-data");
     return response;
     
 };
@@ -86,21 +84,21 @@ export const getCustomerData = async () =>{
 //------------------------------------------------------logout
 export const logoutCustomer = async () =>{
     
-    const response = await CustomerAxiosInstance.post("/logout",{role:'Customer'});
+    const response = await authAxiosInstance.post("/auth/logout",{role:'Customer'});
     return response;
 };
 
 //------------------------------------------------------Edit profile
 export const editProfile = async (form:{name:string;email:string;phone:string}) =>{
     
-    const response = await CustomerAxiosInstance.post("/profile/edit-profile",form);
+    const response = await CustomerAxiosInstance.post("/customer/profile/edit-profile",form);
     return response;
 };
 
 //------------------------------------------------------change passwordin in profile
 export const changePassword = async (form:{currentPassword:string,password:string}) =>{
     
-    const response = await CustomerAxiosInstance.post("/profile/change-password",form);
+    const response = await CustomerAxiosInstance.post("/customer/profile/change-password",form);
     return response;
     
 };
@@ -114,7 +112,7 @@ export const changePassword = async (form:{currentPassword:string,password:strin
 //------------------------------------------------------add Address
 export const postNewAddress = async (form:ICustomerAddress) =>{
     
-    const response = await CustomerAxiosInstance.post("/profile/add-address",form);
+    const response = await CustomerAxiosInstance.post("/customer/profile/add-address",form);
     return response;
     
 };
@@ -122,7 +120,7 @@ export const postNewAddress = async (form:ICustomerAddress) =>{
 
 export const deleteCustomerAddress = async (addressId:string) =>{
 
-    const response = await CustomerAxiosInstance.post("/profile/delete-address",{addressId});
+    const response = await CustomerAxiosInstance.post("/customer/profile/delete-address",{addressId});
     return response;
 
 
@@ -130,14 +128,14 @@ export const deleteCustomerAddress = async (addressId:string) =>{
 //------------------------------------------------------get all address
 export const getAddress = async () =>{
     
-    const response = await CustomerAxiosInstance.get("/profile/get-address");
+    const response = await CustomerAxiosInstance.get("/customer/profile/get-address");
     return response;
     
 };
 //------------------------------------------------------edit cusotmer address
 export const editAddress = async (form:ICustomerAddress) =>{
     
-    const reponse = await CustomerAxiosInstance.post("/profile/edit-address",form);
+    const reponse = await CustomerAxiosInstance.post("/customer/profile/edit-address",form);
     return reponse;
     
 };
@@ -145,7 +143,7 @@ export const editAddress = async (form:ICustomerAddress) =>{
 export const getEachAddress = async (_id:string) =>{
 
     
-    const response = await CustomerAxiosInstance.get(`/profile/get-each-address`,{
+    const response = await CustomerAxiosInstance.get(`/customer/profile/get-each-address`,{
         params:{_id}
     })
     return response
@@ -158,40 +156,40 @@ export const getEachAddress = async (_id:string) =>{
  */
 //---------------------------------------------------- get each shop data
 export const getEachShopData = async (_id:string) =>{
-    const response = await CustomerAxiosInstance.get(`/shop-data/${_id}`,)
+    const response = await CustomerAxiosInstance.get(`/customer/shop-data/${_id}`,)
     return response
 }
 
 //---------------------------------------------------- get each shop service
 export const getEachShopServices = async (shopId:string) =>{
-    const response = await CustomerAxiosInstance.get(`/shop-data/services/${shopId}`,)
+    const response = await CustomerAxiosInstance.get(`/customer/shop-data/services/${shopId}`,)
     return response
 }
 
 //---------------------------------------------------- get selected service
 export const getSelectedSerivce = async (id:string) =>{
-    const response = await CustomerAxiosInstance.get('/service/get-service',{
+    const response = await CustomerAxiosInstance.get('/customer/service/get-service',{
         params:{id}
     })
     return response
 }
 
-/**
- * 
- * Booking  
- * 
- */
-//---------------------------------------------------- get checkout data
-export const createBooking = async (data: IBookingPayload) => {
-  const response = await CustomerAxiosInstance.post("/booking/add-booking", data);
-  return response;
-};
+// /**
+//  * 
+//  * Booking  
+//  * 
+//  */
+// //---------------------------------------------------- get checkout data
+// export const createBooking = async (data: IBookingPayload) => {
+//   const response = await CustomerAxiosInstance.post("/customer/booking/add-booking", data);
+//   return response;
+// };
 
-export const bookAvailableTime = async(data:{staffId:string,timePreffer:string,date:Date,serviceId:string,addressId:string,shopId:string}) =>{
+// export const bookAvailableTime = async(data:{staffId:string,timePreffer:string,date:Date,serviceId:string,addressId:string,shopId:string}) =>{
     
-    const response = await CustomerAxiosInstance.post('/booking/check-time',data)
-    return response
-}
+//     const response = await CustomerAxiosInstance.post('/customer/booking/check-time',data)
+//     return response
+// }
 
 
 /**
@@ -203,7 +201,7 @@ export const bookAvailableTime = async(data:{staffId:string,timePreffer:string,d
 
 //------------------------------------------------------Add review
 export const addReview = async(form:{rating:string,comment:string,shopId:string}) =>{
-    const response = await CustomerAxiosInstance.post('/vendor/add-review',form)
+    const response = await CustomerAxiosInstance.post('/customer/vendor/add-review',form)
 }
 
 
@@ -215,17 +213,17 @@ export const addReview = async(form:{rating:string,comment:string,shopId:string}
 //-------------------------------------------------------- update favorite
 export const favoriteUpdate = async (shopId:string,action:'add'|'remove') =>{
 
-    const response = await CustomerAxiosInstance.post('/favorite',{shopId,action})
+    const response = await CustomerAxiosInstance.post('/customer/favorite',{shopId,action})
     return response
 }
 
 //-------------------------------------------------------- get favorite
 export const getFavorite = async () =>{
-    const response = await CustomerAxiosInstance.get('/favorite')
+    const response = await CustomerAxiosInstance.get('/customer/favorite')
     return response
 }
 //-------------------------------------------------------- get favorite shopes
 export const getFavoriteShopes = async () =>{
-    const response = await CustomerAxiosInstance.get('/favorite/shopes')
+    const response = await CustomerAxiosInstance.get('/customer/favorite/shopes')
     return response
 }

@@ -18,7 +18,7 @@ interface EditStaffProps {
 const EditStaffSchema = Yup.object().shape({
   staffName: Yup.string()
     .required("Staff name is required")
-    .min(3, "Name must be at least 3 characters long"),
+    .min(1, "Name must be at least 3 characters long"),
 
   openingTime: Yup.string().required("Opening time is required"),
 

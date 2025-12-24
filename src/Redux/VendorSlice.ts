@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   decodeToken,
   getAccessToken,
-  vendorGetAccessToken,
 } from "../utils/tokenUtils";
 import { act } from "react";
 import type { ITokenDdecode } from "../Shared/types/Types";

@@ -10,6 +10,7 @@ import { ADMIN_ROUTES, CUSTOMER_ROUTES, VENDOR_ROUTES } from "./Shared/Constants
 import { useEffect } from "react";
 import { connectSocket } from "./Services/Socket/Socket";
 import { getAccessToken } from "./utils/tokenUtils";
+import ScrollToTop from "./components/Shared/ScrollTop";
 
 const App = () => {
   useEffect(() => {
@@ -21,6 +22,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
+    <ScrollToTop/>
       <Routes>
         
         <Route path={CUSTOMER_ROUTES.MAIN} element={<CustomerRoutes />} />

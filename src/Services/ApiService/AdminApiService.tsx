@@ -1,6 +1,7 @@
 
-import {  adminAxiosInstance } from "../../config/AxiosInstance";
+import {  adminAxiosInstance, authAxiosInstance } from "../../config/AxiosInstance";
 import type { IServiceVendorTypes } from "../../Shared/types/Types";
+
 
 
 
@@ -8,7 +9,7 @@ import type { IServiceVendorTypes } from "../../Shared/types/Types";
 export const loginAdmin = async (value :{email:string;password:string,role:string}) =>{
     
     
-    const response =  await adminAxiosInstance.post("/auth/login",value);
+    const response =  await authAxiosInstance.post("/auth/login",value);
     return response;
     
     
@@ -17,15 +18,18 @@ export const loginAdmin = async (value :{email:string;password:string,role:strin
 //--------------------------------------------------------------admin logout
 export const logoutAdmin = async () =>{
     
-    const response = await adminAxiosInstance.post("/logout",{role:'Admin'});
+    const response = await authAxiosInstance.post("/auth/logout",{role:'Admin'});
     return response;
 };
+
+
+
 
 
 //--------------------------------------------------------------get all customers data
 export const getCustomersData = async() =>{
     
-    const response = await adminAxiosInstance.get("/data/customers");
+    const response = await adminAxiosInstance.get("/admin/data/customers");
     return response;
     
     
@@ -34,7 +38,7 @@ export const getCustomersData = async() =>{
 
 export const blockCustomer= async(id:string) =>{
     
-    const response = await adminAxiosInstance.post("/data/block-customer",{id});
+    const response = await adminAxiosInstance.post("/admin/data/block-customer",{id});
     return response;
     
     
@@ -42,14 +46,14 @@ export const blockCustomer= async(id:string) =>{
 //--------------------------------------------------------------get all vendor data
 export const getVendorsData = async () =>{
     
-    const response = await adminAxiosInstance.get("/data/vendors");
+    const response = await adminAxiosInstance.get("/admin/data/vendors");
     return response;
     
 };
 //--------------------------------------------------------------block vendors
 export const blockVendor= async(id:string) =>{
     
-    const response = await adminAxiosInstance.post("/data/block-vendor",{id});
+    const response = await adminAxiosInstance.post("/admin/data/block-vendor",{id});
     return response;
     
     
@@ -59,7 +63,7 @@ export const blockVendor= async(id:string) =>{
 //--------------------------------------------------------------get service types
 export const getServiceTypes = async() =>{
     
-    const response = await adminAxiosInstance.get('service/get-services')
+    const response = await adminAxiosInstance.get('/admin/service/get-services')
     return response
 }
 
@@ -67,14 +71,14 @@ export const getServiceTypes = async() =>{
 //--------------------------------------------------------------add service types
 export const addServiceType = async (form:{serviceName:string;description:string}) =>{
     
-    const response = await adminAxiosInstance.post("service/add-service",form)
+    const response = await adminAxiosInstance.post("admin/service/add-service",form)
     return response
     
 }
 
 //--------------------------------------------------------------edit service types
 export const editServiceType = async (form:IServiceVendorTypes) =>{
-    const response = await adminAxiosInstance.put('/service/edit-service',form)
+    const response = await adminAxiosInstance.put('/admin/service/edit-service',form)
     
    return  response
 }
@@ -84,18 +88,18 @@ export const editServiceType = async (form:IServiceVendorTypes) =>{
 //--------------------------------------------------------------show vendors request
 export const vendorsRequests = async () =>{
     
-    const response = await adminAxiosInstance.get('/data/vendors-request')
+    const response = await adminAxiosInstance.get('/admin/data/vendors-request')
     return response
 }
 
 //--------------------------------------------------------------vendors request reject
 export const vendrRequestReject = async(id:string) =>{
-    const response = await adminAxiosInstance.post('/data/reject-vendor',{id})
+    const response = await adminAxiosInstance.post('/admin/data/reject-vendor',{id})
     return response
 }
 //--------------------------------------------------------------vendors request verified
 export const vendrRequestVerified = async(id:string) =>{
-    const response = await adminAxiosInstance.post('/data/verified-vendor',{id})
+    const response = await adminAxiosInstance.post('/admin/data/verified-vendor',{id})
     return response
 }
 
@@ -107,7 +111,7 @@ export const vendrRequestVerified = async(id:string) =>{
 //-------------------------------------------------------------- get admin dashboard data
 export const adminDashbordData = async () =>{
 
-    const response = await adminAxiosInstance.get('/admin-dashboard')
+    const response = await adminAxiosInstance.get('/admin/admin-dashboard')
     return response
 
 }

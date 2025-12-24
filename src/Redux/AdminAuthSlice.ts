@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { adminGetAccessToken, decodeToken, getAccessToken } from "../utils/tokenUtils";
+import {  decodeToken, getAccessToken } from "../utils/tokenUtils";
 import type { ITokenDdecode } from "../Shared/types/Types";
 
 const tokenDecode: ITokenDdecode | null = decodeToken();
