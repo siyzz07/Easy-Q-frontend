@@ -18,6 +18,7 @@ import VendorProfileView from "../pages/Customer/VendorProfileView";
 import CheckoutPage from "../pages/Customer/CheckoutPage";
 import PaymentConfirmPage from "../pages/Customer/PaymentConfirmPage";
 import BookingsPage from "../pages/Customer/BookingsPage";
+import BookingDetailsPage from "../pages/Customer/BookingDetailsPage";
 import ContractPage from "../pages/Customer/ContractPage";
 import FavoritePage from "../pages/Customer/FavoritePage";
 
@@ -112,7 +113,7 @@ const CustomerRoutes = () => {
             />
 
             <Route
-            path="/service/payment-confirm"
+            path="/service/booking-confirm"
             element ={
 
               <CustomerProtectedRoute>
@@ -129,14 +130,28 @@ const CustomerRoutes = () => {
                   <ContractPage/>
                 </CustomerProtectedRoute>
               }/>
-           <Route
+            <Route
+              path={CUSTOMER_ROUTES.BOOKINGS}
+              element={
+                <CustomerProtectedRoute>
+                  <BookingsPage/>
+                </CustomerProtectedRoute>
+              }/>
+            <Route
             path={CUSTOMER_ROUTES.FAVORITE}
             element={
               <CustomerProtectedRoute>
                 <FavoritePage/>
               </CustomerProtectedRoute>
             }/>
-          
+            <Route
+              path={CUSTOMER_ROUTES.VIEW_BOOKING}
+              element={
+                <CustomerProtectedRoute>
+                  <BookingDetailsPage/>
+                </CustomerProtectedRoute>
+              }/>
+            
         {/* //----------------------------------------------- profile ------------------------ */}
         <Route
           path={CUSTOMER_ROUTES.PROFILE}
@@ -154,10 +169,7 @@ const CustomerRoutes = () => {
               </CustomerProtectedRoute>
             }
           />
-            <Route
-              path={CUSTOMER_ROUTES.BOOKINGS}
-              element={<BookingsPage/>}
-          />
+
           <Route
             path={CUSTOMER_ROUTES.CHANGE_PASSWORD_IN_PROFILE}
             element={

@@ -121,7 +121,7 @@ function PaymentConfirmPage() {
             Go to Home
           </button>
           <button
-            onClick={() => navigate("/my-bookings")}
+            onClick={() => navigate("/customer/bookings")}
             className="flex-1 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-6 rounded-lg border border-gray-300 transition-colors"
           >
             View My Bookings

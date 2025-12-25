@@ -1,6 +1,6 @@
 import SignupForm from "../../components/Customer/SignupForm";
 import { motion } from "framer-motion";
-import landingImage from "../../assets/landImage.jpg";
+import landingImage from "../../assets/customer-login-image.png";
 
 const SignupPage = () => {
   return (

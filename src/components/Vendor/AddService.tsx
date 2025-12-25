@@ -149,7 +149,7 @@ const AddService: FC<IAddService> = ({ onClose }) => {
 
                     <div>
                          <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Duration (min) <span className="text-red-500">*</span>
+                            Duration <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                             <Field

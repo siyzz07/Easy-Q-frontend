@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import LoginForm from "../../components/Customer/LoginForm";
 import { motion } from "framer-motion";
-import landingImage from "../../assets/landImage.jpg";
+import loginImage from "../../assets/customer-login-image.png";
 
 const Login: FC = () => {
   return (
@@ -15,7 +15,7 @@ const Login: FC = () => {
       >
         <div className="absolute inset-0 bg-blue-900/20 z-10" />
         <img 
-          src={landingImage} 
+          src={loginImage} 
           alt="Customer Login" 
           className="w-full h-full object-cover"
         />

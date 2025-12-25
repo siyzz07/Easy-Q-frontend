@@ -135,13 +135,13 @@ const DashboardVendor = () => {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <button
+            {/* <button
               onClick={() => navigate("/vendor/add-staff")} 
               className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2"
             >
               <Users size={18} />
               <span>Manage Staff</span>
-            </button>
+            </button> */}
             <button
                onClick={() => setBlookBookingModal(true)}
               className="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-medium px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2"

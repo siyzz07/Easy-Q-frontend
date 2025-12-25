@@ -119,7 +119,7 @@ const CheckoutPage = () => {
         };
 
         let encode = btoa(JSON.stringify(data));
-        navigate(`/customer/service/payment-confirm?id=${encode}`);
+        window.location.replace(`/customer/service/booking-confirm?id=${encode}`);
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

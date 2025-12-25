@@ -29,38 +29,7 @@ const FavoritePage = () => {
   return (
     <main className="min-h-screen bg-[#EFF6FF]  ">
       {/* Top Search Bar */}
-      <section className="bg-white shadow rounded-xl justify-center shadow-gray-200 p-5 max-w-8xl mx-auto flex flex-col md:flex-row gap-5 items-center">
-        <div className="relative w-full md:w-1/3">
-          <Search
-            className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400"
-            size={16}
-          />
-          <input
-            type="text"
-            placeholder="What service"
-            className="w-full rounded border-2 border-gray-300 px-8 py-2 text-sm 
-                 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition"
-          />
-        </div>
-
-        <div className="relative w-full md:w-1/3">
-          <MapPin
-            className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400"
-            size={16}
-          />
-          <input
-            type="text"
-            placeholder="Location"
-            className="w-full rounded border-2 border-gray-300 px-8 py-2 text-sm 
-                 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 transition"
-          />
-        </div>
-
-        <button className="rounded bg-blue-600 text-white px-4 py-1 text-sm hover:bg-blue-700 transition">
-          Search
-        </button>
-      </section>
-
+      
       {/* Main Content Area */}
 
       <div>

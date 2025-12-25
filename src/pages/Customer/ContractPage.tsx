@@ -131,7 +131,7 @@ const ContractPage = () => {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6 mb-8">
           <div className="flex items-start sm:items-center gap-3 sm:gap-4">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+              <h1 className="mb-4 sm:text-3xl font-bold text-slate-900 tracking-tight">
                 Contract Management
               </h1>
               <p className="text-slate-600 text-sm sm:text-base mt-1">
@@ -222,7 +222,7 @@ const ContractPage = () => {
                         </div>
                         <div className="relative">
                         <h3 className="text-xl font-bold text-white mb-1 line-clamp-1">
-                            {contract.isHiring}
+                            {/* {contract.isHiring} */}
                         </h3>
                         </div>
                     </div>

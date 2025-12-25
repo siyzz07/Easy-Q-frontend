@@ -31,8 +31,9 @@ export const CUSTOMER_ROUTES ={
     CHANGE_PASSWORD_IN_PROFILE:"/profile/security",
     ADDRESS:"/profile/customer-address",
     SHOP_SERVICES:"/services/:id",  
-    BOOKINGS:'/profile/bookings',
-    FAVORITE:'/favorite'
+    BOOKINGS:'bookings',
+    VIEW_BOOKING:'bookings/:id',
+    FAVORITE:'favorite'
 
 
 };

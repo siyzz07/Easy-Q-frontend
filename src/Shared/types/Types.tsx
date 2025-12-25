@@ -158,6 +158,7 @@ export interface IImage {
 export interface IBooking {
   _id?:  string
   customerId: string;
+  bookingId?:string;
   userId?:string
   shopId: string;
   serviceId: string;

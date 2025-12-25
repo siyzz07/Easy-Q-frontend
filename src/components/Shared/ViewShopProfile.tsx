@@ -38,7 +38,7 @@ const ViewShopProfile: FC<ViewShopProfileProps> = ({ data, isOwner, onEdit }) =>
       const action = isFavorite ? "remove" : "add";
       await favoriteUpdate(data._id, action);
       setIsFavorite(!isFavorite);
-      toast.success(isFavorite ? "Removed from favorites" : "Added to favorites");
+      // toast.success(isFavorite ? "Removed from favorites" : "Added to favorites");
     } catch (error) {
       toast.error("Failed to update favorites");
     }
@@ -103,13 +103,13 @@ const ViewShopProfile: FC<ViewShopProfileProps> = ({ data, isOwner, onEdit }) =>
                    </Button>
                   ) : (
                     <>
-                    <Button
+                    {/* <Button
                         variant="ghost" 
                         size="icon"
                         className="rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition"
                       >
                        <Share2 size={20} className="text-gray-600 dark:text-gray-300" />
-                      </Button>
+                      </Button> */}
                       <Button
                         onClick={handleFavoriteToggle}
                         variant="ghost" 
