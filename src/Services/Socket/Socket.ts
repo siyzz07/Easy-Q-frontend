@@ -8,6 +8,7 @@ export const connectSocket = (token: string) => {
   socket = io(import.meta.env.VITE_BASE_URL, {
     auth: { token },       
     transports: ["websocket"],
+    reconnection: true,
   });
 
   socket.on("connect", () => {

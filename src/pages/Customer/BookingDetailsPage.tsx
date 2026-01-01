@@ -84,8 +84,8 @@ const called = useRef(false);
       }
 
     }catch(error:unknown){
+      
         if(error instanceof AxiosError){
-          console.log(error)
           toast.error('Invalied booking id')
           navigate('/customer/bookings')
         }

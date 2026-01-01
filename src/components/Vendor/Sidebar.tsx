@@ -15,6 +15,7 @@ import { logoutVendor } from "../../Services/ApiService/VendorApiServices";
 import { removeToken } from "../../utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import { vendorLogout } from "../../Redux/VendorSlice";
+import { disconnectSocketAction } from "../../Redux/SocketSlice";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -65,6 +66,7 @@ const Sidebar = () => {
       if (response?.status === 200) {
         dispatch(vendorLogout());
         removeToken();
+        dispatch(disconnectSocketAction())
         navigate("/vendor/login");
       } else {
         console.error("Logout failed:", response);
@@ -151,6 +153,7 @@ const Sidebar = () => {
               <li key={idx}>
                 <NavLink
                   to={item.route}
+                  onClick={()=>setIsOpen(false)}
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
                       page == item.path
@@ -184,7 +187,7 @@ const Sidebar = () => {
       {/* Overlay for mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-30 z-30 md:hidden"
+          className="fixed inset-0 bg-[#00000046] bg-opacity-30 z-30 md:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}

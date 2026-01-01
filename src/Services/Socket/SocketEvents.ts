@@ -43,7 +43,7 @@ export const registerSocketEvents = () => {
   })
 
   socket.on('notification-booking:success',(data:INotificationPayload)=>{
-    
+      console.log('reachedddddd')
     NotificationToast(data.title,data.message,'success')
   })
 };

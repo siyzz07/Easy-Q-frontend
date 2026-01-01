@@ -9,6 +9,7 @@ import { loginCustomer, logoutCustomer } from "../../../Services/ApiService/Cust
 import { useDispatch } from "react-redux";
 import { customerLogOut } from "../../../Redux/CustomeSlice";
 import { removeToken } from "../../../utils/tokenUtils";
+import { disconnectSocketAction } from "../../../Redux/SocketSlice";
 
 const ProfilePageLayout = () => {
 
@@ -22,6 +23,7 @@ const ProfilePageLayout = () => {
       if (response?.status === 200) {
         dispatch(customerLogOut());
          removeToken();
+         dispatch(disconnectSocketAction())
         
         navigate("/customer/login");
       } else {

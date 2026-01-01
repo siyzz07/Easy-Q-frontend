@@ -1,5 +1,6 @@
 
 
+import { number, string } from "yup";
 import {  authAxiosInstance, CustomerAxiosInstance } from "../../config/AxiosInstance";
 import type { IBookingPayload, ICustomer, ICustomerAddress, ICustomerLogin } from "../../Shared/types/Types";
 
@@ -37,9 +38,11 @@ return response;
 
 //---------------------------------------------------- get shop Data
 
-export const getShopsData = async () =>{
+export const getShopsData = async ({search='',location='', page=1 , limit=10}:{search?:string;location?:string,page?:number,limit?:number}) =>{
     
-    const response = await CustomerAxiosInstance.get("/customer/shops-data");
+    const response = await CustomerAxiosInstance.get("/customer/shops-data",{
+        params:{search,location,page,limit}
+    });
     return response; 
 };
 
@@ -227,3 +230,25 @@ export const getFavoriteShopes = async () =>{
     const response = await CustomerAxiosInstance.get('/customer/favorite/shopes')
     return response
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//------------------------------------------------ trial api
+

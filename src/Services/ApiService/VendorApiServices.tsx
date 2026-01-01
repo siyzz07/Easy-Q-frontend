@@ -127,8 +127,9 @@ export const addStaff = async (form :IStaff) =>{
 }
 
 //--------------------------- get Staff data
-export const getAllStffs = async() =>{
-    const response = await VendorAxiosInstance.get('/vendor/staff')
+export const getAllStffs = async(filter:boolean|string) =>{
+
+    const response = await VendorAxiosInstance.get(`/vendor/staff/`)
     return response
 } 
 //--------------------------- edit Staff data

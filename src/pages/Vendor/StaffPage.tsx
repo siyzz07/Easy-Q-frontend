@@ -20,13 +20,15 @@ const StaffPage = () => {
   const [staffData, setStaffData] = useState<IStaff[] | []>([]);
   const [editStaffPopup,setEditStaffPopup] = useState<boolean>(false)
   const [eachStaffData,setEachStaffData] = useState<IStaff|null>(null)
+  const[filter,setFilter] = useState<any>('all')
+
   useEffect(() => {
     getStaffs();
   }, [addStaffPopup,editStaffPopup]);
 
   const getStaffs = async () => {
     try {
-      let response = await getAllStffs();
+      let response = await getAllStffs('all');
       if (response?.data?.data) {
         setStaffData(response.data.data);
       }
@@ -49,6 +51,24 @@ const StaffPage = () => {
   const onEdit = (data:any) =>{
     setEachStaffData(data)
     setEditStaffPopup(true)
+  }
+
+  const onClickEvent = async(str:boolean) =>{
+
+    setFilter(str)
+    
+    console.log(str)
+
+    let response = await getAllStffs(str)
+
+      console.log(response.data.data);
+      
+    if(response?.data.data){
+      setStaffData(response.data.data)
+    }
+
+
+
   }
 
   return (
@@ -86,6 +106,12 @@ const StaffPage = () => {
                   Add Staff
                 </Button>
               </div>
+
+              {/* <div>
+                <input type="text" />
+                <button className="w-20 h-10 bg-blue-600" onClick={()=>onClickEvent(true)}> active </button>
+                <button className="w-20 h-10 bg-blue-600" onClick={()=>onClickEvent(false)}> inactive </button>
+              </div> */}
 
               <div className="w-full pt-10">
                 <ReusableTable

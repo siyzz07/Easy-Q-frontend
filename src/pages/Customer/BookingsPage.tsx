@@ -166,6 +166,7 @@ const BookingsPage = () => {
             </TabsContent>
           </Tabs>
         </div>
+        
       </div>
     </div>
   );
