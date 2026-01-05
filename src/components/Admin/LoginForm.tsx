@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { AxiosError } from "axios";
 import { loginAdmin } from "../../Services/ApiService/AdminApiService";
 import { toast } from "react-toastify";
-import { setAccessToken } from "../../utils/tokenUtils";
+import { setAccessToken } from "../../utils/tokenUtils"
 import { useDispatch } from "react-redux";
 import { adminLoginSuccess } from "../../Redux/AdminAuthSlice";
 
@@ -20,7 +20,7 @@ const LoginForm = () => {
     password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
   });
 
-  const handleSubmit = async (values: { email: string; password: string,role:string }) => {
+  const handleSubmit = async (values: { email: string; password: string ,role:string}) => {
     try {
       const response = await loginAdmin(values);
       if (response.data.accesstoken) {
@@ -30,7 +30,7 @@ const LoginForm = () => {
       }
     } catch (error) {
       if (error instanceof AxiosError && error?.response?.data) {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data);
       }
     }
   };
@@ -48,7 +48,7 @@ const LoginForm = () => {
 
         {/* Formik Form */}
         <Formik
-          initialValues={{ email: "", password: "",role:'admin' }}
+          initialValues={{ email: "", password: "" ,role:'admin'}}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >

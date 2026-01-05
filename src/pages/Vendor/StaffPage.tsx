@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import AddStaff from "../../components/Vendor/AddStaff";
 import {
   InputGroup,
@@ -13,6 +13,8 @@ import type { IStaff } from "../../Shared/types/Types";
 import { getAllStffs } from "../../Services/ApiService/VendorApiServices";
 import { AxiosError } from "axios";
 import EditStaff from "../../components/Vendor/EditStaff";
+import { useDebounce } from "../../hooks/useDebounce";
+import Pagination from "../../components/Shared/Pagination";
 
 
 const StaffPage = () => {
@@ -20,17 +22,23 @@ const StaffPage = () => {
   const [staffData, setStaffData] = useState<IStaff[] | []>([]);
   const [editStaffPopup,setEditStaffPopup] = useState<boolean>(false)
   const [eachStaffData,setEachStaffData] = useState<IStaff|null>(null)
-  const[filter,setFilter] = useState<any>('all')
+  const [page,setPage] = useState<number> (1)
+  const [limit,setLimit] = useState<number>(10)
+  const [totalPages,setTotalPages] = useState<number>(1)
+  const [search,setSearch]= useState<string>('')
+
+  const debouncedSearch = useDebounce(search)
 
   useEffect(() => {
     getStaffs();
-  }, [addStaffPopup,editStaffPopup]);
+  }, [addStaffPopup,editStaffPopup,page,debouncedSearch]);
 
   const getStaffs = async () => {
     try {
-      let response = await getAllStffs('all');
+      let response = await getAllStffs(page,limit,debouncedSearch);
       if (response?.data?.data) {
         setStaffData(response.data.data);
+        setTotalPages(response.data.pagination.totalPages)
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -53,23 +61,7 @@ const StaffPage = () => {
     setEditStaffPopup(true)
   }
 
-  const onClickEvent = async(str:boolean) =>{
-
-    setFilter(str)
-    
-    console.log(str)
-
-    let response = await getAllStffs(str)
-
-      console.log(response.data.data);
-      
-    if(response?.data.data){
-      setStaffData(response.data.data)
-    }
-
-
-
-  }
+  
 
   return (
     <>
@@ -85,16 +77,10 @@ const StaffPage = () => {
                    <InputGroup className="bg-white border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500/20 shadow-sm transition-all">
                   <InputGroupInput
                     placeholder="Search staff..."
+                    onChange={(e)=> setSearch(e.target.value)}
                     className="text-gray-900 placeholder-gray-400 px-4 py-2.5 outline-none"
                   />
-                  <InputGroupAddon align="inline-end">
-                    <InputGroupButton
-                      variant="ghost"
-                      className="bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors font-medium px-4 border-l border-gray-100"
-                    >
-                      Search
-                    </InputGroupButton>
-                  </InputGroupAddon>
+                  
                 </InputGroup>
                 </div>
 
@@ -121,6 +107,11 @@ const StaffPage = () => {
                   onEditAction={(data)=> onEdit(data) }
 
                 />
+                <Pagination
+                  page ={page}
+                  totalPages={totalPages}
+                  onPageChange={setPage}
+                  />
               </div>
             </div>
           </main>

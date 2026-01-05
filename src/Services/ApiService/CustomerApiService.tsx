@@ -29,7 +29,7 @@ export const verifyEmail = async (token:string)=>{
 // -----------------------------------------login customer
 
 export const loginCustomer = async (form:ICustomerLogin) =>{
-        
+    console.log(form);    
 const response = await authAxiosInstance.post("/auth/login",form);
 return response;
 

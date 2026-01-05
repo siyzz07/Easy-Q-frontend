@@ -127,9 +127,15 @@ export const addStaff = async (form :IStaff) =>{
 }
 
 //--------------------------- get Staff data
-export const getAllStffs = async(filter:boolean|string) =>{
+export const getAllStffs = async(page:number,limit:number,search:string) =>{
 
-    const response = await VendorAxiosInstance.get(`/vendor/staff/`)
+    const response = await VendorAxiosInstance.get(`/vendor/staff/`,{
+        params:{
+            page,
+            limit,
+            search
+        }
+    })
     return response
 } 
 //--------------------------- edit Staff data
@@ -160,8 +166,14 @@ export const addService = async (formData:IService) =>{
 }
 
 //--------------------------- get services
-export const getServices = async () =>{
-    const response = await VendorAxiosInstance.get('/vendor/service/get-service')
+export const getServices = async (page:number,limit:number,search:string) =>{
+    const response = await VendorAxiosInstance.get('/vendor/service/get-service',{
+        params:{
+            page,
+            limit,
+            search
+        }
+    })
     return response
 }
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Edit, Trash, Plus } from "lucide-react";
+import { Plus, Map, MapPin, Globe, Home, Edit3, Trash2, Phone as PhoneIcon } from "lucide-react";
 import AddAddressModal from "./AddAddressModal";
 import {
   deleteCustomerAddress,
@@ -9,10 +8,7 @@ import {
 import ConfirmationModal from "../Shared/ConfirmationModal";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
-
 import EditAddressModal from "./EditAddressModal";
-import type { data } from "react-router-dom";
-
 
 interface AddressData {
   _id?: string;
@@ -27,18 +23,17 @@ interface AddressData {
   };
 }
 
-
 const CustomerAddress: React.FC = () => {
   const [addresses, setAddresses] = useState<AddressData[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [addressId, setAddresId] = useState<any | null>(null);
-  const [deletePopup, setDeletePopup] = useState<Boolean>(false);
-  const [editAddress,setEditAddress] = useState<Boolean>(false);
-  const [eachAddres,setEachAddress] =useState<any|null>(null);
+  const [addressId, setAddresId] = useState<string | null>(null);
+  const [deletePopup, setDeletePopup] = useState<boolean>(false);
+  const [editAddress, setEditAddress] = useState<boolean>(false);
+  const [eachAddres, setEachAddress] = useState<AddressData | null>(null);
 
   useEffect(() => {
     getAllAddress();
-  }, [showModal,addressId,editAddress]);
+  }, [showModal, addressId, editAddress]);
 
   const getAllAddress = async () => {
     try {
@@ -46,106 +41,159 @@ const CustomerAddress: React.FC = () => {
       if (response?.data?.data) {
         setAddresses(response.data.data);
       }
-      
     } catch (error: unknown) {
-      console.log(error);
+      console.error("Error fetching addresses:", error);
     }
   };
 
-  const onClose = () => setShowModal(false);
-
-  const deleteAddress = async (id?: string) => {
+  const deleteAddressAction = async (id?: string) => {
     try {
       if (id) {
         let response = await deleteCustomerAddress(id);
-        if(response?.data?.message){
+        if (response?.data?.message) {
           toast.success(response.data.message);
         }
+        await getAllAddress();
         setAddresId(null);
+        setDeletePopup(false);
       }
     } catch (error: unknown) {
-      if(error instanceof AxiosError){
-        console.log("delete address error",error);
-        
+      if (error instanceof AxiosError) {
+        console.error("Delete address error", error);
+        toast.error(error.response?.data?.message || "Failed to delete address");
       }
     }
   };
 
-  let deleteAddressDescription =
-    "This action will permanently remove this address from your saved list. You won’t be able to recover it";
-
-
+  const deleteAddressDescription = "This action will permanently remove this address from your saved list. You won’t be able to recover it.";
 
   return (
     <>
-      {/* add address modal */}
-      {showModal && <AddAddressModal onClose={onClose} />}
-
-      {/* delete address modal */}
+      {/* Modals */}
+      {showModal && <AddAddressModal onClose={() => setShowModal(false)} />}
+      
       {deletePopup && (
         <ConfirmationModal
-          payload={addressId}
-          submit={deleteAddress}
+          payload={addressId || undefined}
+          submit={deleteAddressAction}
           description={deleteAddressDescription}
           text="Delete Address?"
           close={() => setDeletePopup(false)}
         />
       )}
+      
+      {editAddress && eachAddres && (
+        <EditAddressModal 
+          onClose={() => setEditAddress(false)} 
+          data={eachAddres} 
+        />
+      )}
 
-      {/* edit customer addres */}
-      {editAddress && <EditAddressModal onClose={()=>setEditAddress(false)}  data={eachAddres} />}
-
-      {/* Address List */}
-      <div className="rounded-lg border border-gray-300 p-4 bg-gray-50 shadow-sm md:p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="font-bold text-xl">Customer Addresses</h2>
+      {/* Main Container */}
+      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden min-h-[400px]">
+        <div className="p-8 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-left">
+          <div className="flex items-center gap-3">
+             <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
+                <Map size={20} />
+             </div>
+             <div>
+                <h2 className="font-bold text-xl text-gray-900 tracking-tight">Saved Addresses</h2>
+                <p className="text-xs text-gray-400 font-medium mt-0.5">Manage your shipping and service locations.</p>
+             </div>
+          </div>
+          
           <button
             onClick={() => setShowModal(true)}
-            className="inline-flex items-center gap-1 rounded-md px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 shadow-sm text-white"
+            className="flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-bold bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20 text-white transition-all active:scale-95 group shrink-0"
           >
-            <Plus size={16} /> Add Address
+            <Plus size={18} className="group-hover:rotate-90 transition-transform duration-300" />
+            Add New Address
           </button>
         </div>
 
-        {/* Address Cards */}
-        <div className="grid gap-4 md:grid-cols-3">
+        {/* Address Grid */}
+        <div className="p-8 pt-6">
           {addresses.length === 0 ? (
-            <p className="text-gray-600 italic">No address added yet</p>
+            <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+               <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-gray-300 mb-4">
+                  <MapPin size={40} strokeWidth={1.5} />
+               </div>
+               <h3 className="text-lg font-bold text-gray-900">No addresses yet</h3>
+               <p className="text-sm text-gray-500 max-w-xs mt-2 font-medium">Add an address to speed up your booking process and manage locations easily.</p>
+            </div>
           ) : (
-            addresses.map((data, index) => (
-              <Card
-                key={index}
-                className="shadow-md hover:shadow-lg transition"
-              >
-                <CardHeader className="flex justify-between items-center">
-                  <CardTitle className="text-sm md:text-base">
-                    {data.address}
-                  </CardTitle>
-                  <div className="flex gap-2">
-                    <Edit
-                    onClick={()=>{
-                      setEditAddress(true),
-                      setEachAddress(data);
-                    }}
-                    className="h-5 w-5 text-gray-500 hover:text-blue-600 cursor-pointer" />
-                    {/* delete address */}
-                    {/* <Trash
-                      onClick={() => {
-                        setAddresId(data._id), setDeletePopup(true);
-                      }}
-                      className="h-5 w-5 text-gray-500 hover:text-red-600 cursor-pointer"
-                    /> */}
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {addresses.map((data, index) => (
+                <div
+                  key={data._id || index}
+                  className="group relative bg-white border border-gray-100 rounded-[2rem] p-6 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-600/5 transition-all duration-300 text-left"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="p-2.5 bg-gray-50 group-hover:bg-blue-50 text-gray-400 group-hover:text-blue-500 rounded-2xl transition-colors">
+                      <Home size={20} />
+                    </div>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => {
+                          setEachAddress(data);
+                          setEditAddress(true);
+                        }}
+                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+                        title="Edit Address"
+                      >
+                        <Edit3 size={16} strokeWidth={2.5} />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setAddresId(data._id || null);
+                          setDeletePopup(true);
+                        }}
+                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                        title="Delete Address"
+                      >
+                        <Trash2 size={16} strokeWidth={2.5} />
+                      </button>
+                    </div>
                   </div>
-                </CardHeader>
-                <CardContent className="text-sm text-gray-700">
-                  <p>{data.city}</p>
-                  <p>{data.state}</p>
-                  <p>{data.country}</p>
-                  <p>Phone: {data.phone}</p>
-                </CardContent>
-              </Card>
-            ))
+
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-bold text-gray-900 line-clamp-1 group-hover:text-blue-700 transition-colors">
+                        {data.address}
+                      </h4>
+                      <div className="flex items-center gap-1.5 mt-1 text-gray-500">
+                        <Globe size={12} className="shrink-0" />
+                        <span className="text-xs font-medium">{data.city}, {data.state}</span>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-gray-50 space-y-2">
+                       <div className="flex items-center gap-2 text-gray-600">
+                          <MapPin size={14} className="text-gray-400" />
+                          <span className="text-[13px] font-medium">{data.country}</span>
+                       </div>
+                       <div className="flex items-center gap-2 text-gray-600">
+                          <PhoneIcon size={14} className="text-gray-400" />
+                          <span className="text-[13px] font-semibold tracking-wide">
+                            {data.phone ? `+91 ${data.phone}` : "No phone provided"}
+                          </span>
+                       </div>
+                    </div>
+                  </div>
+                  <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-blue-500 scale-0 group-hover:scale-100 transition-transform duration-500" />
+                </div>
+              ))}
+            </div>
           )}
+        </div>
+
+        <div className="p-8 pt-0 flex items-center justify-between mt-4">
+           <div className="h-1 flex-1 bg-gray-50 rounded-full overflow-hidden">
+              <div className="h-full bg-blue-100/50 w-full" style={{ width: `${Math.min(100, (addresses.length / 5) * 100)}%` }} />
+           </div>
+           <span className="ml-4 text-[11px] font-bold text-gray-300 uppercase tracking-widest leading-none">
+              {addresses.length} {addresses.length === 1 ? 'Location' : 'Locations'} saved
+           </span>
         </div>
       </div>
     </>

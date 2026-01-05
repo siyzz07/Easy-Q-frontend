@@ -6,7 +6,7 @@ import type { IServiceVendorTypes } from "../../Shared/types/Types";
 
 
 //--------------------------------------------------------------admin login
-export const loginAdmin = async (value :{email:string;password:string,role:string}) =>{
+export const    loginAdmin = async (value :{email:string;password:string,role:string}) =>{
     
     
     const response =  await authAxiosInstance.post("/auth/login",value);
