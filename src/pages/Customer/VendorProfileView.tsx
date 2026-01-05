@@ -25,7 +25,6 @@ const VendorProfileView = () => {
       setLoading(true);
       setError(null);
       let response = await getEachShopData(id as string);
-      console.log("response :>> ", response);
       if (response?.data?.data) {
         setVendorData(response?.data?.data);
       }
@@ -92,6 +91,7 @@ const VendorProfileView = () => {
               <ShopViews
                 isVendor={false}
                 vendorImages={vendordata?.images as IImage[]|[]}
+                vendorId={id as string}
               />
             </div>
         </main>

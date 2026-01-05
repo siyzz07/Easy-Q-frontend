@@ -37,7 +37,7 @@ const HomePage = () => {
         limit,
       });
 
-      // ✅ FIXED RESPONSE HANDLING
+     
       setShops(response.data.data || []);
       setTotalPages(response.data.pagination.totalPages);
 
@@ -168,7 +168,7 @@ const HomePage = () => {
               </motion.div>
             )}
 
-            {/* ✅ FIXED PAGINATION */}
+           
             {totalPages > 1 && (
               <div className="mt-10 mb-20">
                 <Pagination

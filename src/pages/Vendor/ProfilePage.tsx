@@ -61,6 +61,7 @@ const ProfilePage = () => {
                 <ShopViews
                     isVendor={true}
                     vendorImages={vendordata?.images as IImage[]|[]}
+                    vendorId={vendordata?._id}
                     isUpdate={() => setUpdate(!update)}
                 />
                 </div>

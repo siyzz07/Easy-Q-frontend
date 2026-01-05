@@ -1,5 +1,3 @@
-"use client";
-
 import {
   PencilLine,
   Lock,
@@ -7,50 +5,74 @@ import {
   MapPin,
   Wallet,
   Bell,
+  ChevronRight
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-
+import { motion } from "framer-motion";
 
 const items = [
-  { label: "Edit Profile", Icon: PencilLine , path:"/customer/profile" , route:"profile"},
-  { label: "Addresses", Icon: MapPin, path:"/customer/profile/customer-address", route:"customer-address" },
-  { label: "Wallet", Icon: Wallet , path:"/profile" , route:"Profile"},
-  { label: "Bookings", Icon: CreditCard , path:"/customer/bookings" , route:"bookings" },
-  { label: "Notifications", Icon: Bell , path:"/profile" , route:"Profile" },
-  { label: "Security", Icon: Lock , path:"/customer/profile/security", route:"security" },
+  { label: "Profile Details", Icon: PencilLine, path: "/customer/profile", route: "profile" },
+  { label: "Addresses", Icon: MapPin, path: "/customer/profile/customer-address", route: "customer-address" },
+  { label: "Wallet Balance", Icon: Wallet, path: "/profile", route: "Profile" },
+  { label: "My Bookings", Icon: CreditCard, path: "/customer/bookings", route: "bookings" },
+  { label: "Notifications", Icon: Bell, path: "/profile", route: "Profile" },
+  { label: "Account Security", Icon: Lock, path: "/customer/profile/security", route: "security" },
 ];
 
-
-
-
 function ProfileTabs() {
-    
-const location = useLocation();
-let pageArray = location.pathname.split("/").filter(Boolean);
-let page = pageArray[pageArray.length-1]+"";
-
-
-
-
-
+  const location = useLocation();
+  const pageArray = location.pathname.split("/").filter(Boolean);
+  const page = pageArray[pageArray.length - 1] || "profile";
 
   return (
-    <div className="flex w-full flex-wrap items-center gap-x-6 gap-y-3  pb-3">
-      {items.map(({label, Icon,path,route }) => (
-        <Link
-          key={label}
-          to={path}
-          className={`inline-flex items-center gap-2  transition hover:text-black hover:font-semibold ${page == route ? " text-md font-semibold ":"text-gray-500 text-sm" }`}
-          aria-label={label}
-        >
-          <Icon className="h-4 w-4" aria-hidden="true" />
-          <span className="uppercase tracking-tight text-foreground/90">
-            {label}
-          </span>
-        </Link>
-      ))}
-      <div className="mt-3 w-full border-1 border-gray-300" />
-    </div>
+    <nav className="flex flex-col gap-1 w-full">
+      {items.map(({ label, Icon, path, route }) => {
+        const isActive = page === route;
+        return (
+          <Link
+            key={label}
+            to={path}
+            className="group relative"
+            aria-label={label}
+          >
+            <div
+              className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? "bg-primary/5 text-primary font-bold"
+                  : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Icon 
+                  size={18} 
+                  strokeWidth={isActive ? 2.5 : 2} 
+                  className={isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"} 
+                />
+                <span className="text-sm tracking-tight font-medium">
+                  {label}
+                </span>
+              </div>
+              
+              {isActive && (
+                <motion.div
+                  layoutId="activeTabIndicator"
+                  className="absolute left-0 w-1 h-6 bg-primary rounded-r-full"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                />
+              )}
+
+              <ChevronRight 
+                size={14} 
+                className={`transition-all duration-200 ${
+                  isActive ? "text-primary opacity-100" : "opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 text-muted-foreground/40"
+                }`} 
+              />
+            </div>
+          </Link>
+        );
+      })}
+    </nav>
   );
 }
 

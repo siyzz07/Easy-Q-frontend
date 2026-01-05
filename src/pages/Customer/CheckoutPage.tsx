@@ -24,6 +24,7 @@ import type {
 } from "../../Shared/types/Types";
 import { toast } from "react-toastify";
 import { createBooking } from "../../Services/ApiService/BookingApiService";
+import CheckoutForm from "../../components/Shared/StripePaymentCheckoutForm";
 
 const CheckoutPage = () => {
   const [serarchParams] = useSearchParams();
@@ -35,6 +36,7 @@ const CheckoutPage = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedPayment, setSelectedPayment] = useState<string>("");
   const [bookingId,setBookingId] = useState<string>('')
+  const [stripeFrom ,setStrpeForm] = useState<boolean>(false)
 
   const navigate = useNavigate();
   let bookingData = serarchParams.get("bookingId");
@@ -89,7 +91,7 @@ const CheckoutPage = () => {
     }
   };
 
-  const handleProceedToPayment = async () => {
+  const handleProceedToPayment = async (isStripePaid: boolean = false) => {
     try {
       if (!serviceData || !customerData || !addressData || !shopData) {
         alert("Some booking data is missing. Please reload the page.");
@@ -98,6 +100,11 @@ const CheckoutPage = () => {
 
       if (!selectedPayment) {
         toast.error("Please select a payment method.");
+        return;
+      }
+
+      if (selectedPayment === "stripe" && !isStripePaid) {
+        setStrpeForm(true);
         return;
       }
 
@@ -130,8 +137,29 @@ const CheckoutPage = () => {
     }
   };
 
+
+  const handlePaymentMethodSelect = (method: string) => {
+    setSelectedPayment(method);
+  };
+
+  const handleStripeSuccess = async () => {
+    setStrpeForm(false);
+    await handleProceedToPayment(true);
+  };
+
+
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      {stripeFrom && serviceData && (
+        <CheckoutForm 
+          amount={Number(serviceData.price)} 
+          onSuccess={handleStripeSuccess}
+          onCancel={() => setStrpeForm(false)}
+          shopName={shopData?.shopName}
+          serviceName={serviceData?.serviceName}
+        />
+      )}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 w-full">
         {/* Header Section */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-t-2xl p-6 sm:p-8 text-white relative overflow-hidden">
@@ -215,10 +243,10 @@ const CheckoutPage = () => {
               <div className="space-y-3">
                 {[
                   {
-                    id: "razorpay",
-                    name: "Razorpay",
-                    color: "blue",
-                    desc: "Pay securely with UPI, cards or net banking",
+                    id: "stripe",
+                    name: "Stripe",
+                    color: "indigo",
+                    desc: "Pay securely with Credit/Debit card via Stripe",
                   },
                   {
                     id: "COD",
@@ -243,7 +271,7 @@ const CheckoutPage = () => {
                   <button
                     key={method.id}
                     type="button"
-                    onClick={() => setSelectedPayment(method.id)}
+                    onClick={() => handlePaymentMethodSelect(method.id)}
                     className={`w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-4 border-2 rounded-xl transition-all 
                       ${
                         selectedPayment === method.id
@@ -303,7 +331,7 @@ const CheckoutPage = () => {
             </button>
 
             <button
-              onClick={handleProceedToPayment}
+              // onClick={handleProceedToPayment}
               className="flex items-center justify-center gap-2 px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors shadow-lg shadow-blue-500/30 w-full sm:w-auto"
             >
               <span className="font-medium">Proceed to Payment</span>

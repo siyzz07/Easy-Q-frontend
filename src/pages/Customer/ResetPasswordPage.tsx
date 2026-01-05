@@ -1,15 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Image from "../../components/Shared/Image";
 import image from "../../assets/customer-login-image.png";
 import ResetPasswordForm from "../../components/Shared/ResetPasswordForm";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  resetPasword,
-  verificationForResetPassword,
-} from "../../Services/ApiService/VendorApiServices";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { resetCustomerPasword } from "../../Services/ApiService/CustomerApiService";
+import { resetCustomerPassword } from "../../Services/ApiService/CustomerApiService";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
@@ -30,7 +26,7 @@ const ResetPasswordPage = () => {
           password: password,
           role
         };
-        const response = await resetCustomerPasword(data);
+        const response = await resetCustomerPassword(data);
         if (response.data.message) {
           toast.success(response.data.message);
           navigate("/customer/login");

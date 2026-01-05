@@ -4,7 +4,9 @@ import * as Yup from "yup";
 import Map from "../Shared/Map"; 
 import { postNewAddress } from "../../Services/ApiService/CustomerApiService";
 import { toast } from "react-toastify";
-import { Axios, AxiosError } from "axios";
+import { AxiosError } from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, MapPin, Navigation, Phone, Loader2, Plus } from "lucide-react";
 
 const initialValues = {
   address: "",
@@ -14,7 +16,6 @@ const initialValues = {
   phone: "",
   coordinates: { lat: 0, lng: 0 },
 };
-
 
 const validationSchema = Yup.object({
   address: Yup.string()
@@ -74,7 +75,7 @@ const AddAddressModal: React.FC<Props> = ({ onClose }) => {
     { setSubmitting }: any
   ) => {
     try {
-      values.phone=values.phone.toString()
+      values.phone = values.phone.toString();
       const response = await postNewAddress(values);
       onClose();
 
@@ -83,184 +84,168 @@ const AddAddressModal: React.FC<Props> = ({ onClose }) => {
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        if (error?.response?.data?.message) {
-          toast.error(error.response.data.message);
-        } else {
-          toast.error("Error to add address!");
-        }
+        toast.error(error.response?.data?.message || "Error to add address!");
       }
-      onClose();
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000066] bg-opacity-60 backdrop-blur-sm">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6 relative">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6 sticky top-0 bg-white z-10 pb-2 border-b">
-          <h2 className="text-2xl font-semibold text-gray-900">Add Address</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-800 text-xl font-bold"
-          >
-            ✕
-          </button>
-        </div>
+    <AnimatePresence>
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+        />
 
-        {/* Form */}
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          className="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
         >
-          {({ isSubmitting, setFieldValue, values, isValid }) => (
-            <Form className="flex flex-col gap-4">
-              {/* Address */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Address
-                </label>
-                <Field
-                  type="text"
-                  name="address"
-                  placeholder="Enter address"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none mt-1"
-                />
-                <ErrorMessage
-                  name="address"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
+          {/* Header */}
+          <div className="p-8 bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-between text-white shrink-0">
+            <div>
+              <h2 className="text-2xl font-black">Add New Address</h2>
+              <p className="text-sm font-medium opacity-80">Mark your location on the map</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 transition-all active:scale-95"
+            >
+              <X size={20} />
+            </button>
+          </div>
 
-              {/* City */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  City
-                </label>
-                <Field
-                  type="text"
-                  name="city"
-                  placeholder="Enter city"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none mt-1"
-                />
-                <ErrorMessage
-                  name="city"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
+          <div className="overflow-y-auto p-8 custom-scrollbar">
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ isSubmitting, setFieldValue, values, isValid }) => (
+                <Form className="space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Left Column: Form Fields */}
+                    <div className="space-y-6">
+                      {/* Address */}
+                      <div className="space-y-2">
+                        <label className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">
+                          <MapPin size={14} className="text-indigo-500" /> Street Address
+                        </label>
+                        <Field
+                          type="text"
+                          name="address"
+                          placeholder="123 Main St"
+                          className="w-full px-5 py-3.5 rounded-2xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-300 font-medium text-slate-700 bg-slate-50/50"
+                        />
+                        <ErrorMessage name="address" component="div" className="text-red-500 text-[10px] font-bold uppercase tracking-tight pl-2" />
+                      </div>
 
-              {/* State */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  State
-                </label>
-                <Field
-                  type="text"
-                  name="state"
-                  placeholder="Enter state"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none mt-1"
-                />
-                <ErrorMessage
-                  name="state"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        {/* City */}
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">City</label>
+                          <Field
+                            type="text"
+                            name="city"
+                            placeholder="City"
+                            className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:border-indigo-500 outline-none transition-all font-medium text-slate-700"
+                          />
+                          <ErrorMessage name="city" component="div" className="text-red-500 text-[10px] font-bold uppercase tracking-tight pl-2" />
+                        </div>
+                        {/* State */}
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">State</label>
+                          <Field
+                            type="text"
+                            name="state"
+                            placeholder="State"
+                            className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:border-indigo-500 outline-none transition-all font-medium text-slate-700"
+                          />
+                          <ErrorMessage name="state" component="div" className="text-red-500 text-[10px] font-bold uppercase tracking-tight pl-2" />
+                        </div>
+                      </div>
 
-              {/* Country */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Country
-                </label>
-                <Field
-                  type="text"
-                  name="country"
-                  placeholder="Enter country"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none mt-1"
-                />
-                <ErrorMessage
-                  name="country"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        {/* Country */}
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">Country</label>
+                          <Field
+                            type="text"
+                            name="country"
+                            placeholder="Country"
+                            className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:border-indigo-500 outline-none transition-all font-medium text-slate-700"
+                          />
+                          <ErrorMessage name="country" component="div" className="text-red-500 text-[10px] font-bold uppercase tracking-tight pl-2" />
+                        </div>
+                        {/* Phone */}
+                        <div className="space-y-2">
+                          <label className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">
+                            <Phone size={14} className="text-indigo-500" /> Phone
+                          </label>
+                          <Field
+                            type="number"
+                            name="phone"
+                            placeholder="Phone"
+                            className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:border-indigo-500 outline-none transition-all font-medium text-slate-700"
+                          />
+                          <ErrorMessage name="phone" component="div" className="text-red-500 text-[10px] font-bold uppercase tracking-tight pl-2" />
+                        </div>
+                      </div>
+                    </div>
 
-              {/* Phone */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Phone
-                </label>
-                <Field
-                  type="number"
-                  name="phone"
-                  placeholder="Enter phone number"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none mt-1"
-                />
-                <ErrorMessage
-                  name="phone"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
+                    {/* Right Column: Map Selection */}
+                    <div className="space-y-4 flex flex-col">
+                      <label className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">
+                        <Navigation size={14} className="text-indigo-500" /> Pin Location
+                      </label>
+                      <div className="flex-1 min-h-[250px] rounded-[2rem] overflow-hidden border border-slate-200 shadow-inner group">
+                        <Map onSelect={(loc) => setFieldValue("coordinates", loc)} />
+                      </div>
+                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 italic">
+                        {values.coordinates.lat && values.coordinates.lng ? (
+                          <div className="flex items-center justify-between text-[10px] font-bold text-indigo-600 uppercase tracking-widest">
+                            <span>Lat: {values.coordinates.lat.toFixed(4)}</span>
+                            <span>Lng: {values.coordinates.lng.toFixed(4)}</span>
+                          </div>
+                        ) : (
+                          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center">Tap the map to set location</p>
+                        )}
+                        <ErrorMessage name="coordinates.lat" component="div" className="text-red-500 text-[10px] font-bold text-center mt-1" />
+                      </div>
+                    </div>
+                  </div>
 
-              {/* Map */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Shop Location (Map)
-                </label>
-                <div className="mt-1 h-40 w-full border rounded-md overflow-hidden">
-                  <Map
-                    onSelect={(loc) => {
-                      setFieldValue("coordinates", loc);
-                    }}
-                  />
-                </div>
-
-                {values.coordinates.lat && values.coordinates.lng ? (
-                  <p className="mt-2 text-gray-700 text-sm">
-                    Latitude: {values.coordinates.lat.toFixed(6)}, Longitude:{" "}
-                    {values.coordinates.lng.toFixed(6)}
-                  </p>
-                ) : (
-                  <p className="mt-2 text-gray-500 text-sm">
-                    No location selected
-                  </p>
-                )}
-
-              
-                <ErrorMessage
-                  name="coordinates.lat"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-                <ErrorMessage
-                  name="coordinates.lng"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
-
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={isSubmitting || !isValid}
-                className={`w-full py-2 rounded-md text-white font-semibold transition ${
-                  isSubmitting || !isValid
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-500"
-                }`}
-              >
-                {isSubmitting ? "Submitting..." : "Save Address"}
-              </button>
-            </Form>
-          )}
-        </Formik>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting || !isValid}
+                    className="w-full py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all duration-300 active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none flex items-center justify-center gap-3"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="animate-spin" size={20} />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <Plus size={20} />
+                        Save Address
+                      </>
+                    )}
+                  </button>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </motion.div>
       </div>
-    </div>
+    </AnimatePresence>
   );
 };
 

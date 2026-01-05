@@ -109,7 +109,7 @@ export const vendrRequestVerified = async(id:string) =>{
 */
 
 //-------------------------------------------------------------- get admin dashboard data
-export const adminDashbordData = async () =>{
+export const adminDashboardData = async () =>{
 
     const response = await adminAxiosInstance.get('/admin/admin-dashboard')
     return response

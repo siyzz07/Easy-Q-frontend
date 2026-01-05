@@ -66,7 +66,7 @@ export const verificationForResetPassword =  async (data:{email:string,role:stri
 
 
 //------------------------------------------------------reset password
-export const resetCustomerPasword = async(data:{token:string;password:string,role:string}) =>{
+export const resetCustomerPassword = async(data:{token:string;password:string,role:string}) =>{
 
             const response = await authAxiosInstance.post("/auth/reset-password",data);
             return response;
@@ -195,17 +195,7 @@ export const getSelectedSerivce = async (id:string) =>{
 // }
 
 
-/**
- * 
- * Review
- * 
- */
 
-
-//------------------------------------------------------Add review
-export const addReview = async(form:{rating:string,comment:string,shopId:string}) =>{
-    const response = await CustomerAxiosInstance.post('/customer/vendor/add-review',form)
-}
 
 
 /**

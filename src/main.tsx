@@ -6,6 +6,10 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import Store from "./Redux/Store.ts";
 import { Toaster } from "react-hot-toast";
+import { Elements } from "@stripe/react-stripe-js";
+import { PaymentStripe } from "./config/StripeConfig.ts";
+
+
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -23,7 +27,10 @@ createRoot(document.getElementById("root")!).render(
       }}
     />
     <Provider store={Store}>
+      <Elements stripe={PaymentStripe}>
+
       <App />
+      </Elements>
     </Provider>
 
     {/* <ToastContainer

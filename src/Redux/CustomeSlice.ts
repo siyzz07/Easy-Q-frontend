@@ -22,11 +22,13 @@ if (tokenDecode) {
 export interface ICustomerState {
   customerToken: string | null;
   isAuthenticated: boolean;
+  customerData: any | null;
 }
 
 let initialState: ICustomerState = {
   customerToken: token ? token : null,
   isAuthenticated: !!token,
+  customerData: null,
 };
 
 const cusotmerSlice = createSlice({
@@ -37,12 +39,16 @@ const cusotmerSlice = createSlice({
       state.customerToken = action.payload;
       state.isAuthenticated = true;
     },
+    setCustomerData: (state, action) => {
+      state.customerData = action.payload;
+    },
     customerLogOut: (state) => {
       state.customerToken = null;
       state.isAuthenticated = false;
+      state.customerData = null;
     },
   },
 });
 
-export const { customerLoginSuccess, customerLogOut } = cusotmerSlice.actions;
+export const { customerLoginSuccess, customerLogOut, setCustomerData } = cusotmerSlice.actions;
 export default cusotmerSlice.reducer;

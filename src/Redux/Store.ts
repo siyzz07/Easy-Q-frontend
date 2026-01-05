@@ -9,15 +9,16 @@ import notificationSlice from './notificationSlice'
 
 
 const Store = configureStore({
-
-    reducer:{
-        vendorSlice :vendorSlice,
-        customerSlice:customerSlice,
-        adminSlice:adminSlice,
-        socket:socket,
-        notification :notificationSlice
-
-    }
+  reducer: {
+    vendorSlice: vendorSlice,
+    customerSlice: customerSlice,
+    adminSlice: adminSlice,
+    socket: socket,
+    notification: notificationSlice,
+  },
 });
+
+export type RootState = ReturnType<typeof Store.getState>;
+export type AppDispatch = typeof Store.dispatch;
 
 export default Store;

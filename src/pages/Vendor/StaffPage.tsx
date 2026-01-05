@@ -13,6 +13,8 @@ import type { IStaff } from "../../Shared/types/Types";
 import { getAllStffs } from "../../Services/ApiService/VendorApiServices";
 import { AxiosError } from "axios";
 import EditStaff from "../../components/Vendor/EditStaff";
+import Pagination from "../../components/Shared/Pagination";
+import useDebounce from "../../hooks/useDebounce";
 
 
 const StaffPage = () => {
@@ -20,17 +22,24 @@ const StaffPage = () => {
   const [staffData, setStaffData] = useState<IStaff[] | []>([]);
   const [editStaffPopup,setEditStaffPopup] = useState<boolean>(false)
   const [eachStaffData,setEachStaffData] = useState<IStaff|null>(null)
-  const[filter,setFilter] = useState<any>('all')
+  const [search,setSearch] = useState <string> ('')
+  const [page,setPage] = useState<number>(1)
+  const [limit,setLimit]= useState<number>(10)
+  const [totalPages,setTotalPages ] = useState<number> (1)
+
+  const debounceSearch = useDebounce(search)
+
 
   useEffect(() => {
     getStaffs();
-  }, [addStaffPopup,editStaffPopup]);
+  }, [addStaffPopup,editStaffPopup,debounceSearch,page]);
 
   const getStaffs = async () => {
     try {
-      let response = await getAllStffs('all');
+      let response = await getAllStffs(page,limit,debounceSearch);
       if (response?.data?.data) {
         setStaffData(response.data.data);
+        setTotalPages(response.data.pagination.totalPages)
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -44,7 +53,6 @@ const StaffPage = () => {
     {key:'openingTime',label:'Open At'},
     { key: "isActive", label: "Status" },
     {key:'view',label:''},
-    // {key:'action',label:'Action'},
     {key:'edit',label:'Edit'}
   ];
 
@@ -53,23 +61,7 @@ const StaffPage = () => {
     setEditStaffPopup(true)
   }
 
-  const onClickEvent = async(str:boolean) =>{
 
-    setFilter(str)
-    
-    console.log(str)
-
-    let response = await getAllStffs(str)
-
-      console.log(response.data.data);
-      
-    if(response?.data.data){
-      setStaffData(response.data.data)
-    }
-
-
-
-  }
 
   return (
     <>
@@ -85,15 +77,19 @@ const StaffPage = () => {
                    <InputGroup className="bg-white border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500/20 shadow-sm transition-all">
                   <InputGroupInput
                     placeholder="Search staff..."
+                    onChange={(e)=> {
+                      setSearch(e.target.value)
+                      setPage(1)
+                    }}
                     className="text-gray-900 placeholder-gray-400 px-4 py-2.5 outline-none"
                   />
                   <InputGroupAddon align="inline-end">
-                    <InputGroupButton
+                    {/* <InputGroupButton
                       variant="ghost"
-                      className="bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors font-medium px-4 border-l border-gray-100"
+                      className="bg-blue-600 text-white hover:text-white hover:bg-blue-700 transition-colors font-medium px-4 border-l border-gray-100"
                     >
                       Search
-                    </InputGroupButton>
+                    </InputGroupButton> */}
                   </InputGroupAddon>
                 </InputGroup>
                 </div>
@@ -107,11 +103,7 @@ const StaffPage = () => {
                 </Button>
               </div>
 
-              {/* <div>
-                <input type="text" />
-                <button className="w-20 h-10 bg-blue-600" onClick={()=>onClickEvent(true)}> active </button>
-                <button className="w-20 h-10 bg-blue-600" onClick={()=>onClickEvent(false)}> inactive </button>
-              </div> */}
+           
 
               <div className="w-full pt-10">
                 <ReusableTable
@@ -121,6 +113,10 @@ const StaffPage = () => {
                   onEditAction={(data)=> onEdit(data) }
 
                 />
+                <Pagination  page={page}
+                  totalPages={totalPages}
+                  onPageChange={setPage}
+                  />
               </div>
             </div>
           </main>

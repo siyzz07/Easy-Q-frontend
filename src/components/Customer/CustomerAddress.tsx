@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Edit, Trash, Plus } from "lucide-react";
+import { Edit, Plus, MapPin, Phone, Trash2, Globe, ShieldCheck, Navigation } from "lucide-react";
 import AddAddressModal from "./AddAddressModal";
 import {
   deleteCustomerAddress,
@@ -9,10 +8,8 @@ import {
 import ConfirmationModal from "../Shared/ConfirmationModal";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
-
 import EditAddressModal from "./EditAddressModal";
-import type { data } from "react-router-dom";
-
+import { motion, AnimatePresence } from "framer-motion";
 
 interface AddressData {
   _id?: string;
@@ -27,18 +24,17 @@ interface AddressData {
   };
 }
 
-
 const CustomerAddress: React.FC = () => {
   const [addresses, setAddresses] = useState<AddressData[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [addressId, setAddresId] = useState<any | null>(null);
-  const [deletePopup, setDeletePopup] = useState<Boolean>(false);
-  const [editAddress,setEditAddress] = useState<Boolean>(false);
-  const [eachAddres,setEachAddress] =useState<any|null>(null);
+  const [deletePopup, setDeletePopup] = useState<boolean>(false);
+  const [editAddress, setEditAddress] = useState<boolean>(false);
+  const [eachAddres, setEachAddress] = useState<any | null>(null);
 
   useEffect(() => {
     getAllAddress();
-  }, [showModal,addressId,editAddress]);
+  }, [showModal, addressId, editAddress]);
 
   const getAllAddress = async () => {
     try {
@@ -46,109 +42,153 @@ const CustomerAddress: React.FC = () => {
       if (response?.data?.data) {
         setAddresses(response.data.data);
       }
-      
     } catch (error: unknown) {
       console.log(error);
     }
   };
 
-  const onClose = () => setShowModal(false);
-
   const deleteAddress = async (id?: string) => {
     try {
       if (id) {
         let response = await deleteCustomerAddress(id);
-        if(response?.data?.message){
+        if (response?.data?.message) {
           toast.success(response.data.message);
         }
         setAddresId(null);
+        setDeletePopup(false);
       }
     } catch (error: unknown) {
-      if(error instanceof AxiosError){
-        console.log("delete address error",error);
-        
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message || "Failed to delete address");
       }
     }
   };
 
-  let deleteAddressDescription =
-    "This action will permanently remove this address from your saved list. You won’t be able to recover it";
-
-
-
   return (
-    <>
-      {/* add address modal */}
-      {showModal && <AddAddressModal onClose={onClose} />}
-
-      {/* delete address modal */}
+    <div className="space-y-0 divide-y divide-border transition-all">
+      {/* Modals */}
+      {showModal && <AddAddressModal onClose={() => setShowModal(false)} />}
+      
       {deletePopup && (
         <ConfirmationModal
           payload={addressId}
           submit={deleteAddress}
-          description={deleteAddressDescription}
+          description="This action will permanently remove this address from your saved list. You won’t be able to recover it."
           text="Delete Address?"
           close={() => setDeletePopup(false)}
         />
       )}
 
-      {/* edit customer addres */}
-      {editAddress && <EditAddressModal onClose={()=>setEditAddress(false)}  data={eachAddres} />}
+      {editAddress && (
+        <EditAddressModal 
+          onClose={() => setEditAddress(false)} 
+          data={eachAddres} 
+        />
+      )}
 
-      {/* Address List */}
-      <div className="rounded-lg border border-gray-300 p-4 bg-gray-50 shadow-sm md:p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="font-bold text-xl">Customer Addresses</h2>
-          <button
-            onClick={() => setShowModal(true)}
-            className="inline-flex items-center gap-1 rounded-md px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 shadow-sm text-white"
-          >
-            <Plus size={16} /> Add Address
-          </button>
+      {/* Header Section */}
+      <div className="p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-card shrink-0">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-black text-foreground tracking-tight">Shipping Destinations</h2>
+          <p className="text-muted-foreground text-sm font-medium">Manage your delivery and service locations across the globe.</p>
         </div>
-
-        {/* Address Cards */}
-        <div className="grid gap-4 md:grid-cols-3">
-          {addresses.length === 0 ? (
-            <p className="text-gray-600 italic">No address added yet</p>
-          ) : (
-            addresses.map((data, index) => (
-              <Card
-                key={index}
-                className="shadow-md hover:shadow-lg transition"
-              >
-                <CardHeader className="flex justify-between items-center">
-                  <CardTitle className="text-sm md:text-base">
-                    {data.address}
-                  </CardTitle>
-                  <div className="flex gap-2">
-                    <Edit
-                    onClick={()=>{
-                      setEditAddress(true),
-                      setEachAddress(data);
-                    }}
-                    className="h-5 w-5 text-gray-500 hover:text-blue-600 cursor-pointer" />
-                    {/* delete address */}
-                    {/* <Trash
-                      onClick={() => {
-                        setAddresId(data._id), setDeletePopup(true);
-                      }}
-                      className="h-5 w-5 text-gray-500 hover:text-red-600 cursor-pointer"
-                    /> */}
-                  </div>
-                </CardHeader>
-                <CardContent className="text-sm text-gray-700">
-                  <p>{data.city}</p>
-                  <p>{data.state}</p>
-                  <p>{data.country}</p>
-                  <p>Phone: {data.phone}</p>
-                </CardContent>
-              </Card>
-            ))
-          )}
-        </div>
+        <button
+          onClick={() => setShowModal(true)}
+          className="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold bg-primary text-primary-foreground hover:bg-primary/90 shadow-xl shadow-primary/10 transition-all duration-300 active:scale-95 shrink-0"
+        >
+          <Plus size={16} />
+          New Location
+        </button>
       </div>
-    </>
+
+      {/* Address Content */}
+      <div className="p-8 sm:p-10 bg-muted/20 min-h-[400px]">
+        <AnimatePresence mode="popLayout">
+          {addresses.length === 0 ? (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center py-20 text-center"
+            >
+              <div className="h-16 w-16 bg-card rounded-2xl flex items-center justify-center text-muted-foreground shadow-sm border border-border mb-4">
+                <MapPin size={32} />
+              </div>
+              <p className="text-muted-foreground font-black uppercase tracking-widest text-[10px]">Registry Empty</p>
+              <p className="text-muted-foreground/60 text-sm mt-1">No addresses have been saved to your account yet.</p>
+            </motion.div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2">
+              {addresses.map((data) => (
+                <motion.div
+                  key={data._id}
+                  layout
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="group relative bg-card p-6 rounded-2xl border border-border shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300"
+                >
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="h-10 w-10 rounded-xl bg-muted flex items-center justify-center text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-all">
+                      <Navigation size={18} />
+                    </div>
+                    <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
+                      <button
+                        onClick={() => {
+                          setEditAddress(true);
+                          setEachAddress(data);
+                        }}
+                        className="p-2 rounded-lg text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all"
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setAddresId(data._id);
+                          setDeletePopup(true);
+                        }}
+                        className="p-2 rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-foreground font-bold leading-tight line-clamp-1">{data.address}</h3>
+                        <ShieldCheck size={14} className="text-primary/60 shrink-0" />
+                      </div>
+                      <div className="flex items-center gap-1.5 text-muted-foreground font-bold text-[10px] uppercase tracking-wider">
+                        <Globe size={12} />
+                        <span>{data.city}, {data.state}</span>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-border flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-foreground font-bold text-xs">
+                        <Phone size={14} className="text-primary" />
+                        {data.phone}
+                      </div>
+                      <div className="px-2 py-0.5 bg-muted rounded text-[9px] font-black text-muted-foreground uppercase tracking-widest">
+                        Verified
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Footer Info */}
+      <div className="p-8 sm:p-10 bg-card flex items-center gap-4">
+        <div className="h-8 w-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+          <ShieldCheck size={16} />
+        </div>
+        <p className="text-xs font-bold text-muted-foreground">Your address data is encrypted and securely stored following industry standards.</p>
+      </div>
+    </div>
   );
 };
 

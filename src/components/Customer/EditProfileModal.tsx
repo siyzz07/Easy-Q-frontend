@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import { editProfile } from "../../Services/ApiService/CustomerApiService";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, User, Mail, Phone, Loader2 } from "lucide-react";
 
 interface ModalProps {
   name: string;
@@ -17,7 +19,6 @@ interface FormValues {
   email: string;
   phone: string;
 }
-
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -73,96 +74,120 @@ const EditProfileModal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000068] bg-opacity-60">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-semibold text-gray-900">Edit Profile</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-800 text-xl font-bold"
-          >
-            ×
-          </button>
-        </div>
+    <AnimatePresence>
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        {/* Backdrop */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+        />
 
-        {/* Form */}
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
+        {/* Modal Card */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-md overflow-hidden"
         >
-          {({ isSubmitting }) => (
-            <Form className="flex flex-col gap-4">
-              {/* Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Name
-                </label>
-                <Field
-                  type="text"
-                  name="name"
-                  placeholder="Enter name"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none mt-1"
-                />
-                <ErrorMessage
-                  name="name"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
+          {/* Decorative Header */}
+          <div className="h-24 bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-between px-8 text-white">
+            <div>
+              <h2 className="text-xl font-bold">Edit Profile</h2>
+              <p className="text-xs font-medium text-white/80">Update your account details</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
 
-              {/* Email (Read Only) */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Email
-                </label>
-                <Field
-                  type="email"
-                  name="email"
-                  readOnly
-                  disabled
-                  className="w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed mt-1"
-                />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
+          <div className="p-8">
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ isSubmitting }) => (
+                <Form className="flex flex-col gap-5">
+                  {/* Name */}
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">
+                      <User size={14} className="text-indigo-500" /> Full Name
+                    </label>
+                    <div className="relative">
+                      <Field
+                        type="text"
+                        name="name"
+                        placeholder="John Doe"
+                        className="w-full px-5 py-3.5 rounded-2xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-300 font-medium text-slate-700 bg-slate-50/50"
+                      />
+                    </div>
+                    <ErrorMessage
+                      name="name"
+                      component="div"
+                      className="text-red-500 text-[10px] font-bold uppercase tracking-tight pl-2"
+                    />
+                  </div>
 
-              {/* Phone */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Phone
-                </label>
-                <Field
-                  type="text"
-                  name="phone"
-                  placeholder="Enter phone number"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none mt-1"
-                />
-                <ErrorMessage
-                  name="phone"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
+                  {/* Email */}
+                  <div className="space-y-2 opacity-70">
+                    <label className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">
+                      <Mail size={14} className="text-indigo-500" /> Email Address
+                    </label>
+                    <Field
+                      type="email"
+                      name="email"
+                      readOnly
+                      className="w-full px-5 py-3.5 rounded-2xl border border-slate-200 bg-slate-100/50 cursor-not-allowed font-medium text-slate-500 outline-none"
+                    />
+                    <p className="text-[10px] text-slate-400 font-semibold pl-2 italic">Email cannot be changed</p>
+                  </div>
 
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-500 transition disabled:opacity-60"
-              >
-                {isSubmitting ? "Saving..." : "Save Changes"}
-              </button>
-            </Form>
-          )}
-        </Formik>
+                  {/* Phone */}
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest pl-1">
+                      <Phone size={14} className="text-indigo-500" /> Phone Number
+                    </label>
+                    <Field
+                      type="text"
+                      name="phone"
+                      placeholder="10 digit number"
+                      className="w-full px-5 py-3.5 rounded-2xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all duration-300 font-medium text-slate-700 bg-slate-50/50"
+                    />
+                    <ErrorMessage
+                      name="phone"
+                      component="div"
+                      className="text-red-500 text-[10px] font-bold uppercase tracking-tight pl-2"
+                    />
+                  </div>
+
+                  {/* Submit */}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="mt-4 w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all duration-300 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="animate-spin" size={20} />
+                        Updating...
+                      </>
+                    ) : (
+                      "Save Changes"
+                    )}
+                  </button>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </motion.div>
       </div>
-    </div>
+    </AnimatePresence>
   );
 };
-
 export default EditProfileModal;
