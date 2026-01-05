@@ -33,7 +33,8 @@ export const CUSTOMER_ROUTES ={
     SHOP_SERVICES:"/services/:id",  
     BOOKINGS:'bookings',
     VIEW_BOOKING:'bookings/:id',
-    FAVORITE:'favorite'
+    FAVORITE:'favorite',
+    NOTIFICATIONS:'notifications'
 
 
 };

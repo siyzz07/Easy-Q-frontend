@@ -15,7 +15,7 @@ const items = [
   { label: "Addresses", Icon: MapPin, path:"/customer/profile/customer-address", route:"customer-address" },
   { label: "Wallet", Icon: Wallet , path:"/profile" , route:"wallet"},
   { label: "Bookings", Icon: CreditCard , path:"/customer/bookings" , route:"bookings" },
-  { label: "Notifications", Icon: Bell , path:"/profile" , route:"notifications" },
+  { label: "Notifications", Icon: Bell , path:"/customer/profile/notifications" , route:"notifications" },
   { label: "Security", Icon: Lock , path:"/customer/profile/security", route:"security" },
 ];
 

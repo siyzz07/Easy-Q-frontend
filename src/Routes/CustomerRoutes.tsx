@@ -21,6 +21,7 @@ import BookingsPage from "../pages/Customer/BookingsPage";
 import BookingDetailsPage from "../pages/Customer/BookingDetailsPage";
 import ContractPage from "../pages/Customer/ContractPage";
 import FavoritePage from "../pages/Customer/FavoritePage";
+import NotificationPage from "../pages/Customer/NotificationPage";
 
 const CustomerRoutes = () => {
   return (
@@ -183,6 +184,14 @@ const CustomerRoutes = () => {
             element={
               <CustomerProtectedRoute>
                 <CustomerAddress />
+              </CustomerProtectedRoute>
+            }
+          />
+          <Route
+            path={CUSTOMER_ROUTES.NOTIFICATIONS}
+            element={
+              <CustomerProtectedRoute>
+                <NotificationPage />
               </CustomerProtectedRoute>
             }
           />

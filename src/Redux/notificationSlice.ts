@@ -1,35 +1,52 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-interface INotification {
+export interface INotification {
+  id: string;
   title: string;
-  message?: string;
+  message: string;
+  type: 'info' | 'success' | 'warning' | 'error';
+  isRead: boolean;
   createdAt: string;
 }
 
-const initialState: INotification = {
-  title: "",
-  message: "",
-  createdAt: "",
+interface NotificationState {
+  notifications: INotification[];
+}
+
+const initialState: NotificationState = {
+  notifications: [],
 };
 
 const notificationSlice = createSlice({
   name: "notification",
   initialState,
   reducers: {
-    setNotification: (state, action: PayloadAction<INotification>) => {
-      state.title = action.payload.title;
-      state.message = action.payload.message || "";
-      state.createdAt = action.payload.createdAt;
+    addNotification: (state, action: PayloadAction<Omit<INotification, "isRead" | "id">>) => {
+      const newNotification: INotification = {
+        ...action.payload,
+        id: Date.now().toString(),
+        isRead: false,
+      };
+      state.notifications.unshift(newNotification);
     },
-
-    clearNotification: (state) => {
-      state.title = "";
-      state.message = "";
-      state.createdAt = "";
+    markAsRead: (state, action: PayloadAction<string>) => {
+      const notification = state.notifications.find(n => n.id === action.payload);
+      if (notification) {
+        notification.isRead = true;
+      }
+    },
+    markAllAsRead: (state) => {
+      state.notifications.forEach(n => n.isRead = true);
+    },
+    removeNotification: (state, action: PayloadAction<string>) => {
+      state.notifications = state.notifications.filter(n => n.id !== action.payload);
+    },
+    clearAll: (state) => {
+      state.notifications = [];
     },
   },
 });
 
-export const { setNotification, clearNotification } = notificationSlice.actions;
+export const { addNotification, markAsRead, markAllAsRead, removeNotification, clearAll } = notificationSlice.actions;
 export default notificationSlice.reducer;
