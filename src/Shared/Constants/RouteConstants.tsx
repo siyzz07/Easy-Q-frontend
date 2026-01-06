@@ -52,6 +52,7 @@ export const VENDOR_ROUTES ={
     FORGOT_PASSWORD:"/forgot-password",
     RESEST_PASSWORD:"/reset-password",
     PROFILE:"profile",
-    STAFFS:"staffs"
+    STAFFS:"staffs",
+    BOOKINGS:"bookings"
 
 };

@@ -1,14 +1,14 @@
 
 import { Route, Routes } from "react-router-dom";
+import BookingsPage from "../pages/Vendor/BookingsPage";
 import LoginPage from "../pages/Vendor/LoginPage";
 import SignupPage from "../pages/Vendor/SignupPage";
 import LoadingPage from "../pages/Vendor/LodingPage";
 import ShopDataPage from "../pages/Vendor/ShopDataPage";
 import Layout from "../pages/Vendor/Layout/Layout";
-import Dashboard from "../components/Vendor/Dashboard";
+// import Dashboard from "../components/Vendor/Dashboard";
 // import Services from "../components/Vendor/Services";
 import VendorProtectedRoute from "./ProtectedRoutes/VendorProtectedRoute";
-import Services from "../components/Vendor/Services";
 import PublicdRoute from "./PublicRoutes/PublicRoute";
 import { VENDOR_ROUTES } from "../Shared/Constants/RouteConstants";
 import ForgotPassword from "../pages/Vendor/ForgotPasswordPage";
@@ -114,6 +114,14 @@ const VendorRoutes = () => {
           element={
             <VendorProtectedRoute>
               <StaffPage/>
+            </VendorProtectedRoute>
+          }/>
+
+        <Route 
+          path={VENDOR_ROUTES.BOOKINGS}
+          element={
+            <VendorProtectedRoute>
+              <BookingsPage/>
             </VendorProtectedRoute>
           }/>
       </Route>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   LayoutDashboard,
   List,
@@ -10,8 +10,7 @@ import {
   LogOut,
   Calendar,
 } from "lucide-react";
-import { NavLink, Route, useLocation, useNavigate } from "react-router-dom";
-import { boolean } from "yup";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutVendor } from "../../Services/ApiService/VendorApiServices";
 import { removeToken } from "../../utils/tokenUtils";
 import { useDispatch } from "react-redux";
@@ -32,7 +31,7 @@ const Sidebar = () => {
   let items = [
     { icon: LayoutDashboard, label: "Dashboard", path: "", route: "" },
     { icon: List, label: "Services", path: "Services", route: "services" },
-    { icon: Calendar, label: "Bookings" ,path:'Bookings',route:'vendor/dashboard'},
+    { icon: Calendar, label: "Bookings" ,path:'Bookings',route:'bookings'},
     {
       icon: CreditCard,
       label: "Payments",
@@ -60,7 +59,7 @@ const Sidebar = () => {
     },
   ];
 
-  const submitLogout = async (e: React.FormEvent) => {
+  const submitLogout = async () => {
     try {
       const response = await logoutVendor();
 
@@ -155,7 +154,7 @@ const Sidebar = () => {
                 <NavLink
                   to={item.route}
                   onClick={()=>setIsOpen(false)}
-                  className={({ isActive }) =>
+                  className={() =>
                     `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
                       page == item.path
                         ? "bg-slate-700 border-l-4 border-l-blue-500 text-white"

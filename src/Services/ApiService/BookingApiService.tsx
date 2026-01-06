@@ -34,3 +34,10 @@ export const getSelectedBookingData = async (id:string) =>{
   const response = await BookingAxiosInstance.get(`/booking/${id}`)
   return response
 }
+
+
+//--------------------- cancel booking by customer
+export const bookingCanceling = async(bookingId:string) =>{
+    const response = await BookingAxiosInstance.patch(`/booking/cancel/${bookingId}`)
+    return response
+}

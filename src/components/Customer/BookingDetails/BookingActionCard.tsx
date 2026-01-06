@@ -41,13 +41,16 @@ const BookingActionCard: React.FC<BookingActionsProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-3 w-full md:w-auto">
-          <button
-            onClick={onCancel}
-            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-2xl border border-red-100 text-red-600 hover:bg-red-50 font-semibold transition-all active:scale-95"
-          >
-            <XCircle size={18} />
-            Cancel
-          </button>
+          {status !== 'cancelled' && (
+             <button
+             onClick={onCancel}
+             className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-2xl border border-red-100 text-red-600 hover:bg-red-50 font-semibold transition-all active:scale-95"
+           >
+             <XCircle size={18} />
+             Cancel
+           </button>
+          )}
+         
           
           <button
             onClick={onReschedule}

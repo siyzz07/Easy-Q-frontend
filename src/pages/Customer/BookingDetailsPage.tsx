@@ -10,12 +10,13 @@ import StaffSection from "../../components/Customer/BookingDetails/StaffSection"
 import LocationSection from "../../components/Customer/BookingDetails/LocationSection";
 import PaymentSummary from "../../components/Customer/BookingDetails/PaymentSummary";
 import ActionSidebar from "../../components/Customer/BookingDetails/ActionSidebar";
-import { getSelectedBookingData } from "../../Services/ApiService/BookingApiService";
+import { bookingCanceling, getSelectedBookingData } from "../../Services/ApiService/BookingApiService";
 import { useEffect, useRef, useState } from "react";
 import type { IBooking } from "../../Shared/types/Types";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import BookingActionCard from "../../components/Customer/BookingDetails/BookingActionCard";
+import ConfirmationModal from "../../components/Shared/ConfirmationModal";
 
 // Dummy data
 // const bookingDatas = {
@@ -42,18 +43,14 @@ import BookingActionCard from "../../components/Customer/BookingDetails/BookingA
 //   policy: 'Flexible cancellation. Full refund if cancelled 24 hours before the appointment.'
 // };
 
-const statusSteps = [
-  { label: "Booked", date: "Dec 20, 10:15 AM", completed: true },
-  { label: "Confirmed", date: "Dec 20, 11:30 AM", completed: true },
-  { label: "Checked In", date: "--", completed: false, current: true },
-  { label: "Completed", date: "--", completed: false },
-];
+
 
 const BookingDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const called = useRef(false);
   const [bookingData, setBookingData] = useState<any | null>(null);
+  const [cancelPopup,setCancelPopup]  = useState <boolean>(false)
 
   useEffect(() => {
     if (called.current) return;
@@ -80,6 +77,32 @@ const BookingDetailsPage = () => {
     }
   };
 
+
+  const cancelBooking = async () =>{
+    try{
+
+   
+      setCancelPopup(false)
+      if(bookingData._id){
+        const response = await bookingCanceling(bookingData._id)
+        if(response.data.success){
+          toast.success(response.data.message)
+          getEachBookingData()
+        }
+        
+      }else{
+        toast.error('Error to cancel booking , inavalied booking id')
+      }
+    }catch(error:unknown){
+       if(error instanceof AxiosError){
+         toast.error(error.response?.data?.message)
+       }
+    }
+  }
+
+
+  const cancelationMessage = 'Are you sure you want to cancel this booking?Refund eligibility depends on the cancellation time.'
+
   if (!bookingData) {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
@@ -105,8 +128,10 @@ const BookingDetailsPage = () => {
     );
   }
 
+  
   return (
     <div className="min-h-screen bg-[#F8FAFC] pb-24 md:pb-12">
+      { cancelPopup && <ConfirmationModal submit={cancelBooking} close={()=>setCancelPopup(!cancelPopup)} description={cancelationMessage}/> }
       {/* Dynamic Background Element */}
       <div className="absolute top-0 left-0 right-0 h-48 bg-primary/5 -z-10" />
 
@@ -143,10 +168,10 @@ const BookingDetailsPage = () => {
           <div className="lg:col-span-8 space-y-6">
             <DetailsHero bookingData={bookingData} id={id} />
             <BookingActionCard
-              status="confirmed"
-              bookingDate="2026-01-24"
+              status={bookingData.status}
+              bookingDate={bookingData.bookingDate}
               onCancel={() => {
-                console.log("Booking cancelled"); 
+                setCancelPopup(true) 
               }}
               onReschedule={() => {
                 console.log("Booking rescheduled");
