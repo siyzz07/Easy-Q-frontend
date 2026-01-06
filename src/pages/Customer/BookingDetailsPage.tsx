@@ -1,102 +1,89 @@
-
-import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { 
-  ChevronLeft, 
-  Share2, 
-  HelpCircle,
-  MessageSquare
-} from 'lucide-react';
-import { Button } from '../../components/ui/button';
+import { useParams, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { ChevronLeft, Share2, HelpCircle, MessageSquare } from "lucide-react";
+import { Button } from "../../components/ui/button";
 
 // Extracted Components
-import DetailsHero from '../../components/Customer/BookingDetails/DetailsHero';
-import StatusStepper from '../../components/Customer/BookingDetails/StatusStepper';
-import StaffSection from '../../components/Customer/BookingDetails/StaffSection';
-import LocationSection from '../../components/Customer/BookingDetails/LocationSection';
-import PaymentSummary from '../../components/Customer/BookingDetails/PaymentSummary';
-import ActionSidebar from '../../components/Customer/BookingDetails/ActionSidebar';
-import { getSelectedBookingData } from '../../Services/ApiService/BookingApiService';
-import { useEffect, useRef, useState } from 'react';
-import type { IBooking } from '../../Shared/types/Types';
-import { AxiosError } from 'axios';
-import { toast } from 'react-toastify';
+import DetailsHero from "../../components/Customer/BookingDetails/DetailsHero";
+import StatusStepper from "../../components/Customer/BookingDetails/BookingActionCard";
+import StaffSection from "../../components/Customer/BookingDetails/StaffSection";
+import LocationSection from "../../components/Customer/BookingDetails/LocationSection";
+import PaymentSummary from "../../components/Customer/BookingDetails/PaymentSummary";
+import ActionSidebar from "../../components/Customer/BookingDetails/ActionSidebar";
+import { getSelectedBookingData } from "../../Services/ApiService/BookingApiService";
+import { useEffect, useRef, useState } from "react";
+import type { IBooking } from "../../Shared/types/Types";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
+import BookingActionCard from "../../components/Customer/BookingDetails/BookingActionCard";
 
 // Dummy data
-const bookingDatas = {
-  id: 'BOK-7729104',
-  serviceName: 'Hair Cutting & Styling',
-  serviceDuration: '45 mins',
-  shopName: 'Elite Salon & Spa',
-  shopRating: 4.9,
-  shopReviews: 124,
-  shopAddress: '123 Luxury Ave, Beverly Hills, CA 90210',
-  shopPhone: '+1 (555) 000-1234',
-  date: 'December 24, 2025',
-  time: '3:30 PM',
-  staff: 'Michael Stevens',
-  staffRole: 'Senior Stylist',
-  status: 'Confirmed',
-  price: '$65.00',
-  tax: '$5.20',
-  total: '$70.20',
-  customerName: 'John Doe',
-  paymentStatus: 'Paid',
-  paymentMethod: 'Visa (**** 4242)',
-  notes: 'Following up on our last conversation about the taper fade. I would also like to add a quick beard trim if there is time!',
-  policy: 'Flexible cancellation. Full refund if cancelled 24 hours before the appointment.'
-};
+// const bookingDatas = {
+//   id: 'BOK-7729104',
+//   serviceName: 'Hair Cutting & Styling',
+//   serviceDuration: '45 mins',
+//   shopName: 'Elite Salon & Spa',
+//   shopRating: 4.9,
+//   shopReviews: 124,
+//   shopAddress: '123 Luxury Ave, Beverly Hills, CA 90210',
+//   shopPhone: '+1 (555) 000-1234',
+//   date: 'December 24, 2025',
+//   time: '3:30 PM',
+//   staff: 'Michael Stevens',
+//   staffRole: 'Senior Stylist',
+//   status: 'Confirmed',
+//   price: '$65.00',
+//   tax: '$5.20',
+//   total: '$70.20',
+//   customerName: 'John Doe',
+//   paymentStatus: 'Paid',
+//   paymentMethod: 'Visa (**** 4242)',
+//   notes: 'Following up on our last conversation about the taper fade. I would also like to add a quick beard trim if there is time!',
+//   policy: 'Flexible cancellation. Full refund if cancelled 24 hours before the appointment.'
+// };
 
-// const statusSteps = [
-//   { label: 'Booked', date: 'Dec 20, 10:15 AM', completed: true },
-//   { label: 'Confirmed', date: 'Dec 20, 11:30 AM', completed: true },
-//   { label: 'Checked In', date: '--', completed: false, current: true },
-//   { label: 'Completed', date: '--', completed: false },
-// ];
+const statusSteps = [
+  { label: "Booked", date: "Dec 20, 10:15 AM", completed: true },
+  { label: "Confirmed", date: "Dec 20, 11:30 AM", completed: true },
+  { label: "Checked In", date: "--", completed: false, current: true },
+  { label: "Completed", date: "--", completed: false },
+];
 
 const BookingDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-const called = useRef(false);
-  const [bookingData , setBookingData] = useState<any|null>(null)
+  const called = useRef(false);
+  const [bookingData, setBookingData] = useState<any | null>(null);
 
   useEffect(() => {
-  if (called.current) return;
-  called.current = true;
-  getEachBookingData();
-}, []);
- 
-  const getEachBookingData = async () =>{
-    try{
+    if (called.current) return;
+    called.current = true;
+    getEachBookingData();
+  }, []);
 
-      if(id){
-           const response = await getSelectedBookingData(id)
-           console.log(response.data)
-        if(response?.data?.data){
-
-            setBookingData(response.data.data[0])
+  const getEachBookingData = async () => {
+    try {
+      if (id) {
+        const response = await getSelectedBookingData(id);
+        console.log(response.data);
+        if (response?.data?.data) {
+          setBookingData(response.data.data[0]);
         }
-           
-
-      }else{
-        navigate('/customer/bookings')
-
+      } else {
+        navigate("/customer/bookings");
       }
-
-    }catch(error:unknown){
-      
-        if(error instanceof AxiosError){
-          toast.error('Invalied booking id')
-          navigate('/customer/bookings')
-        }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        toast.error("Invalied booking id");
+        navigate("/customer/bookings");
+      }
     }
-  }
+  };
 
-
-if (!bookingData) {
+  if (!bookingData) {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-6">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="flex flex-col items-center"
@@ -106,16 +93,17 @@ if (!bookingData) {
             <div className="absolute top-0 left-0 w-full h-full border-4 border-primary/20 rounded-full"></div>
             <div className="absolute top-0 left-0 w-full h-full border-4 border-t-primary rounded-full animate-spin"></div>
           </div>
-          
-          <h3 className="mt-6 text-lg font-bold text-slate-800">Loading details...</h3>
-          <p className="text-slate-500 text-sm">Please wait while we fetch your booking info.</p>
+
+          <h3 className="mt-6 text-lg font-bold text-slate-800">
+            Loading details...
+          </h3>
+          <p className="text-slate-500 text-sm">
+            Please wait while we fetch your booking info.
+          </p>
         </motion.div>
       </div>
     );
   }
-
-
-
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] pb-24 md:pb-12">
@@ -134,7 +122,9 @@ if (!bookingData) {
             <div className="p-2 rounded-xl bg-white shadow-sm border border-border group-hover:border-primary group-hover:bg-primary group-hover:text-white transition-all">
               <ChevronLeft size={20} />
             </div>
-            <span className="font-semibold text-sm hidden sm:inline">Back to Bookings</span>
+            <span className="font-semibold text-sm hidden sm:inline">
+              Back to Bookings
+            </span>
           </motion.button>
 
           {/* <div className="flex gap-2">
@@ -149,12 +139,20 @@ if (!bookingData) {
 
         {/* Main Content Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
           {/* Left Column: Details (8 cols) */}
           <div className="lg:col-span-8 space-y-6">
             <DetailsHero bookingData={bookingData} id={id} />
-            {/* <StatusStepper statusSteps={statusSteps} /> */}
-            <StaffSection bookingData={bookingData} />
+            <BookingActionCard
+              status="confirmed"
+              bookingDate="2026-01-24"
+              onCancel={() => {
+                console.log("Booking cancelled"); 
+              }}
+              onReschedule={() => {
+                console.log("Booking rescheduled");
+              }}
+            />
+            {/* <StaffSection bookingData={bookingData} /> */}
             <LocationSection bookingData={bookingData} />
           </div>
 
@@ -165,7 +163,7 @@ if (!bookingData) {
           </div>
         </div>
       </div>
-      
+
       {/* Mobile Floating Action Bar */}
       {/* <div className="fixed bottom-6 left-4 right-4 md:hidden z-50">
         <motion.div

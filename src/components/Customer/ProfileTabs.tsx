@@ -1,64 +1,74 @@
 "use client";
 
 import {
-  PencilLine,
-  Lock,
-  CreditCard,
+  User,
+  Shield,
   MapPin,
   Wallet,
   Bell,
+  ChevronRight,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const items = [
-  { label: "Profile", Icon: PencilLine , path:"/customer/profile" , route:"profile"},
-  { label: "Addresses", Icon: MapPin, path:"/customer/profile/customer-address", route:"customer-address" },
-  { label: "Wallet", Icon: Wallet , path:"/profile" , route:"wallet"},
-  { label: "Bookings", Icon: CreditCard , path:"/customer/bookings" , route:"bookings" },
-  { label: "Notifications", Icon: Bell , path:"/customer/profile/notifications" , route:"notifications" },
-  { label: "Security", Icon: Lock , path:"/customer/profile/security", route:"security" },
+  { label: "Profile", Icon: User, path: "/customer/profile", route: "profile" },
+  { label: "Addresses", Icon: MapPin, path: "/customer/profile/customer-address", route: "customer-address" },
+  { label: "Wallet", Icon: Wallet, path: "/profile", route: "wallet" },
+  { label: "Notifications", Icon: Bell, path: "/customer/profile/notifications", route: "notifications" },
+  { label: "Security", Icon: Shield, path: "/customer/profile/security", route: "security" },
 ];
 
 function ProfileTabs() {
   const location = useLocation();
   let pageArray = location.pathname.split("/").filter(Boolean);
-  let page = pageArray[pageArray.length-1] || "profile";
-  
-  // Handle edge case where /customer/profile index is just "profile"
+  let page = pageArray[pageArray.length - 1] || "profile";
+
   if (location.pathname === "/customer/profile") {
-      page = "profile";
+    page = "profile";
   }
 
   return (
-    <div className="w-full overflow-x-auto scrollbar-hide">
-      <div className="flex w-max items-center gap-8">
-        {items.map(({label, Icon, path, route}) => {
-          // Simple active check logic
-          const isActive = page === route || (route === "profile" && location.pathname === "/customer/profile");
+    <div className="flex flex-col gap-2">
+      {items.map(({ label, Icon, path, route }) => {
+        const isActive = page === route || (route === "profile" && location.pathname === "/customer/profile");
 
-          return (
-            <Link
-              key={label}
-              to={path}
-              className={`group relative flex items-center gap-2 py-4 text-sm font-medium transition-colors duration-200
-                ${isActive ? "text-blue-600" : "text-gray-500 hover:text-gray-900"}
-              `}
-              aria-label={label}
-            >
-              <Icon 
-                size={18} 
-                className={`transition-colors duration-200 ${isActive ? "text-blue-600" : "text-gray-400 group-hover:text-gray-600"}`} 
+        return (
+          <Link
+            key={label}
+            to={path}
+            className={`group relative flex items-center justify-between p-4 rounded-2xl transition-all duration-300
+              ${isActive 
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" 
+                : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"}
+            `}
+          >
+            <div className="flex items-center gap-3 relative z-10">
+              <div className={`p-2 rounded-xl transition-colors duration-300 ${isActive ? "bg-white/20" : "bg-slate-100 group-hover:bg-white"}`}>
+                <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+              </div>
+              <span className={`text-[15px] font-bold tracking-tight ${isActive ? "text-white" : "text-slate-600"}`}>
+                {label}
+              </span>
+            </div>
+
+            {isActive ? (
+              <motion.div 
+                layoutId="activeTab"
+                className="absolute inset-0 bg-blue-600 rounded-2xl -z-0"
+                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
-              <span className="tracking-wide">{label}</span>
-              
-              {/* Active Bottom Border */}
-              {isActive && (
-                <span className="absolute bottom-0 left-0 h-0.5 w-full bg-blue-600 rounded-t-full" />
-              )}
-            </Link>
-          );
-        })}
-      </div>
+            ) : (
+               <ChevronRight size={14} className="text-slate-300 group-hover:text-slate-500 group-hover:translate-x-1 transition-all" />
+            )}
+            
+            {/* Notification Badge Mockup for Notifications */}
+            {label === "Notifications" && !isActive && (
+               <span className="absolute top-4 right-10 h-2 w-2 bg-blue-600 rounded-full" />
+            )}
+          </Link>
+        );
+      })}
     </div>
   );
 }

@@ -6,7 +6,8 @@ import {
   CheckCircle2, 
   AlertTriangle, 
   XCircle,
-  MailOpen
+  MailOpen,
+  ChevronRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -18,7 +19,7 @@ const MOCK_NOTIFICATIONS = [
     message: "Your appointment at 'Gentlemen's Cut' has been successfully scheduled for tomorrow at 10:00 AM.",
     type: "success",
     isRead: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(), // 15 mins ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
   },
   {
     id: "2",
@@ -26,7 +27,7 @@ const MOCK_NOTIFICATIONS = [
     message: "Your password was changed successfully. If you didn't do this, please contact support immediately.",
     type: "info",
     isRead: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
   },
   {
     id: "3",
@@ -34,7 +35,7 @@ const MOCK_NOTIFICATIONS = [
     message: "Your pending payment for 'Spa Wellness' is due in 2 hours. Complete it now to avoid cancellation.",
     type: "warning",
     isRead: true,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 day ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
   },
   {
     id: "4",
@@ -42,12 +43,11 @@ const MOCK_NOTIFICATIONS = [
     message: "The 'Deep Tissue Massage' service is currently undergoing maintenance and will be back online soon.",
     type: "error",
     isRead: true,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(), // 3 days ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
   }
 ];
 
 const NotificationPage = () => {
-  // Using mock data so you can see the UI immediately
   const notifications = MOCK_NOTIFICATIONS;
 
   const getIcon = (type: string) => {
@@ -69,89 +69,93 @@ const NotificationPage = () => {
   };
 
   return (
-    <div className="p-4 md:p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 bg-slate-50/30 rounded-[3rem]">
-      {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-2">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 p-10">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
         <div className="flex items-center gap-4">
-           <div className="h-14 w-14 rounded-2xl bg-white shadow-sm border border-slate-100 flex items-center justify-center text-blue-600 relative">
+           <div className="h-14 w-14 rounded-[1.2rem] bg-blue-50 flex items-center justify-center text-blue-600 relative">
               <Bell size={26} strokeWidth={1.5} />
-              <span className="absolute top-3 right-3 h-2.5 w-2.5 bg-blue-600 border-2 border-white rounded-full" />
+              <span className="absolute top-0 right-0 h-3 w-3 bg-blue-600 border-2 border-white rounded-full translate-x-1 -translate-y-1" />
            </div>
            <div>
-              <h1 className="text-2xl font-black text-slate-800 tracking-tight">Notification Center</h1>
-              <p className="text-slate-400 text-sm font-medium mt-0.5">Stay updated with your platform journey.</p>
+              <h1 className="text-2xl font-[900] text-slate-800 tracking-tight leading-none">Notifications</h1>
+              <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1.5">Stay updated with your activity</p>
            </div>
         </div>
 
-        <div className="flex items-center gap-2">
-            <button className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-slate-50 text-slate-600 rounded-xl text-xs font-bold transition-all border border-slate-100 shadow-sm">
+        <div className="flex items-center gap-3">
+            <button className="flex items-center gap-2 px-5 py-3 bg-slate-50 hover:bg-white hover:shadow-lg text-slate-600 rounded-xl text-xs font-black uppercase tracking-widest transition-all border border-slate-100">
               <CheckCheck size={16} />
-              Mark all as read
+              Mark Read
             </button>
-            <button className="flex items-center gap-2 px-5 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-bold transition-all border border-rose-100/50 shadow-sm">
+            <button className="flex items-center gap-2 px-5 py-3 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-black uppercase tracking-widest transition-all border border-rose-100">
               <Trash2 size={16} />
-              Clear All
+              Clear
             </button>
         </div>
       </div>
 
-      <div className="space-y-4">
+      {/* Notifications List */}
+      <div className="space-y-6">
           <AnimatePresence mode='popLayout'>
             {notifications.map((notification, index) => (
               <motion.div
                 layout
                 key={notification.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                className={`group relative p-5 md:p-6 rounded-[2.5rem] border transition-all cursor-pointer flex gap-4 md:gap-6
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className={`group relative p-6 rounded-[2rem] border transition-all cursor-pointer flex gap-6
                   ${notification.isRead 
-                    ? "bg-white/60 border-slate-100 opacity-70" 
+                    ? "bg-white border-slate-100 opacity-60 hover:opacity-100" 
                     : `${getBgColor(notification.type)} border-transparent shadow-xl shadow-slate-200/40 scale-[1.01]`
                   }
                 `}
               >
-                <div className={`shrink-0 h-12 w-12 rounded-2xl flex items-center justify-center shadow-sm
+                <div className={`shrink-0 h-14 w-14 rounded-2xl flex items-center justify-center shadow-inner
                   ${notification.isRead ? "bg-slate-50" : "bg-white"}
                 `}>
-                  {notification.isRead ? <MailOpen className="text-slate-400" size={20} /> : getIcon(notification.type)}
+                  {notification.isRead ? <MailOpen className="text-slate-300" size={24} /> : getIcon(notification.type)}
                 </div>
 
-                <div className="flex-1 min-w-0 pr-10 text-left">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h4 className={`text-sm md:text-base font-bold truncate ${notification.isRead ? "text-slate-500" : "text-slate-900"}`}>
+                <div className="flex-1 min-w-0 pr-12 text-left">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <h4 className={`text-base font-black tracking-tight ${notification.isRead ? "text-slate-500" : "text-slate-900"}`}>
                       {notification.title}
                     </h4>
                     {!notification.isRead && (
-                      <span className="h-2 w-2 bg-blue-600 rounded-full shrink-0" />
+                      <span className="h-2 w-2 bg-blue-600 rounded-full animate-pulse" />
                     )}
                   </div>
-                  <p className={`text-xs md:text-sm font-medium leading-relaxed ${notification.isRead ? "text-slate-400 text-left" : "text-slate-600 text-left"}`}>
+                  <p className={`text-[13px] font-medium leading-relaxed ${notification.isRead ? "text-slate-400" : "text-slate-600"}`}>
                     {notification.message}
                   </p>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-4">
-                    Today, 10:24 AM
-                  </p>
+                  <div className="flex items-center gap-2 mt-4">
+                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">Just Now</span>
+                     <div className="h-1 w-1 bg-slate-200 rounded-full" />
+                     <span className="text-[10px] font-black text-blue-600/40 uppercase tracking-[0.1em]">{notification.type}</span>
+                  </div>
                 </div>
 
-                <div className="absolute right-8 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-3">
                    <button className="h-10 w-10 flex items-center justify-center rounded-xl text-slate-300 hover:text-rose-500 hover:bg-white md:opacity-0 group-hover:opacity-100 transition-all border border-transparent hover:border-rose-100">
                      <Trash2 size={18} />
                    </button>
+                   <ChevronRight size={16} className="text-slate-200 group-hover:text-slate-400 transition-colors" />
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
       </div>
 
-      {/* Pro Tip Section */}
-      <div className="pt-6 flex justify-center">
-         <div className="flex items-center gap-3 px-6 py-4 bg-indigo-50/50 rounded-3xl border border-indigo-100/30">
-            <div className="h-8 w-8 rounded-xl bg-indigo-500 flex items-center justify-center text-white">
-               <Bell size={16} />
+      {/* Footer Info */}
+      <div className="mt-10 pt-10 border-t border-slate-50 flex justify-center">
+         <div className="flex items-center gap-3 px-8 py-5 bg-indigo-50/50 rounded-[2rem] border border-indigo-100/30 w-full">
+            <div className="h-10 w-10 shrink-0 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/20">
+               <Bell size={18} />
             </div>
-            <p className="text-xs text-indigo-700 font-semibold">
-               Configure your notification preferences in the <span className="underline cursor-pointer">Security settings</span>.
+            <p className="text-xs text-indigo-900 font-bold leading-relaxed">
+               Showing your most recent activity. You can customize which alerts you receive in your <span className="underline decoration-indigo-300 underline-offset-4 cursor-pointer hover:text-indigo-600 transition-colors">Security Settings</span>.
             </p>
          </div>
       </div>

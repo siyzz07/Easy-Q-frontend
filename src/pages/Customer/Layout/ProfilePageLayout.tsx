@@ -1,27 +1,25 @@
-import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import ProfileTabs from "../../../components/Customer/ProfileTabs";
-import { LogOut,User } from "lucide-react";
+import { LogOut, User, Shield, ChevronRight } from "lucide-react";
 import { logoutCustomer } from "../../../Services/ApiService/CustomerApiService";
 import { useDispatch } from "react-redux";
 import { customerLogOut } from "../../../Redux/CustomeSlice";
 import { removeToken } from "../../../utils/tokenUtils";
 import { disconnectSocketAction } from "../../../Redux/SocketSlice";
+import { motion } from "framer-motion";
 
 const ProfilePageLayout = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
- const submitLogout = async (e: React.FormEvent) => {
+  const submitLogout = async () => {
     try {
       const response = await logoutCustomer();
 
       if (response?.status === 200) {
         dispatch(customerLogOut());
-         removeToken();
-         dispatch(disconnectSocketAction())
-        
+        removeToken();
+        dispatch(disconnectSocketAction());
         navigate("/customer/login");
       } else {
         console.error("Logout failed:", response);
@@ -32,61 +30,96 @@ const ProfilePageLayout = () => {
   };
 
   return (
-    <section className="min-h-screen w-full bg-gray-50/50 py-12 font-sans">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+    <section className="min-h-screen w-full bg-[#f8fafc] py-12 font-sans relative overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-blue-50 to-transparent -z-10" />
+      <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl -z-10 animate-pulse" />
+      <div className="absolute top-1/2 -left-24 w-72 h-72 bg-indigo-100/30 rounded-full blur-3xl -z-10" />
+
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative">
+        {/* Breadcrumbs/Mini Nav */}
+        <div className="mb-8 flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
+           <span>Account</span>
+           <ChevronRight size={12} />
+           <span className="text-blue-600">Settings</span>
+        </div>
         
         {/* Page Header */}
-        <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-              Account Settings
+        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-2">
+            <h1 className="text-4xl font-[900] text-slate-900 tracking-tight leading-none">
+              Account <span className="text-blue-600">Settings</span>
             </h1>
-            <p className="text-gray-500 mt-2 text-sm font-medium">
-              Manage your personal information and security preferences.
+            <p className="text-slate-500 text-base font-medium max-w-md">
+              Customize your experience, manage security, and stay updated with your activity.
             </p>
           </div>
+          
+          <button
+            onClick={submitLogout}
+            className="group flex items-center gap-3 px-6 py-3.5 text-sm font-black rounded-2xl bg-white text-slate-600 hover:text-red-600 hover:bg-red-50 transition-all duration-300 border border-slate-200 hover:border-red-100 shadow-sm hover:shadow-xl hover:shadow-red-500/10 active:scale-95"
+          >
+            <div className="p-1.5 bg-slate-100 group-hover:bg-red-100/50 rounded-lg transition-colors">
+              <LogOut size={16} className="group-hover:rotate-12 transition-transform" />
+            </div>
+            Sign Out
+          </button>
         </div>
 
-        {/* Main Card */}
-        <div className="rounded-3xl border border-gray-200 bg-white shadow-xl shadow-gray-200/50 overflow-hidden">
-          {/* User Welcome Header */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 p-8 border-b border-gray-100 bg-white">
-            <div className="flex items-center gap-5">
-              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
-                <User size={32} strokeWidth={1.5} />
-              </div>
-              <div className="space-y-1">
-                <h2 className="text-xl font-bold text-gray-900">
-                  Welcome back
-                </h2>
-                <p className="text-sm text-gray-500 font-medium">
-                  Access and manage your account details below.
-                </p>
-              </div>
-            </div>
+        {/* Main Content Container */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Sidebar / Navigation Card */}
+          <div className="lg:col-span-4 xl:col-span-3 space-y-6">
+             <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-xl shadow-slate-200/30 overflow-hidden p-8">
+                <div className="flex flex-col items-center text-center space-y-4 mb-8">
+                   <div className="relative group">
+                      <div className="h-24 w-24 rounded-3xl bg-gradient-to-tr from-blue-600 via-blue-500 to-indigo-600 p-1 shadow-2xl shadow-blue-500/40 transform group-hover:rotate-6 transition-transform duration-500">
+                         <div className="h-full w-full bg-white rounded-[1.3rem] flex items-center justify-center text-blue-600">
+                            <User size={40} strokeWidth={1.5} />
+                         </div>
+                      </div>
+                      <div className="absolute -bottom-1 -right-1 h-8 w-8 bg-emerald-500 border-4 border-white rounded-full flex items-center justify-center text-white shadow-lg">
+                         <Shield size={14} />
+                      </div>
+                   </div>
+                   <div>
+                      <h3 className="text-lg font-black text-slate-900 line-clamp-1">Account Member</h3>
+                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Verified Identity</p>
+                   </div>
+                </div>
 
-            <button
-              onClick={submitLogout}
-              className="group flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-xl bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 transition-all duration-200 border border-red-100"
-            >
-              <LogOut size={16} className="group-hover:-translate-x-0.5 transition-transform" />
-              Sign Out
-            </button>
-          </div>
+                <div className="space-y-1">
+                   <ProfileTabs />
+                </div>
+             </div>
 
-          {/* Navigation Tabs */}
-          <div className="px-8 pt-2 border-b border-gray-100 bg-white sticky top-0 z-10">
-            <ProfileTabs />
+             {/* Support Card */}
+             <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[2.5rem] p-8 text-white shadow-2xl shadow-slate-900/20 relative overflow-hidden group">
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-colors duration-700" />
+                <h4 className="font-bold text-lg relative z-10">Need Help?</h4>
+                <p className="text-slate-400 text-sm mt-2 font-medium relative z-10">Our support team is available 24/7 for you.</p>
+                <button className="mt-6 w-full py-3 bg-white text-slate-900 rounded-2xl text-sm font-bold hover:bg-blue-50 transition-colors active:scale-95 relative z-10">
+                   Contact Support
+                </button>
+             </div>
           </div>
 
           {/* Content Area */}
-          <div className="p-8 bg-gray-50/30 min-h-[400px]">
-             <Outlet />
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="lg:col-span-8 xl:col-span-9"
+          >
+             <div className="bg-white rounded-[3rem] border border-slate-200/60 shadow-2xl shadow-slate-200/40 overflow-hidden min-h-[600px]">
+                <Outlet />
+             </div>
+          </motion.div>
         </div>
         
-        <div className="mt-8 text-center text-xs text-gray-400 font-medium">
-          &copy; {new Date().getFullYear()} Easy Q. All rights reserved.
+        <div className="mt-12 text-center text-[11px] text-slate-400 font-bold uppercase tracking-widest leading-none">
+          &copy; {new Date().getFullYear()} Easy Q &bull; Made with passion for convenience
         </div>
       </div>
     </section>

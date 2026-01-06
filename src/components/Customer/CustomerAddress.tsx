@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Plus, Map, MapPin, Globe, Home, Edit3, Trash2, Phone as PhoneIcon } from "lucide-react";
+import { Plus, Map, MapPin, Globe, Home, Edit3, Trash2, Navigation } from "lucide-react";
 import AddAddressModal from "./AddAddressModal";
 import {
   deleteCustomerAddress,
@@ -68,7 +68,7 @@ const CustomerAddress: React.FC = () => {
   const deleteAddressDescription = "This action will permanently remove this address from your saved list. You won’t be able to recover it.";
 
   return (
-    <>
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Modals */}
       {showModal && <AddAddressModal onClose={() => setShowModal(false)} />}
       
@@ -90,113 +90,123 @@ const CustomerAddress: React.FC = () => {
       )}
 
       {/* Main Container */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden min-h-[400px]">
-        <div className="p-8 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-left">
-          <div className="flex items-center gap-3">
-             <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
-                <Map size={20} />
+      <div className="bg-white p-10">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10">
+          <div className="flex items-center gap-4 text-left">
+             <div className="p-3 bg-blue-50 text-blue-600 rounded-[1.2rem]">
+                <Map size={24} />
              </div>
              <div>
-                <h2 className="font-bold text-xl text-gray-900 tracking-tight">Saved Addresses</h2>
-                <p className="text-xs text-gray-400 font-medium mt-0.5">Manage your shipping and service locations.</p>
+                <h2 className="font-black text-2xl text-slate-900 tracking-tight leading-none">Shipping Addresses</h2>
+                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1.5">Manage your service locations</p>
              </div>
           </div>
           
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-bold bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20 text-white transition-all active:scale-95 group shrink-0"
+            className="flex items-center gap-2 rounded-[1.2rem] px-8 py-4 text-sm font-black bg-blue-600 hover:bg-blue-700 shadow-xl shadow-blue-600/20 text-white transition-all active:scale-95 group shrink-0"
           >
             <Plus size={18} className="group-hover:rotate-90 transition-transform duration-300" />
-            Add New Address
+            Add New Location
           </button>
         </div>
 
         {/* Address Grid */}
-        <div className="p-8 pt-6">
+        <div>
           {addresses.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-               <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-gray-300 mb-4">
-                  <MapPin size={40} strokeWidth={1.5} />
+            <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-slate-50/50 rounded-[3rem] border-2 border-dashed border-slate-100">
+               <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center text-slate-200 mb-6 shadow-sm">
+                  <Navigation size={40} strokeWidth={1} />
                </div>
-               <h3 className="text-lg font-bold text-gray-900">No addresses yet</h3>
-               <p className="text-sm text-gray-500 max-w-xs mt-2 font-medium">Add an address to speed up your booking process and manage locations easily.</p>
+               <h3 className="text-xl font-black text-slate-900 tracking-tight">No saved locations</h3>
+               <p className="text-sm text-slate-500 max-w-xs mt-3 font-medium leading-relaxed">Save your frequently used addresses to speed up your booking experience.</p>
             </div>
           ) : (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-8 md:grid-cols-2">
               {addresses.map((data, index) => (
                 <div
                   key={data._id || index}
-                  className="group relative bg-white border border-gray-100 rounded-[2rem] p-6 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-600/5 transition-all duration-300 text-left"
+                  className="group relative bg-white border border-slate-100 rounded-[2.5rem] p-8 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-600/5 transition-all duration-500 text-left overflow-hidden"
                 >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="p-2.5 bg-gray-50 group-hover:bg-blue-50 text-gray-400 group-hover:text-blue-500 rounded-2xl transition-colors">
-                      <Home size={20} />
+                  {/* Decorative Background Icon */}
+                  <div className="absolute -right-10 -bottom-10 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500 rotate-12">
+                     <MapPin size={180} />
+                  </div>
+
+                  <div className="flex items-start justify-between relative z-10 mb-6">
+                    <div className="h-14 w-14 bg-slate-50 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 rounded-2xl flex items-center justify-center text-slate-400">
+                      <Home size={24} />
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-2">
                       <button
                         onClick={() => {
                           setEachAddress(data);
                           setEditAddress(true);
                         }}
-                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
+                        className="p-3 bg-slate-50 text-slate-400 hover:text-blue-600 hover:bg-white hover:shadow-lg transition-all rounded-xl"
                         title="Edit Address"
                       >
-                        <Edit3 size={16} strokeWidth={2.5} />
+                        <Edit3 size={18} strokeWidth={2.5} />
                       </button>
                       <button
                         onClick={() => {
                           setAddresId(data._id || null);
                           setDeletePopup(true);
                         }}
-                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                        className="p-3 bg-slate-50 text-slate-400 hover:text-rose-600 hover:bg-white hover:shadow-lg transition-all rounded-xl"
                         title="Delete Address"
                       >
-                        <Trash2 size={16} strokeWidth={2.5} />
+                        <Trash2 size={18} strokeWidth={2.5} />
                       </button>
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-6 relative z-10">
                     <div>
-                      <h4 className="font-bold text-gray-900 line-clamp-1 group-hover:text-blue-700 transition-colors">
+                      <h4 className="font-black text-lg text-slate-900 line-clamp-1 group-hover:text-blue-600 transition-colors">
                         {data.address}
                       </h4>
-                      <div className="flex items-center gap-1.5 mt-1 text-gray-500">
-                        <Globe size={12} className="shrink-0" />
-                        <span className="text-xs font-medium">{data.city}, {data.state}</span>
+                      <div className="flex items-center gap-1.5 mt-2 text-slate-400">
+                        <Globe size={14} className="shrink-0" />
+                        <span className="text-xs font-bold uppercase tracking-widest">{data.city}, {data.state}</span>
                       </div>
                     </div>
 
-                    <div className="pt-4 border-t border-gray-50 space-y-2">
-                       <div className="flex items-center gap-2 text-gray-600">
-                          <MapPin size={14} className="text-gray-400" />
-                          <span className="text-[13px] font-medium">{data.country}</span>
+                    <div className="pt-6 border-t border-slate-50 grid grid-cols-2 gap-4">
+                       <div className="flex flex-col gap-1">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">Country</span>
+                          <span className="text-[13px] font-bold text-slate-600">{data.country}</span>
                        </div>
-                       <div className="flex items-center gap-2 text-gray-600">
-                          <PhoneIcon size={14} className="text-gray-400" />
-                          <span className="text-[13px] font-semibold tracking-wide">
-                            {data.phone ? `+91 ${data.phone}` : "No phone provided"}
+                       <div className="flex flex-col gap-1">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">Contact</span>
+                          <span className="text-[13px] font-black text-slate-900 tracking-wide">
+                            {data.phone ? `+91 ${data.phone}` : "---"}
                           </span>
                        </div>
                     </div>
                   </div>
-                  <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-blue-500 scale-0 group-hover:scale-100 transition-transform duration-500" />
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        <div className="p-8 pt-0 flex items-center justify-between mt-4">
-           <div className="h-1 flex-1 bg-gray-50 rounded-full overflow-hidden">
-              <div className="h-full bg-blue-100/50 w-full" style={{ width: `${Math.min(100, (addresses.length / 5) * 100)}%` }} />
+        <div className="mt-12 pt-10 border-t border-slate-50 flex items-center justify-between">
+           <div className="flex items-center gap-3">
+              <div className="h-2 w-32 bg-slate-100 rounded-full overflow-hidden">
+                 <div className="h-full bg-blue-600 transition-all duration-1000" style={{ width: `${Math.min(100, (addresses.length / 5) * 100)}%` }} />
+              </div>
+              <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest leading-none">
+                 {addresses.length} / 5 Slots Used
+              </span>
            </div>
-           <span className="ml-4 text-[11px] font-bold text-gray-300 uppercase tracking-widest leading-none">
-              {addresses.length} {addresses.length === 1 ? 'Location' : 'Locations'} saved
-           </span>
+           
+           <p className="text-[10px] font-bold text-blue-600/60 uppercase tracking-widest">
+              Secured Cloud Storage
+           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

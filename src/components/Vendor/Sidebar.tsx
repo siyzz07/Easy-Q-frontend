@@ -8,6 +8,7 @@ import {
   FileText,
   User,
   LogOut,
+  Calendar,
 } from "lucide-react";
 import { NavLink, Route, useLocation, useNavigate } from "react-router-dom";
 import { boolean } from "yup";
@@ -31,7 +32,7 @@ const Sidebar = () => {
   let items = [
     { icon: LayoutDashboard, label: "Dashboard", path: "", route: "" },
     { icon: List, label: "Services", path: "Services", route: "services" },
-    // { icon: Calendar, label: "Services" ,path:'Services',route:'vendor/dashboard'},
+    { icon: Calendar, label: "Bookings" ,path:'Bookings',route:'vendor/dashboard'},
     {
       icon: CreditCard,
       label: "Payments",

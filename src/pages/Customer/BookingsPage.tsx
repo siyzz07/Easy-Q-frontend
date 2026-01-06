@@ -85,32 +85,32 @@ const BookingsPage = () => {
   }, [activeTab, bookings]);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[#edf6ff]">
       {/* Header */}
-      <div className="relative overflow-hidden px-4 py-10 md:px-6 md:py-20 rounded-b-[2rem] md:rounded-b-[3rem] shadow-sm bg-white border-b border-slate-100">
+      <div className="relative overflow-hidden px-4 py-10 md:px-6 md:py-20 rounded-b-[2rem] md:rounded-b-[3rem] shadow-sm bg-gradient-to-r from-blue-600 to-purple-600">
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">
           <motion.h1
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900"
+            className="text-3xl md:text-5xl font-extrabold tracking-tight text-white"
           >
             My Bookings
           </motion.h1>
-          <p className="mt-3 text-sm md:text-lg text-slate-500 max-w-xl mx-auto leading-relaxed px-4">
+          <p className="mt-3 text-sm md:text-lg text-slate-100 max-w-xl mx-auto leading-relaxed px-4">
             Track your appointments and manage schedules easily.
           </p>
         </div>
       </div>
 
-      <div className="relative z-20 -mt-8 md:-mt-10 max-w-5xl mx-auto px-4 space-y-6 md:space-y-8 pb-20">
+      <div className="relative z-20 -mt-8 md:-mt-10 max-w-5xl mx-auto px-4 space-y-6 md:space-y-8 pb-20 ">
         {/* Stats - Responsive Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 ">
           {[
             { label: 'Cancelled', value: stats.cancelled, icon: X, color: 'red' },
             { label: 'Pending', value: stats.upcoming, icon: Clock, color: 'amber' },
             { label: 'Completed', value: stats.completed, icon: CheckCircle2, color: 'emerald' },
           ].map((item, i) => (
-            <div key={i} className="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-4 group">
+            <div key={i} className="bg-white p-5 md:p-6 rounded-2xl shadow-xl border border-slate-200 flex items-center gap-4 group">
               <div className={`shrink-0 h-12 w-12 rounded-xl bg-${item.color}-50 flex items-center justify-center text-${item.color}-500 transition-transform group-hover:scale-105`}>
                 <item.icon className="w-6 h-6" />
               </div>
