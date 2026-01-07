@@ -19,9 +19,15 @@ import { bookAvailableTime } from "../../Services/ApiService/BookingApiService";
 
 interface IBookNow {
   onClose: () => void;
-  data: IService;
+  data : IService;
   shopId: string;
   shopData: IvendroFullData;
+  type: "reschedule" | "booking";
+  onSubmit: (
+    values: typeof initialValues,
+    date: Date,
+    service: IService
+  ) => Promise<void>;
 }
 
 const initialValues = {
@@ -36,13 +42,17 @@ const validationSchema = Yup.object({
   preferredTime: Yup.string().required("Please select a preferred time"),
 });
 
-const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData }) => {
+const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData ,onSubmit}) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [addresses, setAddress] = useState<ICustomerAddress[]>([]);
   const [selectedStaff, setSelectedStaff] = useState<IStaff | null>(null);
   const [staffAvailable, setStaffAvailable] = useState(true);
 
   const navigate = useNavigate();
+
+  console.log(data)
+
+
 
   useEffect(() => {
     getCustomerAddress();
@@ -85,40 +95,40 @@ const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData }) => {
     checkStaffAvailability(selectedDate, selectedStaff);
   }, [selectedDate, selectedStaff]);
 
-  const handleSubmit = async (
-    values: typeof initialValues,
-    date: Date,
-    service: IService
-  ) => {
-    try {
-      const bookingData = {
-        staffId: values.staff,
-        addressId: values.address,
-        timePreffer: values.preferredTime,
-        serviceId: service._id!,
-        date: date,
-        shopId,
-      };
+  // const handleSubmit = async (
+  //   values: typeof initialValues,
+  //   date: Date,
+  //   service: IService
+  // ) => {
+  //   try {
+  //     const bookingData = {
+  //       staffId: values.staff,
+  //       addressId: values.address,
+  //       timePreffer: values.preferredTime,
+  //       serviceId: service._id!,
+  //       date: date,
+  //       shopId,
+  //     };
 
-      let response = await bookAvailableTime(bookingData);
+  //     let response = await bookAvailableTime(bookingData);
 
-      if (response?.data.success == false) {
-        toast.info(response.data.message, { autoClose: 3000 });
-      } else {
-        const checkoutData = {
-          staffId: values.staff,
-          addressId: values.address,
-          serviceId: service._id,
-          selectedDate: date,
-          bookingId: response.data.bookingId,
-          shopId,
-        };
-        navigate(`/customer/service/checkout?bookingId=${btoa(JSON.stringify(checkoutData))}`);
-      }
-    } catch (error: unknown) {
-      console.log(error);
-    }
-  };
+  //     if (response?.data.success == false) {
+  //       toast.info(response.data.message, { autoClose: 3000 });
+  //     } else {
+  //       const checkoutData = {
+  //         staffId: values.staff,
+  //         addressId: values.address,
+  //         serviceId: service._id,
+  //         selectedDate: date,
+  //         bookingId: response.data.bookingId,
+  //         shopId,
+  //       };
+  //       navigate(`/customer/service/checkout?bookingId=${btoa(JSON.stringify(checkoutData))}`);
+  //     }
+  //   } catch (error: unknown) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <AnimatePresence>
@@ -165,11 +175,11 @@ const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData }) => {
           </div>
 
           <div className="flex-1 overflow-y-auto p-6">
-            <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={(v) => handleSubmit(v, selectedDate, data)}
-              >
+ <Formik
+  initialValues={initialValues}
+  validationSchema={validationSchema}
+  onSubmit={(values) => onSubmit(values, selectedDate, data)}
+>
                 {({ setFieldValue, values }) => (
                   <Form className="space-y-6">
                     

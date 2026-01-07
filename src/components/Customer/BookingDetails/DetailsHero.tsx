@@ -30,6 +30,9 @@ const getStatusColor = (status: string) => {
 };
 
 const DetailsHero: React.FC<DetailsHeroProps> = ({ bookingData, id }) => {
+
+
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

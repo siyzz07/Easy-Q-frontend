@@ -9,7 +9,9 @@ import {
   Star,
   ImagePlus,
   Upload,
-  MessageSquare
+  MessageSquare,
+  Trash2,
+  Edit2
 } from "lucide-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -19,25 +21,9 @@ import { addImages, imageRemove } from "../../Services/ApiService/VendorApiServi
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import type { IImage } from "../../Shared/types/Types";
+import { addReview, deleteReview, getVendorReviews, updateReview } from "../../Services/ApiService/ReviewApiService";
+import { decodeToken } from "../../utils/tokenUtils";
 
-// --- Mock Data ---
-
-const INITIAL_REVIEWS = [
-  {
-    id: 1,
-    name: "John Doe",
-    date: "Oct 10, 2025",
-    rating: 5,
-    comment: "Excellent service!",
-  },
-  {
-    id: 2,
-    name: "Sarah Lee",
-    date: "Oct 8, 2025",
-    rating: 4,
-    comment: "Good experience overall.",
-  },
-];
 
 // --- Validation Schema ---
 const reviewSchema = Yup.object({
@@ -45,41 +31,79 @@ const reviewSchema = Yup.object({
   comment: Yup.string().trim().min(5, "Comment too short").required(),
 });
 
-// Helpers
-const calculateAverageRating = (reviews: typeof INITIAL_REVIEWS) => {
-  if (!reviews.length) return 0;
-  const total = reviews.reduce((sum, r) => sum + r.rating, 0);
-  return (total / reviews.length).toFixed(1);
-};
-
-const getRatingDistribution = (reviews: typeof INITIAL_REVIEWS) => {
-  const dist = [0, 0, 0, 0, 0];
-  reviews.forEach((r) => dist[r.rating - 1]++);
-  return dist;
-};
-
 interface ShopViewsProps {
   isVendor: boolean;
   vendorImages: IImage[] | [];
   isUpdate?: () => void;
+  vendorId?: string;
 }
 
 const ShopViews: React.FC<ShopViewsProps> = ({
   isVendor,
   vendorImages,
   isUpdate,
+  vendorId
 }) => {
   const [photos, setPhotos] = useState<IImage[] | []>([]);
-  const [reviews, setReviews] = useState(INITIAL_REVIEWS);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [shopImagePopup, setShopImagePopup] = useState(false);
   const [preview, setPreview] = useState<IImage | null>(null);
   const [type, setType] = useState<string>("");
+  const [userReview, setUserReview] = useState<any | null>(null);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   useEffect(() => {
     if (vendorImages) {
       setPhotos(vendorImages);
     }
   }, [vendorImages]);
+
+  useEffect(() => {
+     if(vendorId){
+        fetchReviews()
+     }
+  },[vendorId])
+
+  const fetchReviews = async () => {
+    if(!vendorId) return;
+    try {
+        const response = await getVendorReviews(vendorId);
+        if(response.data.success){
+            const fetchedReviews = response.data.data;
+            setReviews(fetchedReviews);
+            
+            const userInfo = decodeToken();
+            if(userInfo?.userId && fetchedReviews.length > 0){
+                // Check if the first review belongs to the user (since backend sorts it)
+                const firstReview = fetchedReviews[0];
+                const reviewUserId = firstReview.customerId?._id || firstReview.customerId;
+                
+                if(reviewUserId === userInfo.userId){
+                    setUserReview(firstReview);
+                } else {
+                    setUserReview(null);
+                }
+            }
+        }
+    } catch (error) {
+        console.log("Error fetching reviews", error);
+    }
+  }
+
+  const calculateAverageRating = (reviews: any[]) => {
+    if (!reviews.length) return 0;
+    const total = reviews.reduce((sum, r) => sum + Number(r.rating), 0);
+    return (total / reviews.length).toFixed(1);
+  };
+
+  const getRatingDistribution = (reviews: any[]) => {
+    const dist = [0, 0, 0, 0, 0];
+    reviews.forEach((r) => {
+        const rating = Math.round(Number(r.rating));
+        if(rating >=1 && rating <=5) dist[rating - 1]++;
+    });
+    return dist;
+  };
 
   const avgRating = calculateAverageRating(reviews);
   const distribution = getRatingDistribution(reviews);
@@ -114,17 +138,53 @@ const ShopViews: React.FC<ShopViewsProps> = ({
     values: { rating: number; comment: string },
     { resetForm }: any
   ) => {
-    const newReview = {
-      id: Date.now(),
-      name: "User",
-      date: new Date().toLocaleDateString(),
-      rating: values.rating,
-      comment: values.comment,
-    };
+    if(!vendorId) return;
+    try {
+        const reviewData = {
+            rating: values.rating.toString(),
+            comment: values.comment,
+            vendorId: vendorId
+        }
 
-    setReviews((prev) => [...prev, newReview]);
-    resetForm();
+        if(isEditing && userReview){
+           const response = await updateReview(userReview._id, reviewData);
+           if(response.data.success){
+             toast.success("Review updated successfully");
+             setIsEditing(false);
+             fetchReviews();
+             resetForm();
+           }
+        } else {
+            const response = await addReview(reviewData);
+            if(response.data.success){
+                toast.success("Review added successfully");
+                fetchReviews();
+                resetForm();
+            }
+        }
+    } catch (error) {
+        if(error instanceof AxiosError){
+            toast.error(error.response?.data?.message || "Failed to submit review");
+        }
+    }
   };
+
+  const handleDeleteReview = async () => {
+      if(!userReview) return;
+      try {
+          const response = await deleteReview(userReview._id);
+          if(response.data.success){
+              toast.success("Review deleted successfully");
+              setUserReview(null);
+              setIsEditing(false);
+              fetchReviews();
+          }
+      } catch (error) {
+           if(error instanceof AxiosError){
+            toast.error(error.response?.data?.message || "Failed to delete review");
+        }
+      }
+  }
 
   const imagePrivew = (p: IImage) => {
     setType("preview");
@@ -296,11 +356,20 @@ const ShopViews: React.FC<ShopViewsProps> = ({
 
                         {/* Reviews List & Form */}
                         <div className="lg:col-span-2 space-y-6">
-                            {!isVendor && (
+                            {!isVendor && (!userReview || isEditing) && (
                             <div className="glass-card rounded-2xl p-6">
-                                <h3 className="font-semibold text-lg mb-4">Write a Review</h3>
+                                <div className="flex justify-between items-center mb-4">
+                                  <h3 className="font-semibold text-lg">{isEditing ? 'Edit your review' : 'Write a Review'}</h3>
+                                  {isEditing && (
+                                      <Button variant="ghost" size="sm" onClick={() => setIsEditing(false)}>Cancel Edit</Button>
+                                  )}
+                                </div>
                                 <Formik
-                                initialValues={{ rating: 0, comment: "" }}
+                                initialValues={{ 
+                                    rating: isEditing && userReview ? Number(userReview.rating) : 0, 
+                                    comment: isEditing && userReview ? userReview.comment : "" 
+                                }}
+                                enableReinitialize
                                 validationSchema={reviewSchema}
                                 onSubmit={handleReviewForm}
                                 >
@@ -336,7 +405,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
 
                                     <div className="flex justify-end">
                                         <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                                        Post Review
+                                        {isEditing ? 'Update Review' : 'Post Review'}
                                         </Button>
                                     </div>
                                     </Form>
@@ -346,32 +415,52 @@ const ShopViews: React.FC<ShopViewsProps> = ({
                             )}
 
                             <div className="space-y-4">
-                                {reviews.map((r) => (
-                                <motion.div
-                                    key={r.id}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="glass-card rounded-2xl p-6"
-                                >
-                                    <div className="flex justify-between items-start mb-2">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center text-primary font-bold">
-                                                {r.name.charAt(0)}
+                                {reviews.map((r, index) => {
+                                    const isMyReview = userReview && (r._id === userReview._id);
+                                    if(isMyReview && isEditing) return null; // Hide my review item when editing
+
+                                    return (
+                                    <motion.div
+                                        key={r._id || index}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className={`glass-card rounded-2xl p-6 ${isMyReview ? 'border-primary/20 bg-primary/5' : ''}`}
+                                    >
+                                        <div className="flex justify-between items-start mb-2">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center text-primary font-bold">
+                                                    {r.customerId?.name ? r.customerId.name.charAt(0) : 'U'}
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-semibold text-gray-900">
+                                                        {r.customerId?.name || "User"} 
+                                                        {isMyReview && <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">You</span>}
+                                                    </h4>
+                                                    <span className="text-xs text-muted-foreground">{new Date(r.createdAt).toLocaleDateString()}</span>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h4 className="font-semibold text-gray-900">{r.name}</h4>
-                                                <span className="text-xs text-muted-foreground">{r.date}</span>
+                                            <div className="flex items-center gap-4">
+                                                <div className="flex text-yellow-400">
+                                                    {[...Array(5)].map((_, i) => (
+                                                        <Star key={i} className={`w-4 h-4 ${i < Number(r.rating) ? "fill-current" : "text-gray-200"}`} />
+                                                    ))}
+                                                </div>
+                                                {!isVendor && isMyReview && (
+                                                    <div className="flex items-center gap-1">
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary" onClick={() => setIsEditing(true)}>
+                                                            <Edit2 size={16} />
+                                                        </Button>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive" onClick={handleDeleteReview}>
+                                                            <Trash2 size={16} />
+                                                        </Button>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
-                                        <div className="flex text-yellow-400">
-                                            {[...Array(5)].map((_, i) => (
-                                                <Star key={i} className={`w-4 h-4 ${i < r.rating ? "fill-current" : "text-gray-200"}`} />
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <p className="text-gray-700 leading-relaxed pl-13">{r.comment}</p>
-                                </motion.div>
-                                ))}
+                                        <p className="text-gray-700 leading-relaxed pl-13">{r.comment}</p>
+                                    </motion.div>
+                                    )
+                                })}
                             </div>
                         </div>
                     </div>

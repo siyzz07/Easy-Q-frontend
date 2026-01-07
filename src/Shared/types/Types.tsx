@@ -175,10 +175,11 @@ export interface IBooking {
 }
 
 export interface IBookingPayload {
-  customerId: string;
+  // customerId: string;
   totalAmount: string;
   paymentMethod: string,
   bookingId:string;
+  status:string
 }
 
 

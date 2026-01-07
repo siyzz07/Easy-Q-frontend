@@ -3,6 +3,9 @@ import type { IService } from "../../Shared/types/Types";
 import { Clock, DollarSign } from "lucide-react";
 import BookNow from "./BookNow";
 import type { IvendroFullData } from "../../Shared/types/Types";
+import { bookAvailableTime } from "../../Services/ApiService/BookingApiService";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface InterfaceServicesList {
   services: IService[];
@@ -10,9 +13,53 @@ interface InterfaceServicesList {
   shopData: IvendroFullData;
 }
 
-const ServicesList: FC<InterfaceServicesList> = ({ services, shopId, shopData }) => {
+const ServicesList: FC<InterfaceServicesList> = ({
+  services,
+  shopId,
+  shopData,
+}) => {
   const [bookService, setBookService] = useState<boolean>(false);
   const [serviceData, setServiceData] = useState<IService | null>(null);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (
+    values: { address: string; preferredTime: string; staff: string },
+    date: Date,
+    service: IService
+  ) => {
+    try {
+      const bookingData = {
+        staffId: values.staff,
+        addressId: values.address,
+        timePreffer: values.preferredTime,
+        serviceId: service._id!,
+        date: date,
+        shopId,
+      };
+
+      let response = await bookAvailableTime(bookingData);
+
+      if (response?.data.success == false) {
+        toast.info(response.data.message, { autoClose: 3000 });
+      } else {
+        const checkoutData = {
+          staffId: values.staff,
+          addressId: values.address,
+          serviceId: service._id,
+          selectedDate: date,
+          bookingId: response.data.bookingId,
+          shopId,
+        };
+        navigate(
+          `/customer/service/checkout?bookingId=${btoa(
+            JSON.stringify(checkoutData)
+          )}`
+        );
+      }
+    } catch (error: unknown) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -23,6 +70,8 @@ const ServicesList: FC<InterfaceServicesList> = ({ services, shopId, shopData })
           data={serviceData as IService}
           shopId={shopId}
           shopData={shopData}
+          onSubmit={handleSubmit}
+          type="booking"
         />
       )}
 
@@ -57,9 +106,9 @@ const ServicesList: FC<InterfaceServicesList> = ({ services, shopId, shopData })
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
+
                 <div className="absolute top-3 right-3">
-                   <span
+                  <span
                     className={`px-3 py-1 rounded-full text-xs font-bold backdrop-blur-md shadow-sm ${
                       service.isActive
                         ? "bg-white/90 text-green-700 dark:bg-black/80 dark:text-green-400"
@@ -74,7 +123,7 @@ const ServicesList: FC<InterfaceServicesList> = ({ services, shopId, shopData })
               {/* Content */}
               <div className="p-5 flex flex-col flex-1">
                 <div className="flex justify-between items-start mb-3 gap-2">
-                   <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                  <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {service.serviceName}
                   </h3>
                   <div className="flex items-center gap-1 text-primary font-bold bg-primary/5 px-2 py-1 rounded-lg shrink-0">
@@ -105,7 +154,10 @@ const ServicesList: FC<InterfaceServicesList> = ({ services, shopId, shopData })
                       Book Appointment
                     </button>
                   ) : (
-                    <button disabled className="w-full py-3 bg-muted text-muted-foreground rounded-xl font-medium cursor-not-allowed border border-border">
+                    <button
+                      disabled
+                      className="w-full py-3 bg-muted text-muted-foreground rounded-xl font-medium cursor-not-allowed border border-border"
+                    >
                       Currently Unavailable
                     </button>
                   )}
@@ -114,11 +166,11 @@ const ServicesList: FC<InterfaceServicesList> = ({ services, shopId, shopData })
             </div>
           ))}
         </div>
-        
+
         {services.length === 0 && (
-           <div className="col-span-full py-12 text-center text-muted-foreground">
-              No services found.
-           </div>
+          <div className="col-span-full py-12 text-center text-muted-foreground">
+            No services found.
+          </div>
         )}
       </section>
     </>

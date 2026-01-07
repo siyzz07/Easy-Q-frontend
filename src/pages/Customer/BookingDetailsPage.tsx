@@ -10,13 +10,25 @@ import StaffSection from "../../components/Customer/BookingDetails/StaffSection"
 import LocationSection from "../../components/Customer/BookingDetails/LocationSection";
 import PaymentSummary from "../../components/Customer/BookingDetails/PaymentSummary";
 import ActionSidebar from "../../components/Customer/BookingDetails/ActionSidebar";
-import { bookingCanceling, getSelectedBookingData } from "../../Services/ApiService/BookingApiService";
+import {
+  bookingCanceling,
+  createBooking,
+  getSelectedBookingData,
+} from "../../Services/ApiService/BookingApiService";
 import { useEffect, useRef, useState } from "react";
-import type { IBooking } from "../../Shared/types/Types";
+import type {
+  IBooking,
+  IBookingPayload,
+  IService,
+  IServiceData,
+} from "../../Shared/types/Types";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import BookingActionCard from "../../components/Customer/BookingDetails/BookingActionCard";
 import ConfirmationModal from "../../components/Shared/ConfirmationModal";
+import BookNow from "../../components/Customer/BookNow";
+import { getSelectedSerivce } from "../../Services/ApiService/CustomerApiService";
+import { razorpay } from "../../utils/razorpayUtil";
 
 // Dummy data
 // const bookingDatas = {
@@ -43,14 +55,14 @@ import ConfirmationModal from "../../components/Shared/ConfirmationModal";
 //   policy: 'Flexible cancellation. Full refund if cancelled 24 hours before the appointment.'
 // };
 
-
-
 const BookingDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const called = useRef(false);
   const [bookingData, setBookingData] = useState<any | null>(null);
-  const [cancelPopup,setCancelPopup]  = useState <boolean>(false)
+  const [serviceData, setServiceData] = useState<IServiceData | null>(null);
+  const [cancelPopup, setCancelPopup] = useState<boolean>(false);
+  const [reschedulePopup, setReschedulePopup] = useState<boolean>(false);
 
   useEffect(() => {
     if (called.current) return;
@@ -64,7 +76,7 @@ const BookingDetailsPage = () => {
         const response = await getSelectedBookingData(id);
         console.log(response.data);
         if (response?.data?.data) {
-          setBookingData(response.data.data[0]);
+          setBookingData(response.data.data);
         }
       } else {
         navigate("/customer/bookings");
@@ -77,31 +89,101 @@ const BookingDetailsPage = () => {
     }
   };
 
+  const rescheduleBooking = async (
+    values: { address: string; preferredTime: string; staff: string },
+    date: Date,
+    service: IService
+  ) => {
+    try {
+      console.log(values, "pppp", date, "ooooo", service);
+    } catch (error: unknown) {}
+  };
 
-  const cancelBooking = async () =>{
-    try{
-
-   
-      setCancelPopup(false)
-      if(bookingData._id){
-        const response = await bookingCanceling(bookingData._id)
-        if(response.data.success){
-          toast.success(response.data.message)
-          getEachBookingData()
-        }
-        
-      }else{
-        toast.error('Error to cancel booking , inavalied booking id')
+  const fetchService = async () => {
+    try {
+      const response = await getSelectedSerivce(bookingData.serviceId._id);
+      if (response?.data.data) {
+        setServiceData(response.data.data[0]);
       }
-    }catch(error:unknown){
-       if(error instanceof AxiosError){
-         toast.error(error.response?.data?.message)
-       }
+    } catch (error: unknown) {
+      console.log("error to fetch service data in reschedule page");
     }
-  }
+  };
 
+  const paymentRetry = async () => {
+    let status = "failed";
 
-  const cancelationMessage = 'Are you sure you want to cancel this booking?Refund eligibility depends on the cancellation time.'
+    const result = await razorpay(bookingData._id);
+
+    if (result && result == "razorpayError") {
+      toast.error("Failed to load razorpay");
+      return;
+    } else if (result && result !== "razorpayError") {
+      status = result;
+    }
+
+    const bookingPayload: IBookingPayload = {
+      totalAmount: bookingData.totalAmount,
+      paymentMethod: "razorpay",
+      bookingId: bookingData._id,
+      status: status,
+    };
+
+    const response = await createBooking(bookingPayload);
+
+    if (response?.data.data) {
+      if (response?.data.data.paymentStatus == "failed") {
+        let data = {
+          bookingDate: response.data.data.bookingDate,
+          bookingTime: response.data.data.bookingTimeStart,
+        };
+
+        let encode = btoa(JSON.stringify(data));
+        window.location.replace(`/customer/payment-failed?id=${encode}`);
+      } else {
+        let data = {
+          bookingDate: response.data.data.bookingDate,
+          bookingTime: response.data.data.bookingTimeStart,
+          paymentMethod: response.data.data.paymentMethod,
+          totalAmount: response.data.data.totalAmount,
+        };
+
+        let encode = btoa(JSON.stringify(data));
+        window.location.replace(
+          `/customer/service/booking-confirm?id=${encode}`
+        );
+      }
+    }
+  };
+
+  const onPopupClick = async () => {
+    if (!serviceData || bookingData.serviceId._id !== serviceData._id) {
+      await fetchService();
+    }
+    setReschedulePopup(true);
+  };
+
+  const cancelBooking = async () => {
+    try {
+      setCancelPopup(false);
+      if (bookingData._id) {
+        const response = await bookingCanceling(bookingData._id);
+        if (response.data.success) {
+          toast.success(response.data.message);
+          getEachBookingData();
+        }
+      } else {
+        toast.error("Error to cancel booking , inavalied booking id");
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message);
+      }
+    }
+  };
+
+  const cancelationMessage =
+    "Are you sure you want to cancel this booking?Refund eligibility depends on the cancellation time.";
 
   if (!bookingData) {
     return (
@@ -128,10 +210,25 @@ const BookingDetailsPage = () => {
     );
   }
 
-  
   return (
     <div className="min-h-screen bg-[#F8FAFC] pb-24 md:pb-12">
-      { cancelPopup && <ConfirmationModal submit={cancelBooking} close={()=>setCancelPopup(!cancelPopup)} description={cancelationMessage}/> }
+      {cancelPopup && (
+        <ConfirmationModal
+          submit={cancelBooking}
+          close={() => setCancelPopup(!cancelPopup)}
+          description={cancelationMessage}
+        />
+      )}
+      {reschedulePopup && (
+        <BookNow
+          onClose={() => setReschedulePopup(false)}
+          shopId={bookingData.shopId._id}
+          shopData={bookingData.shopId}
+          onSubmit={rescheduleBooking}
+          data={serviceData as IService}
+          type="reschedule"
+        />
+      )}
       {/* Dynamic Background Element */}
       <div className="absolute top-0 left-0 right-0 h-48 bg-primary/5 -z-10" />
 
@@ -171,11 +268,9 @@ const BookingDetailsPage = () => {
               status={bookingData.status}
               bookingDate={bookingData.bookingDate}
               onCancel={() => {
-                setCancelPopup(true) 
+                setCancelPopup(true);
               }}
-              onReschedule={() => {
-                console.log("Booking rescheduled");
-              }}
+              onReschedule={() => onPopupClick()}
             />
             {/* <StaffSection bookingData={bookingData} /> */}
             <LocationSection bookingData={bookingData} />
@@ -183,7 +278,7 @@ const BookingDetailsPage = () => {
 
           {/* Right Column: Sidebar (4 cols) */}
           <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
-            <PaymentSummary bookingData={bookingData} />
+            <PaymentSummary bookingData={bookingData} onRetry={paymentRetry} />
             {/* <ActionSidebar bookingData={bookingData} /> */}
           </div>
         </div>

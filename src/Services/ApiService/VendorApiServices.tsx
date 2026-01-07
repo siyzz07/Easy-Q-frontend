@@ -182,3 +182,14 @@ export const editServices = async (form:IService) =>{
     const response = await VendorAxiosInstance.put('/vendor/service/edit-service',form)
     return response
 }
+
+
+//--------------------------- get selected service
+export const getSelectedService = async(id:string)=>{
+    const response = await VendorAxiosInstance.get('/service/selected',{
+        params:{
+            id
+        }
+    })
+    return response
+}

@@ -23,8 +23,14 @@ export const bookAvailableTime = async(data:{staffId:string,timePreffer:string,d
 
 
 //--------------------- get  bookings customer
-export const getCustomerBookingData = async () =>{
-  const response = await BookingAxiosInstance.get(`/booking/customer`)
+export const getCustomerBookingData = async (page:number,limit:number,search:string) =>{
+  const response = await BookingAxiosInstance.get(`/booking/customer`,{
+    params:{
+      page,
+      limit,
+      search
+    }
+  })
   return response
 }
 

@@ -62,6 +62,7 @@ const ProfilePage = () => {
                     isVendor={true}
                     vendorImages={vendordata?.images as IImage[]|[]}
                     isUpdate={() => setUpdate(!update)}
+                    vendorId={vendordata?._id}
                 />
                 </div>
             </div>

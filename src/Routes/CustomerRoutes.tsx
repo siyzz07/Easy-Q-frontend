@@ -17,6 +17,7 @@ import ViewServicesPage from "../pages/Customer/ViewServicesPage";
 import VendorProfileView from "../pages/Customer/VendorProfileView";
 import CheckoutPage from "../pages/Customer/CheckoutPage";
 import PaymentConfirmPage from "../pages/Customer/PaymentConfirmPage";
+import PaymentFailedPage from "../pages/Customer/PaymentFailedPage";
 import BookingsPage from "../pages/Customer/BookingsPage";
 import BookingDetailsPage from "../pages/Customer/BookingDetailsPage";
 import ContractPage from "../pages/Customer/ContractPage";
@@ -119,6 +120,15 @@ const CustomerRoutes = () => {
 
               <CustomerProtectedRoute>
                 <PaymentConfirmPage/>
+            </CustomerProtectedRoute>
+            }
+            />
+
+            <Route
+            path={CUSTOMER_ROUTES.PAYMENT_FAILED}
+            element ={
+              <CustomerProtectedRoute>
+                <PaymentFailedPage/>
             </CustomerProtectedRoute>
             }
             />

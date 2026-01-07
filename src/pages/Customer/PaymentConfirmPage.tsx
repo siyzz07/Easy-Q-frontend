@@ -25,7 +25,7 @@ function PaymentConfirmPage() {
   }, []);
   
 
-  console.log('--',data);
+
   
 
 //   const formattedDate = new Date(data?.bookingDate).toLocaleDateString("en-US", {
@@ -39,7 +39,7 @@ function PaymentConfirmPage() {
   const decodeData = async () =>{
     try{
         const decode = JSON.parse(atob(bookingData as string));
-        console.log('----------',decode);
+
         
         if(decode){
             setData(decode)

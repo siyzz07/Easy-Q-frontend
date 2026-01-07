@@ -82,6 +82,7 @@ export const adminAxiosInstance = axiosInstance();
 export const VendorAxiosInstance = axiosInstance();
 export const CustomerAxiosInstance = axiosInstance();
 export const BookingAxiosInstance =axiosInstance()
+export const TransactionAxiosInstance = axiosInstance()
 // ----------- contract
 export const ContractAxiosInstance = axiosInstance()
 

@@ -24,6 +24,10 @@ import type {
 } from "../../Shared/types/Types";
 import { toast } from "react-toastify";
 import { createBooking } from "../../Services/ApiService/BookingApiService";
+import { loadRazorpay } from "../../utils/loadRazorpay";
+import { createTransaction, verifyPayment } from "../../Services/ApiService/TransactionApiService";
+import { CUSTOMER_ROUTES } from "../../Shared/Constants/RouteConstants";
+import { razorpay } from "../../utils/razorpayUtil";
 
 const CheckoutPage = () => {
   const [serarchParams] = useSearchParams();
@@ -36,10 +40,12 @@ const CheckoutPage = () => {
   const [selectedPayment, setSelectedPayment] = useState<string>("");
   const [bookingId,setBookingId] = useState<string>('')
 
+
   const navigate = useNavigate();
   let bookingData = serarchParams.get("bookingId");
 
   useEffect(() => {
+    
     if (!bookingData) {
       navigate("/customer");
       return;
@@ -47,10 +53,11 @@ const CheckoutPage = () => {
     decodeData();
   }, [bookingData]);
 
+
   const decodeData = async () => {
     try {
       const decode = JSON.parse(atob(bookingData as string));
-      console.log('decode :>> ', decode);
+
       if (
         !decode ||
         !decode.addressId ||
@@ -89,10 +96,68 @@ const CheckoutPage = () => {
     }
   };
 
+
+//  const razorpay = (): Promise<string|void> => {
+//   return new Promise(async (resolve) => {
+//     const isLoaded = await loadRazorpay();
+
+//     if (!isLoaded) {
+//       resolve("razorpayError");
+//       return;
+//     }
+
+//     const response = await createTransaction(bookingId, "razorpay");
+
+//     if (!response?.data?.result) {
+//       resolve("failed");
+//       return;
+//     }
+
+//     const order = response.data.result;
+
+//     const options = {
+//       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+//       amount: order.amount,
+//       currency: "INR",
+//       order_id: order.id,
+
+//       name: "EasyQ",
+//       description: "Booking payment",
+
+//       handler: async (response: any) => {
+//         try {
+//           await verifyPayment(response);
+//           resolve("paid");
+//         } catch {
+//           resolve("failed");
+//         }
+//       },
+
+//       modal: {
+//         ondismiss: () => {
+//           resolve("failed"); 
+//         },
+//       },
+//     };
+
+//     const rzp = new (window as any).Razorpay(options);
+
+//     rzp.on("payment.failed", () => {
+//       resolve("failed"); 
+//     });
+
+//     rzp.open();
+//   });
+// };
+
+
+
   const handleProceedToPayment = async () => {
     try {
+
+      let status  ='pending'
       if (!serviceData || !customerData || !addressData || !shopData) {
-        alert("Some booking data is missing. Please reload the page.");
+        toast.error("Some booking data is missing. Please reload the page.");
         return;
       }
 
@@ -101,17 +166,46 @@ const CheckoutPage = () => {
         return;
       }
 
+      if(selectedPayment == 'razorpay'){
+        let result = await razorpay(bookingId)
+       
+        if(result && result == 'razorpayError'){
+           toast.error("Razorpay failed use another payement method");
+           return 
+        }else if (result && result !== 'razorpayError'){
+          status = result
+
+        }
+      }
+
+
+
+
       const bookingPayload: IBookingPayload = {
-        customerId: customerData._id as string,
+        // customerId: customerData._id as string,
         totalAmount: serviceData.price as string,
         paymentMethod: selectedPayment,
-        bookingId:bookingId
+        bookingId:bookingId,
+        status:status
+    
       };
 
-      const response = await createBooking(bookingPayload);
+  
+      const response = await createBooking(bookingPayload)
 
-      if (response.data.data) {
-        let data = {
+      if(response?.data.data){
+
+        if(response?.data.data.paymentStatus=="failed"){
+             let data = {
+          bookingDate: response.data.data.bookingDate,
+          bookingTime: response.data.data.bookingTimeStart,
+        };
+
+          let encode = btoa(JSON.stringify(data));
+              window.location.replace(`/customer/payment-failed?id=${encode}`)
+             
+        }else{
+           let data = {
           bookingDate: response.data.data.bookingDate,
           bookingTime: response.data.data.bookingTimeStart,
           paymentMethod: response.data.data.paymentMethod,
@@ -120,7 +214,13 @@ const CheckoutPage = () => {
 
         let encode = btoa(JSON.stringify(data));
         window.location.replace(`/customer/service/booking-confirm?id=${encode}`);
+
+
+        }
+
+
       }
+
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.log("Error creating booking:", error.message);
@@ -128,7 +228,7 @@ const CheckoutPage = () => {
         console.error("Unknown error while proceeding to payment:", error);
       }
     }
-  };
+  };  
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -316,4 +416,4 @@ const CheckoutPage = () => {
   );
 };
 
-export default CheckoutPage;
+export default CheckoutPage

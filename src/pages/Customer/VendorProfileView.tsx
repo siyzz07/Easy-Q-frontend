@@ -92,6 +92,7 @@ const VendorProfileView = () => {
               <ShopViews
                 isVendor={false}
                 vendorImages={vendordata?.images as IImage[]|[]}
+                vendorId={vendordata?._id}
               />
             </div>
         </main>

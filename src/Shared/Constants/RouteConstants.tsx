@@ -34,7 +34,8 @@ export const CUSTOMER_ROUTES ={
     BOOKINGS:'bookings',
     VIEW_BOOKING:'bookings/:id',
     FAVORITE:'favorite',
-    NOTIFICATIONS:'notifications'
+    NOTIFICATIONS:'notifications',
+    PAYMENT_FAILED:'payment-failed',
 
 
 };
