@@ -276,3 +276,12 @@ export interface IvendroFullData {
   coordinates?: any;
   isVerified?: "pending" | "verified" | "rejected";
 }
+
+export interface IWalletResponse {
+  _id: string;
+  user: string;
+  userType: "Customer" | "Vendor";
+  balance: number;
+  createdAt: string;  
+  updatedAt: string;   
+}

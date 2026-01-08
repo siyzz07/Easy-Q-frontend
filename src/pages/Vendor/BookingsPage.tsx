@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Calendar, 
@@ -9,7 +10,8 @@ import {
   CheckCircle2, 
   XCircle, 
   AlertCircle,
-  Scissors
+  Scissors,
+  Eye
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -71,6 +73,7 @@ const PAYMENT_CONFIG: Record<string, { color: string; bg: string }> = {
 };
 
 const BookingsPage = () => {
+  const navigate = useNavigate();
   const [bookings, setBookings] = useState(MOCK_BOOKINGS);
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
@@ -86,6 +89,10 @@ const BookingsPage = () => {
   const handleStatusUpdate = (id: string, newStatus: string) => {
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b));
     setSelectedBooking(null);
+  };
+
+  const handleViewDetails = (id: string) => {
+    navigate(`/vendor/bookings/${id}`);
   };
 
   const stats = {
@@ -194,7 +201,8 @@ const BookingsPage = () => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         key={booking.id} 
-                        className="group border-b border-gray-50 hover:bg-blue-50/30 transition-colors"
+                        onClick={() => handleViewDetails(booking.id)}
+                        className="group border-b border-gray-50 hover:bg-blue-50/30 transition-colors cursor-pointer"
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
@@ -243,7 +251,10 @@ const BookingsPage = () => {
                         </td>
                         <td className="px-6 py-4 text-right relative">
                            <button 
-                             onClick={() => setSelectedBooking(selectedBooking === booking.id ? null : booking.id)}
+                             onClick={(e) => {
+                               e.stopPropagation();
+                               setSelectedBooking(selectedBooking === booking.id ? null : booking.id);
+                             }}
                              className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
                            >
                               <MoreVertical size={18} />
@@ -253,13 +264,30 @@ const BookingsPage = () => {
                            {selectedBooking === booking.id && (
                              <div className="absolute right-8 top-12 z-50 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                                 <div className="px-3 py-2 bg-gray-50 border-b border-gray-100 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                                   Update Status
+                                   Actions
                                 </div>
                                 <div className="p-1">
+                                   <button
+                                     onClick={(e) => {
+                                       e.stopPropagation();
+                                       handleViewDetails(booking.id);
+                                     }}
+                                     className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold rounded-lg transition-colors text-blue-600 hover:bg-blue-50"
+                                   >
+                                     <Eye size={12} />
+                                     <span className="uppercase">View Details</span>
+                                   </button>
+                                   <div className="my-1 border-t border-gray-100"></div>
+                                   <div className="px-2 py-1 text-[9px] font-bold text-gray-400 uppercase tracking-widest">
+                                      Update Status
+                                   </div>
                                    {['pending', 'confirmed', 'completed', 'cancelled'].map(status => (
                                      <button
                                        key={status}
-                                       onClick={() => handleStatusUpdate(booking.id, status)}
+                                       onClick={(e) => {
+                                         e.stopPropagation();
+                                         handleStatusUpdate(booking.id, status);
+                                       }}
                                        className={`w-full flex items-center gap-2 px-3 py-2 text-xs font-bold rounded-lg transition-colors ${booking.status === status ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50'}`}
                                      >
                                        {booking.status === status && <CheckCircle2 size={12} />}

@@ -47,3 +47,23 @@ export const bookingCanceling = async(bookingId:string) =>{
     const response = await BookingAxiosInstance.patch(`/booking/cancel/${bookingId}`)
     return response
 }
+
+
+//--------------------- get vendor bookings
+export const getVendorBookings = async (page:number, limit:number, search:string) =>{
+  const response = await BookingAxiosInstance.get(`/booking/vendor`,{
+    params:{
+      page,
+      limit,
+      search
+    }
+  })
+  return response
+}
+
+
+//--------------------- update booking status by vendor
+export const updateBookingStatus = async(bookingId:string, status: string) =>{
+    const response = await BookingAxiosInstance.patch(`/booking/status/${bookingId}`, { status })
+    return response
+}

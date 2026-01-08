@@ -23,6 +23,7 @@ import BookingDetailsPage from "../pages/Customer/BookingDetailsPage";
 import ContractPage from "../pages/Customer/ContractPage";
 import FavoritePage from "../pages/Customer/FavoritePage";
 import NotificationPage from "../pages/Customer/NotificationPage";
+import WalletPage from "../pages/Customer/WalletPage";
 
 const CustomerRoutes = () => {
   return (
@@ -202,6 +203,14 @@ const CustomerRoutes = () => {
             element={
               <CustomerProtectedRoute>
                 <NotificationPage />
+              </CustomerProtectedRoute>
+            }
+          />
+          <Route
+            path={CUSTOMER_ROUTES.WALLET}
+            element={
+              <CustomerProtectedRoute>
+                <WalletPage />
               </CustomerProtectedRoute>
             }
           />

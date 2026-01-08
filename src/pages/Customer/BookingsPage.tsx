@@ -1,12 +1,13 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import BookingViewCard from '../../components/Customer/BookingViewCard';
 import { motion } from "framer-motion";
-import { Calendar as CalendarIcon, Clock, CheckCircle2, X } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
 import { getCustomerBookingData } from '../../Services/ApiService/BookingApiService';
 import { toast } from 'react-toastify';
 import Pagination from '../../components/Shared/Pagination';
 
+// Updated DTO to include Payment Info
 export type BookingCardDTO = {
   id: string;
   title: string;
@@ -20,6 +21,8 @@ export type BookingCardDTO = {
   image: string;
   icon?: string;
   amount: string;
+  paymentStatus: string;
+  isPaymentFailed: boolean;
 };
 
 const BookingsPage = () => {
@@ -30,39 +33,42 @@ const BookingsPage = () => {
   const [limit, setLimit] = useState<number>(5);
   const [totalPage, setTotalPage] = useState<number>(1);
 
-  
   useEffect(() => {
-    getBookings();
+    fetchBookings();
   }, [page, activeTab]);
 
-  
   const handleTabChange = (val: string) => {
     setActiveTab(val);
     setPage(1);
   };
 
-  const getBookings = async () => {
+  const fetchBookings = async () => {
     setLoading(true);
     try {
       const response = await getCustomerBookingData(page, limit, activeTab);
-    
-      const bookingArray = response?.data?.data|| [];
-      setTotalPage(response.data.pagination.totalPages);
+        console.log('mm',response)
+      // Based on your console log structure: response.data.data.data
+      const bookingArray = response?.data?.data || [];
+      const totalPages = response?.data?.pagination.totalPages || 1;
+      setTotalPage(totalPages);
 
       const mapped: BookingCardDTO[] = bookingArray.map((b: any) => {
         const status = b?.status?.toLowerCase() || 'pending';
+        const pStatus = b?.paymentStatus?.toLowerCase() || 'pending';
+
         return {
           id: b?._id,
           title: b?.serviceId?.serviceName || 'General Service',
           location: b?.shopId?.shopName || 'Partner Shop',
           facility: b?.shopId?.city || 'Location N/A',
-          date: new Date(b?.bookingDate).toLocaleDateString('en-GB', {
-            day: '2-digit', month: 'short', year: 'numeric'
-          }),
+          date: b?.bookingDate, 
           time: `${b?.bookingTimeStart} - ${b?.bookingTimeEnd}`,
           status: b?.status || 'Pending',
           image: b?.shopId?.ProfileImage || '', 
           amount: b?.totalAmount?.toString() || '0',
+          paymentStatus: b?.paymentStatus || 'pending',
+          // UI Logic for failed payments
+          isPaymentFailed: pStatus === 'failed',
           statusColor:
             status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
             status === 'pending' || status === 'booked' ? 'bg-amber-100 text-amber-700' :
@@ -87,7 +93,7 @@ const BookingsPage = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fbff]">
-      {/* Header Section */}
+      {/* Hero Header */}
       <div className="relative overflow-hidden px-4 py-12 md:py-20 rounded-b-[2.5rem] md:rounded-b-[4rem] shadow-lg bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700">
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">
           <motion.h1
@@ -98,7 +104,7 @@ const BookingsPage = () => {
             My Bookings
           </motion.h1>
           <p className="mt-4 text-sm md:text-lg text-blue-100 max-w-xl mx-auto font-medium opacity-90">
-            Keep track of your appointments and schedule in one place.
+            View status, manage payments, and track your schedule.
           </p>
         </div>
       </div>
@@ -130,12 +136,21 @@ const BookingsPage = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       key={b.id}
+                      className="relative"
                     >
+                      {/* Booking Card */}
                       <BookingViewCard booking={b} />
+                      
+                      {/* Overlay Alert for Failed Payment */}
+                      {b.isPaymentFailed && (
+                        <div className="absolute top-3 right-5 flex items-center gap-1.5 bg-red-100 text-red-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border border-red-200">
+                           <AlertCircle size={12} /> Payment Failed
+                        </div>
+                      )}
                     </motion.div>
                   ))}
-                  <div className="mt-8">
-                   
+                  
+                  <div className="mt-8 flex justify-center">
                     <Pagination 
                       page={page}
                       totalPages={totalPage}
@@ -154,11 +169,11 @@ const BookingsPage = () => {
   );
 };
 
-
+// Sub-components
 const LoadingSpinner = () => (
   <div className="flex flex-col items-center justify-center py-24 space-y-4">
     <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-100 border-t-blue-600"></div>
-    <p className="text-blue-600 font-bold text-sm animate-pulse">Syncing with server...</p>
+    <p className="text-blue-600 font-bold text-sm animate-pulse">Fetching records...</p>
   </div>
 );
 
@@ -174,4 +189,4 @@ const EmptyState = ({ tab }: { tab: string }) => (
   </div>
 );
 
-export default BookingsPage;
+export default BookingsPage;  

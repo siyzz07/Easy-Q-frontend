@@ -231,6 +231,11 @@ export const getFavoriteShopes = async () =>{
     return response
 }
 
+/**
+ * 
+ *  get service types 
+ * 
+ */
 
 
 

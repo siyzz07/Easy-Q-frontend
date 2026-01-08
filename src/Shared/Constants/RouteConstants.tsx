@@ -36,6 +36,7 @@ export const CUSTOMER_ROUTES ={
     FAVORITE:'favorite',
     NOTIFICATIONS:'notifications',
     PAYMENT_FAILED:'payment-failed',
+    WALLET:'wallet',
 
 
 };
@@ -54,6 +55,7 @@ export const VENDOR_ROUTES ={
     RESEST_PASSWORD:"/reset-password",
     PROFILE:"profile",
     STAFFS:"staffs",
-    BOOKINGS:"bookings"
+    BOOKINGS:"bookings",
+    VIEW_BOOKING:"bookings/:id"
 
 };

@@ -94,15 +94,7 @@ const ProfilePageLayout = () => {
                 </div>
              </div>
 
-             {/* Support Card */}
-             <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[2.5rem] p-8 text-white shadow-2xl shadow-slate-900/20 relative overflow-hidden group">
-                <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-colors duration-700" />
-                <h4 className="font-bold text-lg relative z-10">Need Help?</h4>
-                <p className="text-slate-400 text-sm mt-2 font-medium relative z-10">Our support team is available 24/7 for you.</p>
-                <button className="mt-6 w-full py-3 bg-white text-slate-900 rounded-2xl text-sm font-bold hover:bg-blue-50 transition-colors active:scale-95 relative z-10">
-                   Contact Support
-                </button>
-             </div>
+            
           </div>
 
           {/* Content Area */}

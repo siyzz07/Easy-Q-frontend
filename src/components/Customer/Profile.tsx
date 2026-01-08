@@ -91,17 +91,17 @@ function Profile() {
              </div>
           </div>
 
-          <div className="grid gap-10 md:grid-cols-2">
+          <div className="grid gap-10 md:grid-cols-1">
             {/* Info Cards */}
             <div className="space-y-8">
                <div className="group space-y-3">
                   <div className="flex items-center gap-2 ml-1">
                      <User size={14} className="text-blue-600" />
-                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                     <label className="text-xs font-black text-slate-600 uppercase tracking-widest">
                         Display Name
                      </label>
                   </div>
-                  <div className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-[1.5rem] text-[15px] font-bold text-slate-700 group-hover:border-blue-200 group-hover:bg-blue-50/30 transition-all leading-none">
+                  <div className="w-full px-6 py-4 bg-slate-100 border border-slate-100 rounded-[1.5rem] text-[15px] font-bold text-slate-700 group-hover:border-blue-200 group-hover:bg-blue-50/30 transition-all leading-none">
                      {customerData?.name || "Not provided"}
                   </div>
                </div>
@@ -113,7 +113,7 @@ function Profile() {
                         Email Address
                      </label>
                   </div>
-                  <div className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-[1.5rem] text-[15px] font-bold text-slate-400 italic group-hover:border-blue-200 group-hover:bg-blue-50/30 transition-all leading-none">
+                  <div className="w-full px-6 py-4 bg-slate-100 border border-slate-100 rounded-[1.5rem] text-[15px] font-bold text-slate-400 italic group-hover:border-blue-200 group-hover:bg-blue-50/30 transition-all leading-none">
                      {customerData?.email || "Not provided"}
                   </div>
                </div>
@@ -125,66 +125,14 @@ function Profile() {
                         Phone Number
                      </label>
                   </div>
-                  <div className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-[1.5rem] text-[15px] font-bold text-slate-700 group-hover:border-blue-200 group-hover:bg-blue-50/30 transition-all leading-none">
+                  <div className="w-full px-6 py-4 bg-slate-100 border border-slate-100 rounded-[1.5rem] text-[15px] font-bold text-slate-700 group-hover:border-blue-200 group-hover:bg-blue-50/30 transition-all leading-none">
                      {customerData?.phone ? `+91 ${customerData.phone}` : "Not provided"}
                   </div>
                </div>
             </div>
-
-            {/* Status Section */}
-            <div className="space-y-6">
-               <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] p-8 text-white shadow-2xl shadow-blue-600/20 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-6 opacity-20">
-                     <ShieldCheck size={80} strokeWidth={1} />
-                  </div>
-                  <div className="relative z-10">
-                     <div className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-[0.2em] w-fit border border-white/20">
-                        System Status
-                     </div>
-                     <h4 className="text-xl font-black mt-4">Account Verified</h4>
-                     <p className="text-blue-100/80 text-sm mt-2 font-medium leading-relaxed">
-                        Your account is currently active and secured with 256-bit encryption. All your bookings are synced.
-                     </p>
-                     <div className="flex items-center gap-4 mt-8">
-                        <div className="flex flex-col">
-                           <span className="text-[10px] font-black uppercase tracking-widest text-blue-200">Security</span>
-                           <span className="text-sm font-bold">Optimal</span>
-                        </div>
-                        <div className="h-8 w-[1px] bg-white/10" />
-                        <div className="flex flex-col">
-                           <span className="text-[10px] font-black uppercase tracking-widest text-blue-200">Tier</span>
-                           <span className="text-sm font-bold">Premium</span>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-
-               <div className="bg-slate-50 rounded-[2.5rem] p-8 border border-slate-100 flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                     <div className="h-12 w-12 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-400">
-                        <Calendar size={20} />
-                     </div>
-                     <div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Member Since</p>
-                        <p className="text-base font-black text-slate-700">January 2024</p>
-                     </div>
-                  </div>
-                  <ChevronRight size={18} className="text-slate-300" />
-               </div>
-            </div>
           </div>
 
-          <div className="mt-12 pt-10 border-t border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">
-               Latest Update: <span className="text-slate-600">Today, 10:03 AM</span>
-            </p>
-            <button
-               onClick={() => setEditPopup(true)}
-               className="w-full sm:w-auto px-10 py-4 bg-slate-900 text-white rounded-[1.5rem] text-sm font-black hover:bg-blue-600 hover:shadow-2xl hover:shadow-blue-600/30 transition-all active:scale-95"
-            >
-               Update Profile Settings
-            </button>
-          </div>
+       
         </div>
       )}
     </div>

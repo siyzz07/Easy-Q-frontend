@@ -17,6 +17,7 @@ import ProfilePage from "../pages/Vendor/ProfilePage";
 import StaffPage from "../pages/Vendor/StaffPage";
 import ServicePage from "../pages/Vendor/ServicePage";
 import DashboardVendor from "../pages/Vendor/DashboardVendor";
+import VendorBookingDetailsPage from "../pages/Vendor/VendorBookingDetailsPage";
 
 const VendorRoutes = () => {
   return (
@@ -122,6 +123,14 @@ const VendorRoutes = () => {
           element={
             <VendorProtectedRoute>
               <BookingsPage/>
+            </VendorProtectedRoute>
+          }/>
+
+        <Route 
+          path={VENDOR_ROUTES.VIEW_BOOKING}
+          element={
+            <VendorProtectedRoute>
+              <VendorBookingDetailsPage/>
             </VendorProtectedRoute>
           }/>
       </Route>
