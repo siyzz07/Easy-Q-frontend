@@ -28,6 +28,7 @@ import { loadRazorpay } from "../../utils/loadRazorpay";
 import { createTransaction, verifyPayment } from "../../Services/ApiService/TransactionApiService";
 import { CUSTOMER_ROUTES } from "../../Shared/Constants/RouteConstants";
 import { razorpay } from "../../utils/razorpayUtil";
+import { getCustomerWalletBalance } from "../../Services/ApiService/WalletApiService";
 
 const CheckoutPage = () => {
   const [serarchParams] = useSearchParams();
@@ -39,6 +40,7 @@ const CheckoutPage = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedPayment, setSelectedPayment] = useState<string>("");
   const [bookingId,setBookingId] = useState<string>('')
+  const [walletBalance , setWalletBalance] = useState<number>(0)
 
 
   const navigate = useNavigate();
@@ -76,12 +78,13 @@ const CheckoutPage = () => {
       setSelectedDate(decode.selectedDate);
       setBookingId(decode.bookingId)
 
-      const [serviceResponse, customerResponse, addressResponse, shopResponse] =
+      const [serviceResponse, customerResponse, addressResponse, shopResponse,walletResponse] =
         await Promise.all([
           getSelectedSerivce(decode.serviceId),
           getCustomerData(),
           getEachAddress(decode.addressId),
           getEachShopData(decode.shopId),
+          getCustomerWalletBalance()
         ]);
 
         
@@ -89,6 +92,9 @@ const CheckoutPage = () => {
     customerResponse?.data?.data && setCustomerData(customerResponse.data.data);
     addressResponse?.data?.data && setAddressData(addressResponse.data.data);
     shopResponse?.data?.data && setShopData(shopResponse.data.data);
+    walletResponse?.data?.data && setWalletBalance(walletResponse.data.data.balance)
+   
+    
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.log("Error fetching checkout info");
@@ -178,6 +184,14 @@ const CheckoutPage = () => {
         }
       }
 
+      if(selectedPayment == 'wallet'){
+        if (Number(serviceData.price) > walletBalance) {
+          toast.error("Insufficient balance , choose another payment method");
+            return;
+             }
+       }
+
+
 
 
 
@@ -189,6 +203,8 @@ const CheckoutPage = () => {
         status:status
     
       };
+
+      console.log(bookingPayload)
 
   
       const response = await createBooking(bookingPayload)
@@ -223,6 +239,8 @@ const CheckoutPage = () => {
 
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
+        console.log(error)
+        toast.error(error.response?.data.message)
         console.log("Error creating booking:", error.message);
       } else {
         console.error("Unknown error while proceeding to payment:", error);
@@ -334,7 +352,7 @@ const CheckoutPage = () => {
                       <>
                         Use your wallet balance •{" "}
                         <span className="text-green-600 font-medium">
-                          ₹245.90 available
+                          {walletBalance}
                         </span>
                       </>
                     ),

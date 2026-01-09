@@ -22,3 +22,12 @@ export const verifyPayment = async(payload:any) =>{
     const response = await TransactionAxiosInstance.post('/transaction/verify',payload)
     return response
 }
+
+/**
+ * 
+ *   fetch customerr transactions ----
+ */
+export const getTransactions = async () =>{
+    const response = await  TransactionAxiosInstance('/transaction/transactions')
+    return response
+}

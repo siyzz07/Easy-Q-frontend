@@ -9,6 +9,7 @@ import {
   User,
   LogOut,
   Calendar,
+  Wallet,
 } from "lucide-react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutVendor } from "../../Services/ApiService/VendorApiServices";
@@ -32,6 +33,7 @@ const Sidebar = () => {
     { icon: LayoutDashboard, label: "Dashboard", path: "", route: "" },
     { icon: List, label: "Services", path: "Services", route: "services" },
     { icon: Calendar, label: "Bookings" ,path:'Bookings',route:'bookings'},
+    { icon: Wallet, label: "Wallet", path: "Wallet", route: "wallet" },
     {
       icon: CreditCard,
       label: "Payments",

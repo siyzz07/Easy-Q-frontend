@@ -3,7 +3,11 @@ import { WalletAxiosInstance } from "../../config/AxiosInstance"
 
 
 
-
+/**
+ * 
+ *  customer
+ * 
+ */
 
 /**
  * 
@@ -33,5 +37,19 @@ export const getWalletTransactions = async(page:number = 1, limit:number = 10) =
  */
 export const addMoneyToWallet = async(amount:number) =>{
     const response = await WalletAxiosInstance.post('/transaction/wallet/add-money', { amount })
+    return response
+}
+
+/**
+ * 
+ *  vendor 
+ * 
+ */
+/**
+ * 
+ *   Get vendor wallet transactions ----
+ */
+export const getVendorWalletBalance = async() =>{
+    const response = await WalletAxiosInstance.get('/wallet/vendor-wallet')
     return response
 }

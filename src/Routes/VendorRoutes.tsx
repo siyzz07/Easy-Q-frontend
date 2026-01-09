@@ -18,6 +18,7 @@ import StaffPage from "../pages/Vendor/StaffPage";
 import ServicePage from "../pages/Vendor/ServicePage";
 import DashboardVendor from "../pages/Vendor/DashboardVendor";
 import VendorBookingDetailsPage from "../pages/Vendor/VendorBookingDetailsPage";
+import VendorWalletPage from "../pages/Vendor/VendorWalletPage";
 
 const VendorRoutes = () => {
   return (
@@ -131,6 +132,14 @@ const VendorRoutes = () => {
           element={
             <VendorProtectedRoute>
               <VendorBookingDetailsPage/>
+            </VendorProtectedRoute>
+          }/>
+
+        <Route 
+          path={VENDOR_ROUTES.WALLET}
+          element={
+            <VendorProtectedRoute>
+              <VendorWalletPage/>
             </VendorProtectedRoute>
           }/>
       </Route>
