@@ -195,7 +195,7 @@ export interface IStaff {
 }
 
 export interface IService {
-  _id?:string;
+  id?:string;
   shopName?:string;
   serviceName:string;
   description:string;

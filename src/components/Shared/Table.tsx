@@ -47,6 +47,7 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
 }) => {
   const navigate = useNavigate();
 
+
   const [imagePopup, setImagePopup] = useState<boolean>(false);
   const [image, setImage] = useState<string>("");
 

@@ -1,486 +1,199 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Wallet,
-  ArrowUpRight,
-  ArrowDownLeft,
-  TrendingUp,
-  Calendar,
-  Filter,
-  Download,
-  Search,
-  CreditCard,
-  CheckCircle2,
-  XCircle,
-  Clock,
-  IndianRupee,
-  RefreshCw,
-  DollarSign,
-  TrendingDown
+  Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, Calendar, Filter, 
+  Download, Search, CreditCard, CheckCircle2, XCircle, Clock, 
+  IndianRupee, RefreshCw, DollarSign, TrendingDown
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
-import { AxiosError } from 'axios';
 import { getVendorWalletBalance } from '../../Services/ApiService/WalletApiService';
+import { getTransactions } from '../../Services/ApiService/TransactionApiService';
+import { useDebounce } from '../../hooks/useDebounce';
+import Pagination from '../../components/Shared/Pagination';
 
-// Transaction type
+// Interfaces
 interface Transaction {
   _id: string;
-  type: 'credit' | 'debit';
+  flow: 'credit' | 'debit';
   amount: number;
   description: string;
   status: 'success' | 'pending' | 'failed';
   createdAt: string;
-  bookingId?: string;
   paymentMethod?: string;
 }
 
-const TRANSACTION_TYPE_CONFIG = {
-  credit: {
-    icon: <ArrowDownLeft size={18} />,
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-50',
-    label: 'Credit'
+const CONFIG = {
+  types: {
+    credit: { icon: ArrowDownLeft, color: 'text-emerald-600', bg: 'bg-emerald-50', label: 'Credit' },
+    debit: { icon: ArrowUpRight, color: 'text-rose-600', bg: 'bg-rose-50', label: 'Debit' }
   },
-  debit: {
-    icon: <ArrowUpRight size={18} />,
-    color: 'text-rose-600',
-    bg: 'bg-rose-50',
-    label: 'Debit'
-  }
-};
-
-const STATUS_CONFIG = {
-  success: {
-    icon: <CheckCircle2 size={14} />,
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-100/50',
-    label: 'Success'
-  },
-  pending: {
-    icon: <Clock size={14} />,
-    color: 'text-amber-600',
-    bg: 'bg-amber-100/50',
-    label: 'Pending'
-  },
-  failed: {
-    icon: <XCircle size={14} />,
-    color: 'text-rose-600',
-    bg: 'bg-rose-100/50',
-    label: 'Failed'
+  status: {
+    success: { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-100/50', label: 'Success' },
+    pending: { icon: Clock, color: 'text-amber-600', bg: 'bg-amber-100/50', label: 'Pending' },
+    failed: { icon: XCircle, color: 'text-rose-600', bg: 'bg-rose-100/50', label: 'Failed' }
   }
 };
 
 const VendorWalletPage = () => {
-  const called = useRef(false);
   const [balance, setBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingTransactions, setLoadingTransactions] = useState(false);
   const [filter, setFilter] = useState<'all' | 'credit' | 'debit'>('all');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const [hasMore] = useState(true);
+  const [limit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
 
+  const debouncedSearch = useDebounce(search, 500);
+
+  // Fetch data whenever page, filter, or search changes
   useEffect(() => {
-    if (called.current) return;
-    called.current = true;
     fetchWalletData();
-  }, []);
+  }, [page, debouncedSearch, filter]);
 
   const fetchWalletData = async () => {
     try {
       setLoading(true);
-      let response = await getVendorWalletBalance()
-      if(response?.data?.data){
-        setBalance(response.data.data.balance)
+      // Fetch balance and transactions in parallel
+      const [walletRes, transRes] = await Promise.all([
+        getVendorWalletBalance(),
+        getTransactions(page, limit, debouncedSearch)
+      ]);
+
+      if (walletRes?.data?.data) {
+        setBalance(walletRes.data.data.balance);
       }
-      // Mock transactions
-      const mockTransactions: Transaction[] = [
-        {
-          _id: '1',
-          type: 'credit',
-          amount: 2500,
-          description: 'Payment received from booking #12345',
-          status: 'success',
-          createdAt: new Date().toISOString(),
-          bookingId: '12345',
-          paymentMethod: 'UPI'
-        },
-        {
-          _id: '2',
-          type: 'debit',
-          amount: 500,
-          description: 'Platform fee deduction',
-          status: 'success',
-          createdAt: new Date(Date.now() - 86400000).toISOString(),
-          paymentMethod: 'Wallet'
-        },
-        {
-          _id: '3',
-          type: 'credit',
-          amount: 1800,
-          description: 'Payment received from booking #12344',
-          status: 'success',
-          createdAt: new Date(Date.now() - 172800000).toISOString(),
-          bookingId: '12344',
-          paymentMethod: 'Card'
-        }
-      ];
-      setTransactions(mockTransactions);
+
+      if (transRes?.data?.data) {
+        setTransactions(transRes.data.data);
+        setTotalPages(transRes.data.pagination.totalPages);
+      }
     } catch (error) {
-      console.error('Error fetching wallet data:', error);
-      toast.error('Failed to load wallet data');
+      console.error('Wallet Error:', error);
+      toast.error('Failed to sync wallet data');
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchBalance = async () => {
-    try {
-      let response = await getVendorWalletBalance()
-      if(response?.data?.data){
-        setBalance(response.data.data.balance)
-      }
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        toast.error('Failed to fetch wallet balance');
-      }
-    }
-  };
+  // Logic for filtered view (Local filtering for tabs, but data comes from backend)
+  const displayedTransactions = useMemo(() => {
+    return transactions.filter(t => filter === 'all' || t.flow === filter);
+  }, [transactions, filter]);
 
-  const fetchTransactions = async () => {
-    try {
-      setLoadingTransactions(true);
-      // TODO: Replace with actual vendor wallet API call
-      // const response = await getVendorWalletTransactions(pageNum, 10);
-      // if (response?.data?.data) {
-      //   const newTransactions = response.data.data.transactions || [];
-      //   if (pageNum === 1) {
-      //     setTransactions(newTransactions);
-      //   } else {
-      //     setTransactions(prev => [...prev, ...newTransactions]);
-      //   }
-      //   setHasMore(newTransactions.length === 10);
-      // }
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        toast.error('Failed to fetch transactions');
-      }
-    } finally {
-      setLoadingTransactions(false);
-    }
-  };
-
-  const filteredTransactions = transactions.filter(transaction => {
-    const matchesFilter = filter === 'all' || transaction.type === filter;
-    const matchesSearch = transaction.description.toLowerCase().includes(search.toLowerCase());
-    return matchesFilter && matchesSearch;
-  });
-
-  const stats = {
-    totalCredit: transactions
-      .filter(t => t.type === 'credit' && t.status === 'success')
-      .reduce((sum, t) => sum + t.amount, 0),
-    totalDebit: transactions
-      .filter(t => t.type === 'debit' && t.status === 'success')
-      .reduce((sum, t) => sum + t.amount, 0),
-    totalTransactions: transactions.length
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50/50 flex flex-col items-center justify-center p-6">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex flex-col items-center"
-        >
-          <div className="relative w-16 h-16">
-            <div className="absolute top-0 left-0 w-full h-full border-4 border-purple-600/20 rounded-full"></div>
-            <div className="absolute top-0 left-0 w-full h-full border-4 border-t-purple-600 rounded-full animate-spin"></div>
-          </div>
-          <h3 className="mt-6 text-lg font-bold text-gray-800">Loading wallet...</h3>
-          <p className="text-gray-500 text-sm">Please wait</p>
-        </motion.div>
-      </div>
-    );
-  }
+  if (loading && page === 1) return <LoadingSpinner />;
 
   return (
-    <div className="min-h-screen bg-gray-50/50 p-6 md:p-8 font-sans">
+    <div className="min-h-screen bg-gray-50/50 p-6 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-[900] text-gray-900 tracking-tight flex items-center gap-3">
-              <Wallet size={32} className="text-purple-600" />
-              Vendor Wallet
-            </h1>
-            <p className="text-gray-500 font-medium mt-1">Manage your earnings and transactions</p>
-          </div>
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
+            <Wallet size={32} className="text-purple-600" /> Wallet History
+          </h1>
+          {/* <button onClick={fetchWalletData} className="p-2.5 bg-white border rounded-xl hover:bg-gray-50 shadow-sm">
+            <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
+          </button> */}
         </div>
 
-        {/* Balance Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 rounded-3xl p-8 shadow-2xl"
+        {/* Balance Card - Compact */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-br from-purple-600 to-indigo-800 rounded-[2rem] p-8 text-white shadow-xl relative overflow-hidden"
         >
-          {/* Decorative elements */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24"></div>
-          
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-                  <Wallet size={24} className="text-white" />
-                </div>
-                <div>
-                  <p className="text-purple-100 text-sm font-semibold">Available Balance</p>
-                  <p className="text-white text-xs opacity-75">Vendor Wallet</p>
-                </div>
-              </div>
-              <button
-                onClick={fetchBalance}
-                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-              >
-                <RefreshCw size={20} className="text-white" />
-              </button>
-            </div>
-            
-            <div className="flex items-baseline gap-2 mb-8">
-              <IndianRupee size={32} className="text-white" />
-              <h2 className="text-5xl font-black text-white">{balance.toFixed(2)}</h2>
-            </div>
-
-            <div className="grid grid-cols-3 gap-4">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                <div className="flex items-center gap-2 mb-2">
-                  <ArrowDownLeft size={16} className="text-emerald-300" />
-                  <p className="text-xs font-semibold text-purple-100">Total Earned</p>
-                </div>
-                <p className="text-xl font-black text-white">₹{stats.totalCredit.toFixed(2)}</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                <div className="flex items-center gap-2 mb-2">
-                  <ArrowUpRight size={16} className="text-rose-300" />
-                  <p className="text-xs font-semibold text-purple-100">Total Deducted</p>
-                </div>
-                <p className="text-xl font-black text-white">₹{stats.totalDebit.toFixed(2)}</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                <div className="flex items-center gap-2 mb-2">
-                  <TrendingUp size={16} className="text-blue-300" />
-                  <p className="text-xs font-semibold text-purple-100">Transactions</p>
-                </div>
-                <p className="text-xl font-black text-white">{stats.totalTransactions}</p>
-              </div>
-            </div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl" />
+          <p className="text-purple-100 text-sm font-bold uppercase tracking-widest">Available Balance</p>
+          <div className="flex items-center gap-2 mt-2">
+            <IndianRupee size={36} className="opacity-70" />
+            <h2 className="text-5xl font-black">{balance.toLocaleString('en-IN')}.00</h2>
           </div>
         </motion.div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-emerald-50 rounded-xl">
-                <DollarSign size={24} className="text-emerald-600" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-500">This Month</p>
-                <p className="text-2xl font-black text-gray-900">₹{(stats.totalCredit * 0.6).toFixed(2)}</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-blue-50 rounded-xl">
-                <TrendingUp size={24} className="text-blue-600" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-500">Pending</p>
-                <p className="text-2xl font-black text-gray-900">₹0.00</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-rose-50 rounded-xl">
-                <TrendingDown size={24} className="text-rose-600" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-500">Fees Deducted</p>
-                <p className="text-2xl font-black text-gray-900">₹{stats.totalDebit.toFixed(2)}</p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Transactions Section */}
-        <div className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
-          {/* Controls */}
-          <div className="p-6 border-b border-gray-100">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-              <h2 className="text-xl font-black text-gray-900">Transaction History</h2>
-              <div className="flex gap-2">
-                <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all">
-                  <Filter size={18} />
-                  <span className="hidden sm:inline">Filter</span>
+        {/* Transactions List Container */}
+        <div className="bg-white rounded-[2rem] border border-gray-200 shadow-sm overflow-hidden">
+          <div className="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between gap-4">
+            <div className="flex gap-2 p-1 bg-gray-100 rounded-xl w-fit">
+              {(['all', 'credit', 'debit'] as const).map(t => (
+                <button
+                  key={t}
+                  onClick={() => { setFilter(t); setPage(1); }}
+                  className={`px-6 py-2 rounded-lg text-xs font-black uppercase transition-all ${filter === t ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'}`}
+                >
+                  {t}
                 </button>
-                <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all">
-                  <Download size={18} />
-                  <span className="hidden sm:inline">Export</span>
-                </button>
-              </div>
+              ))}
             </div>
-
-            <div className="flex flex-col sm:flex-row gap-3">
-              <div className="flex gap-2 p-1 bg-gray-100/80 rounded-xl w-fit">
-                {(['all', 'credit', 'debit'] as const).map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setFilter(tab)}
-                    className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-                      filter === tab
-                        ? 'bg-white text-gray-900 shadow-sm'
-                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-200/50'
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
-
-              <div className="relative flex-1 sm:max-w-xs">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                  <Search size={16} />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search transactions..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all"
-                />
-              </div>
-            </div>
+           
           </div>
 
-          {/* Transactions List */}
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-50 min-h-[400px]">
             <AnimatePresence mode="popLayout">
-              {filteredTransactions.length > 0 ? (
-                filteredTransactions.map((transaction, index) => {
-                  const typeConfig = TRANSACTION_TYPE_CONFIG[transaction.type];
-                  const statusConfig = STATUS_CONFIG[transaction.status];
-
+              {displayedTransactions.length > 0 ? (
+                displayedTransactions.map((transaction, index) => {
+                  const type = CONFIG.types[transaction.flow];
+                  const status = CONFIG.status[transaction.status];
                   return (
                     <motion.div
                       key={transaction._id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className="p-6 hover:bg-gray-50/50 transition-colors"
+                      className="p-5 flex items-center justify-between hover:bg-gray-50 transition-colors"
                     >
-                      <div className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-4 flex-1">
-                          <div className={`p-3 rounded-xl ${typeConfig.bg} ${typeConfig.color}`}>
-                            {typeConfig.icon}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="font-bold text-gray-900 text-sm truncate">
-                              {transaction.description}
-                            </p>
-                            <div className="flex items-center gap-3 mt-1">
-                              <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                                <Calendar size={12} />
-                                <span>{format(new Date(transaction.createdAt), 'MMM dd, yyyy')}</span>
-                              </div>
-                              <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                                <Clock size={12} />
-                                <span>{format(new Date(transaction.createdAt), 'hh:mm a')}</span>
-                              </div>
-                            </div>
-                          </div>
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className={`p-3 rounded-2xl ${type.bg} ${type.color}`}>
+                          <type.icon size={20} />
                         </div>
-
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <p className={`text-lg font-black ${typeConfig.color}`}>
-                              {transaction.type === 'credit' ? '+' : '-'}₹{transaction.amount.toFixed(2)}
-                            </p>
-                            <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${statusConfig.bg} ${statusConfig.color}`}>
-                              {statusConfig.icon}
-                              <span>{statusConfig.label}</span>
-                            </div>
+                        <div className="min-w-0">
+                          <p className="font-bold text-gray-900 text-sm truncate">{transaction.description}</p>
+                          <div className="flex gap-3 mt-1 text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+                            <span>{format(new Date(transaction.createdAt), 'MMM dd, yyyy')}</span>
+                            <span>{format(new Date(transaction.createdAt), 'hh:mm a')}</span>
                           </div>
                         </div>
                       </div>
 
-                      {transaction.paymentMethod && (
-                        <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
-                          <CreditCard size={12} />
-                          <span className="capitalize">{transaction.paymentMethod}</span>
-                        </div>
-                      )}
+                      <div className="text-right ml-4">
+                        <p className={`text-lg font-black ${type.color}`}>
+                          {transaction.flow === 'credit' ? '+' : '-'}₹{transaction.amount}
+                        </p>
+                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${status.bg} ${status.color}`}>
+                          {status.label}
+                        </span>
+                      </div>
                     </motion.div>
                   );
                 })
               ) : (
-                <div className="p-20 text-center">
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="h-16 w-16 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-300 mb-3">
-                      <Wallet size={32} />
-                    </div>
-                    <p className="text-gray-900 font-bold text-sm">No transactions found</p>
-                    <p className="text-gray-400 text-xs mt-1">Your transaction history will appear here</p>
-                  </div>
+                <div className="flex flex-col items-center justify-center h-[400px] text-gray-400">
+                   <Wallet size={48} className="opacity-20 mb-4" />
+                   <p className="font-bold">No transactions found</p>
                 </div>
               )}
             </AnimatePresence>
           </div>
 
-          {/* Load More */}
-          {hasMore && filteredTransactions.length > 0 && (
-            <div className="p-6 border-t border-gray-100">
-              <button
-                onClick={() => {
-                  const nextPage = page + 1;
-                  setPage(nextPage);
-                  fetchTransactions();
-                }}
-                disabled={loadingTransactions}
-                className="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loadingTransactions ? 'Loading...' : 'Load More'}
-              </button>
-            </div>
-          )}
+          {/* Corrected Pagination Placement */}
+          <div className="p-6 border-t border-gray-100 flex justify-center bg-gray-50/30">
+            <Pagination 
+              page={page} 
+              totalPages={totalPages} 
+              onPageChange={setPage} 
+            />
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default VendorWalletPage;
+const LoadingSpinner = () => (
+  <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+    <div className="w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mb-4" />
+    <p className="font-black text-gray-800 uppercase tracking-widest text-xs">Syncing Ledger...</p>
+  </div>
+);
+
+export default VendorWalletPage;  

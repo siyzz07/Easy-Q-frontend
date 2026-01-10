@@ -69,6 +69,9 @@ const validationSchema = (hasExistingImage: boolean) =>
   });
 
 const AddService: FC<IAddService> = ({ onClose, data }) => {
+
+  console.log('data',data)
+
   const [imagePreview, setImagePreview] = useState<string | null>(
     typeof data?.image === "string" ? data.image : null
   );
@@ -81,6 +84,7 @@ const AddService: FC<IAddService> = ({ onClose, data }) => {
   const getStaffs = async () => {
     try {
       const response = await getAllStffs();
+      console.log(response)
       if (response?.data?.data) setStaffMembers(response.data.data);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -99,9 +103,11 @@ const AddService: FC<IAddService> = ({ onClose, data }) => {
     isActive: data?.isActive ?? true,
   };
 
-  const onSubmit = async (values: IService) => {
+  const onSubmit = async (values: any) => {
     try {
-      values._id = data?._id;
+      values._id = data?.id;
+
+     
       let payload;
 
       if (typeof values.image !== "string") {
