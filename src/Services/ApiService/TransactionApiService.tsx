@@ -27,7 +27,13 @@ export const verifyPayment = async(payload:any) =>{
  * 
  *   fetch customerr transactions ----
  */
-export const getTransactions = async () =>{
-    const response = await  TransactionAxiosInstance('/transaction/transactions')
+export const getTransactions = async (page:number,limit:number,filter:string) =>{
+    const response = await  TransactionAxiosInstance('/transaction/transactions',{
+        params:{
+            page,
+            limit,
+            filter
+        }
+    })
     return response
 }

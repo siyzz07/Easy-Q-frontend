@@ -56,8 +56,8 @@ const CustomerList = () => {
 
   const onBlockCustomer = async (data: any) => {
     try {
-      if (data._id) {
-        const response = await blockCustomer(data._id);
+      if (data.id) {
+        const response = await blockCustomer(data.id);
         if (response.data.message) {
           toast.success(response.data.message);
         }
@@ -103,11 +103,7 @@ const CustomerList = () => {
           />
         </div>
 
-        <div className="flex items-center gap-2">
-           <button className="px-4 py-2 bg-white border border-gray-100 rounded-xl text-[11px] font-bold uppercase tracking-widest text-gray-400 hover:text-gray-900 transition-all">
-              Export CSV
-           </button>
-        </div>
+     
       </div>
 
       {/* Table Section */}

@@ -97,7 +97,7 @@ const CustomerAddress: React.FC = () => {
                 <Map size={24} />
              </div>
              <div>
-                <h2 className="font-black text-2xl text-slate-900 tracking-tight leading-none">Shipping Addresses</h2>
+                <h2 className="font-black text-2xl text-slate-900 tracking-tight leading-none">Addresses</h2>
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1.5">Manage your service locations</p>
              </div>
           </div>
@@ -106,8 +106,8 @@ const CustomerAddress: React.FC = () => {
             onClick={() => setShowModal(true)}
             className="flex items-center gap-2 rounded-[1.2rem] px-8 py-4 text-sm font-black bg-blue-600 hover:bg-blue-700 shadow-xl shadow-blue-600/20 text-white transition-all active:scale-95 group shrink-0"
           >
-            <Plus size={18} className="group-hover:rotate-90 transition-transform duration-300" />
-            Add New Location
+            <Plus size={18} className=" transition-transform duration-300" />
+            Add New Address
           </button>
         </div>
 
@@ -122,11 +122,11 @@ const CustomerAddress: React.FC = () => {
                <p className="text-sm text-slate-500 max-w-xs mt-3 font-medium leading-relaxed">Save your frequently used addresses to speed up your booking experience.</p>
             </div>
           ) : (
-            <div className="grid gap-8 md:grid-cols-2">
+            <div className="grid gap-8  md:grid-cols-2">
               {addresses.map((data, index) => (
                 <div
                   key={data._id || index}
-                  className="group relative bg-white border border-slate-100 rounded-[2.5rem] p-8 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-600/5 transition-all duration-500 text-left overflow-hidden"
+                  className="group relative bg-gray-100 border border-slate-100 rounded-[2.5rem] p-8 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-600/5 transition-all duration-500 text-left overflow-hidden"
                 >
                   {/* Decorative Background Icon */}
                   <div className="absolute -right-10 -bottom-10 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500 rotate-12">
@@ -148,7 +148,7 @@ const CustomerAddress: React.FC = () => {
                       >
                         <Edit3 size={18} strokeWidth={2.5} />
                       </button>
-                      <button
+                      {/* <button
                         onClick={() => {
                           setAddresId(data._id || null);
                           setDeletePopup(true);
@@ -157,7 +157,7 @@ const CustomerAddress: React.FC = () => {
                         title="Delete Address"
                       >
                         <Trash2 size={18} strokeWidth={2.5} />
-                      </button>
+                      </button> */}
                     </div>
                   </div>
 
@@ -192,18 +192,16 @@ const CustomerAddress: React.FC = () => {
         </div>
 
         <div className="mt-12 pt-10 border-t border-slate-50 flex items-center justify-between">
-           <div className="flex items-center gap-3">
+           {/* <div className="flex items-center gap-3">
               <div className="h-2 w-32 bg-slate-100 rounded-full overflow-hidden">
                  <div className="h-full bg-blue-600 transition-all duration-1000" style={{ width: `${Math.min(100, (addresses.length / 5) * 100)}%` }} />
               </div>
               <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest leading-none">
                  {addresses.length} / 5 Slots Used
               </span>
-           </div>
+           </div> */}
            
-           <p className="text-[10px] font-bold text-blue-600/60 uppercase tracking-widest">
-              Secured Cloud Storage
-           </p>
+        
         </div>
       </div>
     </div>

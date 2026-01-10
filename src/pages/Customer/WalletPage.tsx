@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Wallet,
   ArrowUpRight,
@@ -15,24 +15,25 @@ import {
   XCircle,
   Clock,
   IndianRupee,
-  RefreshCw
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { toast } from 'react-toastify';
-import { AxiosError } from 'axios';
+  RefreshCw,
+} from "lucide-react";
+import { format } from "date-fns";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 import {
   getCustomerWalletBalance,
   getWalletTransactions,
-  addMoneyToWallet
-} from '../../Services/ApiService/WalletApiService';
-import { getTransactions } from '../../Services/ApiService/TransactionApiService';
+  addMoneyToWallet,
+} from "../../Services/ApiService/WalletApiService";
+import { getTransactions } from "../../Services/ApiService/TransactionApiService";
+import Pagination from "../../components/Shared/Pagination";
 
 // Transaction type
 interface Transaction {
   _id: string;
-  flow: 'credit' | 'debit';
+  flow: "credit" | "debit";
   amount: number;
-  status: 'success' | 'created' | 'failed';
+  status: "success" | "created" | "failed";
   createdAt: string;
   bookingId?: string;
   transactionType?: string;
@@ -41,38 +42,37 @@ interface Transaction {
 const TRANSACTION_TYPE_CONFIG = {
   credit: {
     icon: <ArrowDownLeft size={18} />,
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-50',
-    label: 'Credit'
+    color: "text-emerald-600",
+    bg: "bg-emerald-50",
+    label: "Credit",
   },
   debit: {
     icon: <ArrowUpRight size={18} />,
-    color: 'text-rose-600',
-    bg: 'bg-rose-50',
-    label: 'Debit'
-  }
+    color: "text-rose-600",
+    bg: "bg-rose-50",
+    label: "Debit",
+  },
 };
 
 const STATUS_CONFIG = {
   success: {
     icon: <CheckCircle2 size={14} />,
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-100/50',
-    label: 'Success'
+    color: "text-emerald-600",
+    bg: "bg-emerald-100/50",
+    label: "Success",
   },
   created: {
     icon: <Clock size={14} />,
-    color: 'text-amber-600',
-    bg: 'bg-amber-100/50',
-    label: 'Pending'
+    color: "text-amber-600",
+    bg: "bg-amber-100/50",
+    label: "Pending",
   },
   failed: {
     icon: <XCircle size={14} />,
-    color: 'text-rose-600',
-    bg: 'bg-rose-100/50',
-    label: 'Failed'
+    color: "text-rose-600",
+    bg: "bg-rose-100/50",
+    label: "Failed",
   },
-  
 };
 
 const WalletPage = () => {
@@ -80,46 +80,42 @@ const WalletPage = () => {
   const [balance, setBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingTransactions, setLoadingTransactions] = useState(false)
-  const [filter, setFilter] = useState<'all' | 'credit' | 'debit'>('all');
-  const [search, setSearch] = useState('');
+  const [loadingTransactions, setLoadingTransactions] = useState(false);
+  const [filter, setFilter] = useState<"all" | "credit" | "debit">("all");
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limit, setLimit] = useState(5);
   const [hasMore, setHasMore] = useState(true);
 
-
-  console.log('reached')
-
-
   useEffect(() => {
-    if (called.current) return;
-    called.current = true;
+    // if (called.current) return;
+    // called.current = true;
+    console.log('helee')
     fetchWalletData();
-  }, []);
+  }, [page,filter]);
 
   const fetchWalletData = async () => {
     try {
       setLoading(true);
-      let [walletResponse,transactionResponse] =  await Promise.all([getCustomerWalletBalance(),getTransactions()]);
-      if(walletResponse?.data){
-         setBalance(walletResponse.data.data.balance )
+      let [walletResponse, transactionResponse] = await Promise.all([
+        getCustomerWalletBalance(),
+        getTransactions(page, limit, filter),
+      ]);
+      if (walletResponse?.data) {
+        setBalance(walletResponse.data.data.balance);
       }
 
-      transactionResponse?.data && setTransactions(transactionResponse.data.data)
-      // console.log('transsasction data',transactionResponse.data.data);
-      
-    
-
+      transactionResponse?.data &&
+        setTransactions(transactionResponse.data.data);
+      transactionResponse?.data &&
+        setTotalPages(transactionResponse.data.pagination.totalPages);
     } catch (error) {
-      console.error('Error fetching wallet data:', error);
+      console.error("Error fetching wallet data:", error);
     } finally {
       setLoading(false);
     }
   };
-
-
-
-
-
 
   const fetchBalance = async () => {
     try {
@@ -129,51 +125,20 @@ const WalletPage = () => {
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        toast.error('Failed to fetch wallet balance');
+        toast.error("Failed to fetch wallet balance");
       }
     }
   };
 
 
-
-
-  
-
-  // const fetchTransactions = async (pageNum: number = 1) => {
-  //   try {
-  //     setLoadingTransactions(true);
-  //     const response = await getWalletTransactions(pageNum, 10);
-  //     if (response?.data?.data) {
-  //       const newTransactions = response.data.data.transactions || [];
-  //       if (pageNum === 1) {
-  //         setTransactions(newTransactions);
-  //       } else {
-  //         setTransactions(prev => [...prev, ...newTransactions]);
-  //       }
-  //       setHasMore(newTransactions.length === 10);
-  //     }
-  //   } catch (error: unknown) {
-  //     if (error instanceof AxiosError) {
-  //       toast.error('Failed to fetch transactions');
-  //     }
-  //   } finally {
-  //     setLoadingTransactions(false);
-  //   }
-  // };
-
-  const filteredTransactions = transactions.filter(transaction => {
-    const matchesFilter = filter === 'all' || transaction.flow === filter;
-    return matchesFilter
-  });
-
   const stats = {
     totalCredit: transactions
-      .filter(t => t.flow === 'credit' && t.status === 'success')
+      .filter((t) => t.flow === "credit" && t.status === "success")
       .reduce((sum, t) => sum + t.amount, 0),
     totalDebit: transactions
-      .filter(t => t.flow === 'debit' && t.status === 'success')
+      .filter((t) => t.flow === "debit" && t.status === "success")
       .reduce((sum, t) => sum + t.amount, 0),
-    totalTransactions: transactions.length
+    totalTransactions: transactions.length,
   };
 
   if (loading) {
@@ -188,7 +153,9 @@ const WalletPage = () => {
             <div className="absolute top-0 left-0 w-full h-full border-4 border-blue-600/20 rounded-full"></div>
             <div className="absolute top-0 left-0 w-full h-full border-4 border-t-blue-600 rounded-full animate-spin"></div>
           </div>
-          <h3 className="mt-6 text-lg font-bold text-gray-800">Loading wallet...</h3>
+          <h3 className="mt-6 text-lg font-bold text-gray-800">
+            Loading wallet...
+          </h3>
           <p className="text-gray-500 text-sm">Please wait</p>
         </motion.div>
       </div>
@@ -198,7 +165,6 @@ const WalletPage = () => {
   return (
     <div className="min-h-screen bg-gray-50/50 p-6 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto space-y-6">
-        
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
@@ -206,7 +172,9 @@ const WalletPage = () => {
               <Wallet size={32} className="text-blue-600" />
               My Wallet
             </h1>
-            <p className="text-gray-500 font-medium mt-1">Manage your balance and transactions</p>
+            <p className="text-gray-500 font-medium mt-1">
+              Manage your balance and transactions
+            </p>
           </div>
         </div>
 
@@ -219,7 +187,7 @@ const WalletPage = () => {
           {/* Decorative elements */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24"></div>
-          
+
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
@@ -227,7 +195,9 @@ const WalletPage = () => {
                   <Wallet size={24} className="text-white" />
                 </div>
                 <div>
-                  <p className="text-blue-100 text-sm font-semibold">Available Balance</p>
+                  <p className="text-blue-100 text-sm font-semibold">
+                    Available Balance
+                  </p>
                   <p className="text-white text-xs opacity-75">Easy-Q Wallet</p>
                 </div>
               </div>
@@ -238,13 +208,13 @@ const WalletPage = () => {
                 <RefreshCw size={20} className="text-white" />
               </button>
             </div>
-            
+
             <div className="flex items-baseline gap-2 mb-8">
               <IndianRupee size={32} className="text-white" />
-              <h2 className="text-5xl font-black text-white">{balance.toFixed(2)}</h2>
+              <h2 className="text-5xl font-black text-white">
+                {balance.toFixed(2)}
+              </h2>
             </div>
-
-
           </div>
         </motion.div>
 
@@ -253,7 +223,9 @@ const WalletPage = () => {
           {/* Controls */}
           <div className="p-6 border-b border-gray-100">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-              <h2 className="text-xl font-black text-gray-900">Transaction History</h2>
+              <h2 className="text-xl font-black text-gray-900">
+                Transaction History
+              </h2>
               <div className="flex gap-2">
                 <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all">
                   <Download size={18} />
@@ -264,94 +236,129 @@ const WalletPage = () => {
 
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex gap-2 p-1 bg-gray-100/80 rounded-xl w-fit">
-                {(['all', 'credit', 'debit'] as const).map((tab) => (
+                {(["all", "credit", "debit"] as const).map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setFilter(tab)}
                     className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
                       filter === tab
-                        ? 'bg-white text-gray-900 shadow-sm'
-                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-200/50'
+                        ? "bg-white text-gray-900 shadow-sm"
+                        : "text-gray-500 hover:text-gray-900 hover:bg-gray-200/50"
                     }`}
                   >
                     {tab}
                   </button>
                 ))}
               </div>
-
-             
             </div>
           </div>
 
           {/* Transactions List */}
           <div className="divide-y divide-gray-100">
             <AnimatePresence mode="popLayout">
-              {filteredTransactions.length > 0 ? (
-                filteredTransactions.map((transaction, index) => {
-                  const typeConfig = TRANSACTION_TYPE_CONFIG[transaction.flow];
-                  const statusConfig = STATUS_CONFIG[transaction.status];
+              {transactions.length > 0 ? (
+                <>
+                  {/* 1. The Map Function */}
+                  {transactions.map((transaction, index) => {
+                    const typeConfig =
+                      TRANSACTION_TYPE_CONFIG[transaction.flow];
+                    const statusConfig = STATUS_CONFIG[transaction.status];
 
-                  return (
-                    <motion.div
-                      key={transaction._id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ delay: index * 0.05 }}
-                      className="p-6 hover:bg-gray-50/50 transition-colors"
-                    >
-                      <div className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-4 flex-1">
-                          <div className={`p-3 rounded-xl ${typeConfig.bg} ${typeConfig.color}`}>
-                            {typeConfig.icon}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="font-bold text-gray-900 text-sm truncate">
-                              {/* {transaction.description} */}
-                            </p>
-                            <div className="flex items-center gap-3 mt-1">
-                              <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                                <Calendar size={12} />
-                                <span>{format(new Date(transaction.createdAt), 'MMM dd, yyyy')}</span>
+                    return (
+                      <motion.div
+                        key={transaction._id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ delay: index * 0.05 }}
+                        className="p-6 hover:bg-gray-50/50 transition-colors border-b border-gray-100 last:border-0"
+                      >
+                        <div className="flex items-center justify-between gap-4">
+                          <div className="flex items-center gap-4 flex-1">
+                            <div
+                              className={`p-3 rounded-xl ${typeConfig.bg} ${typeConfig.color}`}
+                            >
+                              {typeConfig.icon}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-bold text-gray-900 text-sm truncate">
+                                {/* {transaction.description || "Transaction"} */}
+                              </p>
+                              <div className="flex items-center gap-3 mt-1">
+                                <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                                  <Calendar size={12} />
+                                  <span>
+                                    {format(
+                                      new Date(transaction.createdAt),
+                                      "MMM dd, yyyy"
+                                    )}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                                  <Clock size={12} />
+                                  <span>
+                                    {format(
+                                      new Date(transaction.createdAt),
+                                      "hh:mm a"
+                                    )}
+                                  </span>
+                                </div>
                               </div>
-                              <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                                <Clock size={12} />
-                                <span>{format(new Date(transaction.createdAt), 'hh:mm a')}</span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-4">
+                            <div className="text-right">
+                              <p
+                                className={`text-lg font-black ${typeConfig.color}`}
+                              >
+                                {transaction.flow === "credit" ? "+" : "-"}₹
+                                {transaction.amount.toFixed(2)}
+                              </p>
+                              <div
+                                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${statusConfig.bg} ${statusConfig.color}`}
+                              >
+                                {statusConfig.icon}
+                                <span>{statusConfig.label}</span>
                               </div>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <p className={`text-lg font-black ${typeConfig.color}`}>
-                              {transaction.flow === 'credit' ? '+' : '-'}₹{transaction.amount.toFixed(2)}
-                            </p>
-                            <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${statusConfig.bg} ${statusConfig.color}`}>
-                              {statusConfig.icon}
-                              <span>{statusConfig.label}</span>
-                            </div>
+                        {transaction.transactionType && (
+                          <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
+                            <CreditCard size={12} />
+                            <span className="capitalize">
+                              {transaction.transactionType}
+                            </span>
                           </div>
-                        </div>
-                      </div>
+                        )}
+                      </motion.div>
+                    );
+                  })}
 
-                      {transaction.transactionType && (
-                        <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
-                          <CreditCard size={12} />
-                          <span className="capitalize">{transaction.transactionType}</span>
-                        </div>
-                      )}
-                    </motion.div>
-                  );
-                })
+                  {/* 2. The Pagination (Outside the map but inside the fragment) */}
+                  <div className="p-6 border-t border-gray-100">
+                    <Pagination
+                      page={page}
+                      totalPages={totalPages}
+                      onPageChange={setPage}
+                    />
+                  </div>
+                </>
               ) : (
+                /* 3. Empty State */
                 <div className="p-20 text-center">
                   <div className="flex flex-col items-center justify-center">
                     <div className="h-16 w-16 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-300 mb-3">
                       <Wallet size={32} />
                     </div>
-                    <p className="text-gray-900 font-bold text-sm">No transactions found</p>
-                    <p className="text-gray-400 text-xs mt-1">Your transaction history will appear here</p>
+                    <p className="text-gray-900 font-bold text-sm">
+                      No transactions found
+                    </p>
+                    <p className="text-gray-400 text-xs mt-1">
+                      Your transaction history will appear here
+                    </p>
                   </div>
                 </div>
               )}

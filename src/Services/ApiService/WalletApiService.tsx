@@ -14,7 +14,7 @@ import { WalletAxiosInstance } from "../../config/AxiosInstance"
  *   Get wallet balance ----
  */
 export const getCustomerWalletBalance = async() =>{
-    const response = await WalletAxiosInstance.get('/wallet/customer-wallet')
+    const response = await WalletAxiosInstance.get('/wallet/customer-wallet',)
     return response
 }
 

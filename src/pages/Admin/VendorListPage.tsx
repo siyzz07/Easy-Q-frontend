@@ -8,22 +8,30 @@ import ReusableTable from "../../components/Shared/Table";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { Search, Store, ExternalLink } from "lucide-react";
+import { useDebounce } from "../../hooks/useDebounce";
+import Pagination from "../../components/Shared/Pagination";
 
 const VendorListPage = () => {
   const [vendorDatas, setVendorDatas] = useState<IVendor[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [pages,setPages] = useState(1)
+  const [limit , setLimit] = useState(7)
+  const [totalPages,setTotalPages] = useState(1)
 
+  const debouncedSearch = useDebounce(searchTerm)
   useEffect(() => {
     fetchVendorData();
-  }, []);
+  }, [pages,debouncedSearch]);
+
 
   const fetchVendorData = async () => {
     setLoading(true);
     try {
-      const response = await getVendorsData();
+      const response = await getVendorsData(pages,limit,debouncedSearch);
       if (response?.data?.data) {
         setVendorDatas(response.data.data);
+        setTotalPages(response.data.totalPages)
       }
     } catch (error: unknown) {
       console.error("fetch vendor data error", error);
@@ -85,28 +93,25 @@ const VendorListPage = () => {
       </div>
 
       {/* Control Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-2 rounded-[2rem] border border-gray-100 shadow-sm">
-        <div className="relative flex-1 group">
-          <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-blue-600 transition-colors" size={20} />
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-2">
+        <div className="relative w-full md:w-96 group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors" size={18} />
           <input 
             type="text"
-            placeholder="Search partners by shop name, email..."
+            placeholder="Search by name, email or phone..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-16 pr-6 py-4 bg-transparent text-sm font-semibold outline-none placeholder:text-gray-300 transition-all"
+            className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-sm font-medium outline-none focus:ring-4 focus:ring-blue-600/5 focus:border-blue-600/20 transition-all shadow-sm"
           />
         </div>
 
-        <div className="flex items-center gap-3 px-4">
-           <button className="flex items-center gap-2 px-6 py-3 bg-gray-50 hover:bg-gray-100 rounded-2xl text-[11px] font-bold uppercase tracking-widest text-gray-500 transition-all border border-gray-100">
-              <ExternalLink size={14} />
-              Export
-           </button>
-        </div>
+       
       </div>
 
       {/* Table Section */}
       <div className="bg-white rounded-[2.5rem] p-1 border border-gray-100 shadow-inner">
+        <>
+        
         <ReusableTable
           caption="Verified Business Listings"
           data={filteredData}
@@ -114,6 +119,8 @@ const VendorListPage = () => {
           onAction={onBlockVendor}
           emptyMessage={loading ? "Acquiring data..." : "No partners found matching your requirements."}
         />
+        {/* <Pagination page={pages} totalPages={totalPages} onPageChange={setPages} /> */}
+        </>
       </div>
     </div>
   );
