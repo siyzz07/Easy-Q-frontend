@@ -35,7 +35,7 @@ export const getCustomerBookingData = async (page:number,limit:number,search:str
 }
 
 
-//--------------------- get  bookings customer
+//--------------------- get seleected bookings 
 export const getSelectedBookingData = async (id:string) =>{
   const response = await BookingAxiosInstance.get(`/booking/${id}`)
   return response
@@ -50,12 +50,13 @@ export const bookingCanceling = async(bookingId:string) =>{
 
 
 //--------------------- get vendor bookings
-export const getVendorBookings = async (page:number, limit:number, search:string) =>{
+export const getVendorBookings = async (page:number, limit:number, search:string , date?:string) =>{
   const response = await BookingAxiosInstance.get(`/booking/vendor`,{
     params:{
       page,
       limit,
-      search
+      search,
+      date
     }
   })
   return response
@@ -66,4 +67,16 @@ export const getVendorBookings = async (page:number, limit:number, search:string
 export const updateBookingStatus = async(bookingId:string, status: string) =>{
     const response = await BookingAxiosInstance.patch(`/booking/status/${bookingId}`, { status })
     return response
+}
+
+//--------------------- booking amount refund
+export const bookingRefund = async (bookingId:string) =>{
+  const response = await BookingAxiosInstance.post(`/booking/refund/${bookingId}`)
+  return response
+}
+
+//--------------------- booking reshedule
+export const  bookingReschedule = async (data:{staffId:string,timePreffer:string,date:Date,bookingId:string}) =>{
+   const response = await BookingAxiosInstance.patch('/booking/reschedule',data)
+   return response
 }

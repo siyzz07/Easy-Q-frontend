@@ -169,6 +169,16 @@ export const getEachShopServices = async (shopId:string) =>{
     return response
 }
 
+//---------------------------------------------------- get selected service populated data
+
+export const getSelectedSerivcePopulated = async (id:string) =>{
+
+    const response = await CustomerAxiosInstance.get('/customer/service/get-service-populated',{
+        params:{id}
+    })
+    return response
+}
+
 //---------------------------------------------------- get selected service
 export const getSelectedSerivce = async (id:string) =>{
     const response = await CustomerAxiosInstance.get('/customer/service/get-service',{

@@ -36,23 +36,30 @@ const initialValues = {
   preferredTime: "",
 };
 
-const validationSchema = Yup.object({
+
+const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData ,onSubmit,type = 'booking'}) => {
+
+
+ const validationSchema = Yup.object({
   staff: Yup.string().required("Please select a staff member"),
-  address: Yup.string().required("Please select an address"),
+
+  address: Yup.string().when([], {
+    is: () => type === "booking",
+    then: (schema) =>
+      schema.required("Please select an address"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+
   preferredTime: Yup.string().required("Please select a preferred time"),
 });
 
-const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData ,onSubmit}) => {
+
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [addresses, setAddress] = useState<ICustomerAddress[]>([]);
   const [selectedStaff, setSelectedStaff] = useState<IStaff | null>(null);
   const [staffAvailable, setStaffAvailable] = useState(true);
 
   const navigate = useNavigate();
-
-  console.log(data)
-
-
 
   useEffect(() => {
     getCustomerAddress();
@@ -292,6 +299,7 @@ const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData ,onSubmit}) => 
                         </div>
 
                         {/* Address - Standard Select */}
+                        {type == 'booking' &&
                         <div className="space-y-2">
                              <label className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                 <MapPin className="w-4 h-4 text-green-500" /> Location
@@ -316,6 +324,7 @@ const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData ,onSubmit}) => 
                                 )}
                             <ErrorMessage name="address" component="p" className="text-xs text-red-500" />
                         </div>
+                      }
 
                          <Button
                             type="submit"

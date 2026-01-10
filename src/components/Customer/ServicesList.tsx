@@ -25,27 +25,33 @@ const ServicesList: FC<InterfaceServicesList> = ({
   const handleSubmit = async (
     values: { address: string; preferredTime: string; staff: string },
     date: Date,
-    service: IService
+    service: any
   ) => {
     try {
+
+
+
       const bookingData = {
         staffId: values.staff,
         addressId: values.address,
         timePreffer: values.preferredTime,
-        serviceId: service._id!,
+        serviceId: service.id!,
         date: date,
         shopId,
       };
 
-      let response = await bookAvailableTime(bookingData);
 
+
+      let response = await bookAvailableTime(bookingData);
+        console.log(response.data.success);
+        
       if (response?.data.success == false) {
         toast.info(response.data.message, { autoClose: 3000 });
       } else {
         const checkoutData = {
           staffId: values.staff,
           addressId: values.address,
-          serviceId: service._id,
+          serviceId: service.id,
           selectedDate: date,
           bookingId: response.data.bookingId,
           shopId,

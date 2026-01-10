@@ -15,19 +15,21 @@ import {
   Scissors,
   IndianRupee,
   Package,
-  MessageSquare
+  MessageSquare,
+  Coins
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
-import { getSelectedBookingData, updateBookingStatus } from '../../Services/ApiService/BookingApiService';
+import { bookingRefund, getSelectedBookingData, updateBookingStatus } from '../../Services/ApiService/BookingApiService';
+import { convertRailwayTime } from '../../utils/convertRailwayTime';
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string; icon: React.ReactNode; label: string }> = {
   pending: { 
     color: 'text-amber-600', 
     bg: 'bg-amber-50', 
     icon: <Clock size={20} />, 
-    label: 'Pending Confirmation' 
+    label: 'Pending' 
   },
   confirmed: { 
     color: 'text-blue-600', 
@@ -72,8 +74,11 @@ const VendorBookingDetailsPage = () => {
   const fetchBookingDetails = async () => {
     try {
       setLoading(true);
+      console.log('id :>> ', id);
       if (id) {
+        console.log('booking data clling')
         const response = await getSelectedBookingData(id);
+        console.log('bookingData :>> ', response);
         if (response?.data?.data) {
           setBookingData(response.data.data);
         }
@@ -89,6 +94,27 @@ const VendorBookingDetailsPage = () => {
       setLoading(false);
     }
   };
+
+
+  const refund =  async(id:string) =>{
+
+    try{
+
+      console.log('refund funcion called')
+      const response = await bookingRefund(id)
+      if(response?.data){
+
+        toast.success(response.data.message)
+        fetchBookingDetails()
+      }
+    }catch(error:unknown){
+      if(error instanceof AxiosError){
+         
+        toast.error(error.response?.data.message)
+      }
+    }
+
+  }
 
   const handleStatusUpdate = async (newStatus: string) => {
     if (!bookingData?._id) return;
@@ -156,7 +182,7 @@ const VendorBookingDetailsPage = () => {
 
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-gray-500">Booking ID:</span>
-            <span className="text-sm font-bold text-gray-900">{bookingData._id?.slice(-8).toUpperCase()}</span>
+            <span className="text-sm font-bold text-gray-900">{bookingData.bookingId}</span>
           </div>
         </div>
 
@@ -164,7 +190,7 @@ const VendorBookingDetailsPage = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`${statusConfig.bg} border-2 border-${currentStatus === 'pending' ? 'amber' : currentStatus === 'confirmed' ? 'blue' : currentStatus === 'completed' ? 'emerald' : 'rose'}-200 rounded-2xl p-6`}
+          className={`${statusConfig.bg} border-2 border-${currentStatus === 'pending' ? 'amber' : currentStatus === 'cancelled' ? 'red' : currentStatus === 'completed' ? 'emerald' : 'rose'}-200 rounded-2xl p-6`}
         >
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
@@ -178,6 +204,30 @@ const VendorBookingDetailsPage = () => {
             </div>
 
             {/* Action Buttons */}
+            {/* <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-gradient-to-br from-red-50 to-red-50 rounded-2xl border border-red-200 shadow-sm p-6"
+            > */}
+              {/* <h3 className="text-sm font-black text-gray-900 mb-3 uppercase tracking-wider">Cash refund</h3> */}
+
+              {bookingData.paymentStatus == 'paid' && bookingData.status =="cancelled" && bookingData.paymentMethod != 'payAtShop' && (
+
+             
+              <div className="space-y-2">
+                <button
+                  onClick={()=>refund(bookingData.id)}
+                className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/20 hover:bg-red-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed justify-center flex bg-red-600 text-center ">
+                  <Coins size={18} className="text-white  " />
+                  <span className="text-sm font-bold">Refund</span>
+                </button>
+              </div> 
+              )
+               } 
+            {/* </motion.div> */}
+
+            
             {currentStatus !== 'cancelled' && currentStatus !== 'completed' && (
               <div className="flex gap-2 flex-wrap">
                 {currentStatus === 'pending' && (
@@ -188,16 +238,16 @@ const VendorBookingDetailsPage = () => {
                       className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <CheckCircle2 size={18} />
-                      <span>Confirm Booking</span>
+                      <span>Completed</span>
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => handleStatusUpdate('cancelled')}
                       disabled={updating}
                       className="flex items-center gap-2 px-5 py-2.5 bg-rose-600 text-white font-bold rounded-xl shadow-lg shadow-rose-600/20 hover:bg-rose-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <XCircle size={18} />
                       <span>Cancel</span>
-                    </button>
+                    </button> */}
                   </>
                 )}
                 {currentStatus === 'confirmed' && (
@@ -247,18 +297,18 @@ const VendorBookingDetailsPage = () => {
                     {bookingData.customerId?.name?.charAt(0).toUpperCase() || 'C'}
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold text-gray-900 text-base">{bookingData.customerId?.name || 'N/A'}</p>
+                    <p className="font-bold text-gray-900 text-base">{bookingData.customer?.name || 'N/A'}</p>
                     <div className="flex flex-col gap-1 mt-2">
-                      {bookingData.customerId?.email && (
+                      {bookingData.customer?.email && (
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                           <Mail size={14} className="text-gray-400" />
-                          <span>{bookingData.customerId.email}</span>
+                          <span>{bookingData.customer.email}</span>
                         </div>
                       )}
-                      {bookingData.customerId?.phone && (
+                      {bookingData.customer?.phone && (
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                           <Phone size={14} className="text-gray-400" />
-                          <span>{bookingData.customerId.phone}</span>
+                          <span>{bookingData.customer .phone}</span>
                         </div>
                       )}
                     </div>
@@ -284,19 +334,19 @@ const VendorBookingDetailsPage = () => {
                     <Package size={20} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold text-gray-900">{bookingData.serviceId?.serviceName || 'N/A'}</p>
-                    <p className="text-sm text-gray-600 mt-1">{bookingData.serviceId?.description || 'No description'}</p>
+                    <p className="font-bold text-gray-900">{bookingData.service?.name || 'N/A'}</p>
+                    {/* <p className="text-sm text-gray-600 mt-1">{bookingData.service?.description || 'No description'}</p> */}
                     <div className="flex items-center gap-4 mt-3">
                       <div className="flex items-center gap-1.5">
                         <Clock size={14} className="text-gray-400" />
                         <span className="text-xs font-semibold text-gray-600">
-                          {bookingData.serviceId?.duration || 'N/A'} mins
+                          {bookingData.service?.duration || 'N/A'} mins
                         </span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <IndianRupee size={14} className="text-gray-400" />
                         <span className="text-xs font-semibold text-gray-600">
-                          ₹{bookingData.serviceId?.price || 'N/A'}
+                          ₹{bookingData.service?.price || 'N/A'}
                         </span>
                       </div>
                     </div>
@@ -323,7 +373,7 @@ const VendorBookingDetailsPage = () => {
                     <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Date</p>
                   </div>
                   <p className="text-base font-bold text-gray-900">
-                    {bookingData.bookingDate ? format(new Date(bookingData.bookingDate), 'MMM dd, yyyy') : 'N/A'}
+                    {bookingData.date ? format(new Date(bookingData.date), 'MMM dd, yyyy') : 'N/A'}
                   </p>
                 </div>
                 <div className="p-4 bg-orange-50/50 rounded-xl border border-orange-100">
@@ -332,7 +382,7 @@ const VendorBookingDetailsPage = () => {
                     <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Time</p>
                   </div>
                   <p className="text-base font-bold text-gray-900">
-                    {bookingData.bookingTimeStart || 'N/A'}
+                    {convertRailwayTime(bookingData.startTime) || 'N/A'}
                   </p>
                 </div>
               </div>
@@ -412,24 +462,7 @@ const VendorBookingDetailsPage = () => {
             </motion.div>
 
             {/* Quick Actions */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 shadow-sm p-6"
-            >
-              <h3 className="text-sm font-black text-gray-900 mb-3 uppercase tracking-wider">Quick Actions</h3>
-              <div className="space-y-2">
-                <button className="w-full flex items-center gap-3 px-4 py-3 bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl transition-all group">
-                  <MessageSquare size={18} className="text-gray-600 group-hover:text-blue-600" />
-                  <span className="text-sm font-bold text-gray-700 group-hover:text-blue-600">Contact Customer</span>
-                </button>
-                <button className="w-full flex items-center gap-3 px-4 py-3 bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl transition-all group">
-                  <Calendar size={18} className="text-gray-600 group-hover:text-blue-600" />
-                  <span className="text-sm font-bold text-gray-700 group-hover:text-blue-600">View Calendar</span>
-                </button>
-              </div>
-            </motion.div>
+            
 
           </div>
 

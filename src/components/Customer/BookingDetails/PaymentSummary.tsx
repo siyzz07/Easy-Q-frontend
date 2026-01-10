@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, Phone, ExternalLink, Download, AlertCircle, RefreshCw } from 'lucide-react';
+import { ShieldCheck, Phone, ExternalLink, Download, AlertCircle, RefreshCw, Coins } from 'lucide-react';
 import { Button } from '../../ui/button';
 import { Badge } from '../../ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
@@ -8,9 +8,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 interface PaymentSummaryProps {
   bookingData: any;
   onRetry?: () => void; 
+  onPayContinue ?:()=>void
 }
 
-const PaymentSummary: React.FC<PaymentSummaryProps> = ({ bookingData, onRetry }) => {
+const PaymentSummary: React.FC<PaymentSummaryProps> = ({ bookingData, onRetry, onPayContinue}) => {
+  console.log(bookingData.paymentStatus)
   const status = bookingData.paymentStatus?.toLowerCase();
   const isFailed = status === 'failed';
   const isPending = status === 'pending';
@@ -80,14 +82,14 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ bookingData, onRetry })
           <div className="bg-secondary/40 p-4 rounded-2xl flex items-center justify-between border border-border/30">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-white rounded-xl shadow-sm border border-border/50">
-                <Phone size={16} className={isFailed ? "text-red-600" : "text-primary"} />
+                {/* <Phone size={16} className={isFailed ? "text-red-600" : "text-primary"} /> */}
               </div>
               <div className="leading-tight">
                 <p className="text-[10px] uppercase tracking-widest font-black text-muted-foreground">Payment Via</p>
-                <p className="text-sm font-bold">{bookingData.paymentMethod || 'Razorpay'}</p>
+                <p className="text-sm font-bold">{bookingData.paymentMethod ||'pending'}</p>
               </div>
             </div>
-            <ExternalLink size={14} className="text-muted-foreground" />
+            {/* <ExternalLink size={14} className="text-muted-foreground" /> */}
           </div>
 
           {/* Action Buttons */}
@@ -99,14 +101,23 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ bookingData, onRetry })
               >
                 <RefreshCw size={18} /> Retry Payment
               </Button>
-            ) : isPaid ? (
-              <Button className="w-full rounded-2xl h-12 gap-2 font-bold shadow-lg shadow-primary/10">
-                <Download size={18} /> Download Receipt
-              </Button>
+            ) : isPaid ? (<></>
+              // <Button className="w-full rounded-2xl h-12 gap-2 font-bold shadow-lg shadow-primary/10">
+              //   <Download size={18} /> Download Receipt
+              // </Button>
             ) : (
-              <p className="text-center text-xs text-muted-foreground font-medium">
-                Please wait while we verify your transaction...
-              </p>
+              <></>
+              // <p className="text-center text-xs text-muted-foreground font-medium">
+              //   Please wait while we verify your transaction...
+              // </p>
+            )}
+            {!bookingData.paymentMethod &&(
+               <Button 
+                onClick={onPayContinue}
+                className="w-full rounded-2xl h-12 gap-2 font-bold bg-yellow-500 hover:bg-yellow-600 shadow-lg shadow-red-200"
+              >
+                <Coins size={18} /> pay
+              </Button>
             )}
           </div>
         </CardContent>

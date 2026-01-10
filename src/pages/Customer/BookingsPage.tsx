@@ -23,6 +23,7 @@ export type BookingCardDTO = {
   amount: string;
   paymentStatus: string;
   isPaymentFailed: boolean;
+  paymentMethod?:string
 };
 
 const BookingsPage = () => {
@@ -46,8 +47,6 @@ const BookingsPage = () => {
     setLoading(true);
     try {
       const response = await getCustomerBookingData(page, limit, activeTab);
-        console.log('mm',response)
-      // Based on your console log structure: response.data.data.data
       const bookingArray = response?.data?.data || [];
       const totalPages = response?.data?.pagination.totalPages || 1;
       setTotalPage(totalPages);
@@ -57,18 +56,18 @@ const BookingsPage = () => {
         const pStatus = b?.paymentStatus?.toLowerCase() || 'pending';
 
         return {
-          id: b?._id,
-          title: b?.serviceId?.serviceName || 'General Service',
-          location: b?.shopId?.shopName || 'Partner Shop',
-          facility: b?.shopId?.city || 'Location N/A',
-          date: b?.bookingDate, 
-          time: `${b?.bookingTimeStart} - ${b?.bookingTimeEnd}`,
+          id: b?.id,
+          title: b?.service?.name || 'General Service',
+          location: b?.shop?.shopName || 'Partner Shop',
+          facility: b?.shop?.city || 'Location N/A',
+          date: b?.date, 
+          time: `${b?.startTime} - ${b?.endTime}`,
           status: b?.status || 'Pending',
-          image: b?.shopId?.ProfileImage || '', 
+          image: b?.shop?.profileImage || '', 
           amount: b?.totalAmount?.toString() || '0',
           paymentStatus: b?.paymentStatus || 'pending',
-          // UI Logic for failed payments
           isPaymentFailed: pStatus === 'failed',
+          paymentMethod:b?.paymentMethod,
           statusColor:
             status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
             status === 'pending' || status === 'booked' ? 'bg-amber-100 text-amber-700' :
@@ -82,7 +81,11 @@ const BookingsPage = () => {
           icon: b?.serviceId?.serviceName?.charAt(0)?.toUpperCase() || 'B'
         };
       });
-      setBookings(mapped);
+
+     const allowdBookings= mapped.filter((data)=> data.paymentMethod)
+    
+
+      setBookings(allowdBookings);
     } catch (error) {
       console.error("Fetch error:", error);
       toast.error('Failed to load your bookings');

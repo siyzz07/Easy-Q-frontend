@@ -34,9 +34,9 @@ const LocationSection: React.FC<LocationSectionProps> = ({ bookingData }) => {
               <MapPin size={24} />
             </div>
             <div>
-              <p className="font-bold text-foreground underline decoration-rose-500/20 underline-offset-2">{bookingData.shopId.shopName}</p>
-              <p className="text-sm text-muted-foreground  leading-snug">{`${bookingData.shopId.state} ${bookingData.shopId.city} `}</p>
-              <p className="text-sm text-muted-foreground mb-4 leading-snug">{`${bookingData.shopId.phone}`}</p>
+              <p className="font-bold text-foreground underline decoration-rose-500/20 underline-offset-2">{bookingData.shop.shopName}</p>
+              <p className="text-sm text-muted-foreground  leading-snug">{`${bookingData.shop.state} ${bookingData.shop.city} `}</p>
+              <p className="text-sm text-muted-foreground mb-4 leading-snug">{`${bookingData.shop.phone}`}</p>
               <div className="flex flex-wrap gap-2">
                 <Button variant="outline" size="sm" className="rounded-xl gap-2 font-bold h-9 bg-white hover:bg-slate-50 border-slate-200">
                   <Navigation size={14} className="text-primary" /> Directions

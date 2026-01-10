@@ -12,6 +12,7 @@ import PaymentSummary from "../../components/Customer/BookingDetails/PaymentSumm
 import ActionSidebar from "../../components/Customer/BookingDetails/ActionSidebar";
 import {
   bookingCanceling,
+  bookingReschedule,
   createBooking,
   getSelectedBookingData,
 } from "../../Services/ApiService/BookingApiService";
@@ -27,33 +28,9 @@ import { toast } from "react-toastify";
 import BookingActionCard from "../../components/Customer/BookingDetails/BookingActionCard";
 import ConfirmationModal from "../../components/Shared/ConfirmationModal";
 import BookNow from "../../components/Customer/BookNow";
-import { getSelectedSerivce } from "../../Services/ApiService/CustomerApiService";
+import { getEachShopServices, getSelectedSerivce, getSelectedSerivcePopulated } from "../../Services/ApiService/CustomerApiService";
 import { razorpay } from "../../utils/razorpayUtil";
 
-// Dummy data
-// const bookingDatas = {
-//   id: 'BOK-7729104',
-//   serviceName: 'Hair Cutting & Styling',
-//   serviceDuration: '45 mins',
-//   shopName: 'Elite Salon & Spa',
-//   shopRating: 4.9,
-//   shopReviews: 124,
-//   shopAddress: '123 Luxury Ave, Beverly Hills, CA 90210',
-//   shopPhone: '+1 (555) 000-1234',
-//   date: 'December 24, 2025',
-//   time: '3:30 PM',
-//   staff: 'Michael Stevens',
-//   staffRole: 'Senior Stylist',
-//   status: 'Confirmed',
-//   price: '$65.00',
-//   tax: '$5.20',
-//   total: '$70.20',
-//   customerName: 'John Doe',
-//   paymentStatus: 'Paid',
-//   paymentMethod: 'Visa (**** 4242)',
-//   notes: 'Following up on our last conversation about the taper fade. I would also like to add a quick beard trim if there is time!',
-//   policy: 'Flexible cancellation. Full refund if cancelled 24 hours before the appointment.'
-// };
 
 const BookingDetailsPage = () => {
   const { id } = useParams();
@@ -63,6 +40,10 @@ const BookingDetailsPage = () => {
   const [serviceData, setServiceData] = useState<IServiceData | null>(null);
   const [cancelPopup, setCancelPopup] = useState<boolean>(false);
   const [reschedulePopup, setReschedulePopup] = useState<boolean>(false);
+
+
+
+  console.log('bookingData :>> ', bookingData);
 
   useEffect(() => {
     if (called.current) return;
@@ -74,7 +55,6 @@ const BookingDetailsPage = () => {
     try {
       if (id) {
         const response = await getSelectedBookingData(id);
-        console.log(response.data);
         if (response?.data?.data) {
           setBookingData(response.data.data);
         }
@@ -95,15 +75,36 @@ const BookingDetailsPage = () => {
     service: IService
   ) => {
     try {
-      console.log(values, "pppp", date, "ooooo", service);
-    } catch (error: unknown) {}
+
+      const data ={
+        staffId:values.staff,
+        timePreffer:values.preferredTime,
+        date:date,
+        bookingId:bookingData.id
+      }
+      const response = await bookingReschedule(data)
+
+        if(response?.data){
+          toast.success(response.data.message)
+          getEachBookingData()
+        }
+        setReschedulePopup(false)
+
+    } catch (error: unknown) {
+      if(error instanceof AxiosError){
+        toast.error(error.response?.data.message)
+      }
+      setReschedulePopup(false)
+    }
   };
 
-  const fetchService = async () => {
+  const fetchService = async () :Promise<any>=> {
     try {
-      const response = await getSelectedSerivce(bookingData.serviceId._id);
+      const response = await  getEachShopServices(bookingData.shop.id as string)
+    
       if (response?.data.data) {
-        setServiceData(response.data.data[0]);
+       return response.data.data
+        //  getEachShopServices(id as string),
       }
     } catch (error: unknown) {
       console.log("error to fetch service data in reschedule page");
@@ -113,7 +114,7 @@ const BookingDetailsPage = () => {
   const paymentRetry = async () => {
     let status = "failed";
 
-    const result = await razorpay(bookingData._id);
+    const result = await razorpay(bookingData.id);
 
     if (result && result == "razorpayError") {
       toast.error("Failed to load razorpay");
@@ -125,7 +126,7 @@ const BookingDetailsPage = () => {
     const bookingPayload: IBookingPayload = {
       totalAmount: bookingData.totalAmount,
       paymentMethod: "razorpay",
-      bookingId: bookingData._id,
+      bookingId: bookingData.id,
       status: status,
     };
 
@@ -157,17 +158,42 @@ const BookingDetailsPage = () => {
   };
 
   const onPopupClick = async () => {
-    if (!serviceData || bookingData.serviceId._id !== serviceData._id) {
-      await fetchService();
-    }
+
+     let serviceData = await fetchService();
+     let data = serviceData.find ((data:any) =>data.id == bookingData.service.id)
+     if(data){
+      setServiceData(data)
+     }
+  
     setReschedulePopup(true);
   };
+
+  const paymentContinue = () =>{
+
+      // const checkoutData = {
+      //     staffId: values.staff,
+      //     addressId: values.address,
+      //     serviceId: service.id,
+      //     selectedDate: date,
+      //     bookingId: response.data.bookingId,
+      //     shopId,
+      //   };
+      //   navigate(
+      //     `/customer/service/checkout?bookingId=${btoa(
+      //       JSON.stringify(checkoutData)
+      //     )}`
+      //   );
+
+
+
+  }
+
 
   const cancelBooking = async () => {
     try {
       setCancelPopup(false);
-      if (bookingData._id) {
-        const response = await bookingCanceling(bookingData._id);
+      if (bookingData.id) {
+        const response = await bookingCanceling(bookingData.id);
         if (response.data.success) {
           toast.success(response.data.message);
           getEachBookingData();
@@ -222,8 +248,8 @@ const BookingDetailsPage = () => {
       {reschedulePopup && (
         <BookNow
           onClose={() => setReschedulePopup(false)}
-          shopId={bookingData.shopId._id}
-          shopData={bookingData.shopId}
+          shopId={bookingData.shop.id}
+          shopData={bookingData.shop}
           onSubmit={rescheduleBooking}
           data={serviceData as IService}
           type="reschedule"

@@ -59,7 +59,8 @@ const CheckoutPage = () => {
   const decodeData = async () => {
     try {
       const decode = JSON.parse(atob(bookingData as string));
-
+        console.log('decode',decode);
+        
       if (
         !decode ||
         !decode.addressId ||
@@ -339,7 +340,7 @@ const CheckoutPage = () => {
                     desc: "Pay securely with UPI, cards or net banking",
                   },
                   {
-                    id: "COD",
+                    id: "payAtShop",
                     name: "Pay at location",
                     color: "yellow",
                     desc: "Pay directly at the shop after service",

@@ -54,19 +54,19 @@ const DetailsHero: React.FC<DetailsHeroProps> = ({ bookingData, id }) => {
         </div>
 
         <h1 className="text-3xl md:text-5xl font-black text-foreground tracking-tight mb-2">
-          {bookingData.serviceId.serviceName}
+          {bookingData.service.serviceName}
         </h1>
         <p className="text-muted-foreground text-lg mb-6 flex items-center gap-2">
           <Store size={20} className="text-primary" />
-          At <span className="font-bold text-foreground underline decoration-primary/30 decoration-4 underline-offset-4">{bookingData.shopId.shopName}</span>
+          At <span className="font-bold text-foreground underline decoration-primary/30 decoration-4 underline-offset-4">{bookingData.shop.shopName}</span>
         </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-3xl bg-secondary/30 border border-border/40">
           {[
-            { label: 'Date', value: bookingData.bookingDate },
-            { label: 'Time', value: bookingData.bookingTimeStart, border: true },
-            { label: 'Duration', value: bookingData.serviceId.duration, border: true },
-            { label: 'Price', value: bookingData.serviceId.price, border: true }
+            { label: 'Date', value: bookingData.date },
+            { label: 'Time', value: bookingData.startTime, border: true },
+            { label: 'Duration', value: bookingData.service.duration, border: true },
+            { label: 'Price', value: bookingData.service.price, border: true }
           ].map((item, idx) => (
             <div key={idx} className={`space-y-1 ${item.border ? 'border-l border-border/50 pl-4' : ''}`}>
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{item.label}</p>
