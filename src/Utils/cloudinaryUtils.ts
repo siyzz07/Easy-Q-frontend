@@ -21,7 +21,7 @@ export const uploadToCloudinary = async (file: File, folder = "shop-images") => 
     );
 
     // return response.data.secure_url; 
-    return response.data
+    return response.data;
   } catch (error: any) {
     console.error("Cloudinary upload error:", error.response?.data || error.message);
     return "";

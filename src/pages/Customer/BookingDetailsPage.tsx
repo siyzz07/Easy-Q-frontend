@@ -43,7 +43,7 @@ const BookingDetailsPage = () => {
 
 
 
-  console.log('bookingData :>> ', bookingData);
+  console.log("bookingData :>> ", bookingData);
 
   useEffect(() => {
     if (called.current) return;
@@ -81,29 +81,29 @@ const BookingDetailsPage = () => {
         timePreffer:values.preferredTime,
         date:date,
         bookingId:bookingData.id
-      }
-      const response = await bookingReschedule(data)
+      };
+      const response = await bookingReschedule(data);
 
         if(response?.data){
-          toast.success(response.data.message)
-          getEachBookingData()
+          toast.success(response.data.message);
+          getEachBookingData();
         }
-        setReschedulePopup(false)
+        setReschedulePopup(false);
 
     } catch (error: unknown) {
       if(error instanceof AxiosError){
-        toast.error(error.response?.data.message)
+        toast.error(error.response?.data.message);
       }
-      setReschedulePopup(false)
+      setReschedulePopup(false);
     }
   };
 
   const fetchService = async () :Promise<any>=> {
     try {
-      const response = await  getEachShopServices(bookingData.shop.id as string)
+      const response = await  getEachShopServices(bookingData.shop.id as string);
     
       if (response?.data.data) {
-       return response.data.data
+       return response.data.data;
         //  getEachShopServices(id as string),
       }
     } catch (error: unknown) {
@@ -160,9 +160,9 @@ const BookingDetailsPage = () => {
   const onPopupClick = async () => {
 
      let serviceData = await fetchService();
-     let data = serviceData.find ((data:any) =>data.id == bookingData.service.id)
+     let data = serviceData.find ((data:any) =>data.id == bookingData.service.id);
      if(data){
-      setServiceData(data)
+      setServiceData(data);
      }
   
     setReschedulePopup(true);
@@ -186,7 +186,7 @@ const BookingDetailsPage = () => {
 
 
 
-  }
+  };
 
 
   const cancelBooking = async () => {

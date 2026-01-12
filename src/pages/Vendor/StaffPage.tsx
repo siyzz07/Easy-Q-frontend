@@ -20,14 +20,14 @@ import Pagination from "../../components/Shared/Pagination";
 const StaffPage = () => {
   const [addStaffPopup, setAddStaffPopup] = useState<boolean>(false);
   const [staffData, setStaffData] = useState<IStaff[] | []>([]);
-  const [editStaffPopup,setEditStaffPopup] = useState<boolean>(false)
-  const [eachStaffData,setEachStaffData] = useState<IStaff|null>(null)
-  const [page,setPage] = useState<number> (1)
-  const [limit,setLimit] = useState<number>(10)
-  const [totalPages,setTotalPages] = useState<number>(1)
-  const [search,setSearch]= useState<string>('')
+  const [editStaffPopup,setEditStaffPopup] = useState<boolean>(false);
+  const [eachStaffData,setEachStaffData] = useState<IStaff|null>(null);
+  const [page,setPage] = useState<number> (1);
+  const [limit,setLimit] = useState<number>(10);
+  const [totalPages,setTotalPages] = useState<number>(1);
+  const [search,setSearch]= useState<string>("");
 
-  const debouncedSearch = useDebounce(search)
+  const debouncedSearch = useDebounce(search);
 
   useEffect(() => {
     getStaffs();
@@ -38,7 +38,7 @@ const StaffPage = () => {
       let response = await getAllStffs(page,limit,debouncedSearch);
       if (response?.data?.data) {
         setStaffData(response.data.data);
-        setTotalPages(response.data.pagination.totalPages)
+        setTotalPages(response.data.pagination.totalPages);
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -49,17 +49,17 @@ const StaffPage = () => {
 
   let column = [
     { key: "staffName", label: "Staff Name" },
-    {key:'openingTime',label:'Open At'},
+    {key:"openingTime",label:"Open At"},
     { key: "isActive", label: "Status" },
-    {key:'view',label:''},
+    {key:"view",label:""},
     // {key:'action',label:'Action'},
-    {key:'edit',label:'Edit'}
+    {key:"edit",label:"Edit"}
   ];
 
   const onEdit = (data:any) =>{
-    setEachStaffData(data)
-    setEditStaffPopup(true)
-  }
+    setEachStaffData(data);
+    setEditStaffPopup(true);
+  };
 
   
 

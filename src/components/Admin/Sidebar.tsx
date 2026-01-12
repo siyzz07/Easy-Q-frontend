@@ -26,7 +26,7 @@ const Sidebar = () => {
   const location = useLocation();
 
   const navItems = [
-    { label: "Dashboard", route: `/admin`, icon: LayoutDashboard, path: "admin" },
+    { label: "Dashboard", route: "/admin", icon: LayoutDashboard, path: "admin" },
     { label: "Customers", route: `/admin${ADMIN_ROUTES.CUSTOMERS_DATA}`, icon: Users, path: "customers" },
     { label: "Vendors", route: `/admin${ADMIN_ROUTES.VEDORS_DATA}`, icon: Store, path: "vendors" },
     { label: "Requests", route: `/admin/${ADMIN_ROUTES.VERIFICATION}`, icon: ShieldCheck, path: "verification-requests" },
@@ -51,7 +51,7 @@ const Sidebar = () => {
       if (route === "/admin" && location.pathname === "/admin") return true;
       if (route !== "/admin" && location.pathname.startsWith(route)) return true;
       return false;
-  }
+  };
 
   return (
     <>
@@ -141,7 +141,7 @@ const Sidebar = () => {
                 </motion.div>
               )}
             </NavLink>
-          )})}
+          );})}
         </nav>
 
         {/* Footer Section */}

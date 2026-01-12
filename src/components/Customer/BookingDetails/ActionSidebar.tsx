@@ -1,8 +1,8 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Star, ChevronLeft } from 'lucide-react';
-import { Button } from '../../ui/button';
+import React from "react";
+import { motion } from "framer-motion";
+import { Star, ChevronLeft } from "lucide-react";
+import { Button } from "../../ui/button";
 
 interface ActionSidebarProps {
   bookingData: any;

@@ -35,9 +35,9 @@ const Services = () => {
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(8);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [search,setSearch]= useState<string>('')
+  const [search,setSearch]= useState<string>("");
 
-  const debouncedSearch = useDebounce(search,700)
+  const debouncedSearch = useDebounce(search,700);
 
 
 
@@ -51,7 +51,7 @@ const Services = () => {
       const response = await getServices(page,limit,debouncedSearch);
       if (response.data?.data) {
         setServices(response.data.data);
-        setTotalPages(response.data.pagination.totalPages)
+        setTotalPages(response.data.pagination.totalPages);
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

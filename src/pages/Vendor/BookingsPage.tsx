@@ -148,7 +148,7 @@ const BookingsPage = () => {
                           exit={{ opacity: 0 }}
                           className="group hover:bg-blue-50/30 transition-colors cursor-pointer"
                         >
-                          <td className="px-6 py-4" onClick={() => handleViewDetails(b._id)}>
+                          <td className="px-6 py-4" onClick={() => handleViewDetails(b.id)}>
                             <div className="flex items-center gap-3">
                               <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold uppercase text-xs">
                                 {b.customer?.name?.charAt(0)}

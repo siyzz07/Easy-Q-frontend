@@ -12,7 +12,7 @@ interface IData{
 
 function PaymentConfirmPage() {
      const [serarchParams] = useSearchParams();
-     const [data,setData] = useState<IData|null>(null)
+     const [data,setData] = useState<IData|null>(null);
   const navigate = useNavigate();
    let bookingData = serarchParams.get("id");
 
@@ -42,13 +42,13 @@ function PaymentConfirmPage() {
 
         
         if(decode){
-            setData(decode)
+            setData(decode);
         }
     }catch(error:unknown){
-       navigate('/customer')
+       navigate("/customer");
         
     }
-  }
+  };
 
   // Format readable payment method
 //   const paymentLabel =

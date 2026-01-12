@@ -68,7 +68,7 @@ const SignupForm: React.FC = () => {
     phone: "",
     password: "",
     confirmPassword: "",
-    role:'customer'
+    role:"customer"
   };
 
   const handleSubmit = async(values: ICustomer) => {
@@ -101,7 +101,7 @@ const SignupForm: React.FC = () => {
         }else{
           toast.error("some error please try later");
         }
-        navigate("/customer/login")
+        navigate("/customer/login");
         
     }
   };

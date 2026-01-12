@@ -70,7 +70,7 @@ const validationSchema = (hasExistingImage: boolean) =>
 
 const AddService: FC<IAddService> = ({ onClose, data }) => {
 
-  console.log('data',data)
+  console.log("data",data);
 
   const [imagePreview, setImagePreview] = useState<string | null>(
     typeof data?.image === "string" ? data.image : null
@@ -84,7 +84,7 @@ const AddService: FC<IAddService> = ({ onClose, data }) => {
   const getStaffs = async () => {
     try {
       const response = await getAllStffs();
-      console.log(response)
+      console.log(response);
       if (response?.data?.data) setStaffMembers(response.data.data);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

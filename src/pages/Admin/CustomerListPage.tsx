@@ -42,7 +42,7 @@ const CustomerList = () => {
 
   const stats = useMemo(() => ({
     total: customerDatas.length,
-    active: customerDatas.filter(c => c.role !== 'blocked').length, // Assuming logic or use isActive if available
+    active: customerDatas.filter(c => c.role !== "blocked").length, // Assuming logic or use isActive if available
     blocked: customerDatas.filter(c => !c.password).length, // Replace with actual blocked logic if different
   }), [customerDatas]);
 

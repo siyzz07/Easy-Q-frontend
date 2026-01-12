@@ -1,10 +1,10 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Store, CheckCircle2, Clock4, XCircle, AlertCircle } from 'lucide-react';
-import { Badge } from '../../ui/badge';
-import type { IBooking } from '../../../Shared/types/Types';
-import { convertRailwayTime } from '../../../utils/convertRailwayTime';
+import React from "react";
+import { motion } from "framer-motion";
+import { Store, CheckCircle2, Clock4, XCircle, AlertCircle } from "lucide-react";
+import { Badge } from "../../ui/badge";
+import type { IBooking } from "../../../Shared/types/Types";
+import { convertRailwayTime } from "../../../utils/convertRailwayTime";
 
 interface DetailsHeroProps {
   bookingData: any;
@@ -13,19 +13,19 @@ interface DetailsHeroProps {
 
 const getStatusIcon = (status: string) => {
   switch (status.toLowerCase()) {
-    case 'confirmed': return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
-    case 'pending': return <Clock4 className="w-5 h-5 text-amber-500" />;
-    case 'cancelled': return <XCircle className="w-5 h-5 text-rose-500" />;
+    case "confirmed": return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
+    case "pending": return <Clock4 className="w-5 h-5 text-amber-500" />;
+    case "cancelled": return <XCircle className="w-5 h-5 text-rose-500" />;
     default: return <AlertCircle className="w-5 h-5 text-blue-500" />;
   }
 };
 
 const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
-    case 'confirmed': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-    case 'pending': return 'bg-amber-50 text-amber-700 border-amber-200';
-    case 'cancelled': return 'bg-rose-50 text-rose-700 border-rose-200';
-    default: return 'bg-blue-50 text-blue-700 border-blue-200';
+    case "confirmed": return "bg-emerald-50 text-emerald-700 border-emerald-200";
+    case "pending": return "bg-amber-50 text-amber-700 border-amber-200";
+    case "cancelled": return "bg-rose-50 text-rose-700 border-rose-200";
+    default: return "bg-blue-50 text-blue-700 border-blue-200";
   }
 };
 
@@ -63,12 +63,12 @@ const DetailsHero: React.FC<DetailsHeroProps> = ({ bookingData, id }) => {
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-3xl bg-secondary/30 border border-border/40">
           {[
-            { label: 'Date', value: bookingData.date },
-            { label: 'Time', value: bookingData.startTime, border: true },
-            { label: 'Duration', value: bookingData.service.duration, border: true },
-            { label: 'Price', value: bookingData.service.price, border: true }
+            { label: "Date", value: bookingData.date },
+            { label: "Time", value: bookingData.startTime, border: true },
+            { label: "Duration", value: bookingData.service.duration, border: true },
+            { label: "Price", value: bookingData.service.price, border: true }
           ].map((item, idx) => (
-            <div key={idx} className={`space-y-1 ${item.border ? 'border-l border-border/50 pl-4' : ''}`}>
+            <div key={idx} className={`space-y-1 ${item.border ? "border-l border-border/50 pl-4" : ""}`}>
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{item.label}</p>
               <p className="font-bold text-sm truncate">{item.value}</p>
             </div>

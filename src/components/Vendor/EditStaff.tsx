@@ -57,8 +57,8 @@ const EditStaffSchema = Yup.object().shape({
 });
 
 const EditStaff: React.FC<EditStaffProps> = ({ onClose, data }) => {
-  let [update,setUpdate] = useState<boolean>(false)
-  let [breakTimes,setBreakTimes ] =  useState<IBreakTime[]>(data.breaks)
+  let [update,setUpdate] = useState<boolean>(false);
+  let [breakTimes,setBreakTimes ] =  useState<IBreakTime[]>(data.breaks);
 
   const initialValues: any = {
     staffName: data.staffName,
@@ -88,7 +88,7 @@ const EditStaff: React.FC<EditStaffProps> = ({ onClose, data }) => {
 
        const updatedValues = {
         ...values,
-        isActive: values?.isActive as any === 'true',
+        isActive: values?.isActive as any === "true",
       };
 
       const response = await editStaff(updatedValues);
@@ -109,7 +109,7 @@ const EditStaff: React.FC<EditStaffProps> = ({ onClose, data }) => {
 
 
 
-  console.log('data :>> ', data);
+  console.log("data :>> ", data);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000066] backdrop-blur-sm">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6 relative">
@@ -181,13 +181,13 @@ const EditStaff: React.FC<EditStaffProps> = ({ onClose, data }) => {
                   <button
                     type="button"
                     onClick={() => {
-                      setUpdate(!update)
-                        let i = 0
+                      setUpdate(!update);
+                        let i = 0;
                         // while (i == breakTimes.length){
                         //   // values.breaks.push({ breakStartTime:breakTimes[i].breakStartTime, breakEndTime:breakEndTime})
                         // }
                        
-                      values.breaks.length < 5 && values.breaks.push({ breakStartTime: "", breakEndTime: "" })
+                      values.breaks.length < 5 && values.breaks.push({ breakStartTime: "", breakEndTime: "" });
                     
                     
                     }}

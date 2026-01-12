@@ -45,7 +45,7 @@ const LoginForm: FC = () => {
   const initialValues: IVendorLogin = {
     email: "",
     password: "",
-    role:'vendor'
+    role:"vendor"
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -57,7 +57,7 @@ const LoginForm: FC = () => {
 
 
         setAccessToken(response.data.accesstoken);
-        dispatch(connectSocketAction(response.data.accesstoken))// socket io
+        dispatch(connectSocketAction(response.data.accesstoken));// socket io
         dispatch(vendorLoginSuccess(response.data.accesstoken));
         if(response.data.data){
 

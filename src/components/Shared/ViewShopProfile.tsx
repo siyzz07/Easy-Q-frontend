@@ -56,7 +56,7 @@ const ViewShopProfile: FC<ViewShopProfileProps> = ({ data, isOwner, onEdit }) =>
   return (
     <div className="w-full bg-background mb-6">
       {/* Hero Banner Area */}
-      <div className={`relative h-48 md:h-64 w-full ${isOwner?'bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-80':'bg-gradient-to-r from-blue-600 to-purple-600'}  overflow-hidden rounded-b-3xl shadow-md`}>
+      <div className={`relative h-48 md:h-64 w-full ${isOwner?"bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-80":"bg-gradient-to-r from-blue-600 to-purple-600"}  overflow-hidden rounded-b-3xl shadow-md`}>
         <div className="absolute inset-0 bg-black/10" />
         {/* Abstract shapes or pattern could go here */}
         <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-white/10 rounded-full blur-3xl rounded-bl-none" />
@@ -75,7 +75,7 @@ const ViewShopProfile: FC<ViewShopProfileProps> = ({ data, isOwner, onEdit }) =>
                   {data.shopName?.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <div className={`absolute bottom-2 right-2 w-5 h-5 rounded-full border-2 border-white ${isOpenToday ? 'bg-green-500' : 'bg-red-500'}`} title={isOpenToday ? "Open Today" : "Closed Today"} />
+              <div className={`absolute bottom-2 right-2 w-5 h-5 rounded-full border-2 border-white ${isOpenToday ? "bg-green-500" : "bg-red-500"}`} title={isOpenToday ? "Open Today" : "Closed Today"} />
             </div>
 
             {/* Main Details */}

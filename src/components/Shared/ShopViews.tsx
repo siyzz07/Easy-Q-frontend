@@ -60,9 +60,9 @@ const ShopViews: React.FC<ShopViewsProps> = ({
 
   useEffect(() => {
      if(vendorId){
-        fetchReviews()
+        fetchReviews();
      }
-  },[vendorId])
+  },[vendorId]);
 
   const fetchReviews = async () => {
     if(!vendorId) return;
@@ -88,7 +88,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
     } catch (error) {
         console.log("Error fetching reviews", error);
     }
-  }
+  };
 
   const calculateAverageRating = (reviews: any[]) => {
     if (!reviews.length) return 0;
@@ -144,7 +144,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
             rating: values.rating.toString(),
             comment: values.comment,
             vendorId: vendorId
-        }
+        };
 
         if(isEditing && userReview){
            const response = await updateReview(userReview._id, reviewData);
@@ -184,7 +184,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
             toast.error(error.response?.data?.message || "Failed to delete review");
         }
       }
-  }
+  };
 
   const imagePrivew = (p: IImage) => {
     setType("preview");
@@ -195,27 +195,27 @@ const ShopViews: React.FC<ShopViewsProps> = ({
   const deleteImage = async (id: string, imageId: string) => {
     try{
 
-      const publicId = id
-      const image_id = imageId
+      const publicId = id;
+      const image_id = imageId;
         const data ={
           publicId,
           image_id
-        }
-        setShopImagePopup(false)
-      const response = await imageRemove(data)
+        };
+        setShopImagePopup(false);
+      const response = await imageRemove(data);
         if(response?.data?.message){
-          toast.success(response.data.message)
+          toast.success(response.data.message);
         }
-        isUpdate?.()
+        isUpdate?.();
 
     }catch(error){
         if(error instanceof AxiosError){
           if(error.response?.data.message){
-            toast.error(error.response?.data.message)
+            toast.error(error.response?.data.message);
           }else{
-            toast.error('Error to delete image')
+            toast.error("Error to delete image");
           }
-          setShopImagePopup(false)
+          setShopImagePopup(false);
         }
 
     }
@@ -359,7 +359,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
                             {!isVendor && (!userReview || isEditing) && (
                             <div className="glass-card rounded-2xl p-6">
                                 <div className="flex justify-between items-center mb-4">
-                                  <h3 className="font-semibold text-lg">{isEditing ? 'Edit your review' : 'Write a Review'}</h3>
+                                  <h3 className="font-semibold text-lg">{isEditing ? "Edit your review" : "Write a Review"}</h3>
                                   {isEditing && (
                                       <Button variant="ghost" size="sm" onClick={() => setIsEditing(false)}>Cancel Edit</Button>
                                   )}
@@ -405,7 +405,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
 
                                     <div className="flex justify-end">
                                         <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                                        {isEditing ? 'Update Review' : 'Post Review'}
+                                        {isEditing ? "Update Review" : "Post Review"}
                                         </Button>
                                     </div>
                                     </Form>
@@ -424,12 +424,12 @@ const ShopViews: React.FC<ShopViewsProps> = ({
                                         key={r._id || index}
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className={`glass-card rounded-2xl p-6 ${isMyReview ? 'border-primary/20 bg-primary/5' : ''}`}
+                                        className={`glass-card rounded-2xl p-6 ${isMyReview ? "border-primary/20 bg-primary/5" : ""}`}
                                     >
                                         <div className="flex justify-between items-start mb-2">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center text-primary font-bold">
-                                                    {r.customerId?.name ? r.customerId.name.charAt(0) : 'U'}
+                                                    {r.customerId?.name ? r.customerId.name.charAt(0) : "U"}
                                                 </div>
                                                 <div>
                                                     <h4 className="font-semibold text-gray-900">
@@ -459,7 +459,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
                                         </div>
                                         <p className="text-gray-700 leading-relaxed pl-13">{r.comment}</p>
                                     </motion.div>
-                                    )
+                                    );
                                 })}
                             </div>
                         </div>

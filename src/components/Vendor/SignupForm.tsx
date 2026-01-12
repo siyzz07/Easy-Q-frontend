@@ -41,15 +41,15 @@ const SignupForm: FC = () => {
     password: "",
     confirmPassword: "",
     proof: null, 
-    role:'vendor'
+    role:"vendor"
   };
 
   const handleSubmit = async (values: IVendor, { setSubmitting }: any) => {
     try {
   
         const imageUrl = values.proof
-        ? await uploadToCloudinary(values.proof,'vendor-proof')
-        :''
+        ? await uploadToCloudinary(values.proof,"vendor-proof")
+        :"";
 
 
       const formData = new FormData();
@@ -57,8 +57,8 @@ const SignupForm: FC = () => {
       formData.append("email", values.email);
       formData.append("phone", values.phone);
       formData.append("password", values.password);
-      formData.append('proofImage',imageUrl.secure_url)
-      formData.append('role','vendor')
+      formData.append("proofImage",imageUrl.secure_url);
+      formData.append("role","vendor");
 
       const response = await verifyEmail(formData);
 

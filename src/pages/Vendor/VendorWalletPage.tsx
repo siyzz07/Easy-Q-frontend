@@ -1,37 +1,37 @@
-import { useEffect, useRef, useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useRef, useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Wallet, ArrowUpRight, ArrowDownLeft, TrendingUp, Calendar, Filter, 
   Download, Search, CreditCard, CheckCircle2, XCircle, Clock, 
   IndianRupee, RefreshCw, DollarSign, TrendingDown
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { toast } from 'react-toastify';
-import { getVendorWalletBalance } from '../../Services/ApiService/WalletApiService';
-import { getTransactions } from '../../Services/ApiService/TransactionApiService';
-import { useDebounce } from '../../hooks/useDebounce';
-import Pagination from '../../components/Shared/Pagination';
+} from "lucide-react";
+import { format } from "date-fns";
+import { toast } from "react-toastify";
+import { getVendorWalletBalance } from "../../Services/ApiService/WalletApiService";
+import { getTransactions } from "../../Services/ApiService/TransactionApiService";
+import { useDebounce } from "../../hooks/useDebounce";
+import Pagination from "../../components/Shared/Pagination";
 
 // Interfaces
 interface Transaction {
   _id: string;
-  flow: 'credit' | 'debit';
+  flow: "credit" | "debit";
   amount: number;
   description: string;
-  status: 'success' | 'pending' | 'failed';
+  status: "success" | "pending" | "failed";
   createdAt: string;
   paymentMethod?: string;
 }
 
 const CONFIG = {
   types: {
-    credit: { icon: ArrowDownLeft, color: 'text-emerald-600', bg: 'bg-emerald-50', label: 'Credit' },
-    debit: { icon: ArrowUpRight, color: 'text-rose-600', bg: 'bg-rose-50', label: 'Debit' }
+    credit: { icon: ArrowDownLeft, color: "text-emerald-600", bg: "bg-emerald-50", label: "Credit" },
+    debit: { icon: ArrowUpRight, color: "text-rose-600", bg: "bg-rose-50", label: "Debit" }
   },
   status: {
-    success: { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-100/50', label: 'Success' },
-    pending: { icon: Clock, color: 'text-amber-600', bg: 'bg-amber-100/50', label: 'Pending' },
-    failed: { icon: XCircle, color: 'text-rose-600', bg: 'bg-rose-100/50', label: 'Failed' }
+    success: { icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-100/50", label: "Success" },
+    pending: { icon: Clock, color: "text-amber-600", bg: "bg-amber-100/50", label: "Pending" },
+    failed: { icon: XCircle, color: "text-rose-600", bg: "bg-rose-100/50", label: "Failed" }
   }
 };
 
@@ -39,8 +39,8 @@ const VendorWalletPage = () => {
   const [balance, setBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'credit' | 'debit'>('all');
-  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState<"all" | "credit" | "debit">("all");
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
@@ -70,8 +70,8 @@ const VendorWalletPage = () => {
         setTotalPages(transRes.data.pagination.totalPages);
       }
     } catch (error) {
-      console.error('Wallet Error:', error);
-      toast.error('Failed to sync wallet data');
+      console.error("Wallet Error:", error);
+      toast.error("Failed to sync wallet data");
     } finally {
       setLoading(false);
     }
@@ -79,7 +79,7 @@ const VendorWalletPage = () => {
 
   // Logic for filtered view (Local filtering for tabs, but data comes from backend)
   const displayedTransactions = useMemo(() => {
-    return transactions.filter(t => filter === 'all' || t.flow === filter);
+    return transactions.filter(t => filter === "all" || t.flow === filter);
   }, [transactions, filter]);
 
   if (loading && page === 1) return <LoadingSpinner />;
@@ -107,7 +107,7 @@ const VendorWalletPage = () => {
           <p className="text-purple-100 text-sm font-bold uppercase tracking-widest">Available Balance</p>
           <div className="flex items-center gap-2 mt-2">
             <IndianRupee size={36} className="opacity-70" />
-            <h2 className="text-5xl font-black">{balance.toLocaleString('en-IN')}.00</h2>
+            <h2 className="text-5xl font-black">{balance.toLocaleString("en-IN")}.00</h2>
           </div>
         </motion.div>
 
@@ -115,11 +115,11 @@ const VendorWalletPage = () => {
         <div className="bg-white rounded-[2rem] border border-gray-200 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between gap-4">
             <div className="flex gap-2 p-1 bg-gray-100 rounded-xl w-fit">
-              {(['all', 'credit', 'debit'] as const).map(t => (
+              {(["all", "credit", "debit"] as const).map(t => (
                 <button
                   key={t}
                   onClick={() => { setFilter(t); setPage(1); }}
-                  className={`px-6 py-2 rounded-lg text-xs font-black uppercase transition-all ${filter === t ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'}`}
+                  className={`px-6 py-2 rounded-lg text-xs font-black uppercase transition-all ${filter === t ? "bg-white text-gray-900 shadow-sm" : "text-gray-500"}`}
                 >
                   {t}
                 </button>
@@ -149,15 +149,15 @@ const VendorWalletPage = () => {
                         <div className="min-w-0">
                           <p className="font-bold text-gray-900 text-sm truncate">{transaction.description}</p>
                           <div className="flex gap-3 mt-1 text-[10px] text-gray-400 font-bold uppercase tracking-wider">
-                            <span>{format(new Date(transaction.createdAt), 'MMM dd, yyyy')}</span>
-                            <span>{format(new Date(transaction.createdAt), 'hh:mm a')}</span>
+                            <span>{format(new Date(transaction.createdAt), "MMM dd, yyyy")}</span>
+                            <span>{format(new Date(transaction.createdAt), "hh:mm a")}</span>
                           </div>
                         </div>
                       </div>
 
                       <div className="text-right ml-4">
                         <p className={`text-lg font-black ${type.color}`}>
-                          {transaction.flow === 'credit' ? '+' : '-'}₹{transaction.amount}
+                          {transaction.flow === "credit" ? "+" : "-"}₹{transaction.amount}
                         </p>
                         <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${status.bg} ${status.color}`}>
                           {status.label}

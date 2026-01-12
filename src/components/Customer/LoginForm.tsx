@@ -48,7 +48,7 @@ const LoginForm: FC = () => {
       if (response.data.accesstoken) {
         setAccessToken(response.data.accesstoken);
         dispatch(customerLoginSuccess(response.data.accesstoken));
-        dispatch(connectSocketAction(response.data.accesstoken))// socket io
+        dispatch(connectSocketAction(response.data.accesstoken));// socket io
         navigate("/customer");
       }
     } catch (error: unknown) {
@@ -90,7 +90,7 @@ const LoginForm: FC = () => {
       </div>
 
       <Formik
-        initialValues={{ email: "", password: "" ,role:'customer'}}
+        initialValues={{ email: "", password: "" ,role:"customer"}}
         validationSchema={LoginSchema}
         onSubmit={submit}
       >

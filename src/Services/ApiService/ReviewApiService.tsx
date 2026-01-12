@@ -2,7 +2,7 @@
 import { CustomerAxiosInstance } from "../../config/AxiosInstance";
 
 export const addReview = async (data: { vendorId: string; rating: string; comment: string }) => {
-  console.log(data)
+  console.log(data);
   const response = await CustomerAxiosInstance.post("/review/new-review", data);
   return response;
 };

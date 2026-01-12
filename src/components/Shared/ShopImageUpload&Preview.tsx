@@ -36,17 +36,17 @@ const ImageSchema = Yup.object().shape({
 const ShopImageUpload: FC<IShopImageUpdate> = ({ isVendor,use, data, onClose, onSave ,url,publicId,onDelete,imageId}) => {
   const [preview, setPreview] = useState<string | null>(data || null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [confirmation,setComfirmation] = useState<boolean>(false) 
+  const [confirmation,setComfirmation] = useState<boolean>(false); 
 
 
     const dedteImage = (id:string|undefined) =>{
       if(id && imageId){
-        onDelete?.(id,imageId)
+        onDelete?.(id,imageId);
       }else{
-        toast.error('Error to delete image')
+        toast.error("Error to delete image");
       }
 
-    }
+    };
 
 
   const ModalWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -161,7 +161,7 @@ const ShopImageUpload: FC<IShopImageUpdate> = ({ isVendor,use, data, onClose, on
                         : "bg-gray-400 cursor-not-allowed"
                     } transition`}
                   >
-                    {isSubmitting?'Saving...':'Save'}
+                    {isSubmitting?"Saving...":"Save"}
                   </button>
                 </div>
               )}

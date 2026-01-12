@@ -39,8 +39,8 @@ const CheckoutPage = () => {
   const [staffId, setStaffId] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedPayment, setSelectedPayment] = useState<string>("");
-  const [bookingId,setBookingId] = useState<string>('')
-  const [walletBalance , setWalletBalance] = useState<number>(0)
+  const [bookingId,setBookingId] = useState<string>("");
+  const [walletBalance , setWalletBalance] = useState<number>(0);
 
 
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const CheckoutPage = () => {
   const decodeData = async () => {
     try {
       const decode = JSON.parse(atob(bookingData as string));
-        console.log('decode',decode);
+        console.log("decode",decode);
         
       if (
         !decode ||
@@ -77,7 +77,7 @@ const CheckoutPage = () => {
 
       setStaffId(decode.staffId);
       setSelectedDate(decode.selectedDate);
-      setBookingId(decode.bookingId)
+      setBookingId(decode.bookingId);
 
       const [serviceResponse, customerResponse, addressResponse, shopResponse,walletResponse] =
         await Promise.all([
@@ -93,7 +93,7 @@ const CheckoutPage = () => {
     customerResponse?.data?.data && setCustomerData(customerResponse.data.data);
     addressResponse?.data?.data && setAddressData(addressResponse.data.data);
     shopResponse?.data?.data && setShopData(shopResponse.data.data);
-    walletResponse?.data?.data && setWalletBalance(walletResponse.data.data.balance)
+    walletResponse?.data?.data && setWalletBalance(walletResponse.data.data.balance);
    
     
     } catch (error: unknown) {
@@ -162,7 +162,7 @@ const CheckoutPage = () => {
   const handleProceedToPayment = async () => {
     try {
 
-      let status  ='pending'
+      let status  ="pending";
       if (!serviceData || !customerData || !addressData || !shopData) {
         toast.error("Some booking data is missing. Please reload the page.");
         return;
@@ -173,19 +173,19 @@ const CheckoutPage = () => {
         return;
       }
 
-      if(selectedPayment == 'razorpay'){
-        let result = await razorpay(bookingId)
+      if(selectedPayment == "razorpay"){
+        let result = await razorpay(bookingId);
        
-        if(result && result == 'razorpayError'){
+        if(result && result == "razorpayError"){
            toast.error("Razorpay failed use another payement method");
-           return 
-        }else if (result && result !== 'razorpayError'){
-          status = result
+           return; 
+        }else if (result && result !== "razorpayError"){
+          status = result;
 
         }
       }
 
-      if(selectedPayment == 'wallet'){
+      if(selectedPayment == "wallet"){
         if (Number(serviceData.price) > walletBalance) {
           toast.error("Insufficient balance , choose another payment method");
             return;
@@ -205,10 +205,10 @@ const CheckoutPage = () => {
     
       };
 
-      console.log(bookingPayload)
+      console.log(bookingPayload);
 
   
-      const response = await createBooking(bookingPayload)
+      const response = await createBooking(bookingPayload);
 
       if(response?.data.data){
 
@@ -219,7 +219,7 @@ const CheckoutPage = () => {
         };
 
           let encode = btoa(JSON.stringify(data));
-              window.location.replace(`/customer/payment-failed?id=${encode}`)
+              window.location.replace(`/customer/payment-failed?id=${encode}`);
              
         }else{
            let data = {
@@ -240,8 +240,8 @@ const CheckoutPage = () => {
 
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        console.log(error)
-        toast.error(error.response?.data.message)
+        console.log(error);
+        toast.error(error.response?.data.message);
         console.log("Error creating booking:", error.message);
       } else {
         console.error("Unknown error while proceeding to payment:", error);
@@ -435,4 +435,4 @@ const CheckoutPage = () => {
   );
 };
 
-export default CheckoutPage
+export default CheckoutPage;

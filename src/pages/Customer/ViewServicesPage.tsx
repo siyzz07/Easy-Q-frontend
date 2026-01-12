@@ -35,7 +35,7 @@ const ViewServicesPage: React.FC = () => {
 
       if(shopResponse?.data?.data){
         if(!shopResponse.data.data.isActive){
-          navigate('/customer')
+          navigate("/customer");
         }
       }
       

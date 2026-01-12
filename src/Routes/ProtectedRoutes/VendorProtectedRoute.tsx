@@ -29,7 +29,7 @@ const VendorProtectedRoute = ({ children }: IVProtectedRoute) => {
       }
     };
     if (isVendorAuthenticated) {
-      vendorData()
+      vendorData();
     }
   }, []);
 

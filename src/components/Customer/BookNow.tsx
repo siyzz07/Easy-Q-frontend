@@ -37,8 +37,7 @@ const initialValues = {
 };
 
 
-const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData ,onSubmit,type = 'booking'}) => {
-
+const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData ,onSubmit,type = "booking"}) => {
 
  const validationSchema = Yup.object({
   staff: Yup.string().required("Please select a staff member"),
@@ -214,7 +213,7 @@ const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData ,onSubmit,type 
                                     : "bg-gray-50 dark:bg-gray-900 border-gray-100 dark:border-gray-800 opacity-50 cursor-not-allowed"
                                 }`}
                                 >
-                                <span className={`text-[10px] uppercase font-semibold mb-1 ${isSelected ? 'text-gray-300' : 'text-gray-500'}`}>
+                                <span className={`text-[10px] uppercase font-semibold mb-1 ${isSelected ? "text-gray-300" : "text-gray-500"}`}>
                                     {date.toLocaleDateString("en-US", { weekday: "short" })}
                                 </span>
                                 <span className="text-lg font-bold">
@@ -299,7 +298,7 @@ const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData ,onSubmit,type 
                         </div>
 
                         {/* Address - Standard Select */}
-                        {type == 'booking' &&
+                        {type == "booking" &&
                         <div className="space-y-2">
                              <label className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                 <MapPin className="w-4 h-4 text-green-500" /> Location

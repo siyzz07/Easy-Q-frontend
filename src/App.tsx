@@ -14,7 +14,7 @@ import ScrollToTop from "./components/Shared/ScrollTop";
 
 const App = () => {
   useEffect(() => {
-  const token = getAccessToken()
+  const token = getAccessToken();
   if (token) {
     connectSocket(token);
   }

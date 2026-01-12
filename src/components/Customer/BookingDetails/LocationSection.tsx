@@ -1,8 +1,8 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { MessageSquare, MapPin, Navigation, Phone } from 'lucide-react';
-import { Button } from '../../ui/button';
+import React from "react";
+import { motion } from "framer-motion";
+import { MessageSquare, MapPin, Navigation, Phone } from "lucide-react";
+import { Button } from "../../ui/button";
 
 interface LocationSectionProps {
   bookingData: any;

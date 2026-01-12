@@ -1,8 +1,8 @@
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { User, QrCode, Info } from 'lucide-react';
-import { Badge } from '../../ui/badge';
+import React from "react";
+import { motion } from "framer-motion";
+import { User, QrCode, Info } from "lucide-react";
+import { Badge } from "../../ui/badge";
 
 interface StaffSectionProps {
   bookingData: any;

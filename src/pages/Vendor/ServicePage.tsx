@@ -1,5 +1,5 @@
-import React from 'react'
-import Services from '../../components/Vendor/Services'
+import React from "react";
+import Services from "../../components/Vendor/Services";
 
 const ServicePage = () => {
     
@@ -7,7 +7,7 @@ const ServicePage = () => {
    <>
    <Services/>
    </>
-  )
-}
+  );
+};
 
-export default ServicePage
+export default ServicePage;

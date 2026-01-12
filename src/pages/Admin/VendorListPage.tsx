@@ -15,11 +15,11 @@ const VendorListPage = () => {
   const [vendorDatas, setVendorDatas] = useState<IVendor[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
-  const [pages,setPages] = useState(1)
-  const [limit , setLimit] = useState(7)
-  const [totalPages,setTotalPages] = useState(1)
+  const [pages,setPages] = useState(1);
+  const [limit , setLimit] = useState(7);
+  const [totalPages,setTotalPages] = useState(1);
 
-  const debouncedSearch = useDebounce(searchTerm)
+  const debouncedSearch = useDebounce(searchTerm);
   useEffect(() => {
     fetchVendorData();
   }, [pages,debouncedSearch]);
@@ -31,7 +31,7 @@ const VendorListPage = () => {
       const response = await getVendorsData(pages,limit,debouncedSearch);
       if (response?.data?.data) {
         setVendorDatas(response.data.data);
-        setTotalPages(response.data.totalPages)
+        setTotalPages(response.data.totalPages);
       }
     } catch (error: unknown) {
       console.error("fetch vendor data error", error);

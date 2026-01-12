@@ -78,7 +78,7 @@ const EditAddressModal: React.FC<Props> = ({ onClose, data }) => {
         onClose();
         return;
       }
-      values.phone = values.phone.toString()
+      values.phone = values.phone.toString();
       let response = await editAddress(values);
       if (response.data.message) {
         toast.success(response.data.message);

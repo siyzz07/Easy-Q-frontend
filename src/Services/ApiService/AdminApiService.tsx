@@ -18,7 +18,7 @@ export const    loginAdmin = async (value :{email:string;password:string,role:st
 //--------------------------------------------------------------admin logout
 export const logoutAdmin = async () =>{
     
-    const response = await authAxiosInstance.post("/auth/logout",{role:'Admin'});
+    const response = await authAxiosInstance.post("/auth/logout",{role:"Admin"});
     return response;
 };
 
@@ -69,45 +69,45 @@ export const blockVendor= async(id:string) =>{
 //--------------------------------------------------------------get service types
 export const getServiceTypes = async() =>{
     
-    const response = await adminAxiosInstance.get('/admin/service/get-services')
-    return response
-}
+    const response = await adminAxiosInstance.get("/admin/service/get-services");
+    return response;
+};
 
 
 //--------------------------------------------------------------add service types
 export const addServiceType = async (form:{serviceName:string;description:string}) =>{
     
-    const response = await adminAxiosInstance.post("admin/service/add-service",form)
-    return response
+    const response = await adminAxiosInstance.post("admin/service/add-service",form);
+    return response;
     
-}
+};
 
 //--------------------------------------------------------------edit service types
 export const editServiceType = async (form:IServiceVendorTypes) =>{
-    const response = await adminAxiosInstance.put('/admin/service/edit-service',form)
+    const response = await adminAxiosInstance.put("/admin/service/edit-service",form);
     
-   return  response
-}
+   return  response;
+};
 
 
 
 //--------------------------------------------------------------show vendors request
 export const vendorsRequests = async () =>{
     
-    const response = await adminAxiosInstance.get('/admin/data/vendors-request')
-    return response
-}
+    const response = await adminAxiosInstance.get("/admin/data/vendors-request");
+    return response;
+};
 
 //--------------------------------------------------------------vendors request reject
 export const vendrRequestReject = async(id:string) =>{
-    const response = await adminAxiosInstance.post('/admin/data/reject-vendor',{id})
-    return response
-}
+    const response = await adminAxiosInstance.post("/admin/data/reject-vendor",{id});
+    return response;
+};
 //--------------------------------------------------------------vendors request verified
 export const vendrRequestVerified = async(id:string) =>{
-    const response = await adminAxiosInstance.post('/admin/data/verified-vendor',{id})
-    return response
-}
+    const response = await adminAxiosInstance.post("/admin/data/verified-vendor",{id});
+    return response;
+};
 
 /**
  * dashboared api
@@ -117,7 +117,7 @@ export const vendrRequestVerified = async(id:string) =>{
 //-------------------------------------------------------------- get admin dashboard data
 export const adminDashbordData = async () =>{
 
-    const response = await adminAxiosInstance.get('/admin/admin-dashboard')
-    return response
+    const response = await adminAxiosInstance.get("/admin/admin-dashboard");
+    return response;
 
-}
+};

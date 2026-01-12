@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
-import BookingViewCard from '../../components/Customer/BookingViewCard';
+import React, { useState, useEffect } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
+import BookingViewCard from "../../components/Customer/BookingViewCard";
 import { motion } from "framer-motion";
-import { Calendar as CalendarIcon, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
-import { getCustomerBookingData } from '../../Services/ApiService/BookingApiService';
-import { toast } from 'react-toastify';
-import Pagination from '../../components/Shared/Pagination';
+import { Calendar as CalendarIcon, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { getCustomerBookingData } from "../../Services/ApiService/BookingApiService";
+import { toast } from "react-toastify";
+import Pagination from "../../components/Shared/Pagination";
 
 // Updated DTO to include Payment Info
 export type BookingCardDTO = {
@@ -27,11 +27,11 @@ export type BookingCardDTO = {
 };
 
 const BookingsPage = () => {
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState("all");
   const [bookings, setBookings] = useState<BookingCardDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(5);
+  const [limit, setLimit] = useState<number>(4);
   const [totalPage, setTotalPage] = useState<number>(1);
 
   useEffect(() => {
@@ -52,43 +52,43 @@ const BookingsPage = () => {
       setTotalPage(totalPages);
 
       const mapped: BookingCardDTO[] = bookingArray.map((b: any) => {
-        const status = b?.status?.toLowerCase() || 'pending';
-        const pStatus = b?.paymentStatus?.toLowerCase() || 'pending';
+        const status = b?.status?.toLowerCase() || "pending";
+        const pStatus = b?.paymentStatus?.toLowerCase() || "pending";
 
         return {
           id: b?.id,
-          title: b?.service?.name || 'General Service',
-          location: b?.shop?.shopName || 'Partner Shop',
-          facility: b?.shop?.city || 'Location N/A',
+          title: b?.service?.name || "General Service",
+          location: b?.shop?.shopName || "Partner Shop",
+          facility: b?.shop?.city || "Location N/A",
           date: b?.date, 
           time: `${b?.startTime} - ${b?.endTime}`,
-          status: b?.status || 'Pending',
-          image: b?.shop?.profileImage || '', 
-          amount: b?.totalAmount?.toString() || '0',
-          paymentStatus: b?.paymentStatus || 'pending',
-          isPaymentFailed: pStatus === 'failed',
+          status: b?.status || "Pending",
+          image: b?.shop?.profileImage || "", 
+          amount: b?.totalAmount?.toString() || "0",
+          paymentStatus: b?.paymentStatus || "pending",
+          isPaymentFailed: pStatus === "failed",
           paymentMethod:b?.paymentMethod,
           statusColor:
-            status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
-            status === 'pending' || status === 'booked' ? 'bg-amber-100 text-amber-700' :
-            status === 'cancelled' ? 'bg-rose-100 text-rose-700' :
-            'bg-slate-100 text-slate-700',
+            status === "completed" ? "bg-emerald-100 text-emerald-700" :
+            status === "pending" || status === "booked" ? "bg-amber-100 text-amber-700" :
+            status === "cancelled" ? "bg-rose-100 text-rose-700" :
+            "bg-slate-100 text-slate-700",
           bgColor:
-            status === 'completed' ? 'bg-emerald-500/10' :
-            status === 'pending' || status === 'booked' ? 'bg-amber-500/10' :
-            status === 'cancelled' ? 'bg-rose-500/10' :
-            'bg-slate-500/10',
-          icon: b?.serviceId?.serviceName?.charAt(0)?.toUpperCase() || 'B'
+            status === "completed" ? "bg-emerald-500/10" :
+            status === "pending" || status === "booked" ? "bg-amber-500/10" :
+            status === "cancelled" ? "bg-rose-500/10" :
+            "bg-slate-500/10",
+          icon: b?.serviceId?.serviceName?.charAt(0)?.toUpperCase() || "B"
         };
       });
 
-     const allowdBookings= mapped.filter((data)=> data.paymentMethod)
+     const allowdBookings= mapped.filter((data)=> data.paymentMethod);
     
 
       setBookings(allowdBookings);
     } catch (error) {
       console.error("Fetch error:", error);
-      toast.error('Failed to load your bookings');
+      toast.error("Failed to load your bookings");
     } finally {
       setLoading(false);
     }
@@ -116,7 +116,7 @@ const BookingsPage = () => {
         <Tabs defaultValue="all" onValueChange={handleTabChange} className="w-full">
           <div className="flex justify-center mb-8">
             <TabsList className="bg-white/50 backdrop-blur-md p-1.5 rounded-2xl h-14 border border-white shadow-sm inline-flex w-full md:w-auto">
-              {['all', 'pending', 'complete', 'cancelled'].map(tab => (
+              {["all", "pending", "complete", "cancelled"].map(tab => (
                 <TabsTrigger 
                   key={tab} 
                   value={tab} 
@@ -185,7 +185,7 @@ const EmptyState = ({ tab }: { tab: string }) => (
     <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mb-6">
       <CalendarIcon className="w-12 h-12 text-slate-200" />
     </div>
-    <h3 className="text-2xl font-bold text-slate-800">No {tab !== 'all' ? tab : ''} bookings</h3>
+    <h3 className="text-2xl font-bold text-slate-800">No {tab !== "all" ? tab : ""} bookings</h3>
     <p className="text-slate-400 text-sm mt-2 max-w-xs font-medium">
       We couldn't find any records on the server for this category.
     </p>

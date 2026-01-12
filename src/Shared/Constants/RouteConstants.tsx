@@ -31,12 +31,12 @@ export const CUSTOMER_ROUTES ={
     CHANGE_PASSWORD_IN_PROFILE:"/profile/security",
     ADDRESS:"/profile/customer-address",
     SHOP_SERVICES:"/services/:id",  
-    BOOKINGS:'bookings',
-    VIEW_BOOKING:'bookings/:id',
-    FAVORITE:'favorite',
-    NOTIFICATIONS:'notifications',
-    PAYMENT_FAILED:'payment-failed',
-    WALLET:'wallet',
+    BOOKINGS:"bookings",
+    VIEW_BOOKING:"bookings/:id",
+    FAVORITE:"favorite",
+    NOTIFICATIONS:"notifications",
+    PAYMENT_FAILED:"payment-failed",
+    WALLET:"wallet",
 
 
 };

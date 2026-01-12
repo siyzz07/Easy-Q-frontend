@@ -91,7 +91,7 @@ const WalletPage = () => {
   useEffect(() => {
     // if (called.current) return;
     // called.current = true;
-    console.log('helee')
+    console.log("helee");
     fetchWalletData();
   }, [page,filter]);
 

@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Clock4, CalendarDays, XCircle, AlertCircle } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { Clock4, CalendarDays, XCircle, AlertCircle } from "lucide-react";
 
 interface BookingActionsProps {
   status: string;
@@ -41,7 +41,7 @@ const BookingActionCard: React.FC<BookingActionsProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-3 w-full md:w-auto">
-          {status !== 'cancelled' && (
+          {status !== "cancelled" && (
             <>
           
              <button

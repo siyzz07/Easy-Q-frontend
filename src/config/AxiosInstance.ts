@@ -41,7 +41,7 @@ export const axiosInstance = () => {
 
         try {
 
-          const tokenDecode = decodeToken()
+          const tokenDecode = decodeToken();
         
           const refreshResponse = await instance.post("/auth/refresh-token",{role:tokenDecode?.role});
           const newAccessToken = refreshResponse.data.accessToken;
@@ -54,7 +54,7 @@ export const axiosInstance = () => {
         } catch (refreshError) {
           console.log("Refresh token error");
           removeToken();
-          window.location.href = `/customer/login`;
+          window.location.href = "/customer/login";
           return Promise.reject(refreshError);
         }
       }
@@ -65,7 +65,7 @@ export const axiosInstance = () => {
       ) {
         toast.error("Your account has been blocked by admin.");
         removeToken();
-        window.location.href = `/customer/login`;
+        window.location.href = "/customer/login";
       }
 
       return Promise.reject(error);
@@ -81,10 +81,10 @@ export const axiosInstance = () => {
 export const adminAxiosInstance = axiosInstance();
 export const VendorAxiosInstance = axiosInstance();
 export const CustomerAxiosInstance = axiosInstance();
-export const BookingAxiosInstance =axiosInstance()
-export const TransactionAxiosInstance = axiosInstance()
-export const WalletAxiosInstance = axiosInstance()
+export const BookingAxiosInstance =axiosInstance();
+export const TransactionAxiosInstance = axiosInstance();
+export const WalletAxiosInstance = axiosInstance();
 // ----------- contract
-export const ContractAxiosInstance = axiosInstance()
+export const ContractAxiosInstance = axiosInstance();
 
-export const authAxiosInstance = axiosInstance()
+export const authAxiosInstance = axiosInstance();

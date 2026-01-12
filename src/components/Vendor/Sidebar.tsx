@@ -32,7 +32,7 @@ const Sidebar = () => {
   let items = [
     { icon: LayoutDashboard, label: "Dashboard", path: "", route: "" },
     { icon: List, label: "Services", path: "Services", route: "services" },
-    { icon: Calendar, label: "Bookings" ,path:'Bookings',route:'bookings'},
+    { icon: Calendar, label: "Bookings" ,path:"Bookings",route:"bookings"},
     { icon: Wallet, label: "Wallet", path: "Wallet", route: "wallet" },
     {
       icon: CreditCard,
@@ -68,7 +68,7 @@ const Sidebar = () => {
       if (response?.status === 200) {
         dispatch(vendorLogout());
         removeToken();
-        dispatch(disconnectSocketAction())
+        dispatch(disconnectSocketAction());
         navigate("/vendor/login");
       } else {
         console.error("Logout failed:", response);

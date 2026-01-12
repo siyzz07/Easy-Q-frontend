@@ -9,7 +9,7 @@ import { data } from "react-router-dom";
 const VendorRequest = () => {
   const [requestData, setRequestData] = useState<IVendor[] | []>([]);
   const [viewProof, setViewProof] = useState<boolean>(true);
-  const [update,setUpdate] = useState<boolean>(false)
+  const [update,setUpdate] = useState<boolean>(false);
 
   useEffect(() => {
     VendorRequest();
@@ -48,12 +48,12 @@ const VendorRequest = () => {
     try {
       console.log(data);
       
-        let response = await vendrRequestReject(data._id)
+        let response = await vendrRequestReject(data._id);
         if(response.data.data){
         
         }
         if(response){
-            setUpdate(!update)
+            setUpdate(!update);
         }
     } catch (error: unknown) {
 
@@ -62,9 +62,9 @@ const VendorRequest = () => {
 
   const onVerifiedVendor = async (data: any) => {
     try {
-        const response = await vendrRequestVerified(data._id)
+        const response = await vendrRequestVerified(data._id);
         if(response){
-          setUpdate(!update)
+          setUpdate(!update);
         }
     } catch (error: unknown) {
 

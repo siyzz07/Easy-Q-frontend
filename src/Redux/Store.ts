@@ -3,8 +3,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import vendorSlice from "./VendorSlice";
 import customerSlice from "./CustomeSlice";
 import adminSlice from "./AdminAuthSlice";
-import socket from './SocketSlice'
-import notificationSlice from './notificationSlice'
+import socket from "./SocketSlice";
+import notificationSlice from "./notificationSlice";
 
 
 

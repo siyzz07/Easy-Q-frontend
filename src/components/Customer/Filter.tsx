@@ -104,7 +104,7 @@ const Filter: React.FC<FilterProps> = ({ onApplyFilters }) => {
                     onChange={() => handleRatingChange(label)}
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 transition-all" 
                   />
-                  <span className={`transition-colors ${selectedRatings.includes(label) ? 'text-blue-600 font-bold' : 'text-gray-600 group-hover:text-gray-900'}`}>
+                  <span className={`transition-colors ${selectedRatings.includes(label) ? "text-blue-600 font-bold" : "text-gray-600 group-hover:text-gray-900"}`}>
                     {label}
                   </span>
                 </label>
@@ -136,7 +136,7 @@ const Filter: React.FC<FilterProps> = ({ onApplyFilters }) => {
                     onChange={() => handleCategoryChange(cat._id as string)}
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 transition-all" 
                   />
-                  <span className={`truncate transition-colors ${selectedCategories.includes(cat._id as string) ? 'text-blue-600 font-bold' : 'text-gray-600 group-hover:text-gray-900'}`}>
+                  <span className={`truncate transition-colors ${selectedCategories.includes(cat._id as string) ? "text-blue-600 font-bold" : "text-gray-600 group-hover:text-gray-900"}`}>
                     {cat.serviceName}
                   </span>
                 </label>

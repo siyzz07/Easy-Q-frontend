@@ -89,13 +89,13 @@ const ContractPage = () => {
     try {
       setIsLoading(true);
       let response = await getContract();
-      console.log('response :>> ', response);
+      console.log("response :>> ", response);
       if(response && response.data) {
           setContracts(response.data.data);
       }
       console.log("Contracts fetched:");
     } catch (error: unknown) {
-      console.error('Error fetching contracts:', error);
+      console.error("Error fetching contracts:", error);
     } finally {
       setIsLoading(false);
     }

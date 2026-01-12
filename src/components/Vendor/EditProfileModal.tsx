@@ -17,7 +17,7 @@ interface IEditModal {
 
 const EditProfileModal: FC<IEditModal> = ({ onClose, vendorData }) => {
 
-  console.log('vendorData :>> ', vendorData);
+  console.log("vendorData :>> ", vendorData);
 
 
   const navigate = useNavigate();

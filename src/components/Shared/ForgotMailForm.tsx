@@ -72,7 +72,7 @@ const ForgotMailForm: FC<IForgotMailForm> = ({ onSubmit, style,heading,role }) =
                 disabled={isSubmitting}
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white h-12 text-base font-medium rounded-lg cursor-pointer"
               >
-                {isSubmitting?'submitting...':'Send mail'}
+                {isSubmitting?"submitting...":"Send mail"}
                 
               </button>
             </Form>

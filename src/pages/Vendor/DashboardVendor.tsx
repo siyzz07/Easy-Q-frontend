@@ -28,7 +28,7 @@ const DashboardVendor = () => {
   const [totalServices, setTotalServices] = useState<number>(0);
   const [availabelServices, setTotalAvailabelServices] = useState<number>(0);
   const [unavailabelServices, setUnavailabelServices] = useState<number>(0);
-  const [blokcBookinModal,setBlookBookingModal] = useState<boolean>(false)
+  const [blokcBookinModal,setBlookBookingModal] = useState<boolean>(false);
 
 
 

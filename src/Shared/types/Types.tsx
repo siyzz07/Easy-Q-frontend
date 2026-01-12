@@ -250,7 +250,7 @@ export interface IContractData {
     _id: string;
     serviceName: string;
   };
-  status: 'inprogress'|'completed'|'cancelled';
+  status: "inprogress"|"completed"|"cancelled";
   workers:[string]|[];
   createdAt: string;
   updatedAt: Date;

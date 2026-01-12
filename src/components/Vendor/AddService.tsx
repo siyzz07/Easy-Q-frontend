@@ -223,7 +223,7 @@ const AddService: FC<IAddService> = ({ onClose }) => {
                             />
                             <label
                                 htmlFor="image-upload"
-                                className={`flex flex-col items-center justify-center w-full h-48 rounded-2xl border-2 border-dashed transition-all cursor-pointer ${imagePreview ? 'border-primary/50 bg-primary/5' : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'}`}
+                                className={`flex flex-col items-center justify-center w-full h-48 rounded-2xl border-2 border-dashed transition-all cursor-pointer ${imagePreview ? "border-primary/50 bg-primary/5" : "border-gray-200 hover:border-primary/50 hover:bg-gray-50"}`}
                             >
                                 {imagePreview ? (
                                      <div className="relative w-full h-full p-2">
@@ -275,14 +275,14 @@ const AddService: FC<IAddService> = ({ onClose }) => {
                                                     : "bg-white border-gray-100 hover:border-gray-300"
                                                 }`}
                                             >
-                                                <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${isSelected ? 'bg-primary border-primary' : 'border-gray-300 bg-white'}`}>
+                                                <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${isSelected ? "bg-primary border-primary" : "border-gray-300 bg-white"}`}>
                                                     {isSelected && <Check size={12} className="text-white" />}
                                                 </div>
-                                                <span className={`text-sm font-medium ${isSelected ? 'text-primary' : 'text-gray-700'}`}>
+                                                <span className={`text-sm font-medium ${isSelected ? "text-primary" : "text-gray-700"}`}>
                                                     {staff.staffName}
                                                 </span>
                                             </div>
-                                        )
+                                        );
                                     })}
                                 </div>
                             ) : (
@@ -310,7 +310,7 @@ const AddService: FC<IAddService> = ({ onClose }) => {
                         disabled={!isValid || isSubmitting}
                         className="px-6 py-2.5 text-sm font-bold text-white bg-primary rounded-xl shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                        {isSubmitting ? 'Adding Service...' : 'Create Service'}
+                        {isSubmitting ? "Adding Service..." : "Create Service"}
                     </button>
                 </div>
 

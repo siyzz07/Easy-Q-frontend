@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   ChevronLeft,
   Calendar,
@@ -17,44 +17,44 @@ import {
   Package,
   MessageSquare,
   Coins
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { toast } from 'react-toastify';
-import { AxiosError } from 'axios';
-import { bookingRefund, getSelectedBookingData, updateBookingStatus } from '../../Services/ApiService/BookingApiService';
-import { convertRailwayTime } from '../../utils/convertRailwayTime';
+} from "lucide-react";
+import { format } from "date-fns";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
+import { bookingRefund, getSelectedBookingData, updateBookingStatus } from "../../Services/ApiService/BookingApiService";
+import { convertRailwayTime } from "../../utils/convertRailwayTime";
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string; icon: React.ReactNode; label: string }> = {
   pending: { 
-    color: 'text-amber-600', 
-    bg: 'bg-amber-50', 
+    color: "text-amber-600", 
+    bg: "bg-amber-50", 
     icon: <Clock size={20} />, 
-    label: 'Pending' 
+    label: "Pending" 
   },
   confirmed: { 
-    color: 'text-blue-600', 
-    bg: 'bg-blue-50', 
+    color: "text-blue-600", 
+    bg: "bg-blue-50", 
     icon: <CheckCircle2 size={20} />, 
-    label: 'Confirmed' 
+    label: "Confirmed" 
   },
   completed: { 
-    color: 'text-emerald-600', 
-    bg: 'bg-emerald-50', 
+    color: "text-emerald-600", 
+    bg: "bg-emerald-50", 
     icon: <CheckCircle2 size={20} />, 
-    label: 'Completed' 
+    label: "Completed" 
   },
   cancelled: { 
-    color: 'text-rose-600', 
-    bg: 'bg-rose-50', 
+    color: "text-rose-600", 
+    bg: "bg-rose-50", 
     icon: <XCircle size={20} />, 
-    label: 'Cancelled' 
+    label: "Cancelled" 
   },
 };
 
 const PAYMENT_STATUS_CONFIG: Record<string, { color: string; bg: string; label: string }> = {
-  paid: { color: 'text-emerald-600', bg: 'bg-emerald-100/50', label: 'Paid' },
-  pending: { color: 'text-amber-600', bg: 'bg-amber-100/50', label: 'Pending' },
-  failed: { color: 'text-rose-600', bg: 'bg-rose-100/50', label: 'Failed' },
+  paid: { color: "text-emerald-600", bg: "bg-emerald-100/50", label: "Paid" },
+  pending: { color: "text-amber-600", bg: "bg-amber-100/50", label: "Pending" },
+  failed: { color: "text-rose-600", bg: "bg-rose-100/50", label: "Failed" },
 };
 
 const VendorBookingDetailsPage = () => {
@@ -74,21 +74,21 @@ const VendorBookingDetailsPage = () => {
   const fetchBookingDetails = async () => {
     try {
       setLoading(true);
-      console.log('id :>> ', id);
+      console.log("id :>> ", id);
       if (id) {
-        console.log('booking data clling')
+        console.log("booking data clling");
         const response = await getSelectedBookingData(id);
-        console.log('bookingData :>> ', response);
+        console.log("bookingData :>> ", response);
         if (response?.data?.data) {
           setBookingData(response.data.data);
         }
       } else {
-        navigate('/vendor/bookings');
+        navigate("/vendor/bookings");
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        toast.error('Invalid booking ID');
-        navigate('/vendor/bookings');
+        toast.error("Invalid booking ID");
+        navigate("/vendor/bookings");
       }
     } finally {
       setLoading(false);
@@ -100,21 +100,21 @@ const VendorBookingDetailsPage = () => {
 
     try{
 
-      console.log('refund funcion called')
-      const response = await bookingRefund(id)
+      console.log("refund funcion called");
+      const response = await bookingRefund(id);
       if(response?.data){
 
-        toast.success(response.data.message)
-        fetchBookingDetails()
+        toast.success(response.data.message);
+        fetchBookingDetails();
       }
     }catch(error:unknown){
       if(error instanceof AxiosError){
          
-        toast.error(error.response?.data.message)
+        toast.error(error.response?.data.message);
       }
     }
 
-  }
+  };
 
   const handleStatusUpdate = async (newStatus: string) => {
     if (!bookingData?._id) return;
@@ -129,7 +129,7 @@ const VendorBookingDetailsPage = () => {
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        toast.error(error.response?.data?.message || 'Failed to update booking status');
+        toast.error(error.response?.data?.message || "Failed to update booking status");
       }
     } finally {
       setUpdating(false);
@@ -159,7 +159,7 @@ const VendorBookingDetailsPage = () => {
     return null;
   }
 
-  const currentStatus = bookingData.status || 'pending';
+  const currentStatus = bookingData.status || "pending";
   const statusConfig = STATUS_CONFIG[currentStatus];
 
   return (
@@ -171,7 +171,7 @@ const VendorBookingDetailsPage = () => {
           <motion.button
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            onClick={() => navigate('/vendor/bookings')}
+            onClick={() => navigate("/vendor/bookings")}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-all group"
           >
             <div className="p-2 rounded-xl bg-white shadow-sm border border-gray-200 group-hover:border-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
@@ -190,7 +190,7 @@ const VendorBookingDetailsPage = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`${statusConfig.bg} border-2 border-${currentStatus === 'pending' ? 'amber' : currentStatus === 'cancelled' ? 'red' : currentStatus === 'completed' ? 'emerald' : 'rose'}-200 rounded-2xl p-6`}
+          className={`${statusConfig.bg} border-2 border-${currentStatus === "pending" ? "amber" : currentStatus === "cancelled" ? "red" : currentStatus === "completed" ? "emerald" : "rose"}-200 rounded-2xl p-6`}
         >
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
@@ -212,7 +212,7 @@ const VendorBookingDetailsPage = () => {
             > */}
               {/* <h3 className="text-sm font-black text-gray-900 mb-3 uppercase tracking-wider">Cash refund</h3> */}
 
-              {bookingData.paymentStatus == 'paid' && bookingData.status =="cancelled" && bookingData.paymentMethod != 'payAtShop' && (
+              {bookingData.paymentStatus == "paid" && bookingData.status =="cancelled" && bookingData.paymentMethod != "payAtShop" && (
 
              
               <div className="space-y-2">
@@ -228,12 +228,12 @@ const VendorBookingDetailsPage = () => {
             {/* </motion.div> */}
 
             
-            {currentStatus !== 'cancelled' && currentStatus !== 'completed' && (
+            {currentStatus !== "cancelled" && currentStatus !== "completed" && (
               <div className="flex gap-2 flex-wrap">
-                {currentStatus === 'pending' && (
+                {currentStatus === "pending" && (
                   <>
                     <button
-                      onClick={() => handleStatusUpdate('confirmed')}
+                      onClick={() => handleStatusUpdate("confirmed")}
                       disabled={updating}
                       className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -250,10 +250,10 @@ const VendorBookingDetailsPage = () => {
                     </button> */}
                   </>
                 )}
-                {currentStatus === 'confirmed' && (
+                {currentStatus === "confirmed" && (
                   <>
                     <button
-                      onClick={() => handleStatusUpdate('completed')}
+                      onClick={() => handleStatusUpdate("completed")}
                       disabled={updating}
                       className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -261,7 +261,7 @@ const VendorBookingDetailsPage = () => {
                       <span>Mark as Completed</span>
                     </button>
                     <button
-                      onClick={() => handleStatusUpdate('cancelled')}
+                      onClick={() => handleStatusUpdate("cancelled")}
                       disabled={updating}
                       className="flex items-center gap-2 px-5 py-2.5 bg-rose-600 text-white font-bold rounded-xl shadow-lg shadow-rose-600/20 hover:bg-rose-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -294,10 +294,10 @@ const VendorBookingDetailsPage = () => {
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
                   <div className="h-14 w-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-blue-600 font-bold text-lg border-2 border-white shadow-md">
-                    {bookingData.customerId?.name?.charAt(0).toUpperCase() || 'C'}
+                    {bookingData.customerId?.name?.charAt(0).toUpperCase() || "C"}
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold text-gray-900 text-base">{bookingData.customer?.name || 'N/A'}</p>
+                    <p className="font-bold text-gray-900 text-base">{bookingData.customer?.name || "N/A"}</p>
                     <div className="flex flex-col gap-1 mt-2">
                       {bookingData.customer?.email && (
                         <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -334,19 +334,19 @@ const VendorBookingDetailsPage = () => {
                     <Package size={20} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold text-gray-900">{bookingData.service?.name || 'N/A'}</p>
+                    <p className="font-bold text-gray-900">{bookingData.service?.name || "N/A"}</p>
                     {/* <p className="text-sm text-gray-600 mt-1">{bookingData.service?.description || 'No description'}</p> */}
                     <div className="flex items-center gap-4 mt-3">
                       <div className="flex items-center gap-1.5">
                         <Clock size={14} className="text-gray-400" />
                         <span className="text-xs font-semibold text-gray-600">
-                          {bookingData.service?.duration || 'N/A'} mins
+                          {bookingData.service?.duration || "N/A"} mins
                         </span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <IndianRupee size={14} className="text-gray-400" />
                         <span className="text-xs font-semibold text-gray-600">
-                          ₹{bookingData.service?.price || 'N/A'}
+                          ₹{bookingData.service?.price || "N/A"}
                         </span>
                       </div>
                     </div>
@@ -373,7 +373,7 @@ const VendorBookingDetailsPage = () => {
                     <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Date</p>
                   </div>
                   <p className="text-base font-bold text-gray-900">
-                    {bookingData.date ? format(new Date(bookingData.date), 'MMM dd, yyyy') : 'N/A'}
+                    {bookingData.date ? format(new Date(bookingData.date), "MMM dd, yyyy") : "N/A"}
                   </p>
                 </div>
                 <div className="p-4 bg-orange-50/50 rounded-xl border border-orange-100">
@@ -382,7 +382,7 @@ const VendorBookingDetailsPage = () => {
                     <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Time</p>
                   </div>
                   <p className="text-base font-bold text-gray-900">
-                    {convertRailwayTime(bookingData.startTime) || 'N/A'}
+                    {convertRailwayTime(bookingData.startTime) || "N/A"}
                   </p>
                 </div>
               </div>
@@ -394,7 +394,7 @@ const VendorBookingDetailsPage = () => {
                     <User size={16} className="text-gray-600" />
                     <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Assigned Staff</p>
                   </div>
-                  <p className="text-base font-bold text-gray-900">{bookingData.staffId?.name || 'N/A'}</p>
+                  <p className="text-base font-bold text-gray-900">{bookingData.staffId?.name || "N/A"}</p>
                 </div>
               )}
             </motion.div>
@@ -444,7 +444,7 @@ const VendorBookingDetailsPage = () => {
                 
                 <div className="flex justify-between items-center pb-3 border-b border-gray-100">
                   <span className="text-sm font-medium text-gray-600">Payment Method</span>
-                  <span className="text-sm font-bold text-gray-900 capitalize">{bookingData.paymentMethod || 'N/A'}</span>
+                  <span className="text-sm font-bold text-gray-900 capitalize">{bookingData.paymentMethod || "N/A"}</span>
                 </div>
 
                 <div className="flex justify-between items-center pb-3 border-b border-gray-100">

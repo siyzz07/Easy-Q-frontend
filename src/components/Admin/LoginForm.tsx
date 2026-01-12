@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { AxiosError } from "axios";
 import { loginAdmin } from "../../Services/ApiService/AdminApiService";
 import { toast } from "react-toastify";
-import { setAccessToken } from "../../utils/tokenUtils"
+import { setAccessToken } from "../../utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import { adminLoginSuccess } from "../../Redux/AdminAuthSlice";
 
@@ -48,7 +48,7 @@ const LoginForm = () => {
 
         {/* Formik Form */}
         <Formik
-          initialValues={{ email: "", password: "" ,role:'admin'}}
+          initialValues={{ email: "", password: "" ,role:"admin"}}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >

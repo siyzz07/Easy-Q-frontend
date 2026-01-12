@@ -1,9 +1,9 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ShieldCheck, Phone, ExternalLink, Download, AlertCircle, RefreshCw, Coins } from 'lucide-react';
-import { Button } from '../../ui/button';
-import { Badge } from '../../ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
+import React from "react";
+import { motion } from "framer-motion";
+import { ShieldCheck, Phone, ExternalLink, Download, AlertCircle, RefreshCw, Coins } from "lucide-react";
+import { Button } from "../../ui/button";
+import { Badge } from "../../ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 
 interface PaymentSummaryProps {
   bookingData: any;
@@ -12,11 +12,11 @@ interface PaymentSummaryProps {
 }
 
 const PaymentSummary: React.FC<PaymentSummaryProps> = ({ bookingData, onRetry, onPayContinue}) => {
-  console.log(bookingData.paymentStatus)
+  console.log(bookingData.paymentStatus);
   const status = bookingData.paymentStatus?.toLowerCase();
-  const isFailed = status === 'failed';
-  const isPending = status === 'pending';
-  const isPaid = status === 'paid' || status === 'completed';
+  const isFailed = status === "failed";
+  const isPending = status === "pending";
+  const isPaid = status === "paid" || status === "completed";
 
   // Dynamic Styles based on status
   const statusConfig = {
@@ -72,7 +72,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ bookingData, onRetry, o
             
             <div className="pt-3 border-t border-border/50 flex justify-between">
               <span className="font-black text-lg">Total Amount</span>
-              <span className={`font-black text-lg ${isFailed ? 'text-red-600' : 'text-primary'}`}>
+              <span className={`font-black text-lg ${isFailed ? "text-red-600" : "text-primary"}`}>
                 {bookingData.totalAmount}
               </span>
             </div>
@@ -86,7 +86,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ bookingData, onRetry, o
               </div>
               <div className="leading-tight">
                 <p className="text-[10px] uppercase tracking-widest font-black text-muted-foreground">Payment Via</p>
-                <p className="text-sm font-bold">{bookingData.paymentMethod ||'pending'}</p>
+                <p className="text-sm font-bold">{bookingData.paymentMethod ||"pending"}</p>
               </div>
             </div>
             {/* <ExternalLink size={14} className="text-muted-foreground" /> */}
