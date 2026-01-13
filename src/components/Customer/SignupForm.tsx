@@ -7,7 +7,6 @@ import * as Yup from "yup";
 import { customerSignup } from "../../Services/ApiService/CustomerApiService";
 import { toast } from "react-toastify";
 
-
 const SignupForm: React.FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -73,25 +72,13 @@ const SignupForm: React.FC = () => {
 
   const handleSubmit = async(values: ICustomer) => {
     try{
-
-
-
-
       const { confirmPassword, ...payload } = values;
       await customerSignup(payload); 
-
 
       toast.info("Please verify your email. We have sent a verification link to your email address.",{
         autoClose:5000
       });
-      
-
-
       navigate("/customer/login");
-
-
-
-
 
     }catch(error:any){
       console.log(error);
@@ -108,15 +95,15 @@ const SignupForm: React.FC = () => {
 
   return (
     <div className="w-full">
-      {/* Logo and Heading */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-           <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/30">
-            <span className="text-white font-bold text-lg">Q</span>
+      {/* Header */}
+      <div className="mb-6 text-center">
+        <div className="flex items-center justify-center gap-2 mb-4">
+           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/30">
+            <span className="text-white font-bold text-base">Q</span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Create Account</h1>
+          <h1 className="text-xl font-bold tracking-tight text-gray-900">Create Account</h1>
         </div>
-        <p className="text-gray-500 font-medium">Join Easy Q and start booking seamlessly.</p>
+        <p className="text-gray-500 text-sm">Join Easy Q and start booking seamlessly.</p>
       </div>
 
       <div className="w-full">
@@ -126,64 +113,64 @@ const SignupForm: React.FC = () => {
           onSubmit={handleSubmit}
         >
           {({isSubmitting}) => (
-            <Form className="space-y-4">
+            <Form className="space-y-3">
               {/* Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Full Name</label>
                 <Field
                   name="name"
                   type="text"
                   placeholder="John Doe"
-                  className="w-full px-4 h-11 rounded-xl bg-white border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400 font-medium"
+                  className="w-full px-4 h-10 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400 text-sm font-medium hover:bg-white"
                 />
                 <ErrorMessage
                   name="name"
                   component="div"
-                  className="text-red-500 text-xs mt-1 font-medium"
+                  className="text-red-500 text-[10px] mt-1 font-medium"
                 />
               </div>
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Email Address</label>
                 <Field
                   name="email"
                   type="email"
                   placeholder="name@example.com"
-                  className="w-full px-4 h-11 rounded-xl bg-white border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400 font-medium"
+                  className="w-full px-4 h-10 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400 text-sm font-medium hover:bg-white"
                 />
                 <ErrorMessage
                   name="email"
                   component="div"
-                  className="text-red-500 text-xs mt-1 font-medium"
+                  className="text-red-500 text-[10px] mt-1 font-medium"
                 />
               </div>
 
               {/* Phone */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Phone Number</label>
                 <Field
                   name="phone"
                   type="text"
                   placeholder="9876543210"
-                  className="w-full px-4 h-11 rounded-xl bg-white border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400 font-medium"
+                  className="w-full px-4 h-10 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400 text-sm font-medium hover:bg-white"
                 />
                 <ErrorMessage
                   name="phone"
                   component="div"
-                  className="text-red-500 text-xs mt-1 font-medium"
+                  className="text-red-500 text-[10px] mt-1 font-medium"
                 />
               </div>
 
               {/* Password */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Password</label>
                 <div className="relative">
                   <Field
                     name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Create a password"
-                    className="w-full h-11 px-4 pr-12 rounded-xl bg-white border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400 font-medium"
+                    className="w-full h-10 px-4 pr-10 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400 text-sm font-medium hover:bg-white"
                   />
                   <button
                     type="button"
@@ -191,32 +178,32 @@ const SignupForm: React.FC = () => {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? (
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-4 h-4" />
                     ) : (
-                      <EyeOff className="w-5 h-5" />
+                      <EyeOff className="w-4 h-4" />
                     )}
                   </button>
                 </div>
                 <ErrorMessage
                   name="password"
                   component="div"
-                  className="text-red-500 text-xs mt-1 font-medium"
+                  className="text-red-500 text-[10px] mt-1 font-medium"
                 />
               </div>
 
               {/* Confirm Password */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Confirm Password</label>
                 <Field
                   name="confirmPassword"
                   type={showPassword ? "text" : "password"}
                   placeholder="Repeat password"
-                  className="w-full px-4 h-11 rounded-xl bg-white border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400 font-medium"
+                  className="w-full px-4 h-10 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-gray-400 text-sm font-medium hover:bg-white"
                 />
                 <ErrorMessage
                   name="confirmPassword"
                   component="div"
-                  className="text-red-500 text-xs mt-1 font-medium"
+                  className="text-red-500 text-[10px] mt-1 font-medium"
                 />
               </div>
 
@@ -225,25 +212,25 @@ const SignupForm: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-primary hover:bg-primary/90 text-white h-12 text-sm font-bold rounded-xl shadow-lg shadow-primary/25 transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+                    className="w-full bg-primary hover:bg-primary/90 text-white h-10 text-sm font-bold rounded-lg shadow-lg shadow-primary/25 transition-all transform hover:scale-[1.01] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                         {isSubmitting ? "Creating Account..." : "Sign Up"}
                   </button>
               </div>
 
               {/* Already have an account */}
-               <div className="relative flex py-2 items-center mt-4">
+               <div className="relative flex py-1 items-center">
                   <div className="flex-grow border-t border-gray-200"></div>
-                  <span className="flex-shrink-0 mx-4 text-gray-400 text-xs font-medium">Already have an account?</span>
+                  <span className="flex-shrink-0 mx-3 text-gray-400 text-[10px] font-medium uppercase tracking-wider">or</span>
                   <div className="flex-grow border-t border-gray-200"></div>
               </div>
 
                <button
                  type="button"
                  onClick={() => navigate("/customer/login")}
-                 className="w-full bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 h-12 text-sm font-bold rounded-xl transition-all"
+                 className="w-full bg-gray-50 border border-transparent text-gray-700 hover:bg-gray-100 h-10 text-sm font-bold rounded-lg transition-all"
                >
-                 Log In
+                 Already have an account? Log In
                </button>
             </Form>
           )}

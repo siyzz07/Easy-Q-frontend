@@ -29,11 +29,19 @@ export const verifyEmail = async (token:string)=>{
 // -----------------------------------------login customer
 
 export const loginCustomer = async (form:ICustomerLogin) =>{
-    console.log(form);    
+    
 const response = await authAxiosInstance.post("/auth/login",form);
 return response;
 
 };
+
+// ----------------------------------------- google auth
+export const googleAuth = async (token:string) =>{
+
+    const response = authAxiosInstance.post('/auth/google-auth',{token})
+    return response
+
+}
 
 
 //---------------------------------------------------- get shop Data
@@ -123,7 +131,7 @@ export const postNewAddress = async (form:ICustomerAddress) =>{
 
 export const deleteCustomerAddress = async (addressId:string) =>{
 
-    const response = await CustomerAxiosInstance.post("/customer/profile/delete-address",{addressId});
+    const response = await CustomerAxiosInstance.delete(`/customer/profile/delete-address${addressId}`);
     return response;
 
 

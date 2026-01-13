@@ -20,3 +20,4 @@ export const deleteReview = async (reviewId: string) => {
   const response = await CustomerAxiosInstance.delete(`/review/delete-review/${reviewId}`);
   return response;
 };
+ 

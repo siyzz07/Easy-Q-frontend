@@ -17,6 +17,10 @@ const ProfilePage = () => {
   let [editShopPoppup, setShopPopup] = useState<boolean>(false);
   let [update, setUpdate] = useState<boolean>(false);
 
+
+ 
+
+
   useEffect(() => {
     getShop();
   }, [editShopPoppup, update]);

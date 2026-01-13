@@ -6,6 +6,7 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import Store from "./Redux/Store.ts";
 import { Toaster } from "react-hot-toast";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -23,7 +24,9 @@ createRoot(document.getElementById("root")!).render(
       }}
     />
     <Provider store={Store}>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <App />
+    </GoogleOAuthProvider>
     </Provider>
 
     {/* <ToastContainer

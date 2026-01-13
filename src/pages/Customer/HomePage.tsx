@@ -21,6 +21,10 @@ const HomePage = () => {
   const [location, setLocation] = useState<string>("");
 
   const [showFilters, setShowFilters] = useState(false);
+  
+
+console.log(shops);
+
 
   useEffect(() => {
     fetchShops();

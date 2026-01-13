@@ -12,6 +12,7 @@ interface Shop {
   openAt: string;
   closeAt: string;
   _id: string;
+  rating:number
 }
 
 interface ShopDataCardProps {
@@ -50,7 +51,7 @@ const ShopDataCard: React.FC<ShopDataCardProps> = ({ shopData }) => {
            </h3>
            <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-lg border border-yellow-100">
              <Star size={14} className="fill-yellow-400 text-yellow-400" />
-             <span className="text-xs font-bold text-yellow-700">4.5</span>
+             <span className="text-xs font-bold text-yellow-700">{shopData.rating}</span>
            </div>
         </div>
 

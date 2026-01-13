@@ -5,34 +5,25 @@ import landingImage from "../../assets/vendor-login-image.png";
 
 const LoginPage = () => {
   return (
-    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-white">
-      {/* Left Side - Image */}
-      <motion.div 
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6 }}
-        className="hidden md:block relative overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-blue-900/20 z-10" />
-        <img 
-          src={landingImage} 
-          alt="Vendor Login" 
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute bottom-10 left-10 z-20 text-white max-w-md">
-           <h2 className="text-4xl font-bold mb-4">Manage Your Business Like a Pro.</h2>
-           <p className="text-lg text-white/90">Join thousands of vendors using Easy Q to streamline appointments and boost efficiency.</p>
+    <div className="min-h-screen relative flex items-center justify-center bg-gray-50 overflow-hidden">
+        {/* Background Image with Blur */}
+        <div className="absolute inset-0 z-0">
+            <img 
+              src={landingImage} 
+              alt="Background" 
+              className="w-full h-full object-cover blur-sm opacity-50 scale-105"
+            />
+            <div className="absolute inset-0 bg-blue-900/40" /> {/* Overlay with vendor theme color */}
+            <div className="absolute inset-0 bg-white/40" /> {/* Light Overlay */}
         </div>
-      </motion.div>
 
-      {/* Right Side - Form */}
       <motion.div 
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="flex items-center justify-center p-6 sm:p-12 md:p-24 bg-white"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="relative z-10 w-full max-w-[400px] p-4"
       >
-        <div className="w-full max-w-md">
+        <div className="bg-white/85 backdrop-blur-xl rounded-2xl shadow-2xl p-6 md:p-8 border border-white/50">
            <LoginForm />
         </div>
       </motion.div>

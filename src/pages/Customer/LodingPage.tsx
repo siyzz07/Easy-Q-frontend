@@ -14,7 +14,7 @@ const LoadingPage: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // ✅ Prevent duplicate execution (React Strict Mode)
+
     if (hasVerified.current) return;
     hasVerified.current = true;
 

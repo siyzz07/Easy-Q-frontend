@@ -25,7 +25,6 @@ import { addReview, deleteReview, getVendorReviews, updateReview } from "../../S
 import { decodeToken } from "../../utils/tokenUtils";
 
 
-// --- Validation Schema ---
 const reviewSchema = Yup.object({
   rating: Yup.number().min(1, "Select a rating").required(),
   comment: Yup.string().trim().min(5, "Comment too short").required(),
@@ -44,6 +43,11 @@ const ShopViews: React.FC<ShopViewsProps> = ({
   isUpdate,
   vendorId
 }) => {
+
+
+    console.log('---')
+
+
   const [photos, setPhotos] = useState<IImage[] | []>([]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [shopImagePopup, setShopImagePopup] = useState(false);
@@ -51,6 +55,8 @@ const ShopViews: React.FC<ShopViewsProps> = ({
   const [type, setType] = useState<string>("");
   const [userReview, setUserReview] = useState<any | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+
+
 
   useEffect(() => {
     if (vendorImages) {
@@ -64,6 +70,8 @@ const ShopViews: React.FC<ShopViewsProps> = ({
      }
   },[vendorId]);
 
+
+
   const fetchReviews = async () => {
     if(!vendorId) return;
     try {
@@ -74,7 +82,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
             
             const userInfo = decodeToken();
             if(userInfo?.userId && fetchedReviews.length > 0){
-                // Check if the first review belongs to the user (since backend sorts it)
+               
                 const firstReview = fetchedReviews[0];
                 const reviewUserId = firstReview.customerId?._id || firstReview.customerId;
                 
@@ -187,6 +195,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
   };
 
   const imagePrivew = (p: IImage) => {
+    console.log('p :>> ', p);
     setType("preview");
     setPreview(p);
     setShopImagePopup(true);
@@ -226,6 +235,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
     setShopImagePopup(val);
   };
   
+  console.log('preview :>> ', preview);
   return (
     <>
       <AnimatePresence>

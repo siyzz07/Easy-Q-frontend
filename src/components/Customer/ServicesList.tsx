@@ -101,7 +101,7 @@ const ServicesList: FC<InterfaceServicesList> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {services.map((service) => (
             <div
-              key={service._id}
+              key={service.id}
               className="glass-card rounded-2xl overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 border border-border/50 hover:border-primary/20 flex flex-col"
             >
               {/* Service Image */}

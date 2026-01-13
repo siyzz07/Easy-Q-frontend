@@ -37,7 +37,7 @@ export const getCustomersData = async() =>{
 //--------------------------------------------------------------block the customer
 
 export const blockCustomer= async(id:string) =>{
-    const response = await adminAxiosInstance.post("/admin/data/block-customer",{id});
+    const response = await adminAxiosInstance.put("/admin/data/block-customer",{id});
     return response;
     
     
@@ -59,7 +59,7 @@ export const getVendorsData = async (page:number,limit:number,search:string) =>{
 //--------------------------------------------------------------block vendors
 export const blockVendor= async(id:string) =>{
     
-    const response = await adminAxiosInstance.post("/admin/data/block-vendor",{id});
+    const response = await adminAxiosInstance.put("/admin/data/block-vendor",{id});
     return response;
     
     
