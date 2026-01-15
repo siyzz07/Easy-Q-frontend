@@ -46,10 +46,17 @@ export const googleAuth = async (token:string) =>{
 
 //---------------------------------------------------- get shop Data
 
-export const getShopsData = async ({search="",location="", page=1 , limit=10}:{search?:string;location?:string,page?:number,limit?:number}) =>{
+export const getShopsData = async ({search="", page=1 , limit=10, lat,lng,distance}:{search?:string,page?:number,limit?:number,lat?:number | null; lng?:number | null;  distance?:number | null;}) =>{
     
     const response = await CustomerAxiosInstance.get("/customer/shops-data",{
-        params:{search,location,page,limit}
+        params:{
+            search,
+            page,
+            limit,
+            lat,
+            lng,
+            distance
+        }
     });
     return response; 
 };

@@ -29,8 +29,9 @@ const LoginForm = () => {
         navigate("/admin");
       }
     } catch (error) {
+      console.log(error)
       if (error instanceof AxiosError && error?.response?.data) {
-        toast.error(error.response.data);
+        toast.error(error.response.data.message);
       }
     }
   };
