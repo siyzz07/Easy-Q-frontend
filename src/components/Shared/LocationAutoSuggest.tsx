@@ -85,7 +85,7 @@ const LocationAutoSuggest: React.FC<Props> = ({
 
       {loading && (
         <p className="absolute left-4 -bottom-6 text-xs text-gray-400">
-          searching...
+          {/* searching... */}
         </p>
       )}
 
