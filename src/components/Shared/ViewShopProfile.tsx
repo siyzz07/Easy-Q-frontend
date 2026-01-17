@@ -7,6 +7,7 @@ import { favoriteUpdate, getFavorite } from "../../Services/ApiService/CustomerA
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { GoogleMapDirection } from "../../utils/GoogleMapDirection";
 
 interface ViewShopProfileProps {
   data: IvendroFullData;
@@ -16,6 +17,10 @@ interface ViewShopProfileProps {
 
 const ViewShopProfile: FC<ViewShopProfileProps> = ({ data, isOwner, onEdit }) => {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+
+
+    console.log('data :>> ', data);
+
 
   useEffect(() => {
     const fetchFavoriteStatus = async () => {
@@ -85,7 +90,12 @@ const ViewShopProfile: FC<ViewShopProfileProps> = ({ data, isOwner, onEdit }) =>
                   <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white truncate">
                     {data.shopName}
                   </h1>
-                  <div className="flex items-center gap-2 text-muted-foreground mt-1 text-sm md:text-base">
+
+
+                  <div 
+                  
+                   onClick={()=>GoogleMapDirection(data.location?.coordinates[1] as number,data.location?.coordinates[0] as number)}
+                  className="flex items-center cursor-pointer gap-2 text-muted-foreground mt-1 text-sm md:text-base">
                     <MapPin className="w-4 h-4 shrink-0" />
                     <span className="truncate">{data.city}, {data.state}</span>
                   </div>

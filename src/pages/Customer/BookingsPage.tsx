@@ -11,8 +11,12 @@ import Pagination from "../../components/Shared/Pagination";
 export type BookingCardDTO = {
   id: string;
   title: string;
-  location: string;
-  facility: string;
+  location?: {
+    type: string;
+    coordinates: number[];
+  };
+  city : string;
+  state:string;
   date: string;
   time: string;
   status: string;
@@ -49,6 +53,8 @@ const BookingsPage = () => {
       const response = await getCustomerBookingData(page, limit, activeTab);
       const bookingArray = response?.data?.data || [];
       const totalPages = response?.data?.pagination.totalPages || 1;
+
+      console.log('booking :>> ', bookingArray);
       setTotalPage(totalPages);
 
       const mapped: BookingCardDTO[] = bookingArray.map((b: any) => {
@@ -58,8 +64,9 @@ const BookingsPage = () => {
         return {
           id: b?.id,
           title: b?.service?.name || "General Service",
-          location: b?.shop?.shopName || "Partner Shop",
-          facility: b?.shop?.city || "Location N/A",
+          location: b?.shop?.location || "Partner Shop",
+          city: b?.shop?.city || "Location N/A",
+          state:b?.shop?.state,
           date: b?.date, 
           time: `${b?.startTime} - ${b?.endTime}`,
           status: b?.status || "Pending",

@@ -275,6 +275,10 @@ export interface IvendroFullData {
   workingDays?: any;
   coordinates?: any;
   isVerified?: "pending" | "verified" | "rejected";
+   location?: {
+    type: string;
+    coordinates: number[];
+  };
 }
 
 export interface IWalletResponse {

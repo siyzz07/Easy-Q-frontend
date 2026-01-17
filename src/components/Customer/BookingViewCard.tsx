@@ -17,6 +17,7 @@ import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { Badge } from "../ui/badge";
 import type { BookingCardDTO } from "../../pages/Customer/BookingsPage";
+import { GoogleMapDirection } from "../../utils/GoogleMapDirection";
 
 interface Booking {
   id: number;
@@ -140,14 +141,17 @@ export default function BookingViewCard({
                   </Badge>
                 </div>
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                  <div className="flex items-center gap-2 text-sm font-bold text-slate-500">
+                <div                
+                className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                  <div 
+
+                  className="flex items-center gap-2 text-sm font-bold text-slate-500">
                     <MapPinned className="w-4 h-4 text-primary opacity-60" />
                     <span className="truncate group-hover:text-slate-800 transition-colors uppercase tracking-tight">
-                      {booking.location}
+                      {`${booking.state}-${booking.city}` }
                     </span>
                   </div>
-                  <div className="hidden sm:block h-1.5 w-1.5 rounded-full bg-slate-200" />
+                  {/* <div className="hidden sm:block h-1.5 w-1.5 rounded-full bg-slate-200" /> */}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -187,17 +191,15 @@ export default function BookingViewCard({
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-10 w-10 rounded-2xl hover:bg-slate-200 transition-colors hidden md:flex"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }}
+                      className="h-12 w-12 rounded-2xl cursor-pointer bg-slate-100 hover:bg-slate-200 transition-colors hidden md:flex"
+                        onClick={()=>GoogleMapDirection(booking.location?.coordinates[1] as number,booking.location?.coordinates[0] as number)}
+
                     >
-                      <MapPin size={19} />{" "}
+                      <MapPin className="hover:text-red-400" size={24} />{" "}
                       {/* <MoreVertical className="w-5 h-5 text-slate-400" /> */}
                     </Button>
                     <div className="h-12 w-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-white transition-all  shadow-sm group-hover:shadow-lg group-hover:shadow-primary/30">
