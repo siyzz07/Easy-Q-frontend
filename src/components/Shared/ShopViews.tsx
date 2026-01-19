@@ -23,6 +23,7 @@ import { AxiosError } from "axios";
 import type { IImage } from "../../Shared/types/Types";
 import { addReview, deleteReview, getVendorReviews, updateReview } from "../../Services/ApiService/ReviewApiService";
 import { decodeToken } from "../../utils/tokenUtils";
+import { isThereBooking } from "../../Services/ApiService/BookingApiService";
 
 
 const reviewSchema = Yup.object({
@@ -45,7 +46,6 @@ const ShopViews: React.FC<ShopViewsProps> = ({
 }) => {
 
 
-    console.log('---')
 
 
   const [photos, setPhotos] = useState<IImage[] | []>([]);
@@ -55,6 +55,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
   const [type, setType] = useState<string>("");
   const [userReview, setUserReview] = useState<any | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [eligibility,setEligibility] = useState<boolean>(false)
 
 
 
@@ -67,9 +68,31 @@ const ShopViews: React.FC<ShopViewsProps> = ({
   useEffect(() => {
      if(vendorId){
         fetchReviews();
+        reviewEligibility()
      }
   },[vendorId]);
 
+
+
+
+  const reviewEligibility = async ()=>{
+    try{
+        if(!vendorId)return
+        const response = await isThereBooking(vendorId)
+
+        if(response.data){
+            setEligibility(response.data.data)
+        }
+
+    }catch(error:unknown){
+        if(error){
+            console.log('reviewEligibility error');
+            console.log(error);
+            
+            
+        }
+    }
+  }
 
 
   const fetchReviews = async () => {
@@ -83,7 +106,10 @@ const ShopViews: React.FC<ShopViewsProps> = ({
             const userInfo = decodeToken();
             if(userInfo?.userId && fetchedReviews.length > 0){
                
-                const firstReview = fetchedReviews[0];
+                const firstReview = fetchedReviews.find((r:any) => (r.customerId?._id || r.customerId) === userInfo.userId);
+                    setUserReview(firstReview || null);
+
+                // const firstReview = fetchedReviews[0];
                 const reviewUserId = firstReview.customerId?._id || firstReview.customerId;
                 
                 if(reviewUserId === userInfo.userId){
@@ -195,7 +221,6 @@ const ShopViews: React.FC<ShopViewsProps> = ({
   };
 
   const imagePrivew = (p: IImage) => {
-    console.log('p :>> ', p);
     setType("preview");
     setPreview(p);
     setShopImagePopup(true);
@@ -235,7 +260,6 @@ const ShopViews: React.FC<ShopViewsProps> = ({
     setShopImagePopup(val);
   };
   
-  console.log('preview :>> ', preview);
   return (
     <>
       <AnimatePresence>
@@ -259,7 +283,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
             className="w-full"
         >
         <Card className=" border-0 bg-transparent shadow-none">
-            {/* HEADER removed from here as it likely controlled by parent, but keeping actions if needed */}
+      
             <CardContent className="p-0">
             <Tabs defaultValue="photos" className="w-full">
                 <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
@@ -321,6 +345,9 @@ const ShopViews: React.FC<ShopViewsProps> = ({
                     </div>
                 </TabsContent>
 
+
+
+
                 {/* REVIEWS TAB */}
                 <TabsContent value="reviews" className="mt-0">
                     <div className="grid lg:grid-cols-3 gap-8">
@@ -366,7 +393,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
 
                         {/* Reviews List & Form */}
                         <div className="lg:col-span-2 space-y-6">
-                            {!isVendor && (!userReview || isEditing) && (
+                            {!isVendor && eligibility && (!userReview || isEditing) && (
                             <div className="glass-card rounded-2xl p-6">
                                 <div className="flex justify-between items-center mb-4">
                                   <h3 className="font-semibold text-lg">{isEditing ? "Edit your review" : "Write a Review"}</h3>
@@ -473,6 +500,9 @@ const ShopViews: React.FC<ShopViewsProps> = ({
                                 })}
                             </div>
                         </div>
+
+
+
                     </div>
                 </TabsContent>
             </Tabs>

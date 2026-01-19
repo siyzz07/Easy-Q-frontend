@@ -179,7 +179,7 @@ const HomePage = () => {
                   placeholder="What service are you looking for?"
                   value={searchChange}
                   onChange={(e) => setSearchChange(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                  // onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   className="w-full h-14 pl-12 pr-4 rounded-xl bg-gray-50 md:bg-transparent outline-none text-gray-700 placeholder:text-gray-400"
                 />
               </div>

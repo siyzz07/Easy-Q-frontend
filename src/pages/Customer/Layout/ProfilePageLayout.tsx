@@ -79,13 +79,13 @@ const ProfilePageLayout = () => {
                             <User size={40} strokeWidth={1.5} />
                          </div>
                       </div>
-                      <div className="absolute -bottom-1 -right-1 h-8 w-8 bg-emerald-500 border-4 border-white rounded-full flex items-center justify-center text-white shadow-lg">
+                      {/* <div className="absolute -bottom-1 -right-1 h-8 w-8 bg-emerald-500 border-4 border-white rounded-full flex items-center justify-center text-white shadow-lg">
                          <Shield size={14} />
-                      </div>
+                      </div> */}
                    </div>
                    <div>
                       <h3 className="text-lg font-black text-slate-900 line-clamp-1">Account Member</h3>
-                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Verified Identity</p>
+                      {/* <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Verified Identity</p> */}
                    </div>
                 </div>
 

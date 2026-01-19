@@ -34,12 +34,6 @@ const Sidebar = () => {
     { icon: List, label: "Services", path: "Services", route: "services" },
     { icon: Calendar, label: "Bookings" ,path:"Bookings",route:"bookings"},
     { icon: Wallet, label: "Wallet", path: "Wallet", route: "wallet" },
-    {
-      icon: CreditCard,
-      label: "Payments",
-      path: "Payments",
-      route: "vendor/dashboard",
-    },
     { icon: Users, label: "Staffs", path: "Staffs", route: "/vendor/staffs" },
     {
       icon: Briefcase,

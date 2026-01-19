@@ -79,7 +79,7 @@ const VendorProfileView = () => {
       </div>
       <div className="min-h-screen bg-background/50 pb-12">
         
-        {/* Header using ViewShopProfile */}
+
         {vendordata && (
             <div className="w-full">
                 <ViewShopProfile data={vendordata} />
@@ -87,7 +87,7 @@ const VendorProfileView = () => {
         )}
 
         <main className="max-w-7xl mx-auto px-4 md:px-6 mt-8">
-            {/* Services List / Shop Views */}
+    
             <div className="w-full">
               <ShopViews
                 isVendor={false}

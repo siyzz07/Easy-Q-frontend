@@ -30,13 +30,19 @@ import Pagination from "../../components/Shared/Pagination";
 
 // Transaction type
 interface Transaction {
-  _id: string;
+  id: string;
   flow: "credit" | "debit";
   amount: number;
   status: "success" | "created" | "failed";
   createdAt: string;
   bookingId?: string;
   transactionType?: string;
+
+  bookingService?: string;
+  date?: string;
+  time?: string;
+  bookingDate?: string;
+  bookingTime?: string;
 }
 
 const TRANSACTION_TYPE_CONFIG = {
@@ -93,7 +99,7 @@ const WalletPage = () => {
     // called.current = true;
     console.log("helee");
     fetchWalletData();
-  }, [page,filter]);
+  }, [page, filter]);
 
   const fetchWalletData = async () => {
     try {
@@ -129,7 +135,6 @@ const WalletPage = () => {
       }
     }
   };
-
 
   const stats = {
     totalCredit: transactions
@@ -262,11 +267,13 @@ const WalletPage = () => {
                   {transactions.map((transaction, index) => {
                     const typeConfig =
                       TRANSACTION_TYPE_CONFIG[transaction.flow];
-                    const statusConfig = STATUS_CONFIG[transaction.status];
+                    const statusConfig =
+                      STATUS_CONFIG[transaction.status] ||
+                      STATUS_CONFIG.created;
 
                     return (
                       <motion.div
-                        key={transaction._id}
+                        key={transaction.id || index}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
@@ -284,26 +291,58 @@ const WalletPage = () => {
                               <p className="font-bold text-gray-900 text-sm truncate">
                                 {/* {transaction.description || "Transaction"} */}
                               </p>
+
+                              {/* Transaction Date / Time */}
                               <div className="flex items-center gap-3 mt-1">
                                 <div className="flex items-center gap-1.5 text-xs text-gray-500">
                                   <Calendar size={12} />
                                   <span>
-                                    {format(
-                                      new Date(transaction.createdAt),
-                                      "MMM dd, yyyy"
-                                    )}
+                                    {transaction.date ||
+                                      format(
+                                        new Date(transaction.createdAt),
+                                        "MMM dd, yyyy"
+                                      )}
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-1.5 text-xs text-gray-500">
                                   <Clock size={12} />
                                   <span>
-                                    {format(
-                                      new Date(transaction.createdAt),
-                                      "hh:mm a"
-                                    )}
+                                    {transaction.time ||
+                                      format(
+                                        new Date(transaction.createdAt),
+                                        "hh:mm a"
+                                      )}
                                   </span>
                                 </div>
                               </div>
+
+                              {/* Additional Booking Info if available */}
+                              {transaction.bookingId && (
+                                <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                                  {/* Booking ID */}
+                                  <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 font-semibold text-blue-700 border border-blue-100">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+                                    Booking: {transaction.bookingId}
+                                  </span>
+
+                                  {/* Service */}
+                                  {transaction.bookingService && (
+                                    <span className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-3 py-1 font-semibold text-indigo-700 border border-indigo-100">
+                                      <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
+                                      {transaction.bookingService}
+                                    </span>
+                                  )}
+
+                                  {/* Date + Time */}
+                                  {transaction.bookingDate && (
+                                    <span className="inline-flex items-center gap-1 rounded-full bg-gray-50 px-3 py-1 font-medium text-gray-600 border border-gray-200">
+                                      <span className="h-1.5 w-1.5 rounded-full bg-gray-400" />
+                                      {transaction.bookingDate} •{" "}
+                                      {transaction.bookingTime}
+                                    </span>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </div>
 

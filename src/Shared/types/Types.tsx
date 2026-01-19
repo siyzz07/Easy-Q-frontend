@@ -269,6 +269,7 @@ export interface IvendroFullData {
   shopType?: IServiceVendorTypes;
   openAt?: any;
   closeAt?: any;
+  rating?:string
   proofImage?: any;
   ProfileImage?: any;
   images?: IImage[] | [];

@@ -19,7 +19,7 @@ const ViewShopProfile: FC<ViewShopProfileProps> = ({ data, isOwner, onEdit }) =>
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
 
-    console.log('data :>> ', data);
+
 
 
   useEffect(() => {
@@ -142,7 +142,7 @@ const ViewShopProfile: FC<ViewShopProfileProps> = ({ data, isOwner, onEdit }) =>
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground font-medium">Rating</p>
-                      <p className="text-sm font-semibold">4.8 <span className="text-xs font-normal text-muted-foreground">(127)</span></p>
+                      <p className="text-sm font-semibold">{data.rating}<span className="text-xs font-normal text-muted-foreground"></span></p>
                     </div>
                  </div>
 

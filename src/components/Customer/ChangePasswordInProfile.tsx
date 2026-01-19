@@ -158,7 +158,7 @@ const ChangePasswordInProfile = () => {
                         To maintain a high level of security, we recommend changing your password every 90 days. 
                      </p>
                      <ul className="space-y-2 pt-2">
-                        {["At least 8 characters", "Include numbers", "Symbols recommended"].map((tip, i) => (
+                        {["At least 6 characters", "Include numbers", "Symbols recommended"].map((tip, i) => (
                            <li key={i} className="flex items-center gap-2 text-[11px] font-black text-slate-400 uppercase tracking-widest">
                               <CheckCircle2 size={12} className="text-emerald-500" />
                               {tip}
@@ -169,7 +169,7 @@ const ChangePasswordInProfile = () => {
                </div>
             </div>
 
-            <div className="bg-blue-50/50 rounded-[2.5rem] p-8 border border-blue-100 flex items-center justify-between">
+            {/* <div className="bg-blue-50/50 rounded-[2.5rem] p-8 border border-blue-100 flex items-center justify-between">
                <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-[1.2rem] bg-white shadow-sm border border-blue-100 flex items-center justify-center text-blue-600">
                      <Lock size={20} />
@@ -180,7 +180,7 @@ const ChangePasswordInProfile = () => {
                   </div>
                </div>
                <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            </div>
+            </div> */}
         </div>
       </div>
     </div>
