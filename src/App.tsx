@@ -9,6 +9,7 @@ import PublicdRoute from "./Routes/PublicRoutes/PublicRoute";
 import { ADMIN_ROUTES, CUSTOMER_ROUTES, VENDOR_ROUTES } from "./Shared/Constants/RouteConstants";
 import { useEffect } from "react";
 import { connectSocket } from "./Services/Socket/Socket";
+import { registerSocketEvents } from "./Services/Socket/SocketEvents";
 import { getAccessToken } from "./utils/tokenUtils";
 import ScrollToTop from "./components/Shared/ScrollTop";
 
@@ -17,6 +18,7 @@ const App = () => {
   const token = getAccessToken();
   if (token) {
     connectSocket(token);
+    registerSocketEvents();
   }
 }, []);
 

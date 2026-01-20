@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { connectSocket, disconnectSocket, getSocket } from "../Services/Socket/Socket";
-import { registerSocketEvents } from "../Services/Socket/SocketEvents";
+import { disconnectSocket } from "../Services/Socket/Socket"; // We can keep disconnect if we want, but ideally remove too.
 
 interface SocketState {
   connected: boolean;
@@ -17,13 +16,11 @@ const socketSlice = createSlice({
   initialState,
   reducers: {
     connectSocketAction: (state, action: PayloadAction<string>) => {
-      const token = action.payload;
-      connectSocket(token);
-      registerSocketEvents();
       state.connected = true;
     },
+    
     disconnectSocketAction: (state) => {
-      disconnectSocket();
+      disconnectSocket(); 
       state.connected = false;
     },
   },

@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
+import NotificationModal from "./NotificationModal";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Bell, Menu, X, User } from "lucide-react";
 import { getAccessToken } from "../../utils/tokenUtils";
 import { motion, AnimatePresence } from "framer-motion";
+import { fetchNotification } from "../../Services/ApiService/NotificationApiService";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../Redux/Store";
+import { setNotifications } from "../../Redux/notificationSlice";
 
 interface NavbarProps {
   menu: { label: string; path: string }[];
@@ -11,13 +16,39 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ menu }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const token = getAccessToken();
+  const dispatch = useDispatch();
+
+  // Get notifications from Redux
+  const notifications = useSelector((state: any) => state.notification.notifications) || [];
+  // const unreadCount = Array.isArray(notifications) ? notifications.filter((n: any) => !n.isRead).length : 0;
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Handle scroll effect
+  useEffect(() => {
+    
+      loadNotifications();
+
+  },[]);
+
+
+  const loadNotifications = async () => {
+      try {
+        if(!token) return
+        const result = await fetchNotification();
+        if (result?.data) {
+           dispatch(setNotifications(result.data));
+
+           console.log('result :>> ', result);
+        }
+      } catch (error) {
+        console.error("Failed to fetch notifications", error);
+      }
+    };
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -73,15 +104,32 @@ const Navbar: React.FC<NavbarProps> = ({ menu }) => {
         <div className="flex items-center gap-4">
           {token ? (
             <>
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative rounded-full border border-border p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-                aria-label="Notifications"
-              >
-                <Bell className="h-4 w-4" />
-                <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-background" />
-              </motion.button>
+              <div className="relative">
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                  className={`relative rounded-full border p-2 transition-colors ${
+                    isNotificationOpen 
+                      ? "bg-primary/10 border-primary text-primary" 
+                      : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+                  aria-label="Notifications"
+                >
+                  <Bell className="h-4 w-4" />
+                  {/* {unreadCount > 0 && (
+                    <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-background" />
+                  )} */}
+                </motion.button>
+
+                <NotificationModal 
+                  isOpen={isNotificationOpen}
+                  onClose={() => setIsNotificationOpen(false)}
+                  notifications={notifications}
+                  onMarkRead={() => console.log("Mark all read")}
+                  onClear={() => console.log("Clear all")}
+                />
+              </div>
 
               <motion.div
                 whileHover={{ scale: 1.05 }}

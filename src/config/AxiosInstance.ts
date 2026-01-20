@@ -41,18 +41,19 @@ export const axiosInstance = () => {
 
         try {
 
-          const tokenDecode = decodeToken();
+          // const tokenDecode = decodeToken();
         
-          const refreshResponse = await instance.post("/auth/refresh-token",{role:tokenDecode?.role});
-          const newAccessToken = refreshResponse.data.accessToken;
-
-          removeToken();
-          setAccessToken(newAccessToken);
-
+          // const refreshResponse = await instance.post("/auth/refresh-token",{role:tokenDecode?.role});
+          // const newAccessToken = refreshResponse.data.accessToken;
+          
+          // removeToken();
+          // setAccessToken(newAccessToken);
+          
+          const newAccessToken = await  refreshAccessToken();
           originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return instance(originalRequest);
         } catch (refreshError) {
-          console.log("Refresh token error");
+          console.log("Refresh token error");   
           removeToken();
           window.location.href = "/customer/login";
           return Promise.reject(refreshError);
@@ -76,6 +77,32 @@ export const axiosInstance = () => {
 };
 
 
+
+
+
+export const refreshAccessToken = async (): Promise<string> => {
+  try {
+    const tokenDecode = decodeToken();
+
+    const res = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/api/auth/refresh-token`,
+      { role: tokenDecode?.role },
+      { withCredentials: true }
+    );
+
+    const newAccessToken = res.data.accessToken;
+
+    removeToken();
+    setAccessToken(newAccessToken);
+
+    return newAccessToken;
+  } catch (error) {
+    removeToken();
+    throw error;
+  }
+};
+
+
 // ""'contract
 
 export const adminAxiosInstance = axiosInstance();
@@ -84,6 +111,7 @@ export const CustomerAxiosInstance = axiosInstance();
 export const BookingAxiosInstance =axiosInstance();
 export const TransactionAxiosInstance = axiosInstance();
 export const WalletAxiosInstance = axiosInstance();
+export const NotificaionAxiosInstance = axiosInstance()
 // ----------- contract
 export const ContractAxiosInstance = axiosInstance();
 

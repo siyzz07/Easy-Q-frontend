@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { ToastContainer,Slide, Bounce } from "react-toastify";
+import { ToastContainer, Slide, Bounce } from "react-toastify";
 import "./index.css";
 import App from "./App.tsx";
 import { Provider } from "react-redux";
@@ -9,7 +9,7 @@ import { Toaster } from "react-hot-toast";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+  <>
     <Toaster
       position="top-right"
       gutter={12}
@@ -23,10 +23,24 @@ createRoot(document.getElementById("root")!).render(
         duration: 4000,
       }}
     />
+
+    <ToastContainer
+      position="bottom-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss={false}
+      draggable={false}
+      pauseOnHover={false}
+      //  transition={Slide}
+      theme="light"
+    />
     <Provider store={Store}>
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <App />
-    </GoogleOAuthProvider>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <App />
+      </GoogleOAuthProvider>
     </Provider>
 
     {/* <ToastContainer
@@ -40,21 +54,7 @@ createRoot(document.getElementById("root")!).render(
       limit={3}
     /> */}
 
-    <ToastContainer
-  position="bottom-right"
-  autoClose={3000}
-  hideProgressBar={false}
-  newestOnTop
-  closeOnClick
-  rtl={false}
-  pauseOnFocusLoss={false}
-  draggable={false}
-  pauseOnHover={false}
-  //  transition={Slide}
-  theme="light"
-/>
-
-{/* <ToastContainer
+    {/* <ToastContainer
   position="top-right"
   autoClose={2500}
   hideProgressBar={false}
@@ -65,5 +65,5 @@ createRoot(document.getElementById("root")!).render(
   transition={Slide}
   limit={3}
 /> */}
-  </StrictMode>
+  </>
 );

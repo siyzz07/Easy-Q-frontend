@@ -1,12 +1,13 @@
 import { io, Socket } from "socket.io-client";
+import { refreshAccessToken } from "../../config/AxiosInstance";
 
 let socket: Socket | null = null;
-
+let isRefreshing = false;
 export const connectSocket = (token: string) => {
   if (!token) return null;
 
   socket = io(import.meta.env.VITE_BASE_URL, {
-    auth: { token },       
+    auth: { token },
     transports: ["websocket"],
     reconnection: true,
   });
@@ -19,6 +20,27 @@ export const connectSocket = (token: string) => {
     console.log(" Socket disconnected");
   });
 
+  socket.on("connect_error", async (err) => {
+    console.error("Reason:", err.message);
+    if (err.message === "jwt expired" || err.message == 'socket authentication failed') {
+      console.log("Detected expired token, refreshing...");
+         if (isRefreshing) return;
+      isRefreshing = true;
+      try {
+        const newAccessToken = await refreshAccessToken();
+        const newToken = newAccessToken;
+
+        if (socket) {
+          socket.auth = { token: String( newToken )};
+          socket.connect();
+        }
+      } catch (error) {
+        console.error("Refresh failed, logging out");
+      }finally{
+         isRefreshing = false;
+      }
+    }
+  });
   return socket;
 };
 

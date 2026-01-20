@@ -16,6 +16,8 @@ import { useDispatch } from "react-redux";
 import { customerLoginSuccess } from "../../Redux/CustomeSlice";
 import { connectSocketAction } from "../../Redux/SocketSlice";
 import { GoogleLogin } from "@react-oauth/google";
+import { connectSocket } from "../../Services/Socket/Socket";
+import { registerSocketEvents } from "../../Services/Socket/SocketEvents";
 
 const LoginForm: FC = () => {
   let dispatch = useDispatch();
@@ -53,6 +55,8 @@ const LoginForm: FC = () => {
         setAccessToken(response.data.accesstoken);
         dispatch(customerLoginSuccess(response.data.accesstoken));
         dispatch(connectSocketAction(response.data.accesstoken)); // socket io
+        connectSocket(response.data.accesstoken);
+        registerSocketEvents();
         navigate("/customer");
       }
     } catch (error: unknown) {
