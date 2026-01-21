@@ -1,5 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { NotificaionAxiosInstance } from "../config/AxiosInstance";
 
 export interface INotification {
   _id: string;
@@ -30,11 +31,34 @@ export interface INotification {
 
 interface NotificationState {
   notifications: INotification[];
+  loading: boolean;
+  error: string | null;
+  totalUnreaded:number|0
 }
 
 const initialState: NotificationState = {
   notifications: [],
+  loading: false,
+  error: null,
+  totalUnreaded:0
 };
+
+export const fetchNotification = createAsyncThunk<
+  INotification[],
+  void,
+  { rejectValue: string }
+>("notification/notifications", async (_, { rejectWithValue }) => {
+  try {
+    const response = await NotificaionAxiosInstance.get(
+      "/notification/notifications"
+    );
+    return response.data.data;
+  } catch (error: any) {
+    return rejectWithValue(
+      error?.response?.data?.message || "Failed to fetch notifications"
+    );
+  }
+});
 
 const notificationSlice = createSlice({
   name: "notification",
@@ -42,6 +66,8 @@ const notificationSlice = createSlice({
   reducers: {
     setNotifications: (state, action: PayloadAction<INotification[]>) => {
       state.notifications = action.payload;
+
+
     },
 
     markAsRead: (state, action: PayloadAction<string>) => {
@@ -49,10 +75,12 @@ const notificationSlice = createSlice({
         (n) => n._id === action.payload
       );
       if (notification) notification.isRead = true;
+       state.totalUnreaded = state.totalUnreaded-1
     },
 
     markAllAsRead: (state) => {
       state.notifications.forEach((n) => (n.isRead = true));
+
     },
 
     removeNotification: (state, action: PayloadAction<string>) => {
@@ -64,6 +92,29 @@ const notificationSlice = createSlice({
     clearAll: (state) => {
       state.notifications = [];
     },
+  },
+
+    
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchNotification.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchNotification.fulfilled, (state, action) => {
+        state.loading = false;
+        state.notifications = action.payload; 
+        state.totalUnreaded = action.payload.reduce((acc,data)=>{
+                if(!data.isRead){
+                  acc++
+                }
+                return acc
+        },0)
+      })
+      .addCase(fetchNotification.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Fetch failed";
+      });
   },
 });
 

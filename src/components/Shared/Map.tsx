@@ -16,7 +16,7 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// Internal component to handle view changes
+
 const ChangeView = ({
   center,
   zoom,
@@ -31,7 +31,7 @@ const ChangeView = ({
   return null;
 };
 
-// Internal component to handle clicks
+
 const LocationMarker = ({
   position,
   setPosition,

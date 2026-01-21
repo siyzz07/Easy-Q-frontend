@@ -49,20 +49,13 @@ const HomePage = () => {
   ) => {
     try {
       setLoading(true);
-
       const currentSearch = overrideSearch !== undefined ? overrideSearch : search;
       const currentLat = overrideLat !== undefined ? overrideLat : lat;
       const currentLng = overrideLng !== undefined ? overrideLng : lng;
-
       const currentCategories =
       overrideCategories !== undefined ? overrideCategories : categoryFilter;
-
-    const currentRatings =
+      const currentRatings =
       overrideRatings !== undefined ? overrideRatings : ratingFilter;
-
-
-
-
       const response = await getShopsData({
         search: currentSearch,
         page,
@@ -146,7 +139,7 @@ const HomePage = () => {
 
   return (
     <main className="min-h-screen bg-[#F8FAFC]">
-      <section className="relative z-40 bg-white pt-12 pb-16 px-4 overflow-visible">
+      <section className="relative z-40 bg-white pt-12 pb-16 px-4 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-50 rounded-full blur-3xl opacity-50" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-indigo-50 rounded-full blur-3xl opacity-50" />

@@ -55,8 +55,6 @@ const LoginForm: FC = () => {
         setAccessToken(response.data.accesstoken);
         dispatch(customerLoginSuccess(response.data.accesstoken));
         dispatch(connectSocketAction(response.data.accesstoken)); // socket io
-        connectSocket(response.data.accesstoken);
-        registerSocketEvents();
         navigate("/customer");
       }
     } catch (error: unknown) {

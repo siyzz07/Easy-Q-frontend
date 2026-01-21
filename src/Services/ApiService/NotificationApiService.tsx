@@ -9,6 +9,15 @@ import { NotificaionAxiosInstance } from "../../config/AxiosInstance"
 export const fetchNotification = async () =>{
 
     const response = await NotificaionAxiosInstance.get('/notification/notifications')
-    console.log('response :>> ', response);
     return response
+}
+
+
+/**
+ * 
+ *   update notification
+ * 
+ */
+export const updateNotification = async (updateType:string,id?:string) =>{
+    const response = await NotificaionAxiosInstance.patch('/notification/update',{updateType,id})
 }

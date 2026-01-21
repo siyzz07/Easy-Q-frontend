@@ -22,32 +22,33 @@ const Navbar: React.FC<NavbarProps> = ({ menu }) => {
   const token = getAccessToken();
   const dispatch = useDispatch();
 
-  // Get notifications from Redux
-  const notifications = useSelector((state: any) => state.notification.notifications) || [];
-  // const unreadCount = Array.isArray(notifications) ? notifications.filter((n: any) => !n.isRead).length : 0;
+  const unreadCount = useSelector(
+    (state: any) => state.notification.totalUnreaded
+  );
+
+  const notifications =
+    useSelector((state: any) => state.notification.notifications) || [];
+
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   useEffect(() => {
-    
-      loadNotifications();
+    // loadNotifications();
+  }, []);
 
-  },[]);
+  // const loadNotifications = async () => {
+  //     try {
+  //       if(!token) return
+  //       const result = await fetchNotification();
+  //       if (result?.data) {
+  //          dispatch(setNotifications(result.data));
 
-
-  const loadNotifications = async () => {
-      try {
-        if(!token) return
-        const result = await fetchNotification();
-        if (result?.data) {
-           dispatch(setNotifications(result.data));
-           
-           console.log('result------------------------:>> ', result);
-        }
-      } catch (error) {
-        console.error("Failed to fetch notifications", error);
-      }
-    };
+  //          console.log('result------------------------:>> ', result);
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to fetch notifications", error);
+  //     }
+  //   };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,7 +60,7 @@ const Navbar: React.FC<NavbarProps> = ({ menu }) => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={` fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled ? "glass-nav py-2" : "bg-transparent py-4"
       }`}
     >
@@ -67,7 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({ menu }) => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
           <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-lg overflow-hidden group-hover:scale-105 transition-transform duration-300">
-             <div className="absolute inset-0 bg-white/20 rotate-45 translate-y-full group-hover:translate-y-[-100%] transition-transform duration-700 ease-in-out"/>
+            <div className="absolute inset-0 bg-white/20 rotate-45 translate-y-full group-hover:translate-y-[-100%] transition-transform duration-700 ease-in-out" />
             <span className="text-xl font-bold relative z-10">Q</span>
           </div>
           <span className="text-xl font-bold tracking-tight text-foreground">
@@ -86,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({ menu }) => {
                 className={`relative px-1 py-1 transition-colors hover:text-primary ${
                   isActive ? "text-primary" : "text-muted-foreground"
                 }`}
-              > 
+              >
                 {item.label}
                 {isActive && (
                   <motion.div
@@ -105,29 +106,42 @@ const Navbar: React.FC<NavbarProps> = ({ menu }) => {
           {token ? (
             <>
               <div className="relative">
-                <motion.button 
+                <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsNotificationOpen(!isNotificationOpen)}
                   className={`relative rounded-full border p-2 transition-colors ${
-                    isNotificationOpen 
-                      ? "bg-primary/10 border-primary text-primary" 
+                    isNotificationOpen
+                      ? "bg-primary/10 border-primary text-primary"
                       : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
                   aria-label="Notifications"
                 >
                   <Bell className="h-4 w-4" />
-                  {/* {unreadCount > 0 && (
-                    <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-background" />
-                  )} */}
+                  {unreadCount > 0 && (
+                    <span
+                      className="
+                       absolute -top-1 -right-1
+                       min-w-[18px] h-[18px]
+                       px-1
+                       flex items-center justify-center
+                       rounded-full
+                       bg-red-500 text-white
+                       text-[11px] font-bold
+                       ring-2 ring-background
+                     "
+                    >
+                      {unreadCount}
+                    </span>
+                  )}
                 </motion.button>
 
-                <NotificationModal 
+                <NotificationModal
                   isOpen={isNotificationOpen}
                   onClose={() => setIsNotificationOpen(false)}
-                  notifications={notifications}
-                  onMarkRead={() => console.log("Mark all read")}
-                  onClear={() => console.log("Clear all")}
+                  // notifications={notifications}
+                  // onMarkRead={() => console.log("Mark all read")}
+                  // onClear={() => console.log("Clear all")}
                 />
               </div>
 
@@ -142,7 +156,7 @@ const Navbar: React.FC<NavbarProps> = ({ menu }) => {
             </>
           ) : (
             <div className="flex items-center gap-4">
-                 <Link
+              <Link
                 to="/customer/login"
                 className="hidden md:block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
@@ -188,7 +202,7 @@ const Navbar: React.FC<NavbarProps> = ({ menu }) => {
                 </Link>
               ))}
               {!token && (
-                 <Link
+                <Link
                   to="/customer/login"
                   className="block px-4 py-3 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/5 font-medium transition-colors"
                   onClick={() => setIsOpen(false)}
