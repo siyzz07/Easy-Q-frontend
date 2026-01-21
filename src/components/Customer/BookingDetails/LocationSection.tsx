@@ -3,12 +3,16 @@ import React from "react";
 import { motion } from "framer-motion";
 import { MessageSquare, MapPin, Navigation, Phone } from "lucide-react";
 import { Button } from "../../ui/button";
+import { GoogleMapDirection } from "../../../utils/GoogleMapDirection";
 
 interface LocationSectionProps {
   bookingData: any;
 }
 
 const LocationSection: React.FC<LocationSectionProps> = ({ bookingData }) => {
+
+  // console.log('bookingData :>> ', bookingData);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -49,10 +53,12 @@ const LocationSection: React.FC<LocationSectionProps> = ({ bookingData }) => {
           </div>
         </div>
 
-        <div className="md:col-span-5 h-48 md:h-auto rounded-[2rem] bg-slate-100 border border-border/50 overflow-hidden relative group shadow-inner">
+        <div
+          onClick={()=>GoogleMapDirection(bookingData.shop.location.coordinates[1],bookingData.shop.location.coordinates[0])}
+        className="md:col-span-5 h-48 cursor-pointer md:h-auto rounded-[2rem] bg-slate-100 border border-border/50 overflow-hidden relative group shadow-inner">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 to-indigo-100/50 flex items-center justify-center">
             <MapPin size={40} className="text-primary/30 animate-bounce" />
-            <div className="absolute inset-0 bg-[url('https://api.mapbox.com/styles/v1/mapbox/light-v10/static/-118.4002,34.0736,13/400x300?access_token=none')] bg-cover opacity-20" />
+            <div className="absolute inset-0  bg-cover opacity-20" />
           </div>
           <Button variant="secondary" size="sm" className="absolute bottom-3 right-3 rounded-xl shadow-lg font-bold opacity-0 group-hover:opacity-100 transition-opacity">
             Open Maps

@@ -15,6 +15,8 @@ const BookingActionCard: React.FC<BookingActionsProps> = ({
   onCancel, 
   onReschedule 
 }) => {
+
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -41,7 +43,7 @@ const BookingActionCard: React.FC<BookingActionsProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-3 w-full md:w-auto">
-          {status !== "cancelled" && (
+          {status !== "cancelled" && status !== 'completed' && (
             <>
           
              <button

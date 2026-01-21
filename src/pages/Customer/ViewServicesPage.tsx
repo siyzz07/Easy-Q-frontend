@@ -29,7 +29,7 @@ const ViewServicesPage: React.FC = () => {
         getEachShopData(id as string),
         getEachShopServices(id as string),
       ]);
-
+        
       if (shopResponse?.data?.data) setShopData(shopResponse.data.data);
       if (serviceResponse?.data?.data) setShopServiceData(serviceResponse.data.data);
 

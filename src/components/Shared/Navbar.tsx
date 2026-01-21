@@ -41,8 +41,8 @@ const Navbar: React.FC<NavbarProps> = ({ menu }) => {
         const result = await fetchNotification();
         if (result?.data) {
            dispatch(setNotifications(result.data));
-
-           console.log('result :>> ', result);
+           
+           console.log('result------------------------:>> ', result);
         }
       } catch (error) {
         console.error("Failed to fetch notifications", error);

@@ -6,6 +6,7 @@ import type { IvendroFullData } from "../../Shared/types/Types";
 import { bookAvailableTime } from "../../Services/ApiService/BookingApiService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 interface InterfaceServicesList {
   services: IService[];
@@ -63,7 +64,10 @@ const ServicesList: FC<InterfaceServicesList> = ({
         );
       }
     } catch (error: unknown) {
-      console.log(error);
+      setBookService(false)
+      if(error instanceof AxiosError){
+        toast.error(error.response?.data.message || 'service not available')
+      }
     }
   };
 

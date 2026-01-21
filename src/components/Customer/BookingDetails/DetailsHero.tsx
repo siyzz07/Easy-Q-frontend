@@ -13,7 +13,7 @@ interface DetailsHeroProps {
 
 const getStatusIcon = (status: string) => {
   switch (status.toLowerCase()) {
-    case "confirmed": return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
+    case "completed": return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
     case "pending": return <Clock4 className="w-5 h-5 text-amber-500" />;
     case "cancelled": return <XCircle className="w-5 h-5 text-rose-500" />;
     default: return <AlertCircle className="w-5 h-5 text-blue-500" />;
@@ -22,7 +22,7 @@ const getStatusIcon = (status: string) => {
 
 const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
-    case "confirmed": return "bg-emerald-50 text-emerald-700 border-emerald-200";
+    case "completed": return "bg-emerald-50 text-emerald-700 border-emerald-200";
     case "pending": return "bg-amber-50 text-amber-700 border-amber-200";
     case "cancelled": return "bg-rose-50 text-rose-700 border-rose-200";
     default: return "bg-blue-50 text-blue-700 border-blue-200";
@@ -64,7 +64,7 @@ const DetailsHero: React.FC<DetailsHeroProps> = ({ bookingData, id }) => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-3xl bg-secondary/30 border border-border/40">
           {[
             { label: "Date", value: bookingData.date },
-            { label: "Time", value: bookingData.startTime, border: true },
+            { label: "Time", value: convertRailwayTime( bookingData.startTime), border: true },
             { label: "Duration", value: bookingData.service.duration, border: true },
             { label: "Price", value: bookingData.service.price, border: true }
           ].map((item, idx) => (

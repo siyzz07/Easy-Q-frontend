@@ -45,7 +45,7 @@ const VendorServicesTypePage = () => {
   const column = [
     { key: "serviceName", label: "Catalog Item" },
     { key: "description", label: "Brief Description", maxWidth: "350px" },
-    { key: "action", label: "Visibility", align: "right" as const },
+    // { key: "action", label: "Visibility", align: "right" as const },
     { key: "edit", label: "Modify" },
     { key: "isActive", label: "Offering Status" },
   ];

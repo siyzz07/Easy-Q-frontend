@@ -117,14 +117,16 @@ const VendorBookingDetailsPage = () => {
   };
 
   const handleStatusUpdate = async (newStatus: string) => {
-    if (!bookingData?._id) return;
+    if (!bookingData?.id) return;
     
+      
+
     try {
       setUpdating(true);
-      const response = await updateBookingStatus(bookingData._id, newStatus);
+      const response = await updateBookingStatus(bookingData.id, newStatus);
       
       if (response?.data?.success) {
-        toast.success(`Booking ${newStatus} successfully`);
+        toast.success(` ${newStatus} successfully`);
         setBookingData({ ...bookingData, status: newStatus });
       }
     } catch (error: unknown) {
@@ -232,13 +234,13 @@ const VendorBookingDetailsPage = () => {
               <div className="flex gap-2 flex-wrap">
                 {currentStatus === "pending" && (
                   <>
-                    <button
-                      onClick={() => handleStatusUpdate("confirmed")}
+                     <button
+                      onClick={() => handleStatusUpdate("completed")}
                       disabled={updating}
-                      className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <CheckCircle2 size={18} />
-                      <span>Completed</span>
+                      <span>Mark as Completed</span>
                     </button>
                     {/* <button
                       onClick={() => handleStatusUpdate('cancelled')}
@@ -248,26 +250,6 @@ const VendorBookingDetailsPage = () => {
                       <XCircle size={18} />
                       <span>Cancel</span>
                     </button> */}
-                  </>
-                )}
-                {currentStatus === "confirmed" && (
-                  <>
-                    <button
-                      onClick={() => handleStatusUpdate("completed")}
-                      disabled={updating}
-                      className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <CheckCircle2 size={18} />
-                      <span>Mark as Completed</span>
-                    </button>
-                    <button
-                      onClick={() => handleStatusUpdate("cancelled")}
-                      disabled={updating}
-                      className="flex items-center gap-2 px-5 py-2.5 bg-rose-600 text-white font-bold rounded-xl shadow-lg shadow-rose-600/20 hover:bg-rose-700 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <XCircle size={18} />
-                      <span>Cancel</span>
-                    </button>
                   </>
                 )}
               </div>

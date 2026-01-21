@@ -53,8 +53,6 @@ const BookingsPage = () => {
       const response = await getCustomerBookingData(page, limit, activeTab);
       const bookingArray = response?.data?.data || [];
       const totalPages = response?.data?.pagination.totalPages || 1;
-
-      console.log('booking :>> ', bookingArray);
       setTotalPage(totalPages);
 
       const mapped: BookingCardDTO[] = bookingArray.map((b: any) => {
@@ -123,7 +121,7 @@ const BookingsPage = () => {
         <Tabs defaultValue="all" onValueChange={handleTabChange} className="w-full">
           <div className="flex justify-center mb-8">
             <TabsList className="bg-white/50 backdrop-blur-md p-1.5 rounded-2xl h-14 border border-white shadow-sm inline-flex w-full md:w-auto">
-              {["all", "pending", "complete", "cancelled"].map(tab => (
+              {["all", "pending", "completed", "cancelled"].map(tab => (
                 <TabsTrigger 
                   key={tab} 
                   value={tab} 

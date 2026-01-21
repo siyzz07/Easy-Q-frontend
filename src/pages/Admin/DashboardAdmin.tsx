@@ -44,6 +44,8 @@ const DashboardAdmin = () => {
     const fetchDashboardData = async () => {
       try {
         const response = await adminDashbordData();
+        console.log('response for admin dahsboard :>> ', response);
+
         if (response?.data) {
           setData({
             totalVendors: response.data.totalVednors || 0,
@@ -67,10 +69,10 @@ const DashboardAdmin = () => {
   const statsConfig = useMemo(
     () => [
       {
-        title: "Total Platform Users",
+        title: "Total  Users",
         value: data.totalVendors + data.totalCustomers,
         icon: Users,
-        description: "Aggregate of all members",
+        description: "Combined customers & vendors",
         color: "from-blue-500 to-cyan-400",
         shadow: "shadow-blue-500/20",
       },
@@ -94,7 +96,7 @@ const DashboardAdmin = () => {
         title: "Pending Approval",
         value: data.pendingVendors,
         icon: Clock,
-        description: "Awaiting review",
+        description: "Awaiting approval",
         color: "from-orange-500 to-amber-400",
         shadow: "shadow-orange-500/20",
       },
@@ -169,17 +171,11 @@ const DashboardAdmin = () => {
                     {item.title}
                   </CardTitle>
 
-                  {/* <div className="flex items-baseline gap-2">
+                  <div className="flex items-baseline gap-2">
                     <p className="text-2xl font-black text-foreground tracking-tight transition-all group-hover:translate-x-0.5 duration-300">
-                      {item.isCurrency
-                        ? new Intl.NumberFormat("en-US", {
-                            style: "currency",
-                            currency: "USD",
-                            maximumFractionDigits: 0,
-                          }).format(item.value)
-                        : item.value.toLocaleString()}
+                      {item.value}
                     </p>
-                  </div> */}
+                  </div>
 
                   <CardDescription className="text-[10px] font-medium text-muted-foreground/70 flex items-center gap-1 leading-none">
                     <TrendingUp size={10} className="text-emerald-500" />

@@ -56,7 +56,9 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   }, [isOpen]);
 
 
+ 
 
+  console.log('9090909 :>> ', notifications);
 
 
 
@@ -100,7 +102,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
               <div className="flex items-center gap-3">
                 <h3 className="text-xl font-extrabold text-slate-800">Notifications</h3>
                 <span className="px-3 py-1 rounded-full bg-blue-600 text-white text-[11px] font-bold shadow-sm">
-                  {notifications.filter(n => !n.isRead).length} New
+                  {/* {notifications.filter(n => !n.isRead).length} New */}
                 </span>
               </div>
               <div className="flex items-center gap-1">
@@ -131,9 +133,9 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
             {/* Scrollable Content Area */}
             <div 
               className="overflow-y-auto max-h-[450px] p-4 space-y-3 overscroll-contain bg-slate-50/30"
-              style={{ scrollbarWidth: 'thin' }} // Firefox fix
+              style={{ scrollbarWidth: 'thin' }} 
             >
-              {notifications.length === 0 ? (
+              {/* {notifications.length === 0 ? (
                  <div className="flex flex-col items-center justify-center py-16 text-center">
                     <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
                       <MailOpen className="text-slate-300" size={30} />
@@ -151,14 +153,14 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
                       : `${getBgColor(notification.type)} border shadow-sm`
                     }`}
                   >
-                    {/* Icon */}
+                    
                     <div className={`shrink-0 h-11 w-11 rounded-xl flex items-center justify-center ${
                       notification.isRead ? "bg-slate-50" : "bg-white shadow-sm"
                     }`}>
                       {getIcon(notification.type)}
                     </div>
 
-                    {/* Text */}
+                    
                     <div className="flex-1 min-w-0 pr-8">
                       <div className="flex items-center justify-between mb-0.5">
                         <h4 className={`text-sm font-bold truncate ${notification.isRead ? "text-slate-500" : "text-slate-900"}`}>
@@ -170,7 +172,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
                       </p>
                     </div>
 
-                    {/* Individual Tick Icon */}
+                    
                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
                       {!notification.isRead ? (
                         <button 
@@ -185,7 +187,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
                     </div>
                   </div>
                 ))
-              )}
+              )} */}
             </div>
 
             {/* Footer - Fixed */}

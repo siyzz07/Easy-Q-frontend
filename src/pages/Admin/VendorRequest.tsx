@@ -76,7 +76,7 @@ const VendorRequest = () => {
       <div className="flex h-screen bg-gray-200">
         <div className="flex-1 flex flex-col">
           <main className="flex-1 p-6 md:p-8 overflow-y-auto">
-            <div className="w-full border-2">
+            <div className="w-full ">
               <ReusableTable
                 caption="Vendors Requests"
                 data={requestData}
