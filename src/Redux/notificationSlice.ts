@@ -33,14 +33,14 @@ interface NotificationState {
   notifications: INotification[];
   loading: boolean;
   error: string | null;
-  totalUnreaded:number|0
+  totalUnreaded: number | 0;
 }
 
 const initialState: NotificationState = {
   notifications: [],
   loading: false,
   error: null,
-  totalUnreaded:0
+  totalUnreaded: 0,
 };
 
 export const fetchNotification = createAsyncThunk<
@@ -66,8 +66,14 @@ const notificationSlice = createSlice({
   reducers: {
     setNotifications: (state, action: PayloadAction<INotification[]>) => {
       state.notifications = action.payload;
+    },
 
+    addNotification: (state, action: PayloadAction<INotification>) => {
+      state.notifications.unshift(action.payload);
 
+      if (!action.payload.isRead) {
+        state.totalUnreaded += 1;
+      }
     },
 
     markAsRead: (state, action: PayloadAction<string>) => {
@@ -75,13 +81,13 @@ const notificationSlice = createSlice({
         (n) => n._id === action.payload
       );
       if (notification) notification.isRead = true;
-       state.totalUnreaded = state.totalUnreaded-1
+      if(state.totalUnreaded >0){
+        
+        state.totalUnreaded = state.totalUnreaded - 1;
+      }
     },
 
-    markAllAsRead: (state) => {
-      state.notifications.forEach((n) => (n.isRead = true));
-
-    },
+   
 
     removeNotification: (state, action: PayloadAction<string>) => {
       state.notifications = state.notifications.filter(
@@ -94,7 +100,6 @@ const notificationSlice = createSlice({
     },
   },
 
-    
   extraReducers: (builder) => {
     builder
       .addCase(fetchNotification.pending, (state) => {
@@ -103,13 +108,13 @@ const notificationSlice = createSlice({
       })
       .addCase(fetchNotification.fulfilled, (state, action) => {
         state.loading = false;
-        state.notifications = action.payload; 
-        state.totalUnreaded = action.payload.reduce((acc,data)=>{
-                if(!data.isRead){
-                  acc++
-                }
-                return acc
-        },0)
+        state.notifications = action.payload;
+        state.totalUnreaded = action.payload.reduce((acc, data) => {
+          if (!data.isRead) {
+            acc++;
+          }
+          return acc;
+        }, 0);
       })
       .addCase(fetchNotification.rejected, (state, action) => {
         state.loading = false;
@@ -121,9 +126,9 @@ const notificationSlice = createSlice({
 export const {
   setNotifications,
   markAsRead,
-  markAllAsRead,
   removeNotification,
   clearAll,
+  addNotification 
 } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

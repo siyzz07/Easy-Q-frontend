@@ -80,7 +80,7 @@ const LoginForm: FC = () => {
        <div className="mb-6 text-center">
         <div className="flex items-center justify-center gap-2 mb-4">
            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-600/30">
-            <span className="text-white font-bold text-base">V</span>
+            <span className="text-white font-bold text-base">Q</span>
           </div>
           <h1 className="text-xl font-bold tracking-tight text-gray-900">Easy Q Vendor</h1>
         </div>

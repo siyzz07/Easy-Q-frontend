@@ -35,7 +35,7 @@ const BookingsPage = () => {
   const [bookings, setBookings] = useState<BookingCardDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(4);
+  const [limit, setLimit] = useState<number>(5);
   const [totalPage, setTotalPage] = useState<number>(1);
 
   useEffect(() => {

@@ -20,7 +20,7 @@ const HomePage = () => {
   const [shops, setShops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [limit] = useState(10);
+  const [limit] = useState(9);
   const [totalPages, setTotalPages] = useState(1);
 
   const [searchChange, setSearchChange] = useState("");
@@ -68,7 +68,7 @@ const HomePage = () => {
       });
 
       setShops(response.data.data || []);
-      setTotalPages(response.data.totalPages || 1);
+      setTotalPages(response.data.pagination.totalPages || 1);
     } catch (err) {
       console.error("Fetch error:", err);
       setShops([]);
@@ -137,6 +137,8 @@ const HomePage = () => {
     fetchShops("", null, null,[],[]);
   };
 
+
+  
   return (
     <main className="min-h-screen bg-[#F8FAFC]">
       <section className="relative z-40 bg-white pt-12 pb-16 px-4 overflow-hidden">
@@ -301,6 +303,7 @@ const HomePage = () => {
 
             {totalPages > 1 && (
               <div className="mt-12 flex justify-center pb-20">
+            
                 <Pagination
                   page={page}
                   totalPages={totalPages}

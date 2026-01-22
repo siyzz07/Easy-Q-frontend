@@ -31,6 +31,8 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   const notifications = useSelector((state: any) => state.notification.notifications);
   const unreadCount = useSelector((state: any) => state.notification.totalUnreaded);
   
+
+
   // 1. ADD STATE FOR FILTER
   const [showOnlyUnread, setShowOnlyUnread] = useState(false);
 
@@ -42,7 +44,6 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
     } else {
       document.body.style.overflow = "unset";
       document.body.style.paddingRight = "0px";
-      // Reset filter when modal closes (Optional)
       setShowOnlyUnread(false);
     }
     return () => {
@@ -51,12 +52,15 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
     };
   }, [isOpen]);
 
-  // 2. FILTERED NOTIFICATIONS LOGIC
+  
   const displayNotifications = useMemo(() => {
+    const sorted = [...notifications].sort((a: INotification, b: INotification) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
     if (showOnlyUnread) {
       return notifications.filter((n: INotification) => !n.isRead);
     }
-    return notifications;
+    return sorted;
   }, [notifications, showOnlyUnread]);
 
   const noitficaitonMarkAsRead = async (id: string) => {
@@ -197,16 +201,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
               )}
             </div>
 
-            <div className="p-4 border-t border-slate-100 bg-white shrink-0">
-              <Link 
-                to="/customer/profile/notifications" 
-                onClick={onClose}
-                className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-50 text-[13px] font-bold text-blue-600 hover:bg-blue-50 transition-colors"
-              >
-                View Full History
-                <ChevronRight size={16} />
-              </Link>
-            </div>
+        
           </motion.div>
         </>
       )}

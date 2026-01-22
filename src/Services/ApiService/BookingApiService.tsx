@@ -36,8 +36,8 @@ export const getCustomerBookingData = async (page:number,limit:number,search:str
 
 
 //--------------------- get seleected bookings 
-export const getSelectedBookingData = async (id:string) =>{
-  const response = await BookingAxiosInstance.get(`/booking/${id}`);
+export const getSelectedBookingData = async (id:string,role:string) =>{
+  const response = await BookingAxiosInstance.get(`/booking/${role}/${id}/`);
   return response;
 };
 

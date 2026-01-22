@@ -54,7 +54,7 @@ const BookingDetailsPage = () => {
   const getEachBookingData = async () => {
     try {
       if (id) {
-        const response = await getSelectedBookingData(id);
+        const response = await getSelectedBookingData(id,'Customer');
         if (response?.data?.data) {
           setBookingData(response.data.data);
         }
@@ -63,7 +63,7 @@ const BookingDetailsPage = () => {
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        toast.error("Invalied booking id");
+        toast.error(error.response?.data.message);
         navigate("/customer/bookings");
       }
     }

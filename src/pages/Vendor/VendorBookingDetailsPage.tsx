@@ -74,11 +74,9 @@ const VendorBookingDetailsPage = () => {
   const fetchBookingDetails = async () => {
     try {
       setLoading(true);
-      console.log("id :>> ", id);
+  
       if (id) {
-        console.log("booking data clling");
-        const response = await getSelectedBookingData(id);
-        console.log("bookingData :>> ", response);
+        const response = await getSelectedBookingData(id,'Vendor');
         if (response?.data?.data) {
           setBookingData(response.data.data);
         }
@@ -87,7 +85,7 @@ const VendorBookingDetailsPage = () => {
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        toast.error("Invalid booking ID");
+         toast.error(error.response?.data.message);
         navigate("/vendor/bookings");
       }
     } finally {
@@ -100,7 +98,7 @@ const VendorBookingDetailsPage = () => {
 
     try{
 
-      console.log("refund funcion called");
+
       const response = await bookingRefund(id);
       if(response?.data){
 

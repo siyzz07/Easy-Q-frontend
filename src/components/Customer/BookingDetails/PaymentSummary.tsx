@@ -12,7 +12,9 @@ interface PaymentSummaryProps {
 }
 
 const PaymentSummary: React.FC<PaymentSummaryProps> = ({ bookingData, onRetry, onPayContinue}) => {
-  console.log(bookingData.paymentStatus);
+ 
+  
+
   const status = bookingData.paymentStatus?.toLowerCase();
   const isFailed = status === "failed";
   const isPending = status === "pending";
@@ -94,7 +96,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ bookingData, onRetry, o
 
           {/* Action Buttons */}
           <div className="space-y-3 pt-2">
-            {isFailed ? (
+            {isFailed && bookingData.status!="cancelled" ? (
               <Button 
                 onClick={onRetry}
                 className="w-full rounded-2xl h-12 gap-2 font-bold bg-red-600 hover:bg-red-700 shadow-lg shadow-red-200"
