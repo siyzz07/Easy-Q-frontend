@@ -66,7 +66,6 @@ const Map: FC<Imap> = ({
   );
 
   useEffect(() => {
-     // Ensure state syncs if defaultCenter changes externally
      if (defaultCenter) {
          setMapCenter(defaultCenter);
          setMarkerPos(defaultCenter);

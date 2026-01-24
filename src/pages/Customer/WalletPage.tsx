@@ -376,7 +376,7 @@ const WalletPage = () => {
                     );
                   })}
 
-                  {/* 2. The Pagination (Outside the map but inside the fragment) */}
+           
                   <div className="p-6 border-t border-gray-100">
                     <Pagination
                       page={page}

@@ -21,8 +21,6 @@ if (tokenDecode) {
   token = null;
 }
 
-console.log("---------------",token);
-
 
 export interface IVendorState {
   vendorToken: string | null;

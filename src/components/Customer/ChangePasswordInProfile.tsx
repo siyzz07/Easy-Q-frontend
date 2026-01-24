@@ -169,18 +169,7 @@ const ChangePasswordInProfile = () => {
                </div>
             </div>
 
-            {/* <div className="bg-blue-50/50 rounded-[2.5rem] p-8 border border-blue-100 flex items-center justify-between">
-               <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-[1.2rem] bg-white shadow-sm border border-blue-100 flex items-center justify-center text-blue-600">
-                     <Lock size={20} />
-                  </div>
-                  <div>
-                     <p className="text-[10px] font-black text-blue-600/60 uppercase tracking-widest">Account Shield</p>
-                     <p className="text-sm font-black text-slate-800">2FA is active</p>
-                  </div>
-               </div>
-               <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            </div> */}
+          
         </div>
       </div>
     </div>

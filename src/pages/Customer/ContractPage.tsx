@@ -22,12 +22,12 @@ import {
   Plus, 
   RefreshCcw, 
   Upload,
-  Briefcase, // Added
-  MapPin,    // Added
-  Calendar,  // Added
-  Eye,       // Added
-  Edit2,     // Added
-  Trash2     // Added
+  Briefcase, 
+  MapPin,    
+  Calendar,  
+  Eye,       
+  Edit2,     
+  Trash2     
 } from "lucide-react";
 import AddContractModal from "../../components/Customer/AddContractModal";
 import { getContract } from "../../Services/ApiService/ContractApiService";
@@ -148,7 +148,7 @@ const ContractPage = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
-                <SelectItem value="active">Active</SelectItem> {/* Changed values to match status */}
+                <SelectItem value="active">Active</SelectItem> 
                 <SelectItem value="completed">Completed</SelectItem>
                 <SelectItem value="pending">Pending</SelectItem>
               </SelectContent>

@@ -101,40 +101,7 @@ const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData ,onSubmit,type 
     checkStaffAvailability(selectedDate, selectedStaff);
   }, [selectedDate, selectedStaff]);
 
-  // const handleSubmit = async (
-  //   values: typeof initialValues,
-  //   date: Date,
-  //   service: IService
-  // ) => {
-  //   try {
-  //     const bookingData = {
-  //       staffId: values.staff,
-  //       addressId: values.address,
-  //       timePreffer: values.preferredTime,
-  //       serviceId: service._id!,
-  //       date: date,
-  //       shopId,
-  //     };
-
-  //     let response = await bookAvailableTime(bookingData);
-
-  //     if (response?.data.success == false) {
-  //       toast.info(response.data.message, { autoClose: 3000 });
-  //     } else {
-  //       const checkoutData = {
-  //         staffId: values.staff,
-  //         addressId: values.address,
-  //         serviceId: service._id,
-  //         selectedDate: date,
-  //         bookingId: response.data.bookingId,
-  //         shopId,
-  //       };
-  //       navigate(`/customer/service/checkout?bookingId=${btoa(JSON.stringify(checkoutData))}`);
-  //     }
-  //   } catch (error: unknown) {
-  //     console.log(error);
-  //   }
-  // };
+ 
 
   return (
     <AnimatePresence>
@@ -189,7 +156,7 @@ const BookNow: FC<IBookNow> = ({ onClose, data, shopId, shopData ,onSubmit,type 
                 {({ setFieldValue, values }) => (
                   <Form className="space-y-6">
                     
-                    {/* Date Selection - Keep Horizontal Scroll */}
+                    {/* Date Selection  */}
                      <div className="space-y-2">
                          <label className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                              <Calendar className="w-4 h-4 text-blue-500" />

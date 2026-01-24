@@ -35,25 +35,7 @@ const StaffSection: React.FC<StaffSectionProps> = ({ bookingData }) => {
         </div> */}
       </motion.div>
 
-      {/* <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.3 }}
-        className="bg-white rounded-[2rem] p-6 shadow-sm border border-border/50"
-      >
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-lg text-slate-800">Check-in QR</h3>
-          <Badge variant="secondary" className="text-[8px] uppercase tracking-widest font-black">Scan at shop</Badge>
-        </div>
-        <div className="flex flex-col items-center justify-center gap-4 py-2">
-          <div className="p-4 bg-slate-50 rounded-3xl border border-border/40 hover:bg-white hover:shadow-lg transition-all cursor-pointer group">
-            <QrCode size={80} className="text-foreground group-hover:scale-110 transition-transform duration-300" />
-          </div>
-          <p className="text-[10px] text-muted-foreground text-center font-bold uppercase tracking-tight leading-relaxed">
-            Show this code to the staff member <br/> for a fast check-in experience.
-          </p>
-        </div>
-      </motion.div> */}
+      
     </div>
   );
 };

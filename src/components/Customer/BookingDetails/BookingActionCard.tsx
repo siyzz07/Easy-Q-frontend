@@ -70,8 +70,8 @@ const BookingActionCard: React.FC<BookingActionsProps> = ({
 
       {/* Optional: Small Policy Note */}
       <div className="mt-6 pt-6 border-t border-dashed flex items-center gap-2 text-muted-foreground text-xs italic">
-        <AlertCircle size={14} />
-        Canceling within 24 hours of the appointment may incur a fee.
+        {/* <AlertCircle size={14} /> */}
+        {/* Canceling within 24 hours of the appointment may incur a fee. */}
       </div>
     </motion.div>
   );

@@ -80,9 +80,9 @@ const SignupForm: FC = () => {
       <div className="mb-6 text-center">
         <div className="flex items-center justify-center gap-2 mb-4">
            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-600/30">
-            <span className="text-white font-bold text-base">V</span>
+            <span className="text-white font-bold text-base">Q</span>
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-gray-900">Partner Signup</h1>
+          <h1 className="text-xl font-bold tracking-tight text-gray-900">vendor Signup</h1>
         </div>
         <p className="text-gray-500 text-sm">Join as a vendor and grow your business today.</p>
       </div>

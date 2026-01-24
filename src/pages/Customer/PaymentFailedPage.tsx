@@ -76,13 +76,13 @@ Otherwise, the slot will be released automatically.`}
             <ArrowLeft className="w-4 h-4" />
             Go to Home
           </button>
-          <button
+          {/* <button
             onClick={() => navigate(-1)}
             className="flex-1 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors shadow-lg shadow-red-500/30"
           >
             <RefreshCw className="w-4 h-4" />
             Try Again
-          </button>
+          </button> */}
         </div>
 
         <div className="text-center mt-8">

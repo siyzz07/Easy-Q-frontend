@@ -37,7 +37,7 @@ export default function BookingViewCard({
 }: {
   booking: BookingCardDTO;
 }) {
-  console.log("----------------------------", booking);
+
 
   const iconColors: Record<string, string> = {
     K: "text-blue-500",
