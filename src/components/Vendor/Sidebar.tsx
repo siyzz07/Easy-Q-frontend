@@ -39,7 +39,7 @@ const Sidebar = () => {
       icon: Briefcase,
       label: "Works",
       path: "Works",
-      route: "vendor/dashboard",
+      route: "/vendor/works",
     },
     {
       icon: FileText,

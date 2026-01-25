@@ -32,7 +32,7 @@ const AddStaffSchema = Yup.object().shape({
     .of(
       Yup.object().shape({
         breakStartTime: Yup.string()
-          .required("Break start is required")
+          // .required("Break start is required")
           .test("within-hours-start", "Break start must be within working hours", function (value) {
             const { openingTime, closingTime } = this.options.context || {};
             if (!openingTime || !closingTime || !value) return true;
@@ -40,7 +40,7 @@ const AddStaffSchema = Yup.object().shape({
           }),
 
         breakEndTime: Yup.string()
-          .required("Break end is required")
+          // .required("Break end is required")
           .test("is-after", "Break end must be after break start", function (value) {
             const { breakStartTime } = this.parent;
             return !breakStartTime || !value || value > breakStartTime;

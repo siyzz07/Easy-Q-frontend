@@ -1,18 +1,15 @@
 import React, { useEffect, useState, type FC } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import type { FormikHelpers } from "formik";
-import { getAddress } from "../../Services/ApiService/CustomerApiService";
-import { getServiceTypes } from "../../Services/ApiService/AdminApiService"; 
-import type { ICustomerAddress } from "../../Shared/types/Types";
-import { addContract, getServiceTypesForcontract } from "../../Services/ApiService/ContractApiService";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
+import { X, ClipboardList, Phone, MapPin, Briefcase, AlignLeft } from "lucide-react";
 
-interface IAddContractModal {
-  onClose: () => void;
-  onSubmit: () => void;
-}
+// API Imports
+import { getAddress } from "../../Services/ApiService/CustomerApiService";
+import { getServiceTypes } from "../../Services/ApiService/AdminApiService";
+import { addContract } from "../../Services/ApiService/ContractApiService";
+import type { IContractData, ICustomerAddress, IServiceVendorTypes } from "../../Shared/types/Types";
 
 export interface IAddContractInitialValues {
   contractName: string;
@@ -22,190 +19,146 @@ export interface IAddContractInitialValues {
   serviceType: string;
 }
 
-const AddContractModal: FC<IAddContractModal> = ({ onClose, onSubmit }) => {
+interface IContractModalProps {
+  onClose: () => void;
+  onSubmit: (values: IAddContractInitialValues,isEditMode:boolean,contractId?:string) => void;
+  initialData?: any;
+}
+
+const AddContractModal: FC<IContractModalProps> = ({ onClose, onSubmit, initialData }) => {
   const [addresses, setAddresses] = useState<ICustomerAddress[]>([]);
-  const [services, setServices] = useState<any[]>([]);
+  const [services, setServices] = useState<IServiceVendorTypes[]>([]);
+  const isEditMode = !!initialData;
 
   useEffect(() => {
-    getCustomerAddressAndServiceTypes();
+    fetchFormData();
   }, []);
 
-  const getCustomerAddressAndServiceTypes = async () => {
+  const fetchFormData = async () => {
     try {
-      const [serviceTypeResponse, addressResponse] = await Promise.all([
-        getServiceTypesForcontract(),
+      const [serviceRes, addressRes] = await Promise.all([
+        getServiceTypes(),
         getAddress(),
       ]);
 
-      if (addressResponse?.data?.data) {
-        setAddresses(addressResponse.data.data);
-      }
-
-      if (serviceTypeResponse?.data?.data) {
-        setServices(serviceTypeResponse.data.data);
+      if (serviceRes.data && addressRes.data) {
+        setAddresses(addressRes.data.data || []);
+        setServices(serviceRes.data.data || []);
       }
     } catch (error) {
-      console.log("Error fetching data", error);
+      console.error("Fetch error:", error);
+      toast.error("Failed to load options");
     }
-  };
-
-  const initialValues: IAddContractInitialValues = {
-    contractName: "",
-    description: "",
-    phone: "",
-    address: "",
-    serviceType: "",
   };
 
   const validationSchema = Yup.object({
-    contractName: Yup.string()
-      .trim()
-      .matches(/^[A-Za-z0-9 ]+$/, "Only alphabets, numbers and spaces are allowed")
-      .min(3, "Minimum 3 characters")
-      .required("Contract name is required"),
-
-    description: Yup.string()
-      .required("Description is required")
-      .min(10, "Minimum 10 characters"),
-
-    phone: Yup.string()
-      .matches(/^[0-9]{10}$/, "Enter a valid 10-digit phone number")
-      .required("Phone number is required"),
-
-    address: Yup.string().required("Address is required"),
-
-    serviceType: Yup.string().required("Service type is required"),
+    contractName: Yup.string().trim().min(3, "Too short!").required("Required"),
+    description: Yup.string().min(10, "Provide more detail").required("Required"),
+    phone: Yup.string().matches(/^[0-9]{10}$/, "Invalid phone").required("Required"),
+    address: Yup.string().required("Select an address"),
+    serviceType: Yup.string().required("Select a service"),
   });
 
-  const handleSubmit = async (
-    values: IAddContractInitialValues,
-    actions: FormikHelpers<IAddContractInitialValues>
-  ) => {
-    try {
-      const response = await addContract(values);
-
-      if (response?.data) {
-        toast.success(response.data.message);
-        onClose();
-      }
-
-      actions.setSubmitting(false);
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        toast.error(error.response?.data.message);
-      }
-      onClose();
-    }
+  const handleSubmit =  (values: IAddContractInitialValues, actions: any) => {
+      onSubmit(values,isEditMode)
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000066] backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6 relative">
-
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90vh] overflow-hidden border border-gray-100">
+        
         {/* Header */}
-        <div className="flex items-center justify-between mb-6 sticky top-0 bg-white z-10 pb-2 border-b">
-          <h2 className="text-2xl font-semibold text-gray-900">Add Contract</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-800 text-xl font-bold"
-          >
-            ✕
+        <div className="px-6 py-4 border-b flex items-center justify-between bg-gray-50/50">
+          <div>
+            <h2 className="text-xl font-bold text-gray-800">
+              {isEditMode ? "Edit Contract" : "Create New Contract"}
+            </h2>
+            <p className="text-xs text-gray-500 mt-1">Manage your service details here.</p>
+          </div>
+          <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-400">
+            <X size={20} />
           </button>
         </div>
 
-        {/* FORM */}
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-          {({ isSubmitting, isValid }) => (
-            <Form className="flex flex-col gap-4">
+        {/* Form Body */}
+        <div className="overflow-y-auto p-6">
+          <Formik
+            initialValues={initialData || { contractName: "", description: "", phone: "", address: "", serviceType: "" }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+            enableReinitialize
+          >
+            {({ isSubmitting }) => (
+              <Form className="space-y-5">
+                
+                <div className="space-y-1">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                    <ClipboardList size={16} className="text-blue-500" /> Contract Name
+                  </label>
+                  <Field name="contractName" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="e.g. Garden Maintenance" />
+                  <ErrorMessage name="contractName" component="p" className="text-red-500 text-[10px] italic" />
+                </div>
 
-              {/* Contract Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Contract Name</label>
-                <Field
-                  type="text"
-                  name="contractName"
-                  placeholder="Enter contract name"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 mt-1 outline-none"
-                />
-                <ErrorMessage name="contractName" component="div" className="text-red-500 text-sm" />
-              </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <Briefcase size={16} className="text-blue-500" /> Service Type
+                    </label>
+                    <Field as="select" name="serviceType" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none">
+                      <option value="">Select Service</option>
+                      {services.map(s => <option key={s._id} value={s._id}>{s.serviceName}</option>)}
+                    </Field>
+                    <ErrorMessage name="serviceType" component="p" className="text-red-500 text-[10px] italic" />
+                  </div>
 
-              {/* Description */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Description</label>
-                <Field
-                  as="textarea"
-                  rows={3}
-                  name="description"
-                  placeholder="Enter description"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 mt-1 outline-none"
-                />
-                <ErrorMessage name="description" component="div" className="text-red-500 text-sm" />
-              </div>
+                  <div className="space-y-1">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <Phone size={16} className="text-blue-500" /> Phone
+                    </label>
+                    <Field name="phone" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none" placeholder="10-digit phone" />
+                    <ErrorMessage name="phone" component="p" className="text-red-500 text-[10px] italic" />
+                  </div>
+                </div>
 
-              {/* Phone */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Phone Number</label>
-                <Field
-                  type="text"
-                  name="phone"
-                  placeholder="Enter phone number"
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 mt-1 outline-none"
-                />
-                <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
-              </div>
+                <div className="space-y-1">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                    <MapPin size={16} className="text-blue-500" /> Location / Address
+                  </label>
+                  <Field as="select" name="address" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none">
+                    <option value="">Select saved address</option>
+                    {addresses.map(a => <option key={a._id} value={a._id}>{a.address}, {a.city}</option>)}
+                  </Field>
+                  <ErrorMessage name="address" component="p" className="text-red-500 text-[10px] italic" />
+                </div>
 
-              {/* Address */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Address</label>
-                <Field
-                  as="select"
-                  name="address"
-                  className="w-full p-2 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-blue-500 mt-1 outline-none"
-                >
-                  <option value="">Select Address</option>
-                  {addresses.map((item) => (
-                    <option key={item._id} value={item._id}>
-                      {`${item.address}, ${item.city}`}
-                    </option>
-                  ))}
-                </Field>
-                <ErrorMessage name="address" component="div" className="text-red-500 text-sm" />
-              </div>
+                <div className="space-y-1">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                    <AlignLeft size={16} className="text-blue-500" /> Description
+                  </label>
+                  <Field as="textarea" name="description" rows={3} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none" placeholder="Enter terms..." />
+                  <ErrorMessage name="description" component="p" className="text-red-500 text-[10px] italic" />
+                </div>
 
-              {/* Service Type */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Service Type</label>
-                <Field
-                  as="select"
-                  name="serviceType"
-                  className="w-full p-2 border border-gray-300 rounded-md bg-white focus:ring-2 focus:ring-blue-500 mt-1 outline-none"
-                >
-                  <option value="">Select Service</option>
-                  {services.map((service) => (
-                    <option key={service._id} value={service._id}>
-                      {service.serviceName}
-                    </option>
-                  ))}
-                </Field>
-                <ErrorMessage name="serviceType" component="div" className="text-red-500 text-sm" />
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isSubmitting || !isValid}
-                className={`w-full py-2 rounded-md text-white font-semibold transition ${
-                  isSubmitting || !isValid ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-500"
-                }`}
-              >
-                {isSubmitting ? "Submitting..." : "Save Contract"}
-              </button>
-
-            </Form>
-          )}
-        </Formik>
-
+                <div className="pt-4 flex gap-3">
+                  <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-[2] px-4 py-2.5 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 shadow-md disabled:bg-blue-300 transition-all flex justify-center items-center gap-2"
+                  >
+                    {isSubmitting ? (
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      isEditMode ? "Update Changes" : "Create Contract"
+                    )}
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
     </div>
   );

@@ -57,6 +57,8 @@ export const VENDOR_ROUTES ={
     STAFFS:"staffs",
     BOOKINGS:"bookings",
     VIEW_BOOKING:"bookings/:id",
-    WALLET:"wallet"
+    WALLET:"wallet",
+    WORKS:"works"
+
 
 };

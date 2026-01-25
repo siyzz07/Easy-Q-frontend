@@ -29,9 +29,11 @@ import {
   Edit2,     
   Trash2     
 } from "lucide-react";
-import AddContractModal from "../../components/Customer/AddContractModal";
-import { getContract } from "../../Services/ApiService/ContractApiService";
+import AddContractModal, { type IAddContractInitialValues } from "../../components/Customer/AddContractModal";
+import { addContract, getContract } from "../../Services/ApiService/ContractApiService";
 import type { IContractData } from "../../Shared/types/Types";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 
 const stats = [
@@ -81,9 +83,9 @@ const ContractPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   // 3. Fetch data when component mounts or popup closes (to refresh list)
-  useEffect(() => {
-    fetchContracts();
-  }, [contractPopup]);
+  // useEffect(() => {
+  //   fetchContracts();
+  // }, [contractPopup]);
 
   const fetchContracts = async () => {
     try {
@@ -101,6 +103,28 @@ const ContractPage = () => {
     }
   };
 
+
+
+    const handleContractSubmit = async (values: IAddContractInitialValues,isEditMode:boolean,contractId?:string) => {
+      try {
+
+        
+        // const response = isEditMode 
+        //   ? await updateContrct(initialData._id, values) 
+        //   : await addContract(values);
+        
+        let response = await addContract(values)
+
+        toast.success(isEditMode ? "Contract updated!" : "Contract created!");
+        // onRefresh();
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.data.message || "Something went wrong");
+        }
+      }
+    };
+
+    
   // const handleDelete = (id: string | number) => {
   //     // Add your delete API logic here
   //     console.log("Delete contract with ID:", id);
@@ -119,10 +143,7 @@ const ContractPage = () => {
       {contractPopup && (
         <AddContractModal 
           onClose={() => setContractpopup(false)} 
-          onSubmit={() => {
-            setContractpopup(false);
-            // fetchContracts(); // Optional: Trigger refresh here if relying on parent refresh
-          }} 
+          onSubmit={handleContractSubmit} 
         />
       )}
       

@@ -19,6 +19,9 @@ import ServicePage from "../pages/Vendor/ServicePage";
 import DashboardVendor from "../pages/Vendor/DashboardVendor";
 import VendorBookingDetailsPage from "../pages/Vendor/VendorBookingDetailsPage";
 import VendorWalletPage from "../pages/Vendor/VendorWalletPage";
+import WorksPage from "../pages/Vendor/WorksPage";
+
+
 
 const VendorRoutes = () => {
   return (
@@ -142,6 +145,15 @@ const VendorRoutes = () => {
               <VendorWalletPage/>
             </VendorProtectedRoute>
           }/>
+
+        <Route 
+          path={VENDOR_ROUTES.WORKS}
+          element={
+            <VendorProtectedRoute>
+              <WorksPage/>
+            </VendorProtectedRoute>
+          }/>
+
       </Route>
 
       {/* <Route path="*" element={<LandingPage />} /> */}

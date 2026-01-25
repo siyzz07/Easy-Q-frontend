@@ -12,17 +12,17 @@ import { ContractAxiosInstance } from "../../config/AxiosInstance";
  */
 //-------------------------------- add new contract
 export const addContract = async (form:IAddContractInitialValues) =>{
-    const response = await ContractAxiosInstance.post("/add-contract",form);
+    const response = await ContractAxiosInstance.post("/contract/add-contract",form);
     return response;
 };
 //-------------------------------- get contract
 export const getContract = async () =>{
-    const response = await ContractAxiosInstance.get("/get-contract");
+    const response = await ContractAxiosInstance.get("/contract/get-contract");
     return response;
 };
 
 
 export const getServiceTypesForcontract = async () =>{
-    const response = await ContractAxiosInstance.get("/contract-service-types");
+    const response = await ContractAxiosInstance.get("/service/get-services");
     return response;
 };
