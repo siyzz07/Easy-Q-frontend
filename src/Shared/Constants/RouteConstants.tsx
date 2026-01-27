@@ -37,6 +37,7 @@ export const CUSTOMER_ROUTES ={
     NOTIFICATIONS:"notifications",
     PAYMENT_FAILED:"payment-failed",
     WALLET:"wallet",
+    CHAT:"chat/:id",
 
 
 };

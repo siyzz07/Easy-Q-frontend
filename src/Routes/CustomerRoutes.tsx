@@ -24,6 +24,7 @@ import ContractPage from "../pages/Customer/ContractPage";
 import FavoritePage from "../pages/Customer/FavoritePage";
 import NotificationPage from "../pages/Customer/NotificationPage";
 import WalletPage from "../pages/Customer/WalletPage";
+import ChatPage from "../pages/Customer/ChatPage";
 
 const CustomerRoutes = () => {
   return (
@@ -140,6 +141,13 @@ const CustomerRoutes = () => {
               element={
                 <CustomerProtectedRoute>
                   <ContractPage/>
+                </CustomerProtectedRoute>
+              }/>
+            <Route
+              path={CUSTOMER_ROUTES.CHAT}
+              element={
+                <CustomerProtectedRoute>
+                  <ChatPage/>
                 </CustomerProtectedRoute>
               }/>
             <Route

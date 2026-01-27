@@ -26,3 +26,17 @@ export const getServiceTypesForcontract = async () =>{
     const response = await ContractAxiosInstance.get("/service/get-services");
     return response;
 };
+
+//--------------------------------- get customer contracts
+export const getCustomerContracts = async (page:number,limit:number,search:string,filter:string) =>{
+    const response = await ContractAxiosInstance.get('/contract/customer/contracts',{
+        params:{
+            page,
+            limit,
+            search,
+            filter
+        }
+    })
+
+    return response
+}
