@@ -24,7 +24,7 @@ import ContractPage from "../pages/Customer/ContractPage";
 import FavoritePage from "../pages/Customer/FavoritePage";
 import NotificationPage from "../pages/Customer/NotificationPage";
 import WalletPage from "../pages/Customer/WalletPage";
-import ChatPage from "../pages/Customer/ChatPage";
+import ChatPage from "../components/Shared/ChatPage";
 
 const CustomerRoutes = () => {
   return (

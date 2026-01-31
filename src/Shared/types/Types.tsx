@@ -1,3 +1,4 @@
+import type { IAppliedVendors } from "../../components/Customer/ContractDetailsModal";
 import type { IAdminState } from "../../Redux/AdminAuthSlice";
 import type { ICustomerState } from "../../Redux/CustomeSlice";
 import type { IVendorState } from "../../Redux/VendorSlice";
@@ -241,11 +242,14 @@ export interface IContractAddress {
 
 
 export interface IContractData {
+  _id?:string
   customerId:string;
   contractName:string;
   description :string;
   phone:string;
   address:IContractAddress,
+  acceptedVendors:IAppliedVendors[];
+  appliedVendors:IAppliedVendors[];
   serviceType: {
     _id: string;
     serviceName: string;
@@ -289,4 +293,81 @@ export interface IWalletResponse {
   balance: number;
   createdAt: string;  
   updatedAt: string;   
+}
+
+
+
+//---------------------------contract
+//  Address
+export interface IAddress {
+  _id: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  phone: string;
+}
+
+// Customer
+export interface ICustomer {
+  _id?: string;
+  name: string;
+  email: string;
+  phone: string;
+}
+
+// Location (GeoJSON)
+export interface ILocation {
+  type: "Point";
+  coordinates: [number, number]; // [longitude, latitude]
+}
+
+// Service Type
+export interface IServiceType {
+  _id: string;
+  serviceName: string;
+  description: string;
+}
+
+// Applied / Accepted Vendor
+export interface IAppliedVendor {
+  vendorId: string; 
+  appliedAt?: string;
+  status?: "pending" | "accepted" | "rejected";
+}
+
+// Main Contract DTO
+export interface IContractDto {
+  _id: string;
+
+  contractId: string;
+  contractName: string;
+  description: string;
+
+  budget: number;
+  status: "open" | "in_progress" | "completed" | "cancelled" | "closed";
+
+  address: IAddress;
+  location: ILocation;
+
+  customerId: ICustomer;
+  serviceType: IServiceType;
+
+  appliedVendors: IAppliedVendor[];
+  acceptedVendors: IAppliedVendor[];
+
+  createdAt: string;
+}
+
+// Pagination Wrapper
+export interface IPaginationResponseMeta {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface IPaginatedContractResponse {
+  data: IContractDto[];
+  pagination: IPaginationResponseMeta;
 }

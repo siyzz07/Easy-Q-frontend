@@ -17,16 +17,16 @@ export const registerSocketEvents = () => {
 
   socket.on("notification-booking:new", (data: INotification) => {
     console.log("Notification [New] Received:", data);
-    // NotificationToast(data.title, data.content);
-    
     Store.dispatch(addNotification(data));
   });
 
 
   socket.on("notification-booking:success", (data: INotification) => {
     console.log("Notification [Success] Received:", data);
-    // NotificationToast(data.title, data.content, "success");
-    
     Store.dispatch(addNotification(data));
   });
+
+  socket.on('contract-notification',(data:INotification)=>{
+    Store.dispatch(addNotification(data))
+  })
 };

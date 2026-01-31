@@ -393,7 +393,8 @@ const ShopViews: React.FC<ShopViewsProps> = ({
 
                         {/* Reviews List & Form */}
                         <div className="lg:col-span-2 space-y-6">
-                            {!isVendor && eligibility && (!userReview || isEditing) && (
+                            {/* {!isVendor && eligibility && (!userReview || isEditing) && ( */}
+                            {!isVendor  && (!userReview || isEditing) && (
                             <div className="glass-card rounded-2xl p-6">
                                 <div className="flex justify-between items-center mb-4">
                                   <h3 className="font-semibold text-lg">{isEditing ? "Edit your review" : "Write a Review"}</h3>

@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Filter from "../../components/Customer/Filter";
-import { Search, MapPin, SlidersHorizontal, X, Info } from "lucide-react";
+import { Search, MapPin, SlidersHorizontal, Navigation, Store, Info, Loader2 } from "lucide-react";
 import ShopDataCard from "../../components/Customer/ShopDataCard";
 import { getShopsData } from "../../Services/ApiService/CustomerApiService";
 import Pagination from "../../components/Shared/Pagination";
 import { motion, AnimatePresence } from "framer-motion";
 import LocationAutoSuggest from "../../components/Shared/LocationAutoSuggest";
-
-const geocodePlace = async (place: string) => {
-  const res = await fetch(
-    `https://nominatim.openstreetmap.org/search?format=json&q=${place}`
-  );
-  const data = await res.json();
-  if (!data || data.length === 0) throw new Error("Location not found");
-  return { lat: Number(data[0].lat), lng: Number(data[0].lon) };
-};
 
 const HomePage = () => {
   const [shops, setShops] = useState<any[]>([]);
@@ -23,52 +14,87 @@ const HomePage = () => {
   const [limit] = useState(9);
   const [totalPages, setTotalPages] = useState(1);
 
+  
   const [searchChange, setSearchChange] = useState("");
   const [locationChange, setLocationChange] = useState("");
 
+  
   const [search, setSearch] = useState("");
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
+  
+  
+  const [autoDetectedName, setAutoDetectedName] = useState<string>("");
+  const [displayLocationName, setDisplayLocationName] = useState<string>("your area");
 
   const [locationError, setLocationError] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
-
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
   const [ratingFilter, setRatingFilter] = useState<string[]>([]);
 
+ 
   useEffect(() => {
-    fetchShops();
-  }, [page]);
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const uLat = position.coords.latitude;
+          const uLng = position.coords.longitude;
+          
+          setLat(uLat);
+          setLng(uLng);
 
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${uLat}&lon=${uLng}&format=json&accept-language=en`
+            );
+            const data = await response.json();
+            const cityName = data.address.city || data.address.town || data.address.village || "Current Location";
+            
+            setAutoDetectedName(cityName);
+            setDisplayLocationName(cityName); 
+            
+          
+            fetchShops("", uLat, uLng);
+          } catch (err) {
+            fetchShops("", uLat, uLng);
+          }
+        },
+        () => {
+          fetchShops();
+        }
+      );
+    } else {
+      fetchShops();
+    }
+  }, []);
+
+  
   const fetchShops = async (
     overrideSearch?: string,
     overrideLat?: number | null,
     overrideLng?: number | null,
-    overrideCategories?:string[]|null,
-    overrideRatings?:string[]|null
+    overrideCategories?: string[] | null,
+    overrideRatings?: string[] | null
   ) => {
     try {
       setLoading(true);
       const currentSearch = overrideSearch !== undefined ? overrideSearch : search;
       const currentLat = overrideLat !== undefined ? overrideLat : lat;
       const currentLng = overrideLng !== undefined ? overrideLng : lng;
-      const currentCategories =
-      overrideCategories !== undefined ? overrideCategories : categoryFilter;
-      const currentRatings =
-      overrideRatings !== undefined ? overrideRatings : ratingFilter;
-      const response = await getShopsData({
+      
+      const res = await getShopsData({
         search: currentSearch,
         page,
         limit,
         lat: currentLat,
         lng: currentLng,
-        distance: currentLat && currentLng ? 100000 : undefined,
-        categories:currentCategories,
-        ratings:currentRatings
+        distance: (currentLat || currentLng) ? 50000 : undefined, // 50km radius
+        categories: overrideCategories !== undefined ? overrideCategories : categoryFilter,
+        ratings: overrideRatings !== undefined ? overrideRatings : ratingFilter,
       });
 
-      setShops(response.data.data || []);
-      setTotalPages(response.data.pagination.totalPages || 1);
+      setShops(res.data.data || []);
+      setTotalPages(res.data.pagination.totalPages || 1);
     } catch (err) {
       console.error("Fetch error:", err);
       setShops([]);
@@ -77,241 +103,183 @@ const HomePage = () => {
     }
   };
 
-  const addFilter = async (data: { categories: string[]; ratings: string[] }) => {
-    let rating = await data.ratings.map((data) => data.split("")[0]);
+  useEffect(() => {
+    fetchShops();
+  }, [page]);
 
-    setCategoryFilter(data.categories)
-    setRatingFilter(rating);
-
-    setPage(1)
-
-    fetchShops(search,lat,lng,data.categories,rating)
-  };
 
   const handleSearch = async () => {
-    try {
-      setLocationError(null);
-      let newLat = lat;
-      let newLng = lng;
+    let finalLat = lat;
+    let finalLng = lng;
+    let finalDisplayName = displayLocationName;
 
-      if (locationChange.trim() && !lat) {
-        try {
-          const coords = await geocodePlace(locationChange);
-          newLat = coords.lat;
-          newLng = coords.lng;
-          setLat(newLat);
-          setLng(newLng);
-        } catch (error) {
-          setLocationError(
-            "Location not found. Showing results without location filter."
-          );
-          newLat = null;
-          newLng = null;
-          setLat(null);
-          setLng(null);
-        }
-      } else if (!locationChange.trim()) {
-        newLat = null;
-        newLng = null;
+  
+    if (!locationChange.trim()) {
+     
+      if (lat && lng && autoDetectedName) {
+        finalLat = lat;
+        finalLng = lng;
+        finalDisplayName = autoDetectedName;
+      } else {
+        finalLat = null;
+        finalLng = null;
+        finalDisplayName = "your area";
         setLat(null);
         setLng(null);
       }
-
-      setSearch(searchChange);
-      setPage(1);
-
-      fetchShops(searchChange, newLat, newLng);
-    } catch (error) {
-      console.error("Search error:", error);
+    } 
+    
+    else if (locationChange.trim() && !lat) {
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${locationChange}`);
+        const data = await res.json();
+        if (data.length > 0) {
+          finalLat = Number(data[0].lat);
+          finalLng = Number(data[0].lon);
+          finalDisplayName = locationChange;
+          setLat(finalLat);
+          setLng(finalLng);
+        }
+      } catch (e) {
+        setLocationError("Location not found");
+        return;
+      }
+    } 
+   
+    else {
+      finalDisplayName = locationChange;
     }
+
+    setSearch(searchChange);
+    setDisplayLocationName(finalDisplayName);
+    setPage(1);
+    fetchShops(searchChange, finalLat, finalLng);
   };
 
   const clearFilters = () => {
-    setSearch("");
     setSearchChange("");
     setLocationChange("");
-    setLocationError(null);
     setLat(null);
     setLng(null);
-    setPage(1);
-    fetchShops("", null, null,[],[]);
+    setDisplayLocationName("your area");
+    fetchShops("", null, null, [], []);
   };
 
-
-  
   return (
     <main className="min-h-screen bg-[#F8FAFC]">
-      <section className="relative z-40 bg-white pt-12 pb-16 px-4 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-50 rounded-full blur-3xl opacity-50" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-indigo-50 rounded-full blur-3xl opacity-50" />
-        </div>
-
-        <div className="max-w-7xl mx-auto relative z-10 text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: -10 }}
+      {/* Search Header Section */}
+      <section className="bg-white pt-16 pb-12 px-4 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto text-center">
+          <motion.h1 
+            initial={{ opacity: 0, y: -10 }} 
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-4xl font-extrabold text-gray-900"
+            className="text-4xl md:text-5xl font-black text-slate-900 mb-3 tracking-tight"
           >
             Find the Best Services Near You
           </motion.h1>
+          <p className="text-slate-500 mb-10 text-lg">Book salons, clinics, and more in seconds.</p>
 
-          <p className="text-gray-500 mt-2 max-w-xl mx-auto">
-            Search for salons, clinics, and more. Book instantly and skip the
-            wait.
-          </p>
-
-          <div className="mt-10 mx-auto max-w-4xl relative z-50">
-            <div className="bg-white p-2 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 flex flex-col md:flex-row items-stretch gap-2 transition-all focus-within:shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white p-2 rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-slate-100 flex flex-col md:flex-row items-center gap-2">
+              
               {/* SERVICE SEARCH */}
-              <div className="relative flex-[1.5] group">
-                <Search
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors"
-                  size={20}
-                />
+              <div className="relative flex-[1.5] w-full group">
+                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" size={20} />
                 <input
                   type="text"
                   placeholder="What service are you looking for?"
                   value={searchChange}
                   onChange={(e) => setSearchChange(e.target.value)}
-                  // onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                  className="w-full h-14 pl-12 pr-4 rounded-xl bg-gray-50 md:bg-transparent outline-none text-gray-700 placeholder:text-gray-400"
+                  className="w-full h-14 pl-14 pr-4 rounded-2xl bg-slate-50 md:bg-transparent outline-none text-slate-700 font-medium placeholder:text-slate-400"
                 />
               </div>
 
-              <div className="hidden md:block w-px bg-gray-100 my-3" />
+              <div className="hidden md:block w-px h-8 bg-slate-200" />
 
               {/* LOCATION SEARCH */}
-              <div className="relative flex-1 group z-50">
-                <MapPin
-                  className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors z-10 ${
-                    lat ? "text-primary" : "text-gray-400"
-                  }`}
-                  size={20}
-                />
+              <div className="relative flex-1 w-full group">
+                <MapPin className={`absolute left-5 top-1/2 -translate-y-1/2 z-10 transition-colors ${lat ? "text-blue-600" : "text-slate-400"}`} size={20} />
                 <LocationAutoSuggest
                   value={locationChange}
-                  error={locationError}
-                  onChange={(val: any) => {
-                    setLocationChange(val);
-                    setLat(null);
-                    setLng(null);
-                    if (locationError) setLocationError(null);
-                  }}
-                  onSelect={({ name, lat, lng }: any) => {
-                    setLocationChange(name);
-                    setLat(lat);
-                    setLng(lng);
-                    setLocationError(null);
-                  }}
+                  onChange={(val: string) => { setLocationChange(val); setLat(null); setLng(null); }}
+                  onSelect={({ name, lat, lng }: any) => { setLocationChange(name); setLat(lat); setLng(lng); }}
                 />
-
-                <AnimatePresence>
-                  {locationError && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      className="absolute left-0 -bottom-14 w-full bg-red-50 text-red-600 p-2 rounded-lg text-xs flex items-start gap-2 border border-red-100 shadow-lg z-[60]"
-                    >
-                      <Info size={14} className="mt-0.5 shrink-0" />
-                      {locationError}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </div>
 
-              {/* SEARCH ACTION */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+              <button
                 onClick={handleSearch}
-                className="px-8 h-14 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all flex items-center justify-center disabled:opacity-50"
-                disabled={loading}
+                className="w-full md:w-auto px-10 h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition-all shadow-lg active:scale-95 shrink-0"
               >
-                {loading ? "Searching..." : "Search Now"}
-              </motion.button>
+                {loading ? <Loader2 className="animate-spin mx-auto" /> : "Search"}
+              </button>
+            </div>
+
+            {/* LOCATION STATUS CHIP */}
+            <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 shadow-sm">
+              <Navigation size={14} className="text-blue-600" />
+              <span className="text-sm font-bold text-slate-700">
+                Shops near <span className="text-blue-600 capitalize">{displayLocationName}</span>
+              </span>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="relative z-10 max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <aside className="lg:w-72 shrink-0">
-            <div className="sticky top-24">
-              <div className="flex items-center justify-between mb-6 lg:hidden">
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center gap-2 bg-white px-4 py-2.5 rounded-xl border border-gray-200 font-medium text-gray-700 shadow-sm"
-                >
-                  <SlidersHorizontal size={18} />
-                  {showFilters ? "Hide Filters" : "Show Filters"}
-                </button>
-              </div>
+      {/* Main Content: Filter + Grid */}
+      <section className="max-w-7xl mx-auto px-4 py-12 flex flex-col lg:flex-row gap-10">
+        
+        {/* Sidebar Filters */}
+        <aside className="lg:w-64 shrink-0">
+          <div className="sticky top-24">
+            <Filter onApplyFilters={(d) => fetchShops(search, lat, lng, d.categories, d.ratings.map(r => r[0]))} />
+          </div>
+        </aside>
 
-              <div className={`${showFilters ? "block" : "hidden lg:block"}`}>
-                <Filter onApplyFilters={addFilter} />
-              </div>
-            </div>
-          </aside>
-
-          <div className="flex-1">
+        {/* Results Grid */}
+        <div className="flex-1">
+          <AnimatePresence mode="wait">
             {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              <motion.div key="loading" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                 {[...Array(6)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-80 bg-gray-200 animate-pulse rounded-2xl"
-                  />
+                  <div key={i} className="space-y-4">
+                    <div className="aspect-[4/3] bg-slate-200 animate-pulse rounded-[32px]" />
+                    <div className="h-4 w-2/3 bg-slate-100 animate-pulse rounded-full" />
+                    <div className="h-4 w-1/2 bg-slate-100 animate-pulse rounded-full" />
+                  </div>
                 ))}
-              </div>
+              </motion.div>
             ) : shops.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0 }}
+              <motion.div 
+                key="empty" 
+                initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }}
-                className="py-24 text-center bg-white rounded-3xl border border-dashed border-gray-300"
+                className="py-32 text-center bg-white rounded-[40px] border-2 border-dashed border-slate-100"
               >
-                <div className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
-                  <Search size={32} />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">
-                  No matches found
-                </h3>
-                <p className="text-gray-500 mt-2 max-w-xs mx-auto">
-                  Try clicking search or adjusting your query.
-                </p>
-                <button
-                  onClick={clearFilters}
-                  className="mt-6 text-primary font-bold hover:text-primary/80 transition-colors"
-                >
-                  Clear all search filters
-                </button>
+                <Store size={48} className="mx-auto text-slate-200 mb-4" />
+                <h3 className="text-xl font-bold text-slate-900">No shops found</h3>
+                <p className="text-slate-500 mt-1">Try adjusting your filters or location.</p>
+                <button onClick={clearFilters} className="mt-6 text-blue-600 font-bold hover:underline text-sm">Clear all filters</button>
               </motion.div>
             ) : (
-              <motion.div
-                layout
-                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+              <motion.div 
+                key="grid" 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }}
+                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
               >
                 {shops.map((shop) => (
-                  <motion.div layout key={shop._id}>
-                    <ShopDataCard shopData={shop} />
-                  </motion.div>
+                  <ShopDataCard key={shop._id} shopData={shop} />
                 ))}
               </motion.div>
             )}
+          </AnimatePresence>
 
-            {totalPages > 1 && (
-              <div className="mt-12 flex justify-center pb-20">
-            
-                <Pagination
-                  page={page}
-                  totalPages={totalPages}
-                  onPageChange={setPage}
-                />
-              </div>
-            )}
-          </div>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-16 flex justify-center pb-20">
+              <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+            </div>
+          )}
         </div>
       </section>
     </main>

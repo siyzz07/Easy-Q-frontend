@@ -40,3 +40,33 @@ export const getCustomerContracts = async (page:number,limit:number,search:strin
 
     return response
 }
+
+//--------------------------------- get vendor works
+export const getVendorWorks = async (page:number,limit:number,search:string,filter:string,lat:string,lng:string) =>{
+
+    const response = await  ContractAxiosInstance.get('/contract/vendor/works',{
+        params:{
+            page,
+            limit,
+            search,
+            filter,
+            lat,
+            lng
+        }
+    })
+
+    return response
+
+}   
+
+//--------------------------------- appply for a contract
+export const applyContract = async (contractId:string) =>{
+    const response = await ContractAxiosInstance.patch(`/contract/apply/${contractId}`)
+    return response
+}
+
+//--------------------------------- contract request handle -- customer can reject or accept vendor for the contract
+export const updateContractRequest = async (contractId:string,vendorId:string,decision:'accept'|'reject')=>{
+    const response =  await ContractAxiosInstance.patch('/contract/applied-request',{contractId,vendorId,decision})
+    return response
+}
