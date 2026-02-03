@@ -4,7 +4,8 @@ import type { IServiceVendorTypes } from "../../Shared/types/Types";
 import { getServiceTypes } from "../../Services/ApiService/AdminApiService";
 
 interface FilterProps {
-  onApplyFilters: (filters: { categories: string[]; ratings: string[] }) => void;
+
+  onApplyFilters: (filters: { categories: string[]; ratings: string[]; distance: number | null }) => void;
 }
 
 const Filter: React.FC<FilterProps> = ({ onApplyFilters }) => {
@@ -13,9 +14,12 @@ const Filter: React.FC<FilterProps> = ({ onApplyFilters }) => {
   const [showAll, setShowAll] = useState(false);
   const [allCategories, setAllCategories] = useState<IServiceVendorTypes[]>([]);
   
-  // State for selected items
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedRatings, setSelectedRatings] = useState<string[]>([]);
+
+  const [selectedDistance, setSelectedDistance] = useState<number | null>(null);
+
+  const distances = [2, 5, 10, 20, 40];
 
   useEffect(() => {
     fetchSerivceTypes();
@@ -43,7 +47,6 @@ const Filter: React.FC<FilterProps> = ({ onApplyFilters }) => {
     );
   };
 
-
   const handleRatingChange = (rating: string) => {
     setSelectedRatings((prev) =>
       prev.includes(rating)
@@ -52,10 +55,16 @@ const Filter: React.FC<FilterProps> = ({ onApplyFilters }) => {
     );
   };
 
+
+  const handleDistanceChange = (dist: number) => {
+    setSelectedDistance((prev) => (prev === dist ? null : dist));
+  };
+
   const resetFilters = () => {
     setSelectedCategories([]);
     setSelectedRatings([]);
-    onApplyFilters({ categories: [], ratings: [] });
+    setSelectedDistance(null);
+    onApplyFilters({ categories: [], ratings: [], distance: null });
   };
 
   const filteredCategories = useMemo(() => {
@@ -75,7 +84,7 @@ const Filter: React.FC<FilterProps> = ({ onApplyFilters }) => {
       >
         <span className="flex items-center gap-2">
           <SlidersHorizontal size={18} />
-          Filters {(selectedCategories.length > 0 || selectedRatings.length > 0) && `(${selectedCategories.length + selectedRatings.length})`}
+          Filters {(selectedCategories.length > 0 || selectedRatings.length > 0 || selectedDistance) && `(${selectedCategories.length + selectedRatings.length + (selectedDistance ? 1 : 0)})`}
         </span>
         {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
       </button>
@@ -92,6 +101,26 @@ const Filter: React.FC<FilterProps> = ({ onApplyFilters }) => {
         </div>
 
         <div className="space-y-6 text-sm">
+          {/* Distance Section (New) */}
+          <fieldset>
+            <legend className="mb-3 text-[10px] font-black text-gray-400 uppercase tracking-[0.15em]">Distance (KM)</legend>
+            <div className="flex flex-wrap gap-2">
+              {distances.map((dist) => (
+                <button
+                  key={dist}
+                  onClick={() => handleDistanceChange(dist)}
+                  className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${
+                    selectedDistance === dist
+                      ? "bg-blue-600 border-blue-600 text-white"
+                      : "bg-gray-50 border-gray-200 text-gray-600 hover:border-blue-300"
+                  }`}
+                >
+                  {dist} km
+                </button>
+              ))}
+            </div>
+          </fieldset>
+
           {/* Ratings */}
           <fieldset>
             <legend className="mb-3 text-[10px] font-black text-gray-400 uppercase tracking-[0.15em]">Ratings</legend>
@@ -115,7 +144,6 @@ const Filter: React.FC<FilterProps> = ({ onApplyFilters }) => {
           {/* Categories */}
           <fieldset>
             <legend className="mb-3 text-[10px] font-black text-gray-400 uppercase tracking-[0.15em]">Categories</legend>
-            
             <div className="relative mb-4">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
               <input 
@@ -158,7 +186,11 @@ const Filter: React.FC<FilterProps> = ({ onApplyFilters }) => {
           </fieldset>
 
           <button 
-            onClick={() => onApplyFilters({ categories: selectedCategories, ratings: selectedRatings })}
+            onClick={() => onApplyFilters({ 
+              categories: selectedCategories, 
+              ratings: selectedRatings, 
+              distance: selectedDistance 
+            })}
             className="mt-4 w-full rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2"
           >
             Apply Filters

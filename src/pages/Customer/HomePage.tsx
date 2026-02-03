@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Filter from "../../components/Customer/Filter";
-import { Search, MapPin, SlidersHorizontal, Navigation, Store, Info, Loader2 } from "lucide-react";
+import { Search, MapPin, Navigation, Store, Loader2 } from "lucide-react";
 import ShopDataCard from "../../components/Customer/ShopDataCard";
 import { getShopsData } from "../../Services/ApiService/CustomerApiService";
 import Pagination from "../../components/Shared/Pagination";
@@ -14,25 +14,23 @@ const HomePage = () => {
   const [limit] = useState(9);
   const [totalPages, setTotalPages] = useState(1);
 
-  
   const [searchChange, setSearchChange] = useState("");
   const [locationChange, setLocationChange] = useState("");
 
-  
   const [search, setSearch] = useState("");
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   
-  
+  const [autoDetectedLat, setAutoDetectedLat] = useState<number | null>(null);
+  const [autoDetectedLng, setAutoDetectedLng] = useState<number | null>(null);
   const [autoDetectedName, setAutoDetectedName] = useState<string>("");
   const [displayLocationName, setDisplayLocationName] = useState<string>("your area");
 
   const [locationError, setLocationError] = useState<string | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
   const [ratingFilter, setRatingFilter] = useState<string[]>([]);
+  const [selectedDistance, setSelectedDistance] = useState<number | null>(null);
 
- 
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -42,6 +40,8 @@ const HomePage = () => {
           
           setLat(uLat);
           setLng(uLng);
+          setAutoDetectedLat(uLat);
+          setAutoDetectedLng(uLng);
 
           try {
             const response = await fetch(
@@ -52,8 +52,6 @@ const HomePage = () => {
             
             setAutoDetectedName(cityName);
             setDisplayLocationName(cityName); 
-            
-          
             fetchShops("", uLat, uLng);
           } catch (err) {
             fetchShops("", uLat, uLng);
@@ -68,27 +66,33 @@ const HomePage = () => {
     }
   }, []);
 
-  
   const fetchShops = async (
     overrideSearch?: string,
     overrideLat?: number | null,
     overrideLng?: number | null,
     overrideCategories?: string[] | null,
-    overrideRatings?: string[] | null
+    overrideRatings?: string[] | null,
+    overrideDistance?: number | null
   ) => {
     try {
       setLoading(true);
       const currentSearch = overrideSearch !== undefined ? overrideSearch : search;
       const currentLat = overrideLat !== undefined ? overrideLat : lat;
       const currentLng = overrideLng !== undefined ? overrideLng : lng;
+      const currentDist = overrideDistance !== undefined ? overrideDistance : selectedDistance;
+
+      const distanceInMeters = currentDist   ? currentDist * 1000 : (currentLat || currentLng) ? 50000 : undefined;
       
+
+      console.log('distanceInMeters :>> ', currentDist,'',distanceInMeters,'op',currentLat,'ll',currentLng);
+
       const res = await getShopsData({
         search: currentSearch,
         page,
         limit,
         lat: currentLat,
         lng: currentLng,
-        distance: (currentLat || currentLng) ? 50000 : undefined, // 50km radius
+        distance: distanceInMeters,
         categories: overrideCategories !== undefined ? overrideCategories : categoryFilter,
         ratings: overrideRatings !== undefined ? overrideRatings : ratingFilter,
       });
@@ -96,7 +100,7 @@ const HomePage = () => {
       setShops(res.data.data || []);
       setTotalPages(res.data.pagination.totalPages || 1);
     } catch (err) {
-      console.error("Fetch error:", err);
+      console.error(err);
       setShops([]);
     } finally {
       setLoading(false);
@@ -107,19 +111,18 @@ const HomePage = () => {
     fetchShops();
   }, [page]);
 
-
   const handleSearch = async () => {
     let finalLat = lat;
     let finalLng = lng;
     let finalDisplayName = displayLocationName;
 
-  
     if (!locationChange.trim()) {
-     
-      if (lat && lng && autoDetectedName) {
-        finalLat = lat;
-        finalLng = lng;
+      if (autoDetectedLat && autoDetectedLng) {
+        finalLat = autoDetectedLat;
+        finalLng = autoDetectedLng;
         finalDisplayName = autoDetectedName;
+        setLat(finalLat);
+        setLng(finalLng);
       } else {
         finalLat = null;
         finalLng = null;
@@ -128,7 +131,6 @@ const HomePage = () => {
         setLng(null);
       }
     } 
-    
     else if (locationChange.trim() && !lat) {
       try {
         const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${locationChange}`);
@@ -145,7 +147,6 @@ const HomePage = () => {
         return;
       }
     } 
-   
     else {
       finalDisplayName = locationChange;
     }
@@ -159,15 +160,21 @@ const HomePage = () => {
   const clearFilters = () => {
     setSearchChange("");
     setLocationChange("");
-    setLat(null);
-    setLng(null);
-    setDisplayLocationName("your area");
-    fetchShops("", null, null, [], []);
+    if (autoDetectedLat) {
+        setLat(autoDetectedLat);
+        setLng(autoDetectedLng);
+        setDisplayLocationName(autoDetectedName);
+        fetchShops("", autoDetectedLat, autoDetectedLng, [], []);
+    } else {
+        setLat(null);
+        setLng(null);
+        setDisplayLocationName("your area");
+        fetchShops("", null, null, [], []);
+    }
   };
 
   return (
     <main className="min-h-screen bg-[#F8FAFC]">
-      {/* Search Header Section */}
       <section className="bg-white pt-16 pb-12 px-4 border-b border-slate-100">
         <div className="max-w-7xl mx-auto text-center">
           <motion.h1 
@@ -181,8 +188,6 @@ const HomePage = () => {
 
           <div className="max-w-4xl mx-auto">
             <div className="bg-white p-2 rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-slate-100 flex flex-col md:flex-row items-center gap-2">
-              
-              {/* SERVICE SEARCH */}
               <div className="relative flex-[1.5] w-full group">
                 <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" size={20} />
                 <input
@@ -196,7 +201,6 @@ const HomePage = () => {
 
               <div className="hidden md:block w-px h-8 bg-slate-200" />
 
-              {/* LOCATION SEARCH */}
               <div className="relative flex-1 w-full group">
                 <MapPin className={`absolute left-5 top-1/2 -translate-y-1/2 z-10 transition-colors ${lat ? "text-blue-600" : "text-slate-400"}`} size={20} />
                 <LocationAutoSuggest
@@ -214,7 +218,6 @@ const HomePage = () => {
               </button>
             </div>
 
-            {/* LOCATION STATUS CHIP */}
             <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 shadow-sm">
               <Navigation size={14} className="text-blue-600" />
               <span className="text-sm font-bold text-slate-700">
@@ -225,17 +228,13 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Main Content: Filter + Grid */}
       <section className="max-w-7xl mx-auto px-4 py-12 flex flex-col lg:flex-row gap-10">
-        
-        {/* Sidebar Filters */}
         <aside className="lg:w-64 shrink-0">
           <div className="sticky top-24">
-            <Filter onApplyFilters={(d) => fetchShops(search, lat, lng, d.categories, d.ratings.map(r => r[0]))} />
+            <Filter onApplyFilters={(d) => fetchShops(search, lat, lng, d.categories, d.ratings.map(r => r[0]) , d.distance) } />
           </div>
         </aside>
 
-        {/* Results Grid */}
         <div className="flex-1">
           <AnimatePresence mode="wait">
             {loading ? (
@@ -274,7 +273,6 @@ const HomePage = () => {
             )}
           </AnimatePresence>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="mt-16 flex justify-center pb-20">
               <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
