@@ -33,10 +33,7 @@ export const joinChatRoom = (roomId:string)=>{
 export const sendMessage = (data:SendMessagePayload) =>{
     const socket = getSocket()
     console.log('socket :>> ', socket);
-    console.log('message-----------[[[[[[[[[[[[[[[[[[[[[[[[[[[');
     if(socket){
-        console.log('message-----------');
-        
         socket.emit('message:new',data)
     }
 }

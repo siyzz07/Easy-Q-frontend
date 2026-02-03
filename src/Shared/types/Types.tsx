@@ -241,6 +241,10 @@ export interface IContractAddress {
 }
 
 
+
+
+
+
 export interface IContractData {
   _id?:string
   customerId:string;

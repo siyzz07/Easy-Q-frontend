@@ -26,6 +26,7 @@ import NotificationPage from "../pages/Customer/NotificationPage";
 import WalletPage from "../pages/Customer/WalletPage";
 import ChatPage from "../components/Shared/ChatPage";
 import CustomerChatPage from "../pages/Customer/CustomerChatPage";
+import VideoCall from "../components/Shared/VideoCall";
 
 const CustomerRoutes = () => {
   return (
@@ -136,6 +137,15 @@ const CustomerRoutes = () => {
             }
             />
 
+
+ <Route
+       path="/customer/video-call/:id"
+        element={
+              <CustomerProtectedRoute>
+                <VideoCall/>
+              </CustomerProtectedRoute>
+            }
+          />
             
             <Route
               path="contract"
@@ -226,6 +236,7 @@ const CustomerRoutes = () => {
         </Route>
         {/* //----------------------------------------------------------------------- */}
       </Route>
+     
     </Routes>
   );
 };

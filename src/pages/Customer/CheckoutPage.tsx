@@ -191,11 +191,6 @@ const CheckoutPage = () => {
             return;
              }
        }
-
-
-
-
-
       const bookingPayload: IBookingPayload = {
         // customerId: customerData._id as string,
         totalAmount: serviceData.price as string,
@@ -205,9 +200,6 @@ const CheckoutPage = () => {
     
       };
 
-      console.log(bookingPayload);
-
-  
       const response = await createBooking(bookingPayload);
 
       if(response?.data.data){
@@ -216,6 +208,7 @@ const CheckoutPage = () => {
              let data = {
           bookingDate: response.data.data.bookingDate,
           bookingTime: response.data.data.bookingTimeStart,
+          bookingId:bookingId
         };
 
           let encode = btoa(JSON.stringify(data));
@@ -227,6 +220,7 @@ const CheckoutPage = () => {
           bookingTime: response.data.data.bookingTimeStart,
           paymentMethod: response.data.data.paymentMethod,
           totalAmount: response.data.data.totalAmount,
+          bookingId:response.data.data.bookingId
         };
 
         let encode = btoa(JSON.stringify(data));

@@ -21,7 +21,7 @@ import VendorBookingDetailsPage from "../pages/Vendor/VendorBookingDetailsPage";
 import VendorWalletPage from "../pages/Vendor/VendorWalletPage";
 import WorksPage from "../pages/Vendor/WorksPage";
 import VendorContractsPage from "../pages/Vendor/VendorContractsPage";
-import VendorChatPage from "../pages/Vendor/VendorChatPage";
+import VendorContractDetailsPage from "../pages/Vendor/VendorChatPage";
 
 
 
@@ -168,7 +168,7 @@ const VendorRoutes = () => {
           path={VENDOR_ROUTES.CONTRACT_DETAILS}
           element={
             <VendorProtectedRoute>
-              <VendorChatPage/>
+              <VendorContractDetailsPage/>
             </VendorProtectedRoute>
           }/>
 
