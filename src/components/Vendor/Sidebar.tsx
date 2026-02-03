@@ -45,7 +45,7 @@ const Sidebar = () => {
       icon: FileText,
       label: "Contract",
       path: "Contract",
-      route: "vendor/dashboard",
+      route: "/vendor/contracts",
     },
     {
       icon: User,

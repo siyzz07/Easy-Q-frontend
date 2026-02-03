@@ -29,4 +29,13 @@ export const registerSocketEvents = () => {
   socket.on('contract-notification',(data:INotification)=>{
     Store.dispatch(addNotification(data))
   })
+
+  /**
+   * 
+   *  chata evetns
+   * 
+   */
+  socket.on("message:receive",()=>{
+
+  })
 };

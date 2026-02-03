@@ -16,8 +16,8 @@ export const addContract = async (form:IAddContractInitialValues) =>{
     return response;
 };
 //-------------------------------- get contract
-export const getContract = async () =>{
-    const response = await ContractAxiosInstance.get("/contract/get-contract");
+export const getSelectedContract= async (id:string) =>{
+    const response = await ContractAxiosInstance.get(`/contract/get-contract/${id}`);
     return response;
 };
 
@@ -68,5 +68,17 @@ export const applyContract = async (contractId:string) =>{
 //--------------------------------- contract request handle -- customer can reject or accept vendor for the contract
 export const updateContractRequest = async (contractId:string,vendorId:string,decision:'accept'|'reject')=>{
     const response =  await ContractAxiosInstance.patch('/contract/applied-request',{contractId,vendorId,decision})
+    return response
+}
+
+//---------------------------------  get vendor contracts - vendors that accepted the customer for the contract
+export const vendorContracts = async (page?:number,limit?:number,search?:string) =>{
+    const response = await ContractAxiosInstance.get('/contract/vendor/contracts',{
+        params:{
+            page,
+            limit,
+            search
+        }
+    })
     return response
 }

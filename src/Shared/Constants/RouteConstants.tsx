@@ -37,7 +37,7 @@ export const CUSTOMER_ROUTES ={
     NOTIFICATIONS:"notifications",
     PAYMENT_FAILED:"payment-failed",
     WALLET:"wallet",
-    CHAT:"chat/:id",
+    CHAT:"contarct/:id",
 
 
 };
@@ -59,7 +59,9 @@ export const VENDOR_ROUTES ={
     BOOKINGS:"bookings",
     VIEW_BOOKING:"bookings/:id",
     WALLET:"wallet",
-    WORKS:"works"
+    WORKS:"works",
+    CONTRACTS:"contracts",
+    CONTRACT_DETAILS:"contracts/:id"
 
 
 };

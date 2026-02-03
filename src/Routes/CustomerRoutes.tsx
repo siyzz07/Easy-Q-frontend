@@ -25,6 +25,7 @@ import FavoritePage from "../pages/Customer/FavoritePage";
 import NotificationPage from "../pages/Customer/NotificationPage";
 import WalletPage from "../pages/Customer/WalletPage";
 import ChatPage from "../components/Shared/ChatPage";
+import CustomerChatPage from "../pages/Customer/CustomerChatPage";
 
 const CustomerRoutes = () => {
   return (
@@ -147,7 +148,7 @@ const CustomerRoutes = () => {
               path={CUSTOMER_ROUTES.CHAT}
               element={
                 <CustomerProtectedRoute>
-                  <ChatPage/>
+                  <CustomerChatPage/>
                 </CustomerProtectedRoute>
               }/>
             <Route

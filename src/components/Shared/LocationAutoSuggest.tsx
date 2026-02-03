@@ -14,7 +14,7 @@ type Props = {
   error?: string | null;
 };
 
-const LocationAutoSuggest: React.FC<Props> = ({
+const   LocationAutoSuggest: React.FC<Props> = ({
   value,
   onChange,
   onSelect,
@@ -71,7 +71,7 @@ const LocationAutoSuggest: React.FC<Props> = ({
   };
 
   return (
-    <div className="relative w-full z-100">
+    <div className="relative w-full ">
       <input
         type="text"
         value={value}

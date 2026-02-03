@@ -379,7 +379,7 @@ const ContractPage = () => {
                             <button
                               onClick={() =>
                                 navigate(
-                                  `/customer/${CUSTOMER_ROUTES.CHAT.replace(":id", String(767778765))}`,
+                                  `/customer/${CUSTOMER_ROUTES.CHAT.replace(":id", contract?._id as string)}`,
                                 )
                               }
                               className="flex-1 py-2.5 flex items-center justify-center gap-2 rounded-md bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/20 transition-all"

@@ -1,6 +1,8 @@
-import React, { useEffect, useState, useMemo } from "react"; // Added useState and useMemo
+import React, { useEffect, useState, useMemo } from "react"; 
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+
+
 import { 
   CheckCircle2, 
   AlertTriangle, 
@@ -33,7 +35,6 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   
 
 
-  // 1. ADD STATE FOR FILTER
   const [showOnlyUnread, setShowOnlyUnread] = useState(false);
 
   useEffect(() => {
@@ -91,7 +92,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
     }
   };
 
-  return (
+  return ( 
     <AnimatePresence>
       {isOpen && (
         <>
@@ -206,6 +207,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
         </>
       )}
     </AnimatePresence>
+
   );
 };
 
