@@ -91,7 +91,6 @@ const ChatPage: React.FC<ChatPageProps> = ({
     userId: string;
   } | null>(null);
 
-
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -283,22 +282,17 @@ const ChatPage: React.FC<ChatPageProps> = ({
     setSelectedImage(null);
   };
 
-
-
-  const  handleVedioCall = async () =>{
-    try{
-
-      let result = await startVedioCall(roomId,contract._id as string,decoded?.userId as string)
-      console.log('result :>> ', result);
-  //       window.open(
-  //   `/video-call/${result.data.roomId}`,
-  //   "_blank"
-  // );
-    navigate(`/customer/video-call/${result.data.roomId}`)
-    }catch(error:unknown){
-
-    }
-  }
+  const handleVedioCall = async () => {
+    try {
+      let result = await startVedioCall(
+        roomId,
+        contract._id as string,
+        decoded?.userId as string,
+      );
+      console.log("result :>> ", result);
+      navigate(`/customer/video-call/${result.data.roomId}`);
+    } catch (error: unknown) {}
+  };
 
   return (
     <div className="flex h-[calc(100vh-64px)] bg-[#eeeaea] overflow-hidden relative">
@@ -378,7 +372,8 @@ const ChatPage: React.FC<ChatPageProps> = ({
           <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={handleVedioCall}
-            className="text-[#54656f] hover:bg-slate-200 p-2.5 rounded-full transition-colors hidden sm:block">
+              className="text-[#54656f] hover:bg-slate-200 p-2.5 rounded-full transition-colors hidden sm:block"
+            >
               <Video size={22} />
             </button>
             <div className="h-6 w-px bg-slate-300 mx-1 hidden sm:block"></div>

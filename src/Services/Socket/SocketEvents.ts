@@ -29,11 +29,5 @@ export const registerSocketEvents = () => {
     Store.dispatch(addNotification(data));
   });
 
-  /**
-   *  Notifify incomming vedio call
-   */
-  socket.on('incomming-vedio-call',(data)=>{
-    console.log('inCommingVedioo calllllllllll');
-    
-  })
+
 };

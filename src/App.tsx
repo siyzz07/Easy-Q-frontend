@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import CustomerRoutes from "./Routes/CustomerRoutes";
 import VendorRoutes from "./Routes/VendorRoutes";
 import AdminRoutes from "./Routes/AdminRoutes";
@@ -7,13 +7,17 @@ import LandingPage from "./pages/Customer/LandingPage";
 
 import PublicdRoute from "./Routes/PublicRoutes/PublicRoute";
 import { ADMIN_ROUTES, CUSTOMER_ROUTES, VENDOR_ROUTES } from "./Shared/Constants/RouteConstants";
-import { useEffect } from "react";
-import { connectSocket } from "./Services/Socket/Socket";
+import { useEffect, useState } from "react";
+import { connectSocket, getSocket } from "./Services/Socket/Socket";
 import { registerSocketEvents } from "./Services/Socket/SocketEvents";
 import { getAccessToken } from "./utils/tokenUtils";
 import ScrollToTop from "./components/Shared/ScrollTop";
+import IncomingCallModal from "./components/Shared/IncomingCallModal";
+import GlobalIncomingCallNotify from "./components/Shared/GlobalIncomingCallNotify";
 
 const App = () => {
+
+
   useEffect(() => {
   const token = getAccessToken();
   if (token) {
@@ -23,7 +27,8 @@ const App = () => {
 }, []);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter> 
+    <GlobalIncomingCallNotify/>
     <ScrollToTop/>
       <Routes>
         

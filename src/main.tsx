@@ -23,7 +23,6 @@ createRoot(document.getElementById("root")!).render(
         duration: 4000,
       }}
     />
-
     <ToastContainer
       position="bottom-right"
       autoClose={3000}
@@ -42,28 +41,5 @@ createRoot(document.getElementById("root")!).render(
         <App />
       </GoogleOAuthProvider>
     </Provider>
-
-    {/* <ToastContainer
-      position="top-center"
-      autoClose={2500}
-      closeOnClick
-      pauseOnHover={false}
-      draggable={false}
-      theme="light"
-      transition={Bounce}
-      limit={3}
-    /> */}
-
-    {/* <ToastContainer
-  position="top-right"
-  autoClose={2500}
-  hideProgressBar={false}
-  closeOnClick
-  pauseOnHover={false}
-  draggable={false}
-  theme="light"
-  transition={Slide}
-  limit={3}
-/> */}
   </>
 );

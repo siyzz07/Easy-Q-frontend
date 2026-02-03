@@ -38,6 +38,7 @@ export const CUSTOMER_ROUTES ={
     PAYMENT_FAILED:"payment-failed",
     WALLET:"wallet",
     CHAT:"contract/:id",
+    VIDEO_CALL :'video-call/:id'
 
 
 };
@@ -61,7 +62,8 @@ export const VENDOR_ROUTES ={
     WALLET:"wallet",
     WORKS:"works",
     CONTRACTS:"contracts",
-    CONTRACT_DETAILS:"contracts/:id"
+    CONTRACT_DETAILS:"contracts/:id",
+    VIDEO_CALL :'video-call/:id'
 
 
 };

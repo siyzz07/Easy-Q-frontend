@@ -1,36 +1,55 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../../components/Shared/Navbar";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../../../components/Shared/Footer";
-import LandingPageBody from "../../../components/Customer/LandingPageBody";
 import { getAccessToken } from "../../../utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import { fetchNotification } from "../../../Redux/notificationSlice";
 import type Store from "../../../Redux/Store";
+import { getSocket } from "../../../Services/Socket/Socket";
+import IncomingCallModal from "../../../components/Shared/IncomingCallModal";
+
 export type AppDispatch = typeof Store.dispatch;
 
-const HomePageLayout = () => {
+interface CallData {
+  senderName: string;
+  senderImage?: string;
+  roomId: string;
+  type: 'audio' | 'video';
+}
 
+const HomePageLayout = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [inChat, setInChat] = useState(true);
+
+  // const [callDetails, setCallDetails] = useState<CallData | null>(null);
 
   const token = getAccessToken();
   const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
 
-    const path = pathname
-      .split("/")
-      .filter(value => value.trim().length > 0);
-    if (
-      path.length === 3 &&
-      path[0] == "customer" &&
-      path[1] == "contract"
-    ) {
-      setInChat(false);   
-    } else {
-      setInChat(true);   
-    }
+  // useEffect(() => {
+  //   const socket = getSocket();
+  //   console.log('socket :>> ', socket);
+  //   if (!socket) return;
+
+  //   socket.on('incomming-vedio-call', (data: CallData) => {
+  //     console.log('data :>> ', data);
+  //     console.log("Incoming call data:", data);
+  //     setCallDetails(data);
+      
+  //   });
+
+  //   return () => {
+  //     socket.off('incomming-vedio-call');
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    const pathSegments = pathname.split("/").filter(v => v.length > 0);
+    const isInsideChat = pathSegments[0] === "customer" && pathSegments[1] === "contract" && pathSegments.length === 3;
+    setInChat(!isInsideChat);
   }, [pathname]);
 
   useEffect(() => {
@@ -51,6 +70,8 @@ const HomePageLayout = () => {
     <div className="flex flex-col min-h-screen bg-surface">
       <Navbar menu={menuItems} />
 
+    
+
       <main className="flex-1 pt-16">
         <Outlet />
       </main>
@@ -59,6 +80,5 @@ const HomePageLayout = () => {
     </div>
   );
 };
-
 
 export default HomePageLayout;

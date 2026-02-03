@@ -93,96 +93,92 @@ const CustomerRoutes = () => {
 
         <Route
           path={CUSTOMER_ROUTES.SHOP_SERVICES}
-    
           element={
             <CustomerProtectedRoute>
-              <ViewServicesPage/>
+              <ViewServicesPage />
             </CustomerProtectedRoute>
-          }/>
+          }
+        />
 
-          <Route 
-            path='/vendor/:id'
-             element={
+        <Route
+          path="/vendor/:id"
+          element={
             <CustomerProtectedRoute>
-              <VendorProfileView/>
+              <VendorProfileView />
             </CustomerProtectedRoute>
-          }/>
+          }
+        />
 
-          <Route
-            path="/service/checkout"
-            element ={
-
-              <CustomerProtectedRoute>
-                <CheckoutPage/>
+        <Route
+          path="/service/checkout"
+          element={
+            <CustomerProtectedRoute>
+              <CheckoutPage />
             </CustomerProtectedRoute>
-            }
-            />
+          }
+        />
 
-            <Route
-            path="/service/booking-confirm"
-            element ={
-
-              <CustomerProtectedRoute>
-                <PaymentConfirmPage/>
+        <Route
+          path="/service/booking-confirm"
+          element={
+            <CustomerProtectedRoute>
+              <PaymentConfirmPage />
             </CustomerProtectedRoute>
-            }
-            />
+          }
+        />
 
-            <Route
-            path={CUSTOMER_ROUTES.PAYMENT_FAILED}
-            element ={
-              <CustomerProtectedRoute>
-                <PaymentFailedPage/>
+        <Route
+          path={CUSTOMER_ROUTES.PAYMENT_FAILED}
+          element={
+            <CustomerProtectedRoute>
+              <PaymentFailedPage />
             </CustomerProtectedRoute>
-            }
-            />
+          }
+        />
 
+       
 
- <Route
-       path="/customer/video-call/:id"
-        element={
-              <CustomerProtectedRoute>
-                <VideoCall/>
-              </CustomerProtectedRoute>
-            }
-          />
-            
-            <Route
-              path="contract"
-              element={
-                <CustomerProtectedRoute>
-                  <ContractPage/>
-                </CustomerProtectedRoute>
-              }/>
-            <Route
-              path={CUSTOMER_ROUTES.CHAT}
-              element={
-                <CustomerProtectedRoute>
-                  <CustomerChatPage/>
-                </CustomerProtectedRoute>
-              }/>
-            <Route
-              path={CUSTOMER_ROUTES.BOOKINGS}
-              element={
-                <CustomerProtectedRoute>
-                  <BookingsPage/>
-                </CustomerProtectedRoute>
-              }/>
-            <Route
-            path={CUSTOMER_ROUTES.FAVORITE}
-            element={
-              <CustomerProtectedRoute>
-                <FavoritePage/>
-              </CustomerProtectedRoute>
-            }/>
-            <Route
-              path={CUSTOMER_ROUTES.VIEW_BOOKING}
-              element={
-                <CustomerProtectedRoute>
-                  <BookingDetailsPage/>
-                </CustomerProtectedRoute>
-              }/>
-            
+        <Route
+          path="contract"
+          element={
+            <CustomerProtectedRoute>
+              <ContractPage />
+            </CustomerProtectedRoute>
+          }
+        />
+        <Route
+          path={CUSTOMER_ROUTES.CHAT}
+          element={
+            <CustomerProtectedRoute>
+              <CustomerChatPage />
+            </CustomerProtectedRoute>
+          }
+        />
+        <Route
+          path={CUSTOMER_ROUTES.BOOKINGS}
+          element={
+            <CustomerProtectedRoute>
+              <BookingsPage />
+            </CustomerProtectedRoute>
+          }
+        />
+        <Route
+          path={CUSTOMER_ROUTES.FAVORITE}
+          element={
+            <CustomerProtectedRoute>
+              <FavoritePage />
+            </CustomerProtectedRoute>
+          }
+        />
+        <Route
+          path={CUSTOMER_ROUTES.VIEW_BOOKING}
+          element={
+            <CustomerProtectedRoute>
+              <BookingDetailsPage />
+            </CustomerProtectedRoute>
+          }
+        />
+
         {/* //----------------------------------------------- profile ------------------------ */}
         <Route
           path={CUSTOMER_ROUTES.PROFILE}
@@ -236,7 +232,15 @@ const CustomerRoutes = () => {
         </Route>
         {/* //----------------------------------------------------------------------- */}
       </Route>
-     
+
+       <Route
+          path={CUSTOMER_ROUTES.VIDEO_CALL}
+          element={
+            <CustomerProtectedRoute>
+              <VideoCall />
+            </CustomerProtectedRoute>
+          }
+        />
     </Routes>
   );
 };
