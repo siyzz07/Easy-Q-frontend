@@ -143,7 +143,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
   const distribution = getRatingDistribution(reviews);
   const totalReviews = reviews.length;
 
-  // Save uploaded image
+  // Save uploaded imag//e
   const handleSaveImage = async (image: File | null) => {
     try {
       let imageUrl = await uploadToCloudinary(image as File);
@@ -381,7 +381,7 @@ const ShopViews: React.FC<ShopViewsProps> = ({
                                         <Progress
                                         value={percent}
                                         className="h-2 flex-1"
-                                        // indicatorClassName="bg-yellow-400" // using default styling for now, usually handled by CSS or library
+                                        // indicatorClassName="bg-yellow-400"
                                         />
                                         <div className="w-8 text-right text-muted-foreground">{count}</div>
                                     </div>

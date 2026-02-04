@@ -22,3 +22,18 @@ export const startVedioCall = async (chatRoomId :string,contractId:string,caller
   const response = await ChatRoomAxiosInstance.post('/chat/vedio-call/start',{chatRoomId,contractId,caller})
   return response
 } 
+
+//------------------------ get vedio call zegocloud toke
+export const zegoToken = async (roomId:string,userId:string) =>{
+  console.log('roomId :>> ', roomId);
+  console.log('userId):>> ', userId);
+    const response = await ChatRoomAxiosInstance.get('/chat/zego/token',{
+      params:{
+        roomId,
+        userId
+      }
+    })
+    return response
+}
+
+

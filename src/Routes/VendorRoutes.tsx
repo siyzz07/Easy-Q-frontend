@@ -22,6 +22,7 @@ import VendorWalletPage from "../pages/Vendor/VendorWalletPage";
 import WorksPage from "../pages/Vendor/WorksPage";
 import VendorContractsPage from "../pages/Vendor/VendorContractsPage";
 import VendorContractDetailsPage from "../pages/Vendor/VendorChatPage";
+import VideoCall from "../components/Shared/VideoCall";
 
 
 
@@ -169,6 +170,13 @@ const VendorRoutes = () => {
           element={
             <VendorProtectedRoute>
               <VendorContractDetailsPage/>
+            </VendorProtectedRoute>
+          }/>
+        <Route 
+          path={VENDOR_ROUTES.VIDEO_CALL}
+          element={
+            <VendorProtectedRoute>
+              <VideoCall/>
             </VendorProtectedRoute>
           }/>
 

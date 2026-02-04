@@ -290,13 +290,14 @@ const ChatPage: React.FC<ChatPageProps> = ({
         decoded?.userId as string,
       );
       console.log("result :>> ", result);
-      navigate(`/customer/video-call/${result.data.roomId}`);
+      
+
+      navigate(`/${decoded?.role}/video-call/${result.data.roomId}`);
     } catch (error: unknown) {}
   };
 
   return (
     <div className="flex h-[calc(100vh-64px)] bg-[#eeeaea] overflow-hidden relative">
-      {/* Hidden File Input */}
       <input
         type="file"
         accept="image/*"

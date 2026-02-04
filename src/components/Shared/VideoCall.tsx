@@ -1,66 +1,92 @@
 import { useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import { zegoToken } from "../../Services/ApiService/ChatApiService";
+import { decodeToken } from "../../utils/tokenUtils";
 
 export default function VideoCall() {
 
-  console.log('invedio call rooom');
-  
-  const { roomId } = useParams();              // room id from URL
+
+  console.log('in vedion call')
+  const { roomId } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
   const meetingRef = useRef<HTMLDivElement>(null);
-
-  // You can replace these with real user data
-  const userId = String(Date.now());           // unique per user
-  const userName = "User";                     // customer / vendor name
-
+  const zpRef = useRef<any>(null); 
   useEffect(() => {
-      console.log('invedio call rooom');
-    if (!roomId) return;
+    let isMounted = true; 
 
-    joinZegoRoom();
+    const startCall = async () => {
+      console.log('roomId :>> ', roomId);
+      if (!roomId) return;
+      try {
+        const decoded = decodeToken();
+        if (!decoded?.userId) {
+             console.error("User ID not found");
+             navigate(-1);
+             return;
+        }
 
-    // cleanup when page unmounts
-    return () => {
-      meetingRef.current = null;
-    };
-  }, [roomId]);
+        console.log('response :>> ');
+        const response = await zegoToken(roomId, decoded.userId);
+          console.log('response :>> ', response);
+        if (!isMounted) return;
 
-  const joinZegoRoom = async () => {
-    try {
-      // 1️⃣ Get Zego token from backend (SAFE)
-      const res = await axios.get("/api/zego/token", {
-        params: {
+        const data = response?.data?.data;
+        const token = data?.token;
+        const appId = data?.appId;
+        const userName = data?.userName;
+
+        if (!token || !appId) {
+             console.error("Invalid token response details", data);
+             navigate(-1);
+             return;
+        }
+
+
+        const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
+          appId,
+          token,
           roomId,
-          userId,
-          userName
+          decoded.userId,
+          userName || decoded.userId
+        );
+
+
+        const zp = ZegoUIKitPrebuilt.create(kitToken);
+        zpRef.current = zp;
+
+        if (meetingRef.current) {
+            zp.joinRoom({
+                container: meetingRef.current,
+                scenario: {
+                   mode: ZegoUIKitPrebuilt.VideoConference
+                },
+                showScreenSharingButton: true,
+                showPreJoinView: false,
+                onLeaveRoom: () => navigate(-1)
+            });
         }
-      });
+      } catch (error) {
+        console.error("Failed to start video call", error);
+        if (isMounted) navigate(-1);
+      }
+    };
 
-      const { token } = res.data;
+    startCall();
 
-      // 2️⃣ Create Zego instance
-      const zp = ZegoUIKitPrebuilt.create(token);
-
-      // 3️⃣ Join room (VIDEO CALL STARTS HERE)
-      zp.joinRoom({
-        container: meetingRef.current!,
-        scenario: {
-          mode: ZegoUIKitPrebuilt.VideoConference
-        },
-        showScreenSharingButton: true,
-        showPreJoinView: false,
-        onLeaveRoom: () => {
-          navigate(-1); // go back when user leaves call
-        }
-      });
-
-    } catch (error) {
-      console.error("Failed to start video call", error);
-      navigate(-1);
+    const callLeave = () =>{
+      
+      navigate(-1)
     }
-  };
+
+    return () => {
+      isMounted = false;
+      if (zpRef.current) {
+        zpRef.current.destroy();
+        zpRef.current = null;
+      }
+    };
+  }, [roomId, navigate]);
 
   return (
     <div
@@ -71,6 +97,5 @@ export default function VideoCall() {
         backgroundColor: "#000"
       }}
     />
-    // <div>hai</div>
   );
 }

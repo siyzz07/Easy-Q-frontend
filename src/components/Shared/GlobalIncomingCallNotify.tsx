@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getSocket } from '../../Services/Socket/Socket';
 import IncomingCallModal from './IncomingCallModal';
+import { decodeToken } from '../../utils/tokenUtils';
 
 
 const GlobalIncomingCallNotify = () => {
@@ -28,17 +29,17 @@ const GlobalIncomingCallNotify = () => {
 
   const handleAcceptCall = () => {
     if (callDetails) {
-      navigate(`/video-call/${callDetails.roomId}`);
+      let decode = decodeToken()
+      navigate(`${decode?.role}/video-call/${callDetails.roomId}`);
       setCallDetails(null);
     }
   };
 
   const handleDeclineCall = () => {
-    // Optional: Emit a 'call-declined' event back to the sender via socket here
+    
     setCallDetails(null);
   };
 
-  // JSX: In React, you must wrap adjacent elements or return a Fragment/null
   if (!callDetails) return null;
 
   return (
