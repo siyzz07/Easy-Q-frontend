@@ -20,6 +20,10 @@ const GlobalIncomingCallNotify = () => {
       setCallDetails(data);
     };
 
+
+
+    socket.on('call-ended',handleDeclineCall)
+
     socket.on('incomming-vedio-call', handleIncomingCall);
 
     return () => {

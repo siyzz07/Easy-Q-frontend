@@ -37,3 +37,11 @@ export const sendMessage = (data:SendMessagePayload) =>{
         socket.emit('message:new',data)
     }
 }
+
+//  join the vedio call room
+export const joinVedioCallRoom = (roomId:string,userId:string) =>{
+    const socket = getSocket()
+    if(socket){
+        socket.emit('join-vedio-room',{roomId,userId})
+    }
+}

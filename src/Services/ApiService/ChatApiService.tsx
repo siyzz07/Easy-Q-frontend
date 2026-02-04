@@ -1,3 +1,4 @@
+import { string } from "yup";
 import { ChatRoomAxiosInstance } from "../../config/AxiosInstance"
 
 
@@ -34,6 +35,14 @@ export const zegoToken = async (roomId:string,userId:string) =>{
       }
     })
     return response
+}
+
+//------------------------ leav form the vedio call
+export const leaveZego = async (roomId:string, leaveUser:string) =>{
+
+  const response = await ChatRoomAxiosInstance.post('/chat/leave-vedio',{roomId,leaveUser})
+  return response
+
 }
 
 

@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
-import { zegoToken } from "../../Services/ApiService/ChatApiService";
+import { leaveZego, zegoToken } from "../../Services/ApiService/ChatApiService";
 import { decodeToken } from "../../utils/tokenUtils";
+import { joinVedioCallRoom } from "../../Services/Socket/SocketActions";
 
 export default function VideoCall() {
 
@@ -25,7 +26,8 @@ export default function VideoCall() {
              navigate(-1);
              return;
         }
-
+        // join the  userr to the room of the vedio
+        joinVedioCallRoom(roomId,decoded.userId)
         console.log('response :>> ');
         const response = await zegoToken(roomId, decoded.userId);
           console.log('response :>> ', response);
@@ -63,7 +65,7 @@ export default function VideoCall() {
                 },
                 showScreenSharingButton: true,
                 showPreJoinView: false,
-                onLeaveRoom: () => navigate(-1)
+                onLeaveRoom: () => callLeave()
             });
         }
       } catch (error) {
@@ -73,9 +75,11 @@ export default function VideoCall() {
     };
 
     startCall();
+ 
 
-    const callLeave = () =>{
-      
+    const callLeave = async() =>{
+      let decode = decodeToken()
+        await leaveZego(roomId as string,decode?.userId as string)
       navigate(-1)
     }
 
