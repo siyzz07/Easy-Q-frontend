@@ -1,5 +1,8 @@
 import type { IAddContractInitialValues } from "../../components/Customer/AddContractModal";
+import type { IUpdateContractValues } from "../../components/Customer/EditContract";
 import { ContractAxiosInstance } from "../../config/AxiosInstance";
+
+
 
 
 
@@ -42,7 +45,7 @@ export const getCustomerContracts = async (page:number,limit:number,search:strin
 }
 
 //--------------------------------- get vendor works
-export const editContractData=async (contractId:string ,data:IAddContractInitialValues) =>{
+export const editContractData=async (contractId:string ,data:IUpdateContractValues) =>{
 
     const response = await ContractAxiosInstance.put(`/contract/edit/${contractId}`,data)
     return response

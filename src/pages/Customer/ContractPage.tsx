@@ -16,6 +16,7 @@ import {
   CheckCircle,
   EyeOff,
   FileText,
+  CircleOff ,
   Plus,
   RefreshCcw,
   Upload,
@@ -25,6 +26,9 @@ import {
   Search,
   FolderOpen,
   Edit3,
+  CrossIcon,
+  Cross,
+  Check,
 } from "lucide-react";
 import { Input } from "../../components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
@@ -45,44 +49,6 @@ import { useDebounce } from "../../hooks/useDebounce";
 import Pagination from "../../components/Shared/Pagination";
 import EditContract from "../../components/Customer/EditContract";
 
-const stats = [
-  {
-    title: "All Contracts",
-    value: 9,
-    icon: <FileText className="text-blue-600" size={20} />,
-    description: "Total",
-    iconBg: "bg-blue-100",
-  },
-  {
-    title: "Published",
-    value: 5,
-    icon: <Upload className="text-green-600" size={20} />,
-    description: "Visible",
-    iconBg: "bg-green-100",
-  },
-  {
-    title: "Unpublished",
-    value: 2,
-    icon: <EyeOff className="text-gray-600" size={20} />,
-    description: "Hidden",
-    iconBg: "bg-gray-100",
-  },
-  {
-    title: "In Progress",
-    value: 3,
-    icon: <RefreshCcw className="text-yellow-600" size={20} />,
-    description: "Ongoing",
-    iconBg: "bg-yellow-100",
-  },
-  {
-    title: "Completed",
-    value: 4,
-    icon: <CheckCircle className="text-green-700" size={20} />,
-    description: "Finished",
-    iconBg: "bg-green-50",
-  },
-];
-
 const ContractPage = () => {
   const navigate = useNavigate();
 
@@ -93,8 +59,12 @@ const ContractPage = () => {
     useState<IContractData | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-  const [editContract,setEditContract] = useState<IContractData |null> (null)
-
+  const [editContract, setEditContract] = useState<IContractData | null>(null);
+  const [totalContract, setTotalContract] = useState<number>(0);
+  const [cancelledContract, setCancelledContarct] = useState<number>(0);
+  const [onGoingContract, setOnGoingContract] = useState<number>(0);
+  const [completedContract, setCompletedContract] = useState<number>(0);
+  const [hiring,setHiring] = useState<number>(0)
   const [page, setPage] = useState(1);
   const [limit] = useState(6);
   const [totalPages, setTotalPages] = useState(1);
@@ -110,8 +80,45 @@ const ContractPage = () => {
 
   useEffect(() => {
     fetchContracts();
-  }, [contractPopup, page, debouncedSearch, activeTab,editContract]);
+  }, [contractPopup, page, debouncedSearch, activeTab, editContract]);
 
+  const stats = [
+    {
+      title: "All Contracts",
+      value: totalContract,
+      icon: <FileText className="text-blue-600" size={20} />,
+      description: "Total Conract",
+      iconBg: "bg-blue-100",
+    },
+    {
+      title: "Ongoing",
+      value: onGoingContract,
+      icon: <Upload className="text-green-600" size={20} />,
+      description: "Ongoing",
+      iconBg: "bg-green-100",
+    },
+    {
+      title: "Cancelled",
+      value: cancelledContract,
+      icon: <CircleOff className="text-gray-600" size={20} />,
+      description: "Cancelled",
+      iconBg: "bg-gray-100",
+    },
+    {
+      title: "Completed",
+      value: completedContract,
+      icon: <Check className="text-yellow-600" size={20} />,
+      description: "Completed",
+      iconBg: "bg-yellow-100",
+    },
+    {
+      title: "Hiring",
+      value: hiring,
+      icon: <CheckCircle className="text-green-700" size={20} />,
+      description: "Hiring",
+      iconBg: "bg-green-50",
+    },
+  ];
   const fetchContracts = async () => {
     try {
       setIsLoading(true);
@@ -126,6 +133,37 @@ const ContractPage = () => {
       if (response?.data) {
         setContracts(response.data.data || []);
         setTotalPages(response.data.pagination.totalPages);
+
+        interface ContractCount {
+          ongoing: number;
+          completed: number;
+          cancelled: number;
+          hiring:number
+        }
+        const counts = response.data.data.reduce(
+          (acc: ContractCount, item: IContractData) => {
+            if (item.status === "open" || item.status === "in_progress") {
+              acc.ongoing++;
+            } else if (item.status === "completed") {
+              acc.completed++;
+            } else if (item.status === "cancelled") {
+              acc.cancelled++;
+            }
+            if(item.isHiring == true){
+              acc.hiring++
+            }
+
+
+            return acc;
+          },
+          { ongoing: 0, completed: 0, cancelled: 0 ,hiring:0},
+        );
+
+
+        setHiring(counts.hiring)
+        setCancelledContarct(counts.cancelled)
+        setOnGoingContract(counts.ongoing)
+        setCompletedContract(counts.completed)
       }
     } catch (error: unknown) {
       console.error("Error fetching contracts:", error);
@@ -156,23 +194,18 @@ const ContractPage = () => {
     setIsViewModalOpen(true);
   };
 
-    
-  const handleEditContract  = (data:IContractData) =>{
-
-    setEditContract(data)
-
-  }
-
+  const handleEditContract = (data: IContractData) => {
+    setEditContract(data);
+  };
 
   return (
     <div className="min-h-screen bg-[#f0f4fa]">
-
-    {editContract && (
-      <EditContract 
-        onClose={()=> setEditContract(null)}
-        contractData={editContract}
+      {editContract && (
+        <EditContract
+          onClose={() => setEditContract(null)}
+          contractData={editContract}
         />
-    )}
+      )}
 
       {contractPopup && (
         <AddContractModal
@@ -187,7 +220,6 @@ const ContractPage = () => {
         contract={selectedContract}
       />
 
-  
       <div className="relative overflow-hidden px-4 py-12 md:py-20 rounded-b-[2.5rem] md:rounded-b-[4rem] shadow-lg bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700">
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">
           <motion.h1
@@ -347,27 +379,44 @@ const ContractPage = () => {
 
                             {/* RIGHT SIDE */}
                             <div className="flex items-center gap-2">
-                              {/* STATUS */}
+                              {/* STATUS BADGE */}
                               <span
                                 className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wide border ${
-                                  contract.status === "completed"
+                                  contract.status === "completed" ||
+                                  contract.status === "open"
                                     ? "bg-emerald-100 text-emerald-700 border-emerald-200"
-                                    : contract.status === "inprogress"
+                                    : contract.status === "in_progress"
                                       ? "bg-amber-100 text-amber-700 border-amber-200"
-                                      : "bg-blue-100 text-blue-700 border-blue-200"
+                                      : contract.status === "cancelled"
+                                        ? "bg-red-100 text-red-700 border-red-200"
+                                        : "bg-blue-100 text-blue-700 border-blue-200"
                                 }`}
                               >
-                                {contract.status}
+                                {contract.status.replace("_", " ")}
                               </span>
 
-                              {/* EDIT BUTTON */}
-                              <button
-                                onClick={()=>handleEditContract(contract)}
-                                title="Edit Contract"
-                                className="p-2 text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-all duration-200"
+                              {/* HIRING STATUS BADGE */}
+                              {/* <span
+                                className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wide border ${
+                                  contract.isHiring
+                                    ? "bg-blue-600 text-white border-blue-700"
+                                    : "bg-slate-100 text-slate-500 border-slate-200"
+                                }`}
                               >
-                                <Edit3 size={16} />
-                              </button>
+                                {contract.isHiring ? "Hiring" : "Closed"}
+                              </span> */}
+
+                              {/* EDIT BUTTON */}
+                              {(contract.status == "open" ||
+                                contract.status == "in_progress") && (
+                                <button
+                                  onClick={() => handleEditContract(contract)}
+                                  title="Edit Contract"
+                                  className="p-2 text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-all duration-200 ml-auto"
+                                >
+                                  <Edit3 size={16} />
+                                </button>
+                              )}
                             </div>
                           </div>
 

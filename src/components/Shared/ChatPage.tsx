@@ -282,6 +282,13 @@ const ChatPage: React.FC<ChatPageProps> = ({
     setSelectedImage(null);
   };
 
+
+
+  const removeVendorFromContract = async (vendorId:string) =>{
+      
+  }
+
+
   const handleVedioCall = async () => {
     try {
       let result = await startVedioCall(
