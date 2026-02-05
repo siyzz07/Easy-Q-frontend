@@ -80,7 +80,9 @@ const ContractPage = () => {
 
   useEffect(() => {
     fetchContracts();
-  }, [contractPopup, page, debouncedSearch, activeTab, editContract]);
+    console.log('contract fetched');
+    
+  }, [contractPopup, page, debouncedSearch, activeTab, editContract,isViewModalOpen]);
 
   const stats = [
     {
@@ -214,11 +216,11 @@ const ContractPage = () => {
         />
       )}
 
-      <ContractDetailsModal
+     {isViewModalOpen && <ContractDetailsModal
         isOpen={isViewModalOpen}
         onClose={() => setIsViewModalOpen(false)}
         contract={selectedContract}
-      />
+      />}
 
       <div className="relative overflow-hidden px-4 py-12 md:py-20 rounded-b-[2.5rem] md:rounded-b-[4rem] shadow-lg bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700">
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">

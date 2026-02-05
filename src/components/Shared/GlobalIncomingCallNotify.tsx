@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getSocket } from '../../Services/Socket/Socket';
 import IncomingCallModal from './IncomingCallModal';
@@ -22,7 +22,7 @@ const GlobalIncomingCallNotify = () => {
 
 
 
-    // socket.on('call-ended',handleDeclineCall)
+    socket.on('call-ended',handleDeclineCall)
 
     socket.on('incomming-vedio-call', handleIncomingCall);
 

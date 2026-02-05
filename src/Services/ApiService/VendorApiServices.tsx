@@ -88,7 +88,7 @@ export const logoutVendor = async () =>{
 
 
 //--------------------------- add shop images
-export const addImages = async(data:IImage)=>{
+export const addImages = async(data:IImage[])=>{
     const response = await VendorAxiosInstance.put("/vendor/shop/image",{data});
     return response;
 };
