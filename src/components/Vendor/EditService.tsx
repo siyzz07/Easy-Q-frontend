@@ -96,7 +96,7 @@ const AddService: FC<IAddService> = ({ onClose, data }) => {
   const initialValues: IService = {
     serviceName: data?.serviceName || "",
     duration: data?.duration || "",
-    price: data?.price || "",
+    price: Number(data?.price) || "",
     description: data?.description || "",
     availableStaff: data?.availableStaff || [],
     image: data?.image as string,
@@ -107,7 +107,7 @@ const AddService: FC<IAddService> = ({ onClose, data }) => {
     try {
       values._id = data?.id;
 
-     
+      console.log('values :>> ', values);
       let payload;
 
       if (typeof values.image !== "string") {

@@ -5,7 +5,7 @@ import loginImage from "../../assets/customer-login-image.png";
 
 const Login: FC = () => {
   return (
-    <div className="min-h-screen relative flex items-center justify-center bg-gray-50 overflow-hidden">
+    <div className="min-h-screen relative flex items-center justify-center bg-gray-50 overflow-hidden ">
         {/* Background Image with Blur */}
         <div className="absolute inset-0 z-0">
             <img 
@@ -13,7 +13,7 @@ const Login: FC = () => {
               alt="Background" 
               className="w-full h-full object-cover blur-sm opacity-50 scale-105"
             />
-            <div className="absolute inset-0 bg-white/60" /> {/* Overlay-gradient */}
+            <div className="absolute inset-0 bg-white/60" /> 
         </div>
 
       <motion.div 

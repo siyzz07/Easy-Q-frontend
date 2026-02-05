@@ -3,7 +3,10 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import DeleteButton from "./DeleteButton";
 import Map from "../Shared/Map";
-import { addShopData, getShopType } from "../../Services/ApiService/VendorApiServices";
+import {
+  addShopData,
+  getShopType,
+} from "../../Services/ApiService/VendorApiServices";
 import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
 import type {
   IServiceVendorTypes,
@@ -60,12 +63,12 @@ const ShopdataExtra = () => {
       .required("State is required")
       .matches(
         /^(?!.*\s{2,})[A-Za-z\s]+$/,
-        "State can only contain letters and single spaces"
+        "State can only contain letters and single spaces",
       )
       .test(
         "not-empty",
         "State cannot be just spaces",
-        (val) => val?.trim().length > 0
+        (val) => val?.trim().length > 0,
       )
       .test(
         "no-repeated-letters",
@@ -74,19 +77,19 @@ const ShopdataExtra = () => {
           if (!val) return false;
           const trimmed = val.replace(/\s/g, "");
           return !/^([A-Za-z])\1+$/.test(trimmed);
-        }
+        },
       ),
 
     city: Yup.string()
       .required("City is required")
       .matches(
         /^(?!.*\s{2,})[A-Za-z\s]+$/,
-        "City can only contain letters and single spaces"
+        "City can only contain letters and single spaces",
       )
       .test(
         "not-empty",
         "City cannot be just spaces",
-        (val) => val?.trim().length > 0
+        (val) => val?.trim().length > 0,
       )
       .test(
         "no-repeated-letters",
@@ -95,7 +98,7 @@ const ShopdataExtra = () => {
           if (!val) return false;
           const trimmed = val.replace(/\s/g, "");
           return !/^([A-Za-z])\1+$/.test(trimmed);
-        }
+        },
       ),
 
     shopType: Yup.string()
@@ -103,21 +106,21 @@ const ShopdataExtra = () => {
       .test(
         "not-empty",
         "Shop type cannot be just spaces",
-        (val) => val?.trim().length > 0
+        (val) => val?.trim().length > 0,
       ),
 
     openAt: Yup.string()
       .required("Opening time is required")
       .matches(
         /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-        "Opening time must be in HH:MM format"
+        "Opening time must be in HH:MM format",
       ),
 
     closeAt: Yup.string()
       .required("Closing time is required")
       .matches(
         /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-        "Closing time must be in HH:MM format"
+        "Closing time must be in HH:MM format",
       )
       .test(
         "after-open",
@@ -126,7 +129,7 @@ const ShopdataExtra = () => {
           const { openAt } = this.parent;
           if (!openAt || !value) return true;
           return value > openAt;
-        }
+        },
       ),
 
     ProfileImage: Yup.mixed()
@@ -134,7 +137,7 @@ const ShopdataExtra = () => {
       .test(
         "fileSize",
         "Image size must be less than 4MB",
-        (file: any) => !file || (file && file.size <= 4 * 1024 * 1024)
+        (file: any) => !file || (file && file.size <= 4 * 1024 * 1024),
       )
       .test(
         "fileType",
@@ -155,7 +158,7 @@ const ShopdataExtra = () => {
               "image/heic",
               "image/heif",
               "image/avif",
-            ].includes(file.type))
+            ].includes(file.type)),
       ),
 
     workingDays: Yup.array()
@@ -187,7 +190,7 @@ const ShopdataExtra = () => {
       formData.append("openAt", values.openAt);
       formData.append("closeAt", values.closeAt);
       formData.append("ProfileImage", imageUrl.secure_url);
-      formData.append("workingDays",values.workingDays);
+      formData.append("workingDays", values.workingDays);
       formData.append("latitude", String(values.coordinates.lat));
       formData.append("longitude", String(values.coordinates.lng));
 
@@ -210,10 +213,10 @@ const ShopdataExtra = () => {
 
         <Formik
           initialValues={initialValues}
-          validationSchema={validationSchema} 
+          validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ values, setFieldValue }) => {
+          {({ values, setFieldValue, isSubmitting }) => {
             const toggleDay = (day: string) => {
               const updatedDays = values.workingDays.includes(day)
                 ? values.workingDays.filter((d: string) => d !== day)
@@ -303,7 +306,7 @@ const ShopdataExtra = () => {
                       >
                         <option value="">Select type</option>
 
-                        {vendorTypes.map((type:IServiceVendorTypes) => (
+                        {vendorTypes.map((type: IServiceVendorTypes) => (
                           <option key={type._id} value={type._id}>
                             {type.serviceName}
                           </option>
@@ -386,7 +389,7 @@ const ShopdataExtra = () => {
                         onChange={(event) =>
                           setFieldValue(
                             "ProfileImage",
-                            event.currentTarget.files?.[0] || null
+                            event.currentTarget.files?.[0] || null,
                           )
                         }
                         className="mt-1 p-2 border border-gray-300 rounded-md"
@@ -404,9 +407,21 @@ const ShopdataExtra = () => {
                       /> */}
                       <button
                         type="submit"
-                        className="flex-1 rounded-xl border-2 border-blue-500 bg-blue-500 text-white py-2 font-semibold hover:opacity-90 transition"
+                        disabled={isSubmitting}
+                        className={`flex-1 flex items-center justify-center gap-2 rounded-xl border-2 border-blue-500 bg-blue-500 text-white py-2 font-semibold transition ${
+                          isSubmitting
+                            ? "opacity-70 cursor-not-allowed"
+                            : "hover:opacity-90"
+                        }`}
                       >
-                        Next
+                        {isSubmitting ? (
+                          <>
+                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <span>Submitting...</span>
+                          </>
+                        ) : (
+                          "Next"
+                        )}
                       </button>
                     </div>
                   </div>

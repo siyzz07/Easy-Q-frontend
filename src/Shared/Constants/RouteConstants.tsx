@@ -38,7 +38,8 @@ export const CUSTOMER_ROUTES ={
     PAYMENT_FAILED:"payment-failed",
     WALLET:"wallet",
     CHAT:"contract/:id",
-    VIDEO_CALL :'video-call/:roomId'
+    VIDEO_CALL :'video-call/:roomId',
+    NOT_FOUND :''
 
 
 };
@@ -63,7 +64,8 @@ export const VENDOR_ROUTES ={
     WORKS:"works",
     CONTRACTS:"contracts",
     CONTRACT_DETAILS:"contracts/:id",
-    VIDEO_CALL :'video-call/:roomId'
+    VIDEO_CALL :'video-call/:roomId',
+    NOT_FOUND :'not-found'
 
 
 };

@@ -35,7 +35,7 @@ const App = () => {
         <Route path={CUSTOMER_ROUTES.MAIN} element={<CustomerRoutes />} />
         <Route path={VENDOR_ROUTES.MAIN} element={<VendorRoutes />} />
         <Route path={ADMIN_ROUTES.MAIN} element={<AdminRoutes />} />
-
+        
 
         <Route path="/" element ={ 
           <PublicdRoute>

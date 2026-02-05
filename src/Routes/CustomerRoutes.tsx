@@ -27,6 +27,7 @@ import WalletPage from "../pages/Customer/WalletPage";
 import ChatPage from "../components/Shared/ChatPage";
 import CustomerChatPage from "../pages/Customer/CustomerChatPage";
 import VideoCall from "../components/Shared/VideoCall";
+import NotFoundPage from "../pages/Customer/NotFoundPage";
 
 const CustomerRoutes = () => {
   return (
@@ -232,7 +233,7 @@ const CustomerRoutes = () => {
         </Route>
         {/* //----------------------------------------------------------------------- */}
       </Route>
-
+          
        <Route
           path={CUSTOMER_ROUTES.VIDEO_CALL}
           element={

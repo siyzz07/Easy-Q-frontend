@@ -10,7 +10,7 @@ const LoginPage = () => {
       <Image  image={image} style={"bg-gradient-to-b from-[#F3F3F3] to-[#E6E0DD]"}/>
 
       {/* Right side  */}
-      <div className="flex-1  bg-[#1c1c1a]">
+      <div className="flex-1  bg-gray-900">
         <LoginForm />
       </div>
     </div>

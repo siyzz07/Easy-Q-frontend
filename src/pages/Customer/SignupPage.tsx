@@ -4,7 +4,7 @@ import landingImage from "../../assets/customer-login-image.png";
 
 const SignupPage = () => {
   return (
-    <div className="min-h-screen relative flex items-center justify-center bg-gray-50 overflow-hidden py-6">
+    <div className="min-h-screen relative flex items-center justify-center bg-gray-50 overflow-hidden py-6 ">
        
         <div className="absolute inset-0 z-0">
             <img 
@@ -21,7 +21,7 @@ const SignupPage = () => {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="relative z-10 w-full max-w-[420px] p-4"
       >
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-6 md:p-8 border border-white/50 max-h-[90vh] overflow-y-auto custom-scrollbar">
+        <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-6 md:p-8 border border-white/50 max-h-[90vh] overflow-y-auto scrollbar-hide">
            <SignupForm />
         </div>
       </motion.div>

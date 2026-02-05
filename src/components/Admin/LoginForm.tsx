@@ -38,7 +38,7 @@ const LoginForm = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-1000 p-4">
-      <div className="bg-gray-800 text-white shadow-lg rounded-xl w-full max-w-sm p-6">
+      <div className="bg-gray-800 opacity-60 text-white shadow-lg rounded-xl w-full max-w-sm p-6  ">
         {/* Logo */}
         <div className="flex flex-col items-center mb-6">
           <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-2">

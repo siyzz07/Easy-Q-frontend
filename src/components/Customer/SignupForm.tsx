@@ -219,11 +219,11 @@ const SignupForm: React.FC = () => {
               </div>
 
               {/* Already have an account */}
-               <div className="relative flex py-1 items-center">
+               {/* <div className="relative flex py-1 items-center">
                   <div className="flex-grow border-t border-gray-200"></div>
                   <span className="flex-shrink-0 mx-3 text-gray-400 text-[10px] font-medium uppercase tracking-wider">or</span>
                   <div className="flex-grow border-t border-gray-200"></div>
-              </div>
+              </div> */}
 
                <button
                  type="button"
