@@ -52,10 +52,14 @@ export const editContractData=async (contractId:string ,data:IUpdateContractValu
 }
 
 
+//------------------------ Remove vendor from the contract chat page
+export const removeVendorFromContractandChatRoom = async (contractId:string , vendorId:string) =>{
+  const response = await ContractAxiosInstance.delete(`/contract/room/vendor-remove/${contractId}/${vendorId}`)
+  return response
+} 
+
 //--------------------------------- get vendor works
 export const getVendorWorks = async (page?:number,limit?:number,search?:string,filter?:string,lat?:number|null,lng?:number|null) =>{
-
-    console.log('filter :>> ', filter);
 
     const response = await  ContractAxiosInstance.get('/contract/vendor/works',{
         params:{

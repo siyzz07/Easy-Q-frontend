@@ -31,6 +31,9 @@ import { getSocket } from "../../Services/Socket/Socket";
 import { decodeToken } from "../../utils/tokenUtils";
 import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
 import type { IAppliedVendors } from "../Customer/ContractDetailsModal";
+import { Axios, AxiosError } from "axios";
+import { toast } from "react-toastify";
+import { removeVendorFromContractandChatRoom } from "../../Services/ApiService/ContractApiService";
 
 interface ICustomer {
   name: string;
@@ -83,8 +86,10 @@ const ChatPage: React.FC<ChatPageProps> = ({
   const [newMessage, setNewMessage] = useState("");
   const [showParticipants, setShowParticipants] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [contractData ,setContractData] =useState(contract)
   const [chatRoomData, setChatRoomData] = useState();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
   const [roomId, setRoomId] = useState("");
   const [decoded, setDecoded] = useState<{
     role: string;
@@ -171,6 +176,7 @@ const ChatPage: React.FC<ChatPageProps> = ({
 
   useEffect(() => {
     if (roomId && decoded?.userId) {
+
       fetchMessages();
     }
   }, [roomId, decoded]);
@@ -285,7 +291,31 @@ const ChatPage: React.FC<ChatPageProps> = ({
 
 
   const removeVendorFromContract = async (vendorId:string) =>{
-      
+      try{
+
+
+        console.log('contract.acceptedVendors :>> ', contractData.acceptedVendors);
+        const response = await removeVendorFromContractandChatRoom(contract._id as string ,vendorId)
+        
+        if(response.data.success){
+          setContractData((prevData) => ({
+        ...prevData,
+        acceptedVendors: prevData.acceptedVendors.filter(
+          (vendor: any) => vendor._id !== vendorId
+        ),
+      }));
+          toast.success(response.data.message)
+
+        }
+        
+        console.log('contract.acceptedVendors :>> ', contractData.acceptedVendors);
+
+
+      }catch(error : unknown){
+        if(error instanceof AxiosError){
+          toast.error(error.response?.data.message || 'error to remove vendor')
+        }
+      }
   }
 
 
@@ -555,14 +585,14 @@ const ChatPage: React.FC<ChatPageProps> = ({
                   Accepted Vendors
                 </h4>
                 <span className="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">
-                  {contract.acceptedVendors?.length || 0}
+                  {contractData.acceptedVendors?.length || 0}
                 </span>
               </div>
 
               <div className="space-y-2">
-                {contract.acceptedVendors &&
-                contract.acceptedVendors.length > 0 ? (
-                  contract.acceptedVendors.map((vendor: any, index: number) => (
+                {contractData.acceptedVendors &&
+                contractData.acceptedVendors.length > 0 ? (
+                  contractData.acceptedVendors.map((vendor: any, index: number) => (
                     <div
                       key={index}
                       className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-100 group/vendor"
@@ -585,18 +615,7 @@ const ChatPage: React.FC<ChatPageProps> = ({
                       {/* --- CUSTOMER ONLY: DELETE ACTION --- */}
                       {userType === "customer" && (
                         <button
-                          onClick={() => {
-                            if (
-                              window.confirm(
-                                `Are you sure you want to remove ${vendor.vendorId?.name}?`,
-                              )
-                            ) {
-                              console.log(
-                                "Deleting vendor:",
-                                vendor.vendorId?._id,
-                              );
-                            }
-                          }}
+                          onClick={() => removeVendorFromContract(vendor._id)}
                           className="opacity-0 group-hover/vendor:opacity-100 p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
                           title="Remove Vendor"
                         >
