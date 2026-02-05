@@ -22,7 +22,7 @@ const GlobalIncomingCallNotify = () => {
 
 
 
-    socket.on('call-ended',handleDeclineCall)
+    // socket.on('call-ended',handleDeclineCall)
 
     socket.on('incomming-vedio-call', handleIncomingCall);
 

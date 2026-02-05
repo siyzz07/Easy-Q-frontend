@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X, MapPin, Calendar, Briefcase, User, Clock, AlertCircle } from 'lucide-react';
+import { X, MapPin, Calendar, Briefcase, User, Clock, AlertCircle, Phone } from 'lucide-react';
 import { Button } from '../ui/button';
 
 interface WorkDetailsModalProps {
@@ -10,20 +10,20 @@ interface WorkDetailsModalProps {
 
 const WorkDetailsModal: React.FC<WorkDetailsModalProps> = ({ isOpen, onClose, work }) => {
   // 1. Handle "Esc" key to close and prevent body scroll
-  useEffect(() => {
-    if (isOpen) {
-      const handleEsc = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') onClose();
-      };
-      window.addEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'hidden';
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     const handleEsc = (e: KeyboardEvent) => {
+  //       if (e.key === 'Escape') onClose();
+  //     };
+  //     window.addEventListener('keydown', handleEsc);
+  //     document.body.style.overflow = 'hidden';
       
-      return () => {
-        window.removeEventListener('keydown', handleEsc);
-        document.body.style.overflow = 'unset';
-      };
-    }
-  }, [isOpen, onClose]);
+  //     return () => {
+  //       window.removeEventListener('keydown', handleEsc);
+  //       document.body.style.overflow = 'unset';
+  //     };
+  //   }
+  // }, [isOpen, onClose]);
 
   if (!isOpen || !work) return null;
 
@@ -39,11 +39,11 @@ const WorkDetailsModal: React.FC<WorkDetailsModalProps> = ({ isOpen, onClose, wo
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
-      onClick={onClose} // Close when clicking backdrop
+      onClick={onClose}  
     >
       <div 
         className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col relative animate-in zoom-in-95 duration-200"
-        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking modal content
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header Banner */}
         <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-600 w-full relative shrink-0">
@@ -103,7 +103,7 @@ const WorkDetailsModal: React.FC<WorkDetailsModalProps> = ({ isOpen, onClose, wo
               </div>
               <div>
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Location</p>
-                {/* <p className="font-semibold text-gray-900">{work.location || 'Remote / On-site'}</p> */}
+                <p className="font-semibold text-gray-900">{`${work.address.address} , ${work.address.city}`}</p>
               </div>
             </div>
 
@@ -119,11 +119,11 @@ const WorkDetailsModal: React.FC<WorkDetailsModalProps> = ({ isOpen, onClose, wo
 
             <div className="flex items-start gap-3">
               <div className="p-2 bg-white rounded-lg shadow-sm">
-                <Clock className="w-4 h-4 text-gray-500" />
+                <Phone className="w-4 h-4 text-gray-500" />
               </div>
               <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Duration</p>
-                <p className="font-semibold text-gray-900">Project Based</p>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">phone</p>
+                <p className="font-semibold text-gray-900">{work.address.phone}</p>
               </div>
             </div>
           </div>

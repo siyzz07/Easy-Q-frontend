@@ -18,6 +18,7 @@ import {
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import type { IContractDto } from "../../Shared/types/Types";
+import LocationAutoSuggest from "../Shared/LocationAutoSuggest";
 
 const Works: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -25,19 +26,27 @@ const Works: React.FC = () => {
   const [filterType, setFilterType] = useState("All");
   const [page, setPage] = useState<number>(1);
   const [limit] = useState<number>(9);
+  const [locationChange, setLocationChange] = useState("");
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [lat] = useState("");
-  const [lng] = useState("");
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
   const [contract, setContract] = useState<any[]>([]);
   const debouncedSearch = useDebounce(searchTerm);
 
   useEffect(() => {
     fetchWorks();
-  }, [page, debouncedSearch, filterType]);
+  }, [page, debouncedSearch, filterType, locationChange]);
 
   const fetchWorks = async () => {
     try {
-      const response = await getVendorWorks(page, limit, debouncedSearch, filterType, lat, lng);
+      const response = await getVendorWorks(
+        page,
+        limit,
+        debouncedSearch,
+        filterType,
+        lat,
+        lng,
+      );
       if (response?.data) {
         setContract(response.data.data);
         setTotalPages(response.data.pagination.totalPages);
@@ -52,13 +61,17 @@ const Works: React.FC = () => {
       const response = await applyContract(contractId);
       if (response.data.success) {
         toast.success(response.data.message);
-        setContract((prev) => prev.filter((item: IContractDto) => item._id !== contractId));
+        setContract((prev) =>
+          prev.filter((item: IContractDto) => item._id !== contractId),
+        );
       } else {
         toast.error("Unable to apply for this contract");
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        toast.error(error.response?.data.message || "Unable to apply for this contract");
+        toast.error(
+          error.response?.data.message || "Unable to apply for this contract",
+        );
       }
     }
   };
@@ -71,7 +84,6 @@ const Works: React.FC = () => {
 
   return (
     <div className="p-4 md:p-6 lg:p-8 bg-gray-50 min-h-screen font-sans">
-      {/* --- Header & Search Section --- */}
       <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end mb-8 gap-6 border-b border-gray-200 pb-8">
         <div className="w-full xl:w-auto">
           <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 flex items-center gap-3 tracking-tight">
@@ -89,33 +101,45 @@ const Works: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full xl:w-auto">
           {/* Title Search */}
           <div className="relative group w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 group-focus-within:text-blue-500 transition-colors" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 " />
             <Input
               type="text"
               placeholder="Title..."
-              className="pl-10 w-full bg-white border-gray-300 focus:border-blue-500 rounded-xl h-11 shadow-sm"
+              className="pl-10 w-full bg-white border-gray-300  rounded-xl h-11 shadow"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
-          {/* Location Search */}
           <div className="relative group w-full">
-            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 group-focus-within:text-blue-500 transition-colors" />
-            <Input
-              type="text"
-              placeholder="Location..."
-              className="pl-10 w-full bg-white border-gray-300 focus:border-blue-500 rounded-xl h-11 shadow-sm"
-              value={locationSearchTerm}
-              onChange={(e) => setLocationSearchTerm(e.target.value)}
+            <MapPin
+              className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4
+                 ${lat ? "text-blue-500" : "text-gray-400"}
+                 group-focus-within:text-blue-500`}
             />
+
+            <div className="w-full bg-white border border-gray-300 focus:border-blue-500 focus-within:border-blue-500 rounded-xl h-11 shadow-sm flex items-center ">
+              <LocationAutoSuggest
+                value={locationChange}
+                onChange={(val: string) => {
+                  setLocationChange(val);
+                  setLat(null);
+                  setLng(null);
+                }}
+                onSelect={({ name, lat, lng }: any) => {
+                  setLocationChange(name);
+                  setLat(lat);
+                  setLng(lng);
+                }}
+              />
+            </div>
           </div>
 
           {/* Time Filter */}
           <div className="relative group w-full">
             <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4 group-focus-within:text-blue-500 transition-colors" />
             <select
-              className="pl-10 pr-8 w-full bg-white border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 appearance-none cursor-pointer shadow-sm h-11 font-medium text-gray-700"
+              className="pl-10 pr-8 w-full bg-white border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-blue-500  appearance-none cursor-pointer shadow-sm h-11 font-medium text-gray-700"
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
             >
@@ -126,8 +150,18 @@ const Works: React.FC = () => {
               ))}
             </select>
             <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              <svg
+                className="w-4 h-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </div>
           </div>
@@ -143,18 +177,26 @@ const Works: React.FC = () => {
           >
             <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-            <div onClick={() => handleCardClick(work)} className="cursor-pointer">
+            <div
+              onClick={() => handleCardClick(work)}
+              className="cursor-pointer"
+            >
               <div className="flex justify-between items-start mb-4 gap-2">
-                <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
-                    ${work.urgency === "High" ? "bg-red-50 text-red-600" :
-                      work.urgency === "Medium" ? "bg-orange-50 text-orange-600" :
-                      "bg-green-50 text-green-600"}`}
+                <span
+                  className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
+                    ${
+                      work.status === "open"
+                        ? "bg-green-50 text-green-600"
+                        : work.status === "in_progress"
+                          ? "bg-yellow-100 text-yellow-600"
+                          : "bg-green-50 text-green-600"
+                    }`}
                 >
-                  {work.urgency} Priority
+                  {work.status}
                 </span>
-                <span className="text-[10px] text-gray-400 font-bold bg-gray-50 px-2 py-1 rounded-md uppercase truncate max-w-[120px]">
+                {/* <span className="text-[10px] text-gray-400 font-bold bg-gray-50 px-2 py-1 rounded-md uppercase truncate max-w-[120px]">
                   {work?.contractName}
-                </span>
+                </span> */}
               </div>
 
               <h3 className="text-lg md:text-xl font-extrabold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-1">
@@ -163,7 +205,9 @@ const Works: React.FC = () => {
 
               <div className="flex items-center text-gray-500 text-xs mb-4 gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-blue-500/60 shrink-0" />
-                <span className="line-clamp-1 font-medium">{work.address.address}</span>
+                <span className="line-clamp-1 font-medium">
+                  {work.address.address}
+                </span>
               </div>
 
               <p className="text-gray-600 text-sm mb-6 leading-relaxed line-clamp-3 font-medium">
@@ -185,7 +229,7 @@ const Works: React.FC = () => {
 
               <button
                 onClick={(e) => {
-                  e.stopPropagation(); // Prevents opening modal when clicking button
+                  e.stopPropagation();
                   applyFroJob(work._id);
                 }}
                 className="bg-blue-600 text-white text-[10px] md:text-xs font-bold uppercase tracking-widest px-4 py-3 rounded-xl hover:bg-blue-700 hover:shadow-lg active:scale-95 transition-all flex items-center gap-2 shrink-0"

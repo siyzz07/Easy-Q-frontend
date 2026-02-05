@@ -12,7 +12,7 @@ interface IncomingCallProps {
 const IncomingCallModal: React.FC<IncomingCallProps> = ({
   callerName,
   callerImage,
-  callType,
+  callType ='video',
   onAccept,
   onDecline,
 }) => {

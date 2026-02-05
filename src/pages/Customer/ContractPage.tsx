@@ -10,7 +10,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../../components/ui/tabs"; // Importing Tabs like BookingPage
+} from "../../components/ui/tabs";
 import { Button } from "../../components/ui/button";
 import {
   CheckCircle,
@@ -24,6 +24,7 @@ import {
   MessageCircle,
   Search,
   FolderOpen,
+  Edit3,
 } from "lucide-react";
 import { Input } from "../../components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
@@ -42,6 +43,7 @@ import { CUSTOMER_ROUTES } from "../../Shared/Constants/RouteConstants";
 import ContractDetailsModal from "../../components/Customer/ContractDetailsModal";
 import { useDebounce } from "../../hooks/useDebounce";
 import Pagination from "../../components/Shared/Pagination";
+import EditContract from "../../components/Customer/EditContract";
 
 const stats = [
   {
@@ -91,6 +93,8 @@ const ContractPage = () => {
     useState<IContractData | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
+  const [editContract,setEditContract] = useState<IContractData |null> (null)
+
   const [page, setPage] = useState(1);
   const [limit] = useState(6);
   const [totalPages, setTotalPages] = useState(1);
@@ -106,7 +110,7 @@ const ContractPage = () => {
 
   useEffect(() => {
     fetchContracts();
-  }, [contractPopup, page, debouncedSearch, activeTab]);
+  }, [contractPopup, page, debouncedSearch, activeTab,editContract]);
 
   const fetchContracts = async () => {
     try {
@@ -152,8 +156,24 @@ const ContractPage = () => {
     setIsViewModalOpen(true);
   };
 
+    
+  const handleEditContract  = (data:IContractData) =>{
+
+    setEditContract(data)
+
+  }
+
+
   return (
     <div className="min-h-screen bg-[#f0f4fa]">
+
+    {editContract && (
+      <EditContract 
+        onClose={()=> setEditContract(null)}
+        contractData={editContract}
+        />
+    )}
+
       {contractPopup && (
         <AddContractModal
           onClose={() => setContractpopup(false)}
@@ -167,7 +187,7 @@ const ContractPage = () => {
         contract={selectedContract}
       />
 
-      {/* Hero Header - Matches BookingPage */}
+  
       <div className="relative overflow-hidden px-4 py-12 md:py-20 rounded-b-[2.5rem] md:rounded-b-[4rem] shadow-lg bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700">
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">
           <motion.h1
@@ -310,7 +330,8 @@ const ContractPage = () => {
                           className="group relative bg-white rounded-3xl border border-slate-100 p-6 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full"
                         >
                           {/* Dates & Status */}
-                          <div className="flex justify-between items-start mb-4">
+                          <div className="flex items-start justify-between mb-4">
+                            {/* LEFT SIDE */}
                             <div className="flex flex-col">
                               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                                 Created On
@@ -323,21 +344,35 @@ const ContractPage = () => {
                                   : "N/A"}
                               </span>
                             </div>
-                            <span
-                              className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wide border ${
-                                contract.status === "completed"
-                                  ? "bg-emerald-100 text-emerald-700 border-emerald-200"
-                                  : contract.status === "inprogress"
-                                    ? "bg-amber-100 text-amber-700 border-amber-200"
-                                    : "bg-blue-100 text-blue-700 border-blue-200"
-                              }`}
-                            >
-                              {contract.status}
-                            </span>
+
+                            {/* RIGHT SIDE */}
+                            <div className="flex items-center gap-2">
+                              {/* STATUS */}
+                              <span
+                                className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wide border ${
+                                  contract.status === "completed"
+                                    ? "bg-emerald-100 text-emerald-700 border-emerald-200"
+                                    : contract.status === "inprogress"
+                                      ? "bg-amber-100 text-amber-700 border-amber-200"
+                                      : "bg-blue-100 text-blue-700 border-blue-200"
+                                }`}
+                              >
+                                {contract.status}
+                              </span>
+
+                              {/* EDIT BUTTON */}
+                              <button
+                                onClick={()=>handleEditContract(contract)}
+                                title="Edit Contract"
+                                className="p-2 text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-all duration-200"
+                              >
+                                <Edit3 size={16} />
+                              </button>
+                            </div>
                           </div>
 
                           {/* Title & Desc */}
-                          <h3 className="text-lg font-bold text-slate-900 mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                          <h3 className="text-lg font-bold text-slate-800 mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
                             {contract.contractName}
                           </h3>
                           <p className="text-slate-500 text-sm mb-6 line-clamp-2 leading-relaxed">

@@ -27,7 +27,7 @@ export default function VideoCall() {
              return;
         }
         // join the  userr to the room of the vedio
-        joinVedioCallRoom(roomId,decoded.userId)
+        // joinVedioCallRoom(roomId,decoded.userId)
         console.log('response :>> ');
         const response = await zegoToken(roomId, decoded.userId);
           console.log('response :>> ', response);
@@ -79,8 +79,8 @@ export default function VideoCall() {
 
     const callLeave = async() =>{
       let decode = decodeToken()
-        await leaveZego(roomId as string,decode?.userId as string)
       navigate(-1)
+        // await leaveZego(roomId as string,decode?.userId as string)
     }
 
     return () => {
