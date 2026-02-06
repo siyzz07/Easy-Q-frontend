@@ -112,7 +112,7 @@ export const BookingAxiosInstance =axiosInstance();
 export const TransactionAxiosInstance = axiosInstance();
 export const WalletAxiosInstance = axiosInstance();
 export const NotificaionAxiosInstance = axiosInstance();
-export const ChatRoomAxiosInstance = axiosInstance()
+export const ChatRoomAxiosInstance = axiosInstance();
 // ----------- contract
 export const ContractAxiosInstance = axiosInstance();
 

@@ -22,7 +22,7 @@ export const connectSocket = (token: string) => {
 
   socket.on("connect_error", async (err) => {
     console.error("Reason:", err.message);
-    if (err.message === "jwt expired" || err.message == 'socket authentication failed') {
+    if (err.message === "jwt expired" || err.message == "socket authentication failed") {
       console.log("Detected expired token, refreshing...");
          if (isRefreshing) return;
       isRefreshing = true;

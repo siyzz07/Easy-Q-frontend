@@ -23,6 +23,7 @@ import WorksPage from "../pages/Vendor/WorksPage";
 import VendorContractsPage from "../pages/Vendor/VendorContractsPage";
 import VendorContractDetailsPage from "../pages/Vendor/VendorChatPage";
 import VideoCall from "../components/Shared/VideoCall";
+import NotFoundPage from "../pages/Vendor/NotFoundPage";
 
 
 
@@ -182,7 +183,7 @@ const VendorRoutes = () => {
 
       </Route>
 
-      {/* <Route path="*" element={<LandingPage />} /> */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

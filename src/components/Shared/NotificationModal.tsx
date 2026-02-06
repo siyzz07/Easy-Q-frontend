@@ -67,9 +67,9 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   const noitficaitonMarkAsRead = async (id: string) => {
     try {
       dispatch(markAsRead(id));
-      await updateNotification('one', id);
+      await updateNotification("one", id);
     } catch (error) {
-      console.log('notification error :>> ', error);
+      console.log("notification error :>> ", error);
     }
   };
 
@@ -177,7 +177,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
                       </div>
                       <p className={`text-[13px] leading-relaxed line-clamp-2 ${notification.isRead ? "text-slate-400" : "text-slate-600"}`}>
                         {notification.content} 
-                        {notification.category === 'booking' && notification.type === 'booking_completed' && (
+                        {notification.category === "booking" && notification.type === "booking_completed" && (
                           <span className="block font-medium mt-1">
                             {notification.metaData?.booking?.date}, {notification.metaData?.booking?.time}
                           </span>

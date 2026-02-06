@@ -178,54 +178,7 @@ const AddStaff: React.FC<AddStaffProps> = ({ onClose }) => {
                 )}
               </div>
 
-              {/* <FieldArray name="breaks">
-                {({ remove, push }) => (
-                  <div className="space-y-4">
-                    {values.breaks.map((_, index) => (
-                      <div
-                        key={index}
-                        className="grid grid-cols-2 gap-4 items-end border rounded-md p-3 relative "
-                      >
-                        <div className=" flex gap-x-3">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-900 mb-2">
-                            Start
-                          </label>
-                          <Field as={Input} type="time" name={`breaks[${index}].breakStartTime`} />
-                          <ErrorMessage
-                            name={`breaks[${index}].breakStartTime`}
-                            component="p"
-                            className="text-xs text-red-500 mt-1"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-900 mb-2">
-                            End
-                          </label>
-                          <Field as={Input} type="time" name={`breaks[${index}].breakEndTime`} />
-                          <ErrorMessage
-                            name={`breaks[${index}].breakEndTime`}
-                            component="p"
-                            className="text-xs text-red-500 mt-1"
-                          />
-                        </div>
-                        </div>
-
-                        {values.breaks.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => remove(index)}
-                            className="absolute -right-3 -top-3 bg-red-100 hover:bg-red-200 rounded-full p-1 transition"
-                            title="Remove Break"
-                          >
-                            <Trash2 className="w-4 h-4 text-red-600" />
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </FieldArray> */}
+           
 
               <FieldArray name="breaks">
                 {({ remove, push }) => (

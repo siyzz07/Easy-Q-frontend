@@ -106,7 +106,7 @@ const EditContract: FC<IContractModalProps> = ({ onClose, contractData }) => {
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        onClose()
+        onClose();
         toast.error(error.response?.data.message || "Error updating contract");
       }
     }

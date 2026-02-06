@@ -1,4 +1,4 @@
-import { NotificaionAxiosInstance } from "../../config/AxiosInstance"
+import { NotificaionAxiosInstance } from "../../config/AxiosInstance";
 
 
 
@@ -8,9 +8,9 @@ import { NotificaionAxiosInstance } from "../../config/AxiosInstance"
  */
 export const fetchNotification = async () =>{
 
-    const response = await NotificaionAxiosInstance.get('/notification/notifications')
-    return response
-}
+    const response = await NotificaionAxiosInstance.get("/notification/notifications");
+    return response;
+};
 
 
 /**
@@ -19,5 +19,5 @@ export const fetchNotification = async () =>{
  * 
  */
 export const updateNotification = async (updateType:string,id?:string) =>{
-    const response = await NotificaionAxiosInstance.patch('/notification/update',{updateType,id})
-}
+    const response = await NotificaionAxiosInstance.patch("/notification/update",{updateType,id});
+};

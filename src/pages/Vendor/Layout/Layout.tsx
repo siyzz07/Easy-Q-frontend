@@ -12,10 +12,10 @@ const Layout = () => {
 const [inChat, setInChat] = useState(true);
   const { pathname } = useLocation();
   const navigate = useNavigate();  
-     const token = getAccessToken()
-     const dispatch = useDispatch<AppDispatch>()
+     const token = getAccessToken();
+     const dispatch = useDispatch<AppDispatch>();
 
-  console.log('pathname :>> ', pathname);
+  console.log("pathname :>> ", pathname);
 
        useEffect(() => {
          const pathSegments = pathname.split("/").filter(v => v.length > 0);
@@ -29,11 +29,11 @@ const [inChat, setInChat] = useState(true);
   
       if(token){
   
-        dispatch(fetchNotification())
+        dispatch(fetchNotification());
       }
   
   
-    },[token,dispatch])
+    },[token,dispatch]);
 
 
   return (

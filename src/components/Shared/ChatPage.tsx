@@ -86,7 +86,7 @@ const ChatPage: React.FC<ChatPageProps> = ({
   const [newMessage, setNewMessage] = useState("");
   const [showParticipants, setShowParticipants] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [contractData ,setContractData] =useState(contract)
+  const [contractData ,setContractData] =useState(contract);
   const [chatRoomData, setChatRoomData] = useState();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -294,8 +294,8 @@ const ChatPage: React.FC<ChatPageProps> = ({
       try{
 
 
-        console.log('contract.acceptedVendors :>> ', contractData.acceptedVendors);
-        const response = await removeVendorFromContractandChatRoom(contract._id as string ,vendorId)
+        console.log("contract.acceptedVendors :>> ", contractData.acceptedVendors);
+        const response = await removeVendorFromContractandChatRoom(contract._id as string ,vendorId);
         
         if(response.data.success){
           setContractData((prevData) => ({
@@ -304,19 +304,19 @@ const ChatPage: React.FC<ChatPageProps> = ({
           (vendor: any) => vendor._id !== vendorId
         ),
       }));
-          toast.success(response.data.message)
+          toast.success(response.data.message);
 
         }
         
-        console.log('contract.acceptedVendors :>> ', contractData.acceptedVendors);
+        console.log("contract.acceptedVendors :>> ", contractData.acceptedVendors);
 
 
       }catch(error : unknown){
         if(error instanceof AxiosError){
-          toast.error(error.response?.data.message || 'error to remove vendor')
+          toast.error(error.response?.data.message || "error to remove vendor");
         }
       }
-  }
+  };
 
 
   const handleVedioCall = async () => {

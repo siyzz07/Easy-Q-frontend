@@ -14,6 +14,7 @@ import { getAccessToken } from "./utils/tokenUtils";
 import ScrollToTop from "./components/Shared/ScrollTop";
 import IncomingCallModal from "./components/Shared/IncomingCallModal";
 import GlobalIncomingCallNotify from "./components/Shared/GlobalIncomingCallNotify";
+import NotFoundPage from "./components/Shared/NotFoundPage";
 
 const App = () => {
 
@@ -35,7 +36,12 @@ const App = () => {
         <Route path={CUSTOMER_ROUTES.MAIN} element={<CustomerRoutes />} />
         <Route path={VENDOR_ROUTES.MAIN} element={<VendorRoutes />} />
         <Route path={ADMIN_ROUTES.MAIN} element={<AdminRoutes />} />
-        
+
+        <Route path="/*" element ={
+          <PublicdRoute>
+            <NotFoundPage/>
+          </PublicdRoute>
+        }/>
 
         <Route path="/" element ={ 
           <PublicdRoute>

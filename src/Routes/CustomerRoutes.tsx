@@ -242,6 +242,7 @@ const CustomerRoutes = () => {
             </CustomerProtectedRoute>
           }
         />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

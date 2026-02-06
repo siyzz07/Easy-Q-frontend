@@ -239,8 +239,8 @@ const ShopViews: React.FC<ShopViewsProps> = ({
         publicId,
         image_id,
       };
-       const riminingPhotos = photos.filter((image)=> image._id != imageId)
-      setPhotos(riminingPhotos)
+       const riminingPhotos = photos.filter((image)=> image._id != imageId);
+      setPhotos(riminingPhotos);
       setShopImagePopup(false);
       const response = await imageRemove(data);
       if (response?.data?.message) {

@@ -64,9 +64,9 @@ const ServicesList: FC<InterfaceServicesList> = ({
         );
       }
     } catch (error: unknown) {
-      setBookService(false)
+      setBookService(false);
       if(error instanceof AxiosError){
-        toast.error(error.response?.data.message || 'service not available')
+        toast.error(error.response?.data.message || "service not available");
       }
     }
   };

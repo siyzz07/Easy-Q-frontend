@@ -84,7 +84,7 @@ export const  bookingReschedule = async (data:{staffId:string,timePreffer:string
 //--------------------- is there booking for the customer  - check the customer has any booking -boolean
 export const isThereBooking = async (vendorId:string) =>{
 
-  const response = await BookingAxiosInstance.get(`/booking/review-eligibility/${vendorId}`)
-  return response
+  const response = await BookingAxiosInstance.get(`/booking/review-eligibility/${vendorId}`);
+  return response;
 
-}
+};

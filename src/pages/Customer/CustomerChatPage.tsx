@@ -23,7 +23,7 @@ const CustomerChatPage = () => {
         const contractData = response.data.data;
         const userId = decoded.userId;
         
-        const isAllowed = contractData.customerId._id == userId
+        const isAllowed = contractData.customerId._id == userId;
         if (isAllowed) {
           setContract(contractData as IContractDataResponse);
         } else {

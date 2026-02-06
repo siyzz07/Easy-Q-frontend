@@ -107,7 +107,7 @@ const AddService: FC<IAddService> = ({ onClose, data }) => {
     try {
       values._id = data?.id;
 
-      console.log('values :>> ', values);
+      console.log("values :>> ", values);
       let payload;
 
       if (typeof values.image !== "string") {

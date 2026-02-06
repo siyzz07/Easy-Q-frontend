@@ -37,7 +37,7 @@ const PaymentConfirmPage = () => {
 
   const decodeData = () => {
     try {
-      // Use try-catch for atob to handle non-base64 strings gracefully
+
       const decodedString = atob(bookingData as string);
       const parsedData = JSON.parse(decodedString);
       setData(parsedData);
@@ -124,7 +124,7 @@ const PaymentConfirmPage = () => {
                   </div>
                   <div>
                     <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Payment via</p>
-                    <p className="text-sm font-bold text-slate-800 capitalize">{data?.paymentMethod.replace('_', ' ')}</p>
+                    <p className="text-sm font-bold text-slate-800 capitalize">{data?.paymentMethod.replace("_", " ")}</p>
                   </div>
                 </div>
                 <div className="text-right">

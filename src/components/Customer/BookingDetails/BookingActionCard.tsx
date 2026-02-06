@@ -43,7 +43,7 @@ const BookingActionCard: React.FC<BookingActionsProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-3 w-full md:w-auto">
-          {status !== "cancelled" && status !== 'completed' && (
+          {status !== "cancelled" && status !== "completed" && (
             <>
           
              <button

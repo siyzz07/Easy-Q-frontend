@@ -114,7 +114,7 @@ const Sidebar = () => {
                 }
               `}
             >
-                {/* Active Indicator Background for subtle effect */}
+          
                 {active && (
                    <motion.div
                      layoutId="activeNavIndicator"

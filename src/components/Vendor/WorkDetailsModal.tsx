@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { X, MapPin, Calendar, Briefcase, User, Clock, AlertCircle, Phone } from 'lucide-react';
-import { Button } from '../ui/button';
+import React, { useEffect } from "react";
+import { X, MapPin, Calendar, Briefcase, User, Clock, AlertCircle, Phone } from "lucide-react";
+import { Button } from "../ui/button";
 
 interface WorkDetailsModalProps {
   isOpen: boolean;
@@ -9,30 +9,16 @@ interface WorkDetailsModalProps {
 }
 
 const WorkDetailsModal: React.FC<WorkDetailsModalProps> = ({ isOpen, onClose, work }) => {
-  // 1. Handle "Esc" key to close and prevent body scroll
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     const handleEsc = (e: KeyboardEvent) => {
-  //       if (e.key === 'Escape') onClose();
-  //     };
-  //     window.addEventListener('keydown', handleEsc);
-  //     document.body.style.overflow = 'hidden';
-      
-  //     return () => {
-  //       window.removeEventListener('keydown', handleEsc);
-  //       document.body.style.overflow = 'unset';
-  //     };
-  //   }
-  // }, [isOpen, onClose]);
+
 
   if (!isOpen || !work) return null;
 
   // Helper for date formatting
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric"
     });
   };
 
@@ -65,12 +51,12 @@ const WorkDetailsModal: React.FC<WorkDetailsModalProps> = ({ isOpen, onClose, wo
               <h2 className="text-2xl font-bold text-gray-900 mb-2">{work.contractName}</h2>
               <div className="flex flex-wrap items-center gap-3">
                 <span className="flex items-center gap-1 bg-blue-50 px-2.5 py-1 rounded-md text-blue-700 text-xs font-semibold">
-                  {work.serviceType?.serviceName || 'General Service'}
+                  {work.serviceType?.serviceName || "General Service"}
                 </span>
                 <span className={`flex items-center gap-1 px-2.5 py-1 rounded-md font-bold text-xs uppercase tracking-wider
-                  ${work.urgency === 'High' ? 'bg-red-50 text-red-600' : 
-                    work.urgency === 'Medium' ? 'bg-orange-50 text-orange-600' : 
-                    'bg-green-50 text-green-600'}`}>
+                  ${work.urgency === "High" ? "bg-red-50 text-red-600" : 
+                    work.urgency === "Medium" ? "bg-orange-50 text-orange-600" : 
+                    "bg-green-50 text-green-600"}`}>
                   <AlertCircle className="w-3 h-3" />
                   {work.urgency}
                 </span>

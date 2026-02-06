@@ -259,7 +259,7 @@ export interface IContractData {
     _id: string;
     serviceName: string;
   };
-  status: "inprogress"|"completed"|"cancelled"|'in_progress'|'open';
+  status: "inprogress"|"completed"|"cancelled"|"in_progress"|"open";
   workers:[string]|[];
   isHiring?:boolean;
   createdAt: string;

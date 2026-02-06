@@ -1,5 +1,5 @@
 import { Slot } from "@radix-ui/react-slot";
-import { getSocket } from "./Socket"
+import { getSocket } from "./Socket";
 import { Socket } from "socket.io-client";
 
 
@@ -21,27 +21,27 @@ export type SendMessagePayload = {
 
 //  join the vendor in chat room
 export const joinChatRoom = (roomId:string)=>{
-    const socket = getSocket()
+    const socket = getSocket();
     if(socket){
-        socket.emit('join-room',roomId)
+        socket.emit("join-room",roomId);
     }else{
-        console.log('socket not found  in joinChatRoom');
+        console.log("socket not found  in joinChatRoom");
     }
-}
+};
 
 // send message in the room
 export const sendMessage = (data:SendMessagePayload) =>{
-    const socket = getSocket()
-    console.log('socket :>> ', socket);
+    const socket = getSocket();
+    console.log("socket :>> ", socket);
     if(socket){
-        socket.emit('message:new',data)
+        socket.emit("message:new",data);
     }
-}
+};
 
 //  join the vedio call room
 export const joinVedioCallRoom = (roomId:string,userId:string) =>{
-    const socket = getSocket()
+    const socket = getSocket();
     if(socket){
-        socket.emit('join-vedio-room',{roomId,userId})
+        socket.emit("join-vedio-room",{roomId,userId});
     }
-}
+};

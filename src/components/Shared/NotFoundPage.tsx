@@ -74,13 +74,15 @@ const NotFoundPage = () => {
           </Button>
           
           <Button
-            onClick={() => navigate("/customer")}
+            onClick={() => navigate("/")}
             className="w-full sm:w-auto h-12 px-8 rounded-2xl bg-blue-700 text-white hover:bg-blue-800 shadow-lg shadow-blue-500/25 transition-all flex items-center gap-2"
           >
             <Home size={18} />
             Home
           </Button>
         </motion.div>
+
+       
       </div>
     </div>
   );

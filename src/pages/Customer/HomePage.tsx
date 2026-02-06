@@ -84,7 +84,7 @@ const HomePage = () => {
       const distanceInMeters = currentDist   ? currentDist * 1000 : (currentLat || currentLng) ? 50000 : undefined;
       
 
-      console.log('distanceInMeters :>> ', currentDist,'',distanceInMeters,'op',currentLat,'ll',currentLng);
+      console.log("distanceInMeters :>> ", currentDist,"",distanceInMeters,"op",currentLat,"ll",currentLng);
 
       const res = await getShopsData({
         search: currentSearch,

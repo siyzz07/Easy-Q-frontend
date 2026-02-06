@@ -7,7 +7,7 @@ import { getCustomerBookingData } from "../../Services/ApiService/BookingApiServ
 import { toast } from "react-toastify";
 import Pagination from "../../components/Shared/Pagination";
 
-// Updated DTO to include Payment Info
+
 export type BookingCardDTO = {
   id: string;
   title: string;

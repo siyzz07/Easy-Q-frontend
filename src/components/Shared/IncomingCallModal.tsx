@@ -1,10 +1,10 @@
-import React from 'react';
-import { Phone, PhoneOff, Video, User } from 'lucide-react';
+import React from "react";
+import { Phone, PhoneOff, Video, User } from "lucide-react";
 
 interface IncomingCallProps {
   callerName: string;
   callerImage?: string;
-  callType: 'audio' | 'video';
+  callType: "audio" | "video";
   onAccept: () => void;
   onDecline: () => void;
 }
@@ -12,7 +12,7 @@ interface IncomingCallProps {
 const IncomingCallModal: React.FC<IncomingCallProps> = ({
   callerName,
   callerImage,
-  callType ='video',
+  callType ="video",
   onAccept,
   onDecline,
 }) => {
@@ -59,7 +59,7 @@ const IncomingCallModal: React.FC<IncomingCallProps> = ({
               onClick={onAccept}
               className="p-3 bg-emerald-500 text-white rounded-full hover:bg-emerald-600 shadow-lg shadow-emerald-200 transition-all active:scale-90"
             >
-              {callType === 'video' ? <Video size={20} fill="currentColor" /> : <Phone size={20} fill="currentColor" />}
+              {callType === "video" ? <Video size={20} fill="currentColor" /> : <Phone size={20} fill="currentColor" />}
             </button>
           </div>
         </div>

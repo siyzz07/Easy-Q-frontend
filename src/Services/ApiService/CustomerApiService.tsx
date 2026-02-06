@@ -38,10 +38,10 @@ return response;
 // ----------------------------------------- google auth
 export const googleAuth = async (token:string) =>{
 
-    const response = authAxiosInstance.post('/auth/google-auth',{token})
-    return response
+    const response = authAxiosInstance.post("/auth/google-auth",{token});
+    return response;
 
-}
+};
 
 
 //---------------------------------------------------- get shop Data

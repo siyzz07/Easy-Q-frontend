@@ -86,12 +86,12 @@ Otherwise, the slot will be released automatically.`}
         </div>
 
         <div className="text-center mt-8">
-          <p className="text-sm text-gray-600">
+          {/* <p className="text-sm text-gray-600">
             Need help?{" "}
             <a href="#" className="text-red-600 hover:text-red-700 underline">
               Contact Support
             </a>
-          </p>
+          </p> */}
         </div>
       </main>
     </div>

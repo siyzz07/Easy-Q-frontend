@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getSocket } from '../../Services/Socket/Socket';
-import IncomingCallModal from './IncomingCallModal';
-import { decodeToken } from '../../utils/tokenUtils';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getSocket } from "../../Services/Socket/Socket";
+import IncomingCallModal from "./IncomingCallModal";
+import { decodeToken } from "../../utils/tokenUtils";
 
 
 const GlobalIncomingCallNotify = () => {
@@ -22,18 +22,18 @@ const GlobalIncomingCallNotify = () => {
 
 
 
-    socket.on('call-ended',handleDeclineCall)
+    socket.on("call-ended",handleDeclineCall);
 
-    socket.on('incomming-vedio-call', handleIncomingCall);
+    socket.on("incomming-vedio-call", handleIncomingCall);
 
     return () => {
-      socket.off('incomming-vedio-call', handleIncomingCall);
+      socket.off("incomming-vedio-call", handleIncomingCall);
     };
   }, []);
 
   const handleAcceptCall = () => {
     if (callDetails) {
-      let decode = decodeToken()
+      let decode = decodeToken();
       navigate(`${decode?.role}/video-call/${callDetails.roomId}`);
       setCallDetails(null);
     }

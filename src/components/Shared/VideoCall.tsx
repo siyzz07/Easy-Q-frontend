@@ -8,7 +8,7 @@ import { joinVedioCallRoom } from "../../Services/Socket/SocketActions";
 export default function VideoCall() {
 
 
-  console.log('in vedion call')
+  console.log("in vedion call");
   const { roomId } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
   const meetingRef = useRef<HTMLDivElement>(null);
@@ -17,7 +17,7 @@ export default function VideoCall() {
     let isMounted = true; 
 
     const startCall = async () => {
-      console.log('roomId :>> ', roomId);
+      console.log("roomId :>> ", roomId);
       if (!roomId) return;
       try {
         const decoded = decodeToken();
@@ -26,11 +26,10 @@ export default function VideoCall() {
              navigate(-1);
              return;
         }
-        // join the  userr to the room of the vedio
-        joinVedioCallRoom(roomId,decoded.userId)
-        console.log('response :>> ');
+        joinVedioCallRoom(roomId,decoded.userId);
+        console.log("response :>> ");
         const response = await zegoToken(roomId, decoded.userId);
-          console.log('response :>> ', response);
+          console.log("response :>> ", response);
         if (!isMounted) return;
 
         const data = response?.data?.data;
@@ -78,12 +77,12 @@ export default function VideoCall() {
  
 
     const callLeave = async() =>{
-      let decode = decodeToken()
-      navigate(-1)
+      let decode = decodeToken();
+      navigate(-1);
       if(decode?.userId){
-         await leaveZego(roomId as string,decode.userId)
+         await leaveZego(roomId as string,decode.userId);
       }
-    }
+    };
 
     return () => {
       isMounted = false;

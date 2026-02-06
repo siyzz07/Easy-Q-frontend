@@ -54,7 +54,7 @@ const BookingDetailsPage = () => {
   const getEachBookingData = async () => {
     try {
       if (id) {
-        const response = await getSelectedBookingData(id,'Customer');
+        const response = await getSelectedBookingData(id,"Customer");
         if (response?.data?.data) {
           setBookingData(response.data.data);
         }
@@ -168,25 +168,7 @@ const BookingDetailsPage = () => {
     setReschedulePopup(true);
   };
 
-  const paymentContinue = () =>{
 
-      // const checkoutData = {
-      //     staffId: values.staff,
-      //     addressId: values.address,
-      //     serviceId: service.id,
-      //     selectedDate: date,
-      //     bookingId: response.data.bookingId,
-      //     shopId,
-      //   };
-      //   navigate(
-      //     `/customer/service/checkout?bookingId=${btoa(
-      //       JSON.stringify(checkoutData)
-      //     )}`
-      //   );
-
-
-
-  };
 
 
   const cancelBooking = async () => {

@@ -65,7 +65,7 @@ const NotFoundPage = () => {
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <Button
-             onClick={() => navigate("/")}
+            onClick={() => navigate(-1)}
             variant="outline"
             className="w-full sm:w-auto h-12 px-8 rounded-2xl border-slate-200 text-slate-600 hover:bg-white hover:text-blue-700 hover:border-blue-200 transition-all flex items-center gap-2"
           >
@@ -74,12 +74,32 @@ const NotFoundPage = () => {
           </Button>
           
           <Button
-            onClick={() => navigate("/customer")}
+            onClick={() => navigate("/vendor")}
             className="w-full sm:w-auto h-12 px-8 rounded-2xl bg-blue-700 text-white hover:bg-blue-800 shadow-lg shadow-blue-500/25 transition-all flex items-center gap-2"
           >
             <Home size={18} />
-            Home
+            Vendor Dashboard
           </Button>
+        </motion.div>
+
+        {/* Quick Links / Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="mt-16 pt-8 border-t border-slate-200"
+        >
+          <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">
+            Commonly Visited
+          </p>
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm font-semibold">
+            <button onClick={() => navigate("/vendor/bookings")} className="text-slate-500 hover:text-blue-700 transition-colors flex items-center gap-2">
+                <Calendar size={14} /> My Bookings
+            </button>
+            <button onClick={() => navigate("/vendor/profile")} className="text-slate-500 hover:text-blue-700 transition-colors flex items-center gap-2">
+                <User size={14} /> Profile
+            </button>
+          </div>
         </motion.div>
       </div>
     </div>

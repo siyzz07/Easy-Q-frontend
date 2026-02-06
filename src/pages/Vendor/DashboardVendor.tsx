@@ -181,10 +181,7 @@ const DashboardVendor = () => {
           ))}
         </div>
 
-        {/* Quick Actions / Featured Section could go here if needed, for instance Recent Bookings or Top Staff */}
-        
-        {/* Buttons Section - Legacy support if preferred, but Header buttons are better */}
-        {/* Quick Actions - Compact Style */}
+     
         <div className="mt-8">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

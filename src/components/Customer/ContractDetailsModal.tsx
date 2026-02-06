@@ -109,8 +109,8 @@ const ContractDetailsModal: React.FC<ContractDetailsModalProps> = ({
       );
 
       if(response.data){
-        if(decision == 'accept'){
-          toast.success('vendor added Successfuly in contract')
+        if(decision == "accept"){
+          toast.success("vendor added Successfuly in contract");
         }
           setContractRequest((prev) => prev.filter((v) => v._id !== vendorId));
 

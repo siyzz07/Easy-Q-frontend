@@ -15,7 +15,7 @@ interface CallData {
   senderName: string;
   senderImage?: string;
   roomId: string;
-  type: 'audio' | 'video';
+  type: "audio" | "video";
 }
 
 const HomePageLayout = () => {

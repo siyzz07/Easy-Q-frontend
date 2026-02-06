@@ -44,7 +44,7 @@ const DashboardAdmin = () => {
     const fetchDashboardData = async () => {
       try {
         const response = await adminDashbordData();
-        console.log('response for admin dahsboard :>> ', response);
+        console.log("response for admin dahsboard :>> ", response);
 
         if (response?.data) {
           setData({

@@ -1,5 +1,5 @@
-import React from 'react'
-import Works from '../../components/Vendor/Works'
+import React from "react";
+import Works from "../../components/Vendor/Works";
 
 const WorksPage = () => {
 
@@ -9,7 +9,7 @@ const WorksPage = () => {
 
         <Works/>
     </div>
-  )
-}
+  );
+};
 
-export default WorksPage
+export default WorksPage;

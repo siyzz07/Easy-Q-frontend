@@ -6,7 +6,7 @@ import loginImage from "../../assets/customer-login-image.png";
 const Login: FC = () => {
   return (
     <div className="min-h-screen relative flex items-center justify-center bg-gray-50 overflow-hidden ">
-        {/* Background Image with Blur */}
+        {/* Background Image */}
         <div className="absolute inset-0 z-0">
             <img 
               src={loginImage} 

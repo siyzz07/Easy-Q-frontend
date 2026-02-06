@@ -60,7 +60,7 @@ const AddContractModal: FC<IContractModalProps> = ({ onClose, onSubmit, initialD
   });
 
   const handleSubmit =  (values: IAddContractInitialValues, actions: any) => {
-      onSubmit(values,isEditMode)
+      onSubmit(values,isEditMode);
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ChatPage from "../../components/Shared/ChatPage";
+import ChatPage, { type IContractDataResponse } from "../../components/Shared/ChatPage";
 import { decodeToken } from "../../utils/tokenUtils";
 import { getSelectedContract } from "../../Services/ApiService/ContractApiService";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -7,7 +7,7 @@ import type { IContractData } from "../../Shared/types/Types";
 
 const VendorChatPage = () => {
   const { id } = useParams();
-  const [contract, setContract] = useState<IContractData | null>(null);
+  const [contract, setContract] = useState<IContractDataResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true); 
   const navigate = useNavigate();
 

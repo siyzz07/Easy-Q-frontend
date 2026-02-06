@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { disconnectSocket } from "../Services/Socket/Socket"; // We can keep disconnect if we want, but ideally remove too.
-
+import { disconnectSocket } from "../Services/Socket/Socket"; 
 interface SocketState {
   connected: boolean;
 }

@@ -14,8 +14,8 @@ const SignupPage = () => {
               alt="Vendor Signup" 
               className="w-full h-full object-cover blur-sm opacity-50 scale-105"
             />
-            <div className="absolute inset-0 bg-blue-900/40" /> {/* Overlay with vendor theme color */}
-            <div className="absolute inset-0 bg-white/40" /> {/* Light Overlay */}
+            <div className="absolute inset-0 bg-blue-900/40" /> 
+            <div className="absolute inset-0 bg-white/40" /> 
         </div>
 
       <motion.div 

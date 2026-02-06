@@ -64,7 +64,7 @@ const ContractPage = () => {
   const [cancelledContract, setCancelledContarct] = useState<number>(0);
   const [onGoingContract, setOnGoingContract] = useState<number>(0);
   const [completedContract, setCompletedContract] = useState<number>(0);
-  const [hiring,setHiring] = useState<number>(0)
+  const [hiring,setHiring] = useState<number>(0);
   const [page, setPage] = useState(1);
   const [limit] = useState(6);
   const [totalPages, setTotalPages] = useState(1);
@@ -80,7 +80,7 @@ const ContractPage = () => {
 
   useEffect(() => {
     fetchContracts();
-    console.log('contract fetched');
+    console.log("contract fetched");
     
   }, [contractPopup, page, debouncedSearch, activeTab, editContract,isViewModalOpen]);
 
@@ -152,7 +152,7 @@ const ContractPage = () => {
               acc.cancelled++;
             }
             if(item.isHiring == true){
-              acc.hiring++
+              acc.hiring++;
             }
 
 
@@ -162,10 +162,10 @@ const ContractPage = () => {
         );
 
 
-        setHiring(counts.hiring)
-        setCancelledContarct(counts.cancelled)
-        setOnGoingContract(counts.ongoing)
-        setCompletedContract(counts.completed)
+        setHiring(counts.hiring);
+        setCancelledContarct(counts.cancelled);
+        setOnGoingContract(counts.ongoing);
+        setCompletedContract(counts.completed);
       }
     } catch (error: unknown) {
       console.error("Error fetching contracts:", error);
