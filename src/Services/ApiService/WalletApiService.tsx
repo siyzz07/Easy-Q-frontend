@@ -1,4 +1,6 @@
+
 import { WalletAxiosInstance } from "../../config/AxiosInstance";
+import { WALLET_API_ROUTES } from "../../Shared/Constants/ApiEndpoints";
 
 
 
@@ -14,7 +16,7 @@ import { WalletAxiosInstance } from "../../config/AxiosInstance";
  *   Get wallet balance ----
  */
 export const getCustomerWalletBalance = async() =>{
-    const response = await WalletAxiosInstance.get("/wallet/customer-wallet",);
+    const response = await WalletAxiosInstance.get(WALLET_API_ROUTES.CUSTOMER_WALLET);
     return response;
 };
 
@@ -24,7 +26,7 @@ export const getCustomerWalletBalance = async() =>{
  *   Get wallet transactions ----
  */
 export const getWalletTransactions = async(page:number = 1, limit:number = 10) =>{
-    const response = await WalletAxiosInstance.get("/transaction/wallet/transactions", {
+    const response = await WalletAxiosInstance.get(WALLET_API_ROUTES.WALLET_TRANSACTIONS, {
         params: { page, limit }
     });
     return response;
@@ -36,7 +38,7 @@ export const getWalletTransactions = async(page:number = 1, limit:number = 10) =
  *   Add money to wallet ----
  */
 export const addMoneyToWallet = async(amount:number) =>{
-    const response = await WalletAxiosInstance.post("/transaction/wallet/add-money", { amount });
+    const response = await WalletAxiosInstance.post(WALLET_API_ROUTES.ADD_MONEY, { amount });
     return response;
 };
 
@@ -50,6 +52,6 @@ export const addMoneyToWallet = async(amount:number) =>{
  *   Get vendor wallet transactions ----
  */
 export const getVendorWalletBalance = async() =>{
-    const response = await WalletAxiosInstance.get("/wallet/vendor-wallet");
+    const response = await WalletAxiosInstance.get(WALLET_API_ROUTES.VENDOR_WALLET);
     return response;
 };

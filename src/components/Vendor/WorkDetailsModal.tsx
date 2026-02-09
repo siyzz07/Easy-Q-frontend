@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { X, MapPin, Calendar, Briefcase, User, Clock, AlertCircle, Phone } from "lucide-react";
 import { Button } from "../ui/button";
+import { GoogleMapDirection } from "../../utils/GoogleMapDirection";
 
 interface WorkDetailsModalProps {
   isOpen: boolean;
@@ -10,10 +11,11 @@ interface WorkDetailsModalProps {
 
 const WorkDetailsModal: React.FC<WorkDetailsModalProps> = ({ isOpen, onClose, work }) => {
 
+ 
 
   if (!isOpen || !work) return null;
 
-  // Helper for date formatting
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       month: "long",
@@ -83,7 +85,9 @@ const WorkDetailsModal: React.FC<WorkDetailsModalProps> = ({ isOpen, onClose, wo
               </div>
             </div>
             
-            <div className="flex items-start gap-3">
+            <div
+              onClick={()=>GoogleMapDirection(work.location.coordinates[1],work.location.coordinates[0])}
+            className="flex items-start gap-3 cursor-pointer ">
               <div className="p-2 bg-white rounded-lg shadow-sm">
                 <MapPin className="w-4 h-4 text-gray-500" />
               </div>

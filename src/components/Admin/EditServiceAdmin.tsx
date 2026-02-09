@@ -5,6 +5,7 @@ import { editServiceType } from "../../Services/ApiService/AdminApiService";
 import { toast } from "react-toastify";
 import type { IServiceVendorTypes } from "../../Shared/types/Types";
 import { X, PenTool } from "lucide-react";
+import { AxiosError } from "axios";
 
 const validationSchema = Yup.object({
   serviceName: Yup.string()
@@ -14,7 +15,7 @@ const validationSchema = Yup.object({
     .test(
       "not-empty",
       "Cannot be empty or spaces",
-      (val) => val?.trim() !== ""
+      (val) => val?.trim() !== "",
     ),
   description: Yup.string()
     .min(5, "Description must be at least 5 characters")
@@ -23,7 +24,7 @@ const validationSchema = Yup.object({
     .test(
       "not-empty",
       "Cannot be empty or spaces",
-      (val) => val?.trim() !== ""
+      (val) => val?.trim() !== "",
     ),
 });
 
@@ -41,7 +42,7 @@ const EditServiceAdmin: FC<IAddServicesAdmin> = ({ onClose, data }) => {
   const handleSubmit = async (values: any) => {
     try {
       const hasChange = Object.keys(initialValues).some(
-        (key) => (values as any)[key] !== (initialValues as any)[key]
+        (key) => (values as any)[key] !== (initialValues as any)[key],
       );
 
       if (!hasChange) {
@@ -57,94 +58,100 @@ const EditServiceAdmin: FC<IAddServicesAdmin> = ({ onClose, data }) => {
       }
       onClose();
     } catch (error: unknown) {
-      toast.error("Error editing service");
+      if (error instanceof AxiosError) {
+        if (error?.response?.data?.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("error to edit service");
+        }
+      }
       onClose();
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-in fade-in duration-200">
-        <div className="bg-background border border-border rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto relative animate-in zoom-in-95 duration-200">
+      <div className="bg-background border border-border rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto relative animate-in zoom-in-95 duration-200">
         {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-border bg-muted/20">
-                <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                        <PenTool size={20} />
-                    </div>
-                    <h2 className="text-xl font-bold text-foreground">Edit Service</h2>
-                </div>
-                <button
-                    onClick={onClose}
-                    className="text-muted-foreground hover:text-foreground p-2 hover:bg-muted rounded-full transition-colors"
-                >
-                    <X size={20} />
-                </button>
+        <div className="flex items-center justify-between p-6 border-b border-border bg-muted/20">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-primary/10 rounded-lg text-primary">
+              <PenTool size={20} />
             </div>
-
-            <div className="p-6">
-                <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-                >
-                {({ isSubmitting, isValid }) => (
-                    <Form className="flex flex-col gap-5">
-                    {/* Service Name */}
-                    <div className="space-y-2">
-                        <label className="text-sm font-semibold text-foreground">
-                        Service Name
-                        </label>
-                        <Field
-                        type="text"
-                        name="serviceName"
-                        placeholder="Enter service name"
-                        className="w-full px-4 py-2.5 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/50 text-foreground"
-                        />
-                        <ErrorMessage
-                        name="serviceName"
-                        component="div"
-                        className="text-destructive text-xs font-medium pl-1"
-                        />
-                    </div>
-
-                    {/* Description */}
-                    <div className="space-y-2">
-                        <label className="text-sm font-semibold text-foreground">
-                        Description
-                        </label>
-                        <Field
-                        as="textarea"
-                        name="description"
-                        placeholder="Enter description"
-                        className="w-full px-4 py-2.5 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/50 text-foreground resize-none"
-                        rows="4"
-                        />
-                        <ErrorMessage
-                        name="description"
-                        component="div"
-                        className="text-destructive text-xs font-medium pl-1"
-                        />
-                    </div>
-
-                    {/* Submit Button */}
-                    <div className="pt-2">
-                        <button
-                            type="submit"
-                            disabled={isSubmitting || !isValid}
-                            className={`w-full py-3 rounded-xl text-primary-foreground font-bold shadow-lg transition-all active:scale-95 ${
-                            isSubmitting || !isValid
-                                ? "bg-muted text-muted-foreground cursor-not-allowed shadow-none"
-                                : "bg-primary hover:bg-primary/90 shadow-primary/25"
-                            }`}
-                        >
-                            {isSubmitting ? "Saving..." : "Save Changes"}
-                        </button>
-                    </div>
-                    </Form>
-                )}
-                </Formik>
-            </div>
+            <h2 className="text-xl font-bold text-foreground">Edit Service</h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground p-2 hover:bg-muted rounded-full transition-colors"
+          >
+            <X size={20} />
+          </button>
         </div>
+
+        <div className="p-6">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ isSubmitting, isValid }) => (
+              <Form className="flex flex-col gap-5">
+                {/* Service Name */}
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground">
+                    Service Name
+                  </label>
+                  <Field
+                    type="text"
+                    name="serviceName"
+                    placeholder="Enter service name"
+                    className="w-full px-4 py-2.5 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/50 text-foreground"
+                  />
+                  <ErrorMessage
+                    name="serviceName"
+                    component="div"
+                    className="text-destructive text-xs font-medium pl-1"
+                  />
+                </div>
+
+                {/* Description */}
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground">
+                    Description
+                  </label>
+                  <Field
+                    as="textarea"
+                    name="description"
+                    placeholder="Enter description"
+                    className="w-full px-4 py-2.5 bg-secondary/50 border border-border rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/50 text-foreground resize-none"
+                    rows="4"
+                  />
+                  <ErrorMessage
+                    name="description"
+                    component="div"
+                    className="text-destructive text-xs font-medium pl-1"
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting || !isValid}
+                    className={`w-full py-3 rounded-xl text-primary-foreground font-bold shadow-lg transition-all active:scale-95 ${
+                      isSubmitting || !isValid
+                        ? "bg-muted text-muted-foreground cursor-not-allowed shadow-none"
+                        : "bg-primary hover:bg-primary/90 shadow-primary/25"
+                    }`}
+                  >
+                    {isSubmitting ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 
 import {  authAxiosInstance, VendorAxiosInstance } from "../../config/AxiosInstance";
 import type { IImage, IService, IStaff, IVendor, IVendorLogin } from "../../Shared/types/Types";
+import { VENDOR_API_ROUTES } from "../../Shared/Constants/ApiEndpoints";
 
 
 
@@ -8,7 +9,7 @@ import type { IImage, IService, IStaff, IVendor, IVendorLogin } from "../../Shar
 //---------------------email verification in signup page
 export const verifyEmail = async (data:any) =>{
   
-    let response = await authAxiosInstance.post("/auth/verify-email",data);
+    let response = await authAxiosInstance.post(VENDOR_API_ROUTES.VERIFY_EMAIL,data);
     return response;
 
 }; 
@@ -16,7 +17,7 @@ export const verifyEmail = async (data:any) =>{
 //----------------------add vendor after verifing
 export const addVendor =async (token:string) =>{
 
-    let response = await authAxiosInstance.post("/auth/add-vendor",{token});
+    let response = await authAxiosInstance.post(VENDOR_API_ROUTES.ADD_VENDOR,{token});
 
     return response;
 };
@@ -24,7 +25,7 @@ export const addVendor =async (token:string) =>{
 //-----------------------login vendor
 export const loginVendor = async (form:IVendorLogin)=>{
 
-    const response = await authAxiosInstance.post("/auth/login",form);
+    const response = await authAxiosInstance.post(VENDOR_API_ROUTES.LOGIN,form);
     return response;
 
 };
@@ -34,7 +35,7 @@ export const loginVendor = async (form:IVendorLogin)=>{
 export const addShopData = async (form:any) => {
     
     
-    const response = await VendorAxiosInstance.post("/vendor/shop-data",form);
+    const response = await VendorAxiosInstance.post(VENDOR_API_ROUTES.ADD_SHOP_DATA,form);
     return response;
     
     
@@ -42,7 +43,7 @@ export const addShopData = async (form:any) => {
 //------------------------ get vendors service types that added by admin 
 export const getShopType = async () => {
     
-    const response = await VendorAxiosInstance.get("/vendor/shop-type");
+    const response = await VendorAxiosInstance.get(VENDOR_API_ROUTES.GET_SHOP_TYPE);
     return response;
     
     
@@ -51,13 +52,13 @@ export const getShopType = async () => {
 // --------------------------get the shop data
 export  const getShopData = async ()  =>{
     
-    const response = await VendorAxiosInstance.get("/vendor/shop-data");
+    const response = await VendorAxiosInstance.get(VENDOR_API_ROUTES.GET_SHOP_DATA);
     return response;
     
 };
 // -------------------------- edit shop data
 export const editShopData = async(formData:any) =>{
-    const response = await VendorAxiosInstance.put("/vendor/shop/edit-shop",formData);
+    const response = await VendorAxiosInstance.put(VENDOR_API_ROUTES.EDIT_SHOP_DATA,formData);
     return response;
 };
 
@@ -65,14 +66,14 @@ export const editShopData = async(formData:any) =>{
 //---------------------------verify email for reset password
 export const verificationForResetPassword =  async (data:{email:string,role:string}) =>{
 
-    const response = await authAxiosInstance.post("/auth/reset-password/verify",data);
+    const response = await authAxiosInstance.post(VENDOR_API_ROUTES.VERIFY_RESET_PASSWORD,data);
     return response;
 };
 
 //---------------------------reset password
 export const resetPasword = async(data:{token:string;password:string,role:string}) =>{
 
-            const response = await authAxiosInstance.post("/auth/reset-password",data);
+            const response = await authAxiosInstance.post(VENDOR_API_ROUTES.RESET_PASSWORD,data);
             return response;
 
 };
@@ -81,7 +82,7 @@ export const resetPasword = async(data:{token:string;password:string,role:string
 //---------------------------logout vendor
 export const logoutVendor = async () =>{
     
-    const response = await authAxiosInstance.post("/auth/logout",{role:"Vendor"});
+    const response = await authAxiosInstance.post(VENDOR_API_ROUTES.LOGOUT,{role:"Vendor"});
     return response;
 };
 
@@ -89,13 +90,13 @@ export const logoutVendor = async () =>{
 
 //--------------------------- add shop images
 export const addImages = async(data:IImage[])=>{
-    const response = await VendorAxiosInstance.put("/vendor/shop/image",{data});
+    const response = await VendorAxiosInstance.put(VENDOR_API_ROUTES.ADD_IMAGES,{data});
     return response;
 };
 
 //--------------------------- remove shop images
 export const imageRemove = async (data:{publicId:string,image_id:string}) =>{
-        const response = await VendorAxiosInstance.put("/vendor/shop/delete-image",data);
+        const response = await VendorAxiosInstance.put(VENDOR_API_ROUTES.REMOVE_IMAGE,data);
         return response;
 };
 
@@ -106,7 +107,7 @@ export const imageRemove = async (data:{publicId:string,image_id:string}) =>{
  * 
  */
 export const vendorDashboard = async () =>{
-    const response = await VendorAxiosInstance.get("/vendor/dashboard/data");
+    const response = await VendorAxiosInstance.get(VENDOR_API_ROUTES.DASHBOARD);
     return response;
 };
 
@@ -122,14 +123,14 @@ export const vendorDashboard = async () =>{
 //--------------------------- add new Staff
 export const addStaff = async (form :IStaff) =>{
     
-    const response = await VendorAxiosInstance.post("/vendor/staff/add-staff",form);
+    const response = await VendorAxiosInstance.post(VENDOR_API_ROUTES.ADD_STAFF,form);
     return response;
 };
 
 //--------------------------- get Staff data
 export const getAllStffs = async(page?:number,limit?:number,search?:string) =>{
 
-    const response = await VendorAxiosInstance.get("/vendor/staff/",{
+    const response = await VendorAxiosInstance.get(VENDOR_API_ROUTES.GET_STAFF,{
         params:{
             page,
             limit,
@@ -140,14 +141,14 @@ export const getAllStffs = async(page?:number,limit?:number,search?:string) =>{
 }; 
 //--------------------------- edit Staff data
 export const editStaff = async (form:IStaff) =>{
-    const response =  await VendorAxiosInstance.put("/vendor/staff/edit-staff",form);
+    const response =  await VendorAxiosInstance.put(VENDOR_API_ROUTES.EDIT_STAFF,form);
     return response;
 };
 
 //--------------------------- block staff date
 export const blockStaffDate = async (data:{staffId:string,blockedDates:string[]}) =>{
 
-    const response = VendorAxiosInstance.post("/vendor/staff/block-dates",data);
+    const response = VendorAxiosInstance.post(VENDOR_API_ROUTES.BLOCK_STAFF_DATES,data);
     return response;
 };
 
@@ -157,17 +158,17 @@ export const blockStaffDate = async (data:{staffId:string,blockedDates:string[]}
  * 
  *  serive api service
  * 
-*/
+ */
 
 //--------------------------- add new shop service
 export const addService = async (formData:IService) =>{
-    const response = await VendorAxiosInstance.post("/vendor/service/add-service",formData);
+    const response = await VendorAxiosInstance.post(VENDOR_API_ROUTES.ADD_SERVICE,formData);
     return response;
 };
 
 //--------------------------- get services
 export const getServices = async (page:number,limit:number,search:string) =>{
-    const response = await VendorAxiosInstance.get("/vendor/service/get-service",{
+    const response = await VendorAxiosInstance.get(VENDOR_API_ROUTES.GET_SERVICES,{
         params:{
             page,
             limit,
@@ -179,14 +180,14 @@ export const getServices = async (page:number,limit:number,search:string) =>{
 
 //--------------------------- edit services
 export const editServices = async (form:IService) =>{
-    const response = await VendorAxiosInstance.put("/vendor/service/edit-service",form);
+    const response = await VendorAxiosInstance.put(VENDOR_API_ROUTES.EDIT_SERVICE,form);
     return response;
 };
 
 
 //--------------------------- get selected service
 export const getSelectedService = async(id:string)=>{
-    const response = await VendorAxiosInstance.get("/service/selected",{
+    const response = await VendorAxiosInstance.get(VENDOR_API_ROUTES.GET_SELECTED_SERVICE,{
         params:{
             id
         }

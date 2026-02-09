@@ -1,4 +1,6 @@
+
 import { TransactionAxiosInstance } from "../../config/AxiosInstance";
+import { TRANSACTION_API_ROUTES } from "../../Shared/Constants/ApiEndpoints";
 
 
 
@@ -8,7 +10,7 @@ import { TransactionAxiosInstance } from "../../config/AxiosInstance";
  */
 export const createTransaction = async(bookingId:string,type:string) =>{
 
-    const response = await TransactionAxiosInstance.post("/transaction/create-pay",{bookingId,type});
+    const response = await TransactionAxiosInstance.post(TRANSACTION_API_ROUTES.CREATE_PAY,{bookingId,type});
     return response;
 
 };
@@ -19,7 +21,7 @@ export const createTransaction = async(bookingId:string,type:string) =>{
  */
 export const verifyPayment = async(payload:any) =>{
 
-    const response = await TransactionAxiosInstance.post("/transaction/verify",payload);
+    const response = await TransactionAxiosInstance.post(TRANSACTION_API_ROUTES.VERIFY,payload);
     return response;
 };
 
@@ -28,7 +30,7 @@ export const verifyPayment = async(payload:any) =>{
  *   fetch customerr transactions ----
  */
 export const getTransactions = async (page:number,limit:number,filter:string) =>{
-    const response = await  TransactionAxiosInstance("/transaction/transactions",{
+    const response = await  TransactionAxiosInstance(TRANSACTION_API_ROUTES.GET_TRANSACTIONS,{
         params:{
             page,
             limit,

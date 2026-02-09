@@ -1,9 +1,10 @@
 
 
+
 import { number, string } from "yup";
 import {  authAxiosInstance, CustomerAxiosInstance } from "../../config/AxiosInstance";
 import type { IBookingPayload, ICustomer, ICustomerAddress, ICustomerLogin } from "../../Shared/types/Types";
-
+import { CUSTOMER_API_ROUTES } from "../../Shared/Constants/ApiEndpoints";
 
 
 
@@ -11,7 +12,7 @@ import type { IBookingPayload, ICustomer, ICustomerAddress, ICustomerLogin } fro
 
 
 export const customerSignup = async(form:ICustomer) =>{
-    const response = await authAxiosInstance.post("/auth/verify-email",form);
+    const response = await authAxiosInstance.post(CUSTOMER_API_ROUTES.SIGNUP_VERIFY_EMAIL,form);
     
     return response;
     
@@ -21,7 +22,7 @@ export const customerSignup = async(form:ICustomer) =>{
 
 export const verifyEmail = async (token:string)=>{
       
-        const response = await authAxiosInstance.post("/auth/add-customer",{token });
+        const response = await authAxiosInstance.post(CUSTOMER_API_ROUTES.ADD_CUSTOMER,{token });
          return response;
 };
 
@@ -30,7 +31,7 @@ export const verifyEmail = async (token:string)=>{
 
 export const loginCustomer = async (form:ICustomerLogin) =>{
     
-const response = await authAxiosInstance.post("/auth/login",form);
+const response = await authAxiosInstance.post(CUSTOMER_API_ROUTES.LOGIN,form);
 return response;
 
 };
@@ -38,7 +39,7 @@ return response;
 // ----------------------------------------- google auth
 export const googleAuth = async (token:string) =>{
 
-    const response = authAxiosInstance.post("/auth/google-auth",{token});
+    const response = authAxiosInstance.post(CUSTOMER_API_ROUTES.GOOGLE_AUTH,{token});
     return response;
 
 };
@@ -48,7 +49,7 @@ export const googleAuth = async (token:string) =>{
 
 export const getShopsData = async ({search="", page=1 , limit=10, lat,lng,distance,categories,ratings}:{search?:string,page?:number,limit?:number,lat?:number | null; lng?:number | null;  distance?:number | null; categories?:string[]|null,  ratings?:string[]|null}) =>{
     
-    const response = await CustomerAxiosInstance.get("/customer/shops-data",{
+    const response = await CustomerAxiosInstance.get(CUSTOMER_API_ROUTES.GET_SHOPS_DATA,{
         params:{
             search,
             page,
@@ -69,7 +70,7 @@ export const getShopDataWithPagination = async (page:number,limit:number,shopNam
 
     console.log("--",page,"--",limit,"---",shopName,"---",location);
     
-    const response = await CustomerAxiosInstance.get( `/customer/shops/data?page=${page}&limit=${limit}&shopName=${shopName}&location=${location}&filter=${filter}`);
+    const response = await CustomerAxiosInstance.get( `${CUSTOMER_API_ROUTES.GET_SHOPS_DATA_PAGINATION}?page=${page}&limit=${limit}&shopName=${shopName}&location=${location}&filter=${filter}`);
     return response;
 };
 
@@ -77,7 +78,7 @@ export const getShopDataWithPagination = async (page:number,limit:number,shopNam
 //----------------------------------------------------verify Email for reset password
 export const verificationForResetPassword =  async (data:{email:string,role:string}) =>{
 
-    const response = await authAxiosInstance.post("/auth/reset-password/verify",data);
+    const response = await authAxiosInstance.post(CUSTOMER_API_ROUTES.VERIFY_RESET_PASSWORD,data);
     return response;
 };
 
@@ -85,7 +86,7 @@ export const verificationForResetPassword =  async (data:{email:string,role:stri
 //------------------------------------------------------reset password
 export const resetCustomerPasword = async(data:{token:string;password:string,role:string}) =>{
 
-            const response = await authAxiosInstance.post("/auth/reset-password",data);
+            const response = await authAxiosInstance.post(CUSTOMER_API_ROUTES.RESET_PASSWORD,data);
             return response;
 
 };
@@ -95,7 +96,7 @@ export const resetCustomerPasword = async(data:{token:string;password:string,rol
 
 export const getCustomerData = async () =>{
     
-    const response = await CustomerAxiosInstance.get("/customer/profile/customer-data");
+    const response = await CustomerAxiosInstance.get(CUSTOMER_API_ROUTES.GET_CUSTOMER_DATA);
     return response;
     
 };
@@ -104,21 +105,21 @@ export const getCustomerData = async () =>{
 //------------------------------------------------------logout
 export const logoutCustomer = async () =>{
     
-    const response = await authAxiosInstance.post("/auth/logout",{role:"Customer"});
+    const response = await authAxiosInstance.post(CUSTOMER_API_ROUTES.LOGOUT,{role:"Customer"});
     return response;
 };
 
 //------------------------------------------------------Edit profile
 export const editProfile = async (form:{name:string;email:string;phone:string}) =>{
     
-    const response = await CustomerAxiosInstance.post("/customer/profile/edit-profile",form);
+    const response = await CustomerAxiosInstance.post(CUSTOMER_API_ROUTES.EDIT_PROFILE,form);
     return response;
 };
 
 //------------------------------------------------------change passwordin in profile
 export const changePassword = async (form:{currentPassword:string,password:string}) =>{
     
-    const response = await CustomerAxiosInstance.post("/customer/profile/change-password",form);
+    const response = await CustomerAxiosInstance.post(CUSTOMER_API_ROUTES.CHANGE_PASSWORD,form);
     return response;
     
 };
@@ -132,7 +133,7 @@ export const changePassword = async (form:{currentPassword:string,password:strin
 //------------------------------------------------------add Address
 export const postNewAddress = async (form:ICustomerAddress) =>{
     
-    const response = await CustomerAxiosInstance.post("/customer/profile/add-address",form);
+    const response = await CustomerAxiosInstance.post(CUSTOMER_API_ROUTES.ADD_ADDRESS,form);
     return response;
     
 };
@@ -140,7 +141,7 @@ export const postNewAddress = async (form:ICustomerAddress) =>{
 
 export const deleteCustomerAddress = async (addressId:string) =>{
 
-    const response = await CustomerAxiosInstance.delete(`/customer/profile/delete-address${addressId}`);
+    const response = await CustomerAxiosInstance.delete(`${CUSTOMER_API_ROUTES.DELETE_ADDRESS}${addressId}`);
     return response;
 
 
@@ -148,14 +149,14 @@ export const deleteCustomerAddress = async (addressId:string) =>{
 //------------------------------------------------------get all address
 export const getAddress = async () =>{
     
-    const response = await CustomerAxiosInstance.get("/customer/profile/get-address");
+    const response = await CustomerAxiosInstance.get(CUSTOMER_API_ROUTES.GET_ADDRESS);
     return response;
     
 };
 //------------------------------------------------------edit cusotmer address
 export const editAddress = async (form:ICustomerAddress) =>{
     
-    const reponse = await CustomerAxiosInstance.post("/customer/profile/edit-address",form);
+    const reponse = await CustomerAxiosInstance.post(CUSTOMER_API_ROUTES.EDIT_ADDRESS,form);
     return reponse;
     
 };
@@ -163,7 +164,7 @@ export const editAddress = async (form:ICustomerAddress) =>{
 export const getEachAddress = async (_id:string) =>{
 
     
-    const response = await CustomerAxiosInstance.get("/customer/profile/get-each-address",{
+    const response = await CustomerAxiosInstance.get(CUSTOMER_API_ROUTES.GET_EACH_ADDRESS,{
         params:{_id}
     });
     return response;
@@ -176,13 +177,13 @@ export const getEachAddress = async (_id:string) =>{
  */
 //---------------------------------------------------- get each shop data
 export const getEachShopData = async (_id:string) =>{
-    const response = await CustomerAxiosInstance.get(`/customer/shop-data/${_id}`,);
+    const response = await CustomerAxiosInstance.get(`${CUSTOMER_API_ROUTES.GET_EACH_SHOP_DATA}${_id}`,);
     return response;
 };
 
 //---------------------------------------------------- get each shop service
 export const getEachShopServices = async (shopId:string) =>{
-    const response = await CustomerAxiosInstance.get(`/customer/shop-data/services/${shopId}`,);
+    const response = await CustomerAxiosInstance.get(`${CUSTOMER_API_ROUTES.GET_EACH_SHOP_SERVICES}${shopId}`,);
     return response;
 };
 
@@ -190,7 +191,7 @@ export const getEachShopServices = async (shopId:string) =>{
 
 export const getSelectedSerivcePopulated = async (id:string) =>{
 
-    const response = await CustomerAxiosInstance.get("/customer/service/get-service-populated",{
+    const response = await CustomerAxiosInstance.get(CUSTOMER_API_ROUTES.GET_SELECTED_SERVICE_POPULATED,{
         params:{id}
     });
     return response;
@@ -198,7 +199,7 @@ export const getSelectedSerivcePopulated = async (id:string) =>{
 
 //---------------------------------------------------- get selected service
 export const getSelectedSerivce = async (id:string) =>{
-    const response = await CustomerAxiosInstance.get("/customer/service/get-service",{
+    const response = await CustomerAxiosInstance.get(CUSTOMER_API_ROUTES.GET_SELECTED_SERVICE,{
         params:{id}
     });
     return response;
@@ -231,7 +232,7 @@ export const getSelectedSerivce = async (id:string) =>{
 
 //------------------------------------------------------Add review
 export const addReview = async(form:{rating:string,comment:string,shopId:string}) =>{
-    const response = await CustomerAxiosInstance.post("/customer/vendor/add-review",form);
+    const response = await CustomerAxiosInstance.post(CUSTOMER_API_ROUTES.ADD_VENDOR_REVIEW,form);
 };
 
 
@@ -243,18 +244,18 @@ export const addReview = async(form:{rating:string,comment:string,shopId:string}
 //-------------------------------------------------------- update favorite
 export const favoriteUpdate = async (shopId:string,action:"add"|"remove") =>{
 
-    const response = await CustomerAxiosInstance.post("/customer/favorite",{shopId,action});
+    const response = await CustomerAxiosInstance.post(CUSTOMER_API_ROUTES.FAVORITE,{shopId,action});
     return response;
 };
 
 //-------------------------------------------------------- get favorite
 export const getFavorite = async () =>{
-    const response = await CustomerAxiosInstance.get("/customer/favorite");
+    const response = await CustomerAxiosInstance.get(CUSTOMER_API_ROUTES.FAVORITE);
     return response;
 };
 //-------------------------------------------------------- get favorite shopes
 export const getFavoriteShopes = async () =>{
-    const response = await CustomerAxiosInstance.get("/customer/favorite/shopes");
+    const response = await CustomerAxiosInstance.get(CUSTOMER_API_ROUTES.FAVORITE_SHOPS);
     return response;
 };
 
