@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useMemo } from "react";
 import {
   blockCustomer,
@@ -8,11 +9,14 @@ import ReusableTable from "../../components/Shared/Table";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { Search, Users } from "lucide-react";
+import ConfirmationModal from "../../components/Shared/ConfirmationModal";
 
 const CustomerList = () => {
   const [customerDatas, setCustomerDatas] = useState<ICustomer[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<any | null>(null);
 
   useEffect(() => {
     fetchCustomerData();
@@ -42,8 +46,8 @@ const CustomerList = () => {
 
   const stats = useMemo(() => ({
     total: customerDatas.length,
-    active: customerDatas.filter(c => c.role !== "blocked").length, // Assuming logic or use isActive if available
-    blocked: customerDatas.filter(c => !c.password).length, // Replace with actual blocked logic if different
+    active: customerDatas.filter(c => c.role !== "blocked").length, 
+    blocked: customerDatas.filter(c => !c.password).length, 
   }), [customerDatas]);
 
   const column = [
@@ -54,24 +58,43 @@ const CustomerList = () => {
     { key: "isActive", label: "Membership" },
   ];
 
-  const onBlockCustomer = async (data: any) => {
+  const onBlockCustomer = (data: any) => {
+    setSelectedCustomer(data);
+    setShowModal(true);
+  };
+
+  const handleConfirmBlock = async () => {
+    if (!selectedCustomer?.id) return;
+    
     try {
-      if (data.id) {
-        const response = await blockCustomer(data.id);
+        const response = await blockCustomer(selectedCustomer.id);
         if (response.data.message) {
           toast.success(response.data.message);
         }
         fetchCustomerData();
-      }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.error(error);
+        toast.error("Failed to update status");
       }
+    } finally {
+      setShowModal(false);
+      setSelectedCustomer(null);
     }
   };
 
   return (
     <div className="p-8 space-y-8 animate-in fade-in duration-700">
+      {showModal && (
+        <ConfirmationModal
+          text="Confirm Action"
+          description={"Are you sure you want to change the status of this customer?"}
+          submit={handleConfirmBlock}
+          close={() => setShowModal(false)}
+          bg="bg-red-600"
+        />
+      )}
+
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>

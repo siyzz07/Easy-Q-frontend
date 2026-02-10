@@ -17,6 +17,10 @@ import { vendorDashboard } from "../../Services/ApiService/VendorApiServices";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import BlookBookisModal from "../../components/Vendor/BlookBookisModal";
+import type { ChartConfig } from "../../components/ui/chart";
+import ChartMultyChart from "../../components/Vendor/ChartMultyChart";
+import VendorWeeklyChart from "../../components/Vendor/VendorWeeklyChart";
+
 
 const DashboardVendor = () => {
   const navigate = useNavigate();
@@ -29,19 +33,39 @@ const DashboardVendor = () => {
   const [availabelServices, setTotalAvailabelServices] = useState<number>(0);
   const [unavailabelServices, setUnavailabelServices] = useState<number>(0);
   const [blokcBookinModal,setBlookBookingModal] = useState<boolean>(false);
+  const [chartData, setChartData] = useState<any[]>([]);
+  const [weeklyChartData, setWeeklyChartData] = useState<any[]>([]);
+  const [year, setYear] = useState<number>(new Date().getFullYear());
 
 
+const chartConfig = {
+  bookings: {
+    label: "Bookings",
+    color: "hsl(var(--chart-1))", 
+  },
+  contracts: {
+    label: "Contracts",
+    color: "hsl(var(--chart-2))",
+  },
+} satisfies ChartConfig
+
+const weeklyChartConfig = {
+  bookings: {
+    label: "Bookings",
+    color: "hsl(var(--chart-1))",
+  },
+} satisfies ChartConfig
 
   useEffect(() => {
-    dashboardDocument();
+    dashboardDocument(year);
     if (hasShop == false) {
       navigate("/vendor/shop-data");
     }
-  }, []);
+  }, [year]);
 
-  const dashboardDocument = async () => {
+  const dashboardDocument = async (selectedYear: number) => {
     try {
-      let response = await vendorDashboard();
+      let response = await vendorDashboard(selectedYear);
       if (response?.data?.data) {
         setTotalStaff(response.data.data.totalStaff);
         setAvailableStaff(response.data.data.availableStaff);
@@ -49,6 +73,8 @@ const DashboardVendor = () => {
         setTotalServices(response.data.data.totalService);
         setTotalAvailabelServices(response.data.data.totalAvailableService);
         setUnavailabelServices(response.data.data.totalUnavailableService);
+        setChartData(response.data.data.chartData || []);
+        setWeeklyChartData(response.data.data.weeklyChartData || []);
       }
     } catch (error: unknown) {
       console.log("error to fetch vendor dashbord data");
@@ -222,6 +248,12 @@ const DashboardVendor = () => {
             </div>
           </div>
         </div>
+
+      {/* chart area */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <ChartMultyChart chartConfig={chartConfig} chartData={chartData} setYear={setYear}/>
+        <VendorWeeklyChart chartConfig={weeklyChartConfig} chartData={weeklyChartData} />
+      </div>
 
       </main>
     </div>

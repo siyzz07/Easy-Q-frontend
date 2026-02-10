@@ -106,8 +106,10 @@ export const imageRemove = async (data:{publicId:string,image_id:string}) =>{
  * 
  * 
  */
-export const vendorDashboard = async () =>{
-    const response = await VendorAxiosInstance.get(VENDOR_API_ROUTES.DASHBOARD);
+export const  vendorDashboard = async (year?: number) =>{
+    const response = await VendorAxiosInstance.get(VENDOR_API_ROUTES.DASHBOARD, {
+        params: { year }
+    });
     return response;
 };
 

@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useMemo } from "react";
 import {
   blockVendor,
@@ -10,6 +11,7 @@ import { AxiosError } from "axios";
 import { Search, Store, ExternalLink } from "lucide-react";
 import { useDebounce } from "../../hooks/useDebounce";
 import Pagination from "../../components/Shared/Pagination";
+import ConfirmationModal from "../../components/Shared/ConfirmationModal";
 
 const VendorListPage = () => {
   const [vendorDatas, setVendorDatas] = useState<IVendor[]>([]);
@@ -18,6 +20,8 @@ const VendorListPage = () => {
   const [pages,setPages] = useState(1);
   const [limit , setLimit] = useState(7);
   const [totalPages,setTotalPages] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedVendor, setSelectedVendor] = useState<any | null>(null);
 
   const debouncedSearch = useDebounce(searchTerm);
   useEffect(() => {
@@ -56,24 +60,43 @@ const VendorListPage = () => {
     { key: "isActive", label: "Business Status" },
   ];
 
-  const onBlockVendor = async (data: any) => {
+  const onBlockVendor = (data: any) => {
+    setSelectedVendor(data);
+    setShowModal(true);
+  };
+
+  const handleConfirmBlock = async () => {
+    if (!selectedVendor?._id) return;
+
     try {
-      if (data._id) {
-        const response = await blockVendor(data._id);
+        const response = await blockVendor(selectedVendor._id);
         if (response.data.message) {
           toast.success(response.data.message);
         }
         fetchVendorData();
-      }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.error(error);
+        toast.error("Failed to update status");
       }
+    } finally {
+      setShowModal(false);
+      setSelectedVendor(null);
     }
   };
 
   return (
     <div className="p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 font-sans">
+      {showModal && (
+        <ConfirmationModal
+          text="Confirm Action"
+          description={"Are you sure you want to change the status of this vendor?"}
+          submit={handleConfirmBlock}
+          close={() => setShowModal(false)}
+          bg="bg-red-600"
+        />
+      )}
+
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>

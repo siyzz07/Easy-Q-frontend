@@ -8,7 +8,7 @@ interface IConfirmationModal {
   bg?: string;
   close?: () => void;
   description?: string;
-  payload?:string
+  payload?:string|any
   
 }
 

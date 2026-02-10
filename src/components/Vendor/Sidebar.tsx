@@ -85,9 +85,9 @@ const Sidebar = () => {
   return (
     <>
       {/* Top bar for mobile */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-[60] flex items-center justify-between p-4 bg-slate-800 border-b border-slate-700 shadow-lg">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-[60] flex items-center justify-between p-4  bg-slate-800 border-b border-slate-700 shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg  flex items-center justify-center">
             <span className="text-white font-black text-sm">Q</span>
           </div>
           <span className="text-lg font-bold text-white tracking-tight">Easy Q</span>

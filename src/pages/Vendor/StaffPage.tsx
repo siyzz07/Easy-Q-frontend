@@ -51,7 +51,7 @@ const StaffPage = () => {
     { key: "staffName", label: "Staff Name" },
     {key:"openingTime",label:"Open At"},
     { key: "isActive", label: "Status" },
-    {key:"view",label:""},
+    // {key:"view",label:""},
     // {key:'action',label:'Action'},
     {key:"edit",label:"Edit"}
   ];
