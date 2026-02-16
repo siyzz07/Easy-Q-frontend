@@ -3,7 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import vendorSlice from "./VendorSlice";
 import customerSlice from "./CustomeSlice";
 import adminSlice from "./AdminAuthSlice";
-import socket from "./SocketSlice";
+import vediCallNotifySlice from "./vediCallNotifySlice";
 import notificationSlice from "./notificationSlice";
 
 
@@ -14,7 +14,7 @@ const Store = configureStore({
         vendorSlice :vendorSlice,
         customerSlice:customerSlice,
         adminSlice:adminSlice,
-        socket:socket,
+        vediCallNotifySlice:vediCallNotifySlice,
         notification :notificationSlice
 
     }

@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { hasShopData, shopData, vendorLoginSuccess } from "../../Redux/VendorSlice";
 import { setAccessToken } from "../../utils/tokenUtils";
-import { connectSocketAction } from "../../Redux/SocketSlice";
+import { connectSocketAction } from "../../Redux/vediCallNotifySlice";
 
 const LoginForm: FC = () => {
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const LoginForm: FC = () => {
       let response = await loginVendor(values);
       if (response.data.accesstoken) {
         setAccessToken(response.data.accesstoken);
-        dispatch(connectSocketAction(response.data.accesstoken));// socket io
+        dispatch(connectSocketAction(response.data.accesstoken));
         dispatch(vendorLoginSuccess(response.data.accesstoken));
         if(response.data.data){
           dispatch(shopData(response.data.data));

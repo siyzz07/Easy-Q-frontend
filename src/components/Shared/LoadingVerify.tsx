@@ -39,17 +39,7 @@ const LoadingVerify: FC<LoadingVerifyProps> = ({ style }) => {
         <OrbitProgress color={style} size="large" text="" textColor="" />
       </div>
 
-      {/* Button with timer */}
-      {/* <div className="w-full max-w-md mx-auto p-6 space-y-4 bg-white ">
-        <button
-          onClick={handleClick}
-          disabled={timeLeft > 0}
-          className={`w-full h-12 text-base font-medium rounded-lg 
-            ${timeLeft > 0 ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600 text-white"}`}
-        >
-          {timeLeft > 0 ? ` ${formatTime(timeLeft)}` : "Resend"}
-        </button>
-      </div> */}
+
     </div>
   );
 };

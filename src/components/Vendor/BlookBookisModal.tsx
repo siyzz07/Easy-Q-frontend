@@ -24,8 +24,8 @@ interface AddStaffProps {
 const validationSchema = Yup.object({
   _id: Yup.string().required("Please select a staff member"),
   blockedDates: Yup.array()
-    .min(1, "Please select at least one date")
-    .required("Please select at least one date"),
+    // .min(, "Please select at least one date")
+    // .required("Please select at least one date"),
 });
 
 const BlockBookingsModal: React.FC<AddStaffProps> = ({ onClose }) => {

@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   LayoutDashboard,
   List,
-  CreditCard,
   Users,
   Briefcase,
   FileText,
@@ -10,6 +9,7 @@ import {
   LogOut,
   Calendar,
   Wallet,
+  Clock,
   X,
   Menu,
 } from "lucide-react";
@@ -18,7 +18,7 @@ import { logoutVendor } from "../../Services/ApiService/VendorApiServices";
 import { removeToken } from "../../utils/tokenUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { vendorLogout } from "../../Redux/VendorSlice";
-import { disconnectSocketAction } from "../../Redux/SocketSlice";
+import { disconnectSocketAction } from "../../Redux/vediCallNotifySlice";
 import { Bell } from "lucide-react";
 import NotificationModal from "../Shared/NotificationModal";
 import { motion } from "framer-motion";
@@ -50,6 +50,12 @@ const Sidebar = () => {
       label: "Works",
       path: "Works",
       route: "/vendor/works",
+    },
+    {
+      icon: Clock,
+      label: "Applied Works",
+      path: "Applied-works",
+      route: "/vendor/applied-works",
     },
     {
       icon: FileText,

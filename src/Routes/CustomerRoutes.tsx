@@ -24,10 +24,10 @@ import ContractPage from "../pages/Customer/ContractPage";
 import FavoritePage from "../pages/Customer/FavoritePage";
 import NotificationPage from "../pages/Customer/NotificationPage";
 import WalletPage from "../pages/Customer/WalletPage";
-import ChatPage from "../components/Shared/ChatPage";
 import CustomerChatPage from "../pages/Customer/CustomerChatPage";
 import VideoCall from "../components/Shared/VideoCall";
 import NotFoundPage from "../pages/Customer/NotFoundPage";
+import AboutPage from "../pages/Customer/AboutPage";
 
 const CustomerRoutes = () => {
   return (
@@ -177,6 +177,12 @@ const CustomerRoutes = () => {
             <CustomerProtectedRoute>
               <BookingDetailsPage />
             </CustomerProtectedRoute>
+          }
+        />
+        <Route
+          path={CUSTOMER_ROUTES.ABOUT}
+          element={
+            <AboutPage />
           }
         />
 

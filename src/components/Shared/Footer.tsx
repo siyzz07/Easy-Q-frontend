@@ -30,6 +30,7 @@ const Footer = () => {
             <h3 className="font-semibold text-white mb-6">Product</h3>
             <ul className="space-y-4 text-sm">
               <FooterLink to="/" label="Features" />
+              <FooterLink to="/customer/about" label="About Us" />
               <FooterLink to="/" label="Pricing" />
               <FooterLink to="/" label="For Business" />
               <FooterLink to="/" label="For Customers" />

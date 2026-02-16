@@ -29,10 +29,6 @@ const StaffSection: React.FC<StaffSectionProps> = ({ bookingData }) => {
             </div>
           </div>
         </div>
-        {/* <div className="mt-6 pt-6 border-t border-border/50 flex justify-between items-center text-sm">
-          <span className="text-muted-foreground font-medium">Cancellation Policy</span>
-          <Info size={16} className="text-primary cursor-help" />
-        </div> */}
       </motion.div>
 
       

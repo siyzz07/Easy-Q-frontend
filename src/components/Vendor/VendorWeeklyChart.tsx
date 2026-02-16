@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
-import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '../ui/chart'
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "../ui/chart";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 interface IChartData {
   chartConfig: any,
@@ -9,14 +9,14 @@ interface IChartData {
 }
 
 const VendorWeeklyChart: React.FC<IChartData> = ({ chartConfig, chartData }) => {
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768)
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <Card className="w-full shadow-2xl border-none mt-3">
@@ -100,7 +100,7 @@ const VendorWeeklyChart: React.FC<IChartData> = ({ chartConfig, chartData }) => 
         </ChartContainer>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default VendorWeeklyChart
+export default VendorWeeklyChart;

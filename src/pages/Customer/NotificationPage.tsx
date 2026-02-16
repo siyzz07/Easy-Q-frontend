@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Mock data for immediate UI visualization
+
 const MOCK_NOTIFICATIONS = [
   {
     id: "1",

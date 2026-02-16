@@ -148,16 +148,7 @@ const CustomerAddress: React.FC = () => {
                       >
                         <Edit3 size={18} strokeWidth={2.5} />
                       </button>
-                      {/* <button
-                        onClick={() => {
-                          setAddresId(data._id || null);
-                          setDeletePopup(true);
-                        }}
-                        className="p-3 bg-slate-50 text-slate-400 hover:text-rose-600 hover:bg-white hover:shadow-lg transition-all rounded-xl"
-                        title="Delete Address"
-                      >
-                        <Trash2 size={18} strokeWidth={2.5} />
-                      </button> */}
+
                     </div>
                   </div>
 

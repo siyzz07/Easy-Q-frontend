@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
-import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '../ui/chart'
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
-import { Calendar } from 'lucide-react'
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "../ui/chart";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Calendar } from "lucide-react";
 
 interface IChartData {
   chartConfig: any,
@@ -11,18 +11,17 @@ interface IChartData {
 }
 
 const ChartMultyChart: React.FC<IChartData> = ({ chartConfig, chartData, setYear }) => {
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Generate years: Current year + 3 previous years
-  const currentYear = new Date().getFullYear()
-  const years = Array.from({ length: 4 }, (_, i) => currentYear - i)
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 4 }, (_, i) => currentYear - i);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768)
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <Card className="w-full shadow-2xl border-none  mt-3">
@@ -61,7 +60,6 @@ const ChartMultyChart: React.FC<IChartData> = ({ chartConfig, chartData, setYear
         >
           <BarChart 
             data={chartData}
-            // Removed right margin to ensure it fills the container
             margin={{ top: 20, right: 10, left: isMobile ? -30 : 0, bottom: 60 }}
             barGap={isMobile ? 2 : 6}
           >
@@ -84,7 +82,6 @@ const ChartMultyChart: React.FC<IChartData> = ({ chartConfig, chartData, setYear
               axisLine={false}
               interval={0}
               scale="band"
-              // Set padding to 0.2 to balance the spacing between the first/last bar and the edges
               padding={{ left: 0, right: 0 }}
               tick={({ x, y, payload }) => (
                 <g transform={`translate(${x},${y})`}>
@@ -137,7 +134,7 @@ const ChartMultyChart: React.FC<IChartData> = ({ chartConfig, chartData, setYear
         </ChartContainer>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default ChartMultyChart
+export default ChartMultyChart;

@@ -20,6 +20,7 @@ import DashboardVendor from "../pages/Vendor/DashboardVendor";
 import VendorBookingDetailsPage from "../pages/Vendor/VendorBookingDetailsPage";
 import VendorWalletPage from "../pages/Vendor/VendorWalletPage";
 import WorksPage from "../pages/Vendor/WorksPage";
+import AppliedWorksPage from "../pages/Vendor/AppliedWorksPage";
 import VendorContractsPage from "../pages/Vendor/VendorContractsPage";
 import VendorContractDetailsPage from "../pages/Vendor/VendorChatPage";
 import VideoCall from "../components/Shared/VideoCall";
@@ -155,6 +156,14 @@ const VendorRoutes = () => {
           element={
             <VendorProtectedRoute>
               <WorksPage/>
+            </VendorProtectedRoute>
+          }/>
+
+        <Route 
+          path={VENDOR_ROUTES.APPLIED_WORKS}
+          element={
+            <VendorProtectedRoute>
+              <AppliedWorksPage/>
             </VendorProtectedRoute>
           }/>
 

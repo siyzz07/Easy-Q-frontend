@@ -130,13 +130,14 @@ export const addStaff = async (form :IStaff) =>{
 };
 
 //--------------------------- get Staff data
-export const getAllStffs = async(page?:number,limit?:number,search?:string) =>{
+export const getAllStffs = async(page?:number,limit?:number,search?:string,isActive?:string) =>{
 
     const response = await VendorAxiosInstance.get(VENDOR_API_ROUTES.GET_STAFF,{
         params:{
             page,
             limit,
-            search
+            search,
+            isActive
         }
     });
     return response;

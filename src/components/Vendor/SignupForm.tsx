@@ -181,7 +181,7 @@ const SignupForm: FC = () => {
                         setFieldValue("proof", e.currentTarget.files[0]);
                         }
                     }}
-                    className="hidden" // Hide the default file input
+                    className="hidden" 
                     />
                     <label 
                         htmlFor="proof" 

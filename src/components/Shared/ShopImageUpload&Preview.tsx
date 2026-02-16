@@ -149,7 +149,7 @@ const ShopImageUpload: FC<IShopImageUpdate> = ({ isVendor, use, onClose, onSave,
     );
   }
 
-  // ---------------- PREVIEW MODE (Single Image Preview from existing photos) ----------------
+  // ---------------- PREVIEW MODE ----------------
   if (use === "preview") {
     return (
       <>

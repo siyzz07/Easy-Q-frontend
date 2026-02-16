@@ -19,10 +19,10 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import type { IContractDto } from "../../Shared/types/Types";
 import LocationAutoSuggest from "../Shared/LocationAutoSuggest";
+import Pagination from "../Shared/Pagination";
 
 const Works: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [locationSearchTerm, setLocationSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("All");
   const [page, setPage] = useState<number>(1);
   const [limit] = useState<number>(9);
@@ -270,6 +270,16 @@ const Works: React.FC = () => {
         onClose={handleCloseModal}
         work={selectedWork}
       />
+
+      {contract.length > 0 && (
+        <div className="mt-12 flex justify-center pb-10">
+          <Pagination
+            totalPages={totalPages}
+            page={page}
+            onPageChange={setPage}
+          />
+        </div>
+      )}
     </div>
   );
 };

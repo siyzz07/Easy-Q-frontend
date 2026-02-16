@@ -45,9 +45,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ bookingData }) => {
                 <Button variant="outline" size="sm" className="rounded-xl gap-2 font-bold h-9 bg-white hover:bg-slate-50 border-slate-200">
                   <Navigation size={14} className="text-primary" /> Directions
                 </Button>
-                {/* <Button variant="ghost" size="sm" className="rounded-xl h-9 font-bold text-slate-600">
-                  <Phone size={14} className="mr-2" /> Call Shop
-                </Button> */}
+            
               </div>
             </div>
           </div>

@@ -5,7 +5,7 @@ import { logoutCustomer } from "../../../Services/ApiService/CustomerApiService"
 import { useDispatch } from "react-redux";
 import { customerLogOut } from "../../../Redux/CustomeSlice";
 import { removeToken } from "../../../utils/tokenUtils";
-import { disconnectSocketAction } from "../../../Redux/SocketSlice";
+import { disconnectSocketAction } from "../../../Redux/vediCallNotifySlice";
 import { motion } from "framer-motion";
 
 const ProfilePageLayout = () => {

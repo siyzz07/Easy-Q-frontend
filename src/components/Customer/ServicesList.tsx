@@ -1,5 +1,5 @@
 import { useState, type FC } from "react";
-import type { IService } from "../../Shared/types/Types";
+import type { IService, IStaff } from "../../Shared/types/Types";
 import { Clock, DollarSign } from "lucide-react";
 import BookNow from "./BookNow";
 import type { IvendroFullData } from "../../Shared/types/Types";
@@ -7,6 +7,7 @@ import { bookAvailableTime } from "../../Services/ApiService/BookingApiService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
+import { color } from "framer-motion";
 
 interface InterfaceServicesList {
   services: IService[];
@@ -19,19 +20,21 @@ const ServicesList: FC<InterfaceServicesList> = ({
   shopId,
   shopData,
 }) => {
+  console.log("services :>> ", services);
+
   const [bookService, setBookService] = useState<boolean>(false);
   const [serviceData, setServiceData] = useState<IService | null>(null);
   const navigate = useNavigate();
 
+
+
+
   const handleSubmit = async (
     values: { address: string; preferredTime: string; staff: string },
     date: Date,
-    service: any
+    service: any,
   ) => {
     try {
-
-
-
       const bookingData = {
         staffId: values.staff,
         addressId: values.address,
@@ -41,11 +44,9 @@ const ServicesList: FC<InterfaceServicesList> = ({
         shopId,
       };
 
-
-
       let response = await bookAvailableTime(bookingData);
-        console.log(response.data.success);
-        
+      console.log(response.data.success);
+
       if (response?.data.success == false) {
         toast.info(response.data.message, { autoClose: 3000 });
       } else {
@@ -59,16 +60,26 @@ const ServicesList: FC<InterfaceServicesList> = ({
         };
         navigate(
           `/customer/service/checkout?bookingId=${btoa(
-            JSON.stringify(checkoutData)
-          )}`
+            JSON.stringify(checkoutData),
+          )}`,
         );
       }
     } catch (error: unknown) {
       setBookService(false);
-      if(error instanceof AxiosError){
+      if (error instanceof AxiosError) {
         toast.error(error.response?.data.message || "service not available");
       }
     }
+  };
+
+
+
+
+  
+
+  const staffAvailable = (data: any) => {
+    const available = data.some((value: IStaff) => value.isActive == true);
+    return available;
   };
 
   return (
@@ -120,12 +131,14 @@ const ServicesList: FC<InterfaceServicesList> = ({
                 <div className="absolute top-3 right-3">
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-bold backdrop-blur-md shadow-sm ${
-                      service.isActive
+                      service.isActive && staffAvailable(service.availableStaff)
                         ? "bg-white/90 text-green-700 dark:bg-black/80 dark:text-green-400"
                         : "bg-white/90 text-red-700 dark:bg-black/80 dark:text-red-400"
                     }`}
                   >
-                    {service.isActive ? "Available" : "Unavailable"}
+                    {service.isActive && staffAvailable(service.availableStaff)
+                      ? "Available"
+                      : "Unavailable"}
                   </span>
                 </div>
               </div>
@@ -153,7 +166,8 @@ const ServicesList: FC<InterfaceServicesList> = ({
 
                 {/* Book Button */}
                 <div className="mt-auto">
-                  {service.isActive ? (
+                  {service.isActive &&
+                  staffAvailable(service.availableStaff) ? (
                     <button
                       onClick={() => {
                         setBookService(true);

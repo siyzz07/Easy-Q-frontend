@@ -115,7 +115,7 @@ const Map: FC<Imap> = ({
       </div>
 
       <MapContainer
-        key={`${mapCenter.lat}-${mapCenter.lng}`} // Force remount on center change to be safe
+        key={`${mapCenter.lat}-${mapCenter.lng}`} 
         center={mapCenter}
         zoom={zoom}
         style={{ height: "100%", width: "100%" }}

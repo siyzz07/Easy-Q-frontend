@@ -39,6 +39,7 @@ export const CUSTOMER_ROUTES ={
     WALLET:"wallet",
     CHAT:"contract/:id",
     VIDEO_CALL :"video-call/:roomId",
+    ABOUT: "about",
     NOT_FOUND :""
 
 
@@ -62,6 +63,7 @@ export const VENDOR_ROUTES ={
     VIEW_BOOKING:"bookings/:id",
     WALLET:"wallet",
     WORKS:"works",
+    APPLIED_WORKS: "applied-works",
     CONTRACTS:"contracts",
     CONTRACT_DETAILS:"contracts/:id",
     VIDEO_CALL :"video-call/:roomId",

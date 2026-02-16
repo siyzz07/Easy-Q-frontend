@@ -98,6 +98,7 @@ export const CONTRACT_API_ROUTES = {
     APPLY_CONTRACT: "/contract/apply/",
     UPDATE_REQUEST: "/contract/applied-request",
     VENDOR_CONTRACTS: "/contract/vendor/contracts",
+    VENDOR_APPLIED_CONTRACTS: "/contract/vendor/applied-contracts",
 };
 
 export const NOTIFICATION_API_ROUTES = {

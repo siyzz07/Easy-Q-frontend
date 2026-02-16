@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { ChevronLeft, Share2, HelpCircle, MessageSquare } from "lucide-react";
 import { Button } from "../../components/ui/button";
 
-// Extracted Components
 import DetailsHero from "../../components/Customer/BookingDetails/DetailsHero";
 import StatusStepper from "../../components/Customer/BookingDetails/BookingActionCard";
 import StaffSection from "../../components/Customer/BookingDetails/StaffSection";
@@ -257,14 +256,6 @@ const BookingDetailsPage = () => {
             </span>
           </motion.button>
 
-          {/* <div className="flex gap-2">
-            <Button variant="ghost" size="icon" className="rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-border">
-              <Share2 size={18} />
-            </Button>
-            <Button variant="ghost" size="icon" className="rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-border" title="Help Center">
-              <HelpCircle size={18} />
-            </Button>
-          </div> */}
         </div>
 
         {/* Main Content Layout */}

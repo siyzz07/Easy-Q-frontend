@@ -1,47 +1,25 @@
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSocket } from "../../Services/Socket/Socket";
+import { useSelector, useDispatch } from "react-redux";
 import IncomingCallModal from "./IncomingCallModal";
 import { decodeToken } from "../../utils/tokenUtils";
-
+import type { RootState } from "../../Redux/Store";
+import { clearIncomingCall } from "../../Redux/vediCallNotifySlice";
 
 const GlobalIncomingCallNotify = () => {
-
-  const [callDetails, setCallDetails] = useState<{ contractName: string; roomId: string } | null>(null);
+  const callDetails = useSelector((state: RootState) => state.vediCallNotifySlice.incomingCall);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const socket = getSocket();
-    
-    if (!socket) return;
-
-    const handleIncomingCall = (data: { contractName: string; roomId: string }) => {
-      console.log("Incoming call received:", data);
-      setCallDetails(data);
-    };
-
-
-
-    socket.on("call-ended",handleDeclineCall);
-
-    socket.on("incomming-vedio-call", handleIncomingCall);
-
-    return () => {
-      socket.off("incomming-vedio-call", handleIncomingCall);
-    };
-  }, []);
 
   const handleAcceptCall = () => {
     if (callDetails) {
       let decode = decodeToken();
       navigate(`${decode?.role}/video-call/${callDetails.roomId}`);
-      setCallDetails(null);
+      dispatch(clearIncomingCall());
     }
   };
 
   const handleDeclineCall = () => {
-    
-    setCallDetails(null);
+    dispatch(clearIncomingCall());
   };
 
   if (!callDetails) return null;

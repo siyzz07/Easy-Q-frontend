@@ -27,34 +27,32 @@ const DashboardVendor = () => {
   let hasShop = useSelector((state: any) => state.vendorSlice.hasShop);
   const [totalStaff, setTotalStaff] = useState<number>(0);
   const [availableStaff, setAvailableStaff] = useState<number>(0);
-  const [UnavailableStaff, setToalUnavailableStaff] = useState<number>(0);
-
-  const [totalServices, setTotalServices] = useState<number>(0);
   const [availabelServices, setTotalAvailabelServices] = useState<number>(0);
-  const [unavailabelServices, setUnavailabelServices] = useState<number>(0);
   const [blokcBookinModal,setBlookBookingModal] = useState<boolean>(false);
   const [chartData, setChartData] = useState<any[]>([]);
   const [weeklyChartData, setWeeklyChartData] = useState<any[]>([]);
   const [year, setYear] = useState<number>(new Date().getFullYear());
+  const [totalRevenue, setTotalRevenue] = useState<number>(0);
+  const [customerCount, setCustomerCount] = useState<number>(0);
+  const [pendingBookingsCount, setPendingBookingsCount] = useState<number>(0);
 
+  const chartConfig = {
+    bookings: {
+      label: "Bookings",
+      color: "hsl(var(--chart-1))", 
+    },
+    contracts: {
+      label: "Contracts",
+      color: "hsl(var(--chart-2))",
+    },
+  } satisfies ChartConfig;
 
-const chartConfig = {
-  bookings: {
-    label: "Bookings",
-    color: "hsl(var(--chart-1))", 
-  },
-  contracts: {
-    label: "Contracts",
-    color: "hsl(var(--chart-2))",
-  },
-} satisfies ChartConfig
-
-const weeklyChartConfig = {
-  bookings: {
-    label: "Bookings",
-    color: "hsl(var(--chart-1))",
-  },
-} satisfies ChartConfig
+  const weeklyChartConfig = {
+    bookings: {
+      label: "Bookings",
+      color: "hsl(var(--chart-1))",
+    },
+  } satisfies ChartConfig;
 
   useEffect(() => {
     dashboardDocument(year);
@@ -69,12 +67,12 @@ const weeklyChartConfig = {
       if (response?.data?.data) {
         setTotalStaff(response.data.data.totalStaff);
         setAvailableStaff(response.data.data.availableStaff);
-        setToalUnavailableStaff(response.data.data.totalUnavailableStaff);
-        setTotalServices(response.data.data.totalService);
         setTotalAvailabelServices(response.data.data.totalAvailableService);
-        setUnavailabelServices(response.data.data.totalUnavailableService);
         setChartData(response.data.data.chartData || []);
         setWeeklyChartData(response.data.data.weeklyChartData || []);
+        setTotalRevenue(response.data.data.totalRevenue || 0);
+        setCustomerCount(response.data.data.customerCount || 0);
+        setPendingBookingsCount(response.data.data.pendingBookingsCount || 0);
       }
     } catch (error: unknown) {
       console.log("error to fetch vendor dashbord data");
@@ -86,62 +84,43 @@ const weeklyChartConfig = {
       title: "Total Staff",
       value: totalStaff,
       icon: <Users className="text-blue-600" size={18} />,
-      description: "All registered users",
+      description: "Service providers",
       iconBg: "bg-blue-100",
     },
     {
-      title: "Available Staff",
+      title: "Active Staff",
       value: availableStaff,
-      icon: <Users className="text-green-600" size={18} />,
-      description: "All registered users",
-      iconBg: "bg-green-100",
+      icon: <Users className="text-emerald-600" size={18} />,
+      description: "Ready for bookings",
+      iconBg: "bg-emerald-100",
     },
     {
-      title: "Unavailable Staff",
-      value: UnavailableStaff,
-      icon: <Users className="text-red-600" size={18} />,
-      description: "All registered users",
-      iconBg: "bg-red-100",
-    },
-
-    {
-      title: "Total Services",
-      value: totalServices,
-      icon: <PencilRuler className="text-green-600" size={18} />,
-      description: "All business vendors",
-      iconBg: "bg-green-100",
-    },
-
-    {
-      title: "Unavailable Services",
-      value: unavailabelServices,
-      icon: <PencilRuler className="text-red-600" size={18} />,
-      description: "All business vendors",
-      iconBg: "bg-red-100",
-    },
-
-    {
-      title: "Available Services",
+      title: "Active Services",
       value: availabelServices,
-      icon: <PencilRuler className="text-green-600" size={18} />,
-      description: "All business vendors",
-      iconBg: "bg-green-100",
+      icon: <PencilRuler className="text-indigo-600" size={18} />,
+      description: "Enabled services",
+      iconBg: "bg-indigo-100",
     },
-
     {
-      title: "Total Customers",
-      value: 0,
+      title: "Customer Reach",
+      value: customerCount,
       icon: <ShoppingCart className="text-purple-600" size={18} />,
-      description: "Active customer profiles",
+      description: "Unique customers",
       iconBg: "bg-purple-100",
     },
-
+    {
+      title: "New Bookings",
+      value: pendingBookingsCount,
+      icon: <Clock className="text-orange-600" size={18} />,
+      description: "Pending requests",
+      iconBg: "bg-orange-100",
+    },
     {
       title: "Total Revenue",
-      value: "0",
-      icon: <DollarSign className="text-yellow-600" size={18} />,
-      description: "Revenue this month",
-      iconBg: "bg-yellow-100",
+      value: `₹${totalRevenue.toLocaleString()}`,
+      icon: <DollarSign className="text-amber-600" size={18} />,
+      description: "Total earnings",
+      iconBg: "bg-amber-100",
     },
   ];
 

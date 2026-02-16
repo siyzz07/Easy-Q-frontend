@@ -4,10 +4,8 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Bell, Menu, X, User } from "lucide-react";
 import { getAccessToken } from "../../utils/tokenUtils";
 import { motion, AnimatePresence } from "framer-motion";
-import { fetchNotification } from "../../Services/ApiService/NotificationApiService";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../Redux/Store";
-import { setNotifications } from "../../Redux/notificationSlice";
+
 
 interface NavbarProps {
   menu: { label: string; path: string }[];

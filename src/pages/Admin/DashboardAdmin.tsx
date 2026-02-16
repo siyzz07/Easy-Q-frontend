@@ -2,121 +2,119 @@ import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
   Users,
-  Store,
   ShoppingCart,
   Clock,
-  ArrowUpRight,
   TrendingUp,
   ShieldCheck,
-  UserCheck,
 } from "lucide-react";
 
-// UI Components
 import {
   Card,
-  CardHeader,
   CardTitle,
   CardContent,
   CardDescription,
 } from "../../components/ui/card";
 import { adminDashbordData } from "../../Services/ApiService/AdminApiService";
-
-// Types
-interface DashboardStats {
-  totalVendors: number;
-  totalCustomers: number;
-  pendingVendors: number;
-  rejectedVendors: number;
-  verifiedVendors: number;
-}
+import PieChartComponent from "../../components/Admin/PieChartComponent";
+import ChartMultyChart from "../../components/Vendor/ChartMultyChart";
 
 const DashboardAdmin = () => {
-  const [data, setData] = useState<DashboardStats>({
+  const [data, setData] = useState<any>({
     totalVendors: 0,
     totalCustomers: 0,
     pendingVendors: 0,
     rejectedVendors: 0,
     verifiedVendors: 0,
+    bookingStats: { totalRevenue: 0, totalBookings: 0, completedBookings: 0, cancelledBookings: 0, pendingBookings: 0 },
+    contractStats: { totalContracts: 0, openContracts: 0, completedContracts: 0, cancelledContracts: 0 },
   });
-  const [loading, setLoading] = useState(true);
+  const [pieChartData, setPieChartData] = useState<any[]>([]);
+  const [revenueChartData, setRevenueChartData] = useState<any[]>([]);
+  const [year, setYear] = useState(new Date().getFullYear());
+
+  const chartConfig = {
+    revenue: {
+      label: "Revenue",
+      color: "hsl(var(--chart-1))",
+    },
+    bookings: {
+      label: "Bookings",
+      color: "hsl(var(--chart-2))",
+    },
+  };
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const response = await adminDashbordData();
-        console.log("response for admin dahsboard :>> ", response);
 
         if (response?.data) {
-          setData({
-            totalVendors: response.data.totalVednors || 0,
-            totalCustomers: response.data.totalCutomers || 0,
-            pendingVendors: response.data.pendingVendors || 0,
-            rejectedVendors: response.data.rejectedVendors || 0,
-            verifiedVendors: response.data.verifiedVendors || 0,
-          });
+          const resData = response.data;
+          setPieChartData([
+            {
+              browser: "Customers",
+              visitors: resData.totalCustomers || 0,
+              fill: "#93c5fd",
+            },
+            {
+              browser: "Vendors",
+              visitors: resData.totalVendors || 0,
+              fill: "#1e40af",
+            },
+          ]);
+          setRevenueChartData(resData.revenueChartData || []);
+          setData(resData);
         }
       } catch (error) {
         console.error("Dashboard data fetch failed", error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchDashboardData();
-  }, []);
+  }, [year]);
 
-  // Memoize stats to prevent recalculation on every render
   const statsConfig = useMemo(
     () => [
       {
-        title: "Total  Users",
-        value: data.totalVendors + data.totalCustomers,
-        icon: Users,
-        description: "Combined customers & vendors",
-        color: "from-blue-500 to-cyan-400",
+        title: "Platform Revenue",
+        value: `₹${(data.bookingStats?.totalRevenue || 0).toLocaleString()}`,
+        icon: TrendingUp,
+        description: "Gross earnings",
+        color: "from-blue-600 to-indigo-500",
         shadow: "shadow-blue-500/20",
       },
       {
-        title: "Service Vendors",
-        value: data.totalVendors,
-        icon: Store,
-        description: "Registered businesses",
+        title: "Total Bookings",
+        value: data.bookingStats?.totalBookings || 0,
+        icon: ShoppingCart,
+        description: "Service requests",
         color: "from-emerald-500 to-teal-400",
         shadow: "shadow-emerald-500/20",
       },
       {
-        title: "Active Customers",
-        value: data.totalCustomers,
-        icon: ShoppingCart,
-        description: "End-user profiles",
+        title: "Total Contracts",
+        value: data.contractStats?.totalContracts || 0,
+        icon: ShieldCheck,
+        description: "Bidding contracts",
         color: "from-violet-500 to-purple-400",
         shadow: "shadow-violet-500/20",
       },
       {
-        title: "Pending Approval",
+        title: "Pending Vendors",
         value: data.pendingVendors,
         icon: Clock,
-        description: "Awaiting approval",
+        description: "Awaiting verification",
         color: "from-orange-500 to-amber-400",
         shadow: "shadow-orange-500/20",
       },
       {
-        title: "Verified Partners",
-        value: data.verifiedVendors,
-        icon: ShieldCheck,
-        description: "Trusted vendors",
+        title: "Total Users",
+        value: (data.totalCustomers || 0) + (data.totalVendors || 0),
+        icon: Users,
+        description: "Combined ecosystem",
         color: "from-pink-500 to-rose-400",
         shadow: "shadow-pink-500/20",
       },
-      // {
-      //   title: "Revenue (M.T.D)",
-      //   value: 54820, // Should eventually come from API
-      //   isCurrency: true,
-      //   icon: TrendingUp,
-      //   description: "Month-to-date earnings",
-      //   color: "from-indigo-500 to-blue-400",
-      //   shadow: "shadow-indigo-500/20",
-      // },
     ],
     [data]
   );
@@ -132,14 +130,14 @@ const DashboardAdmin = () => {
   // };
 
   return (
-    <div className="min-h-full p-6 lg:p-10 space-y-10">
+    <div className="min-h-full  p-6 lg:p-10 space-y-10">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl font-extrabold text-foreground tracking-tight">
-            Overview Dashboard
+            Admin Overview
           </h2>
           <p className="text-muted-foreground font-medium mt-1">
-            Welcome back. Here's what's happening with Easy Q today.
+            Real-time platform analytics and business performance.
           </p>
         </div>
       </header>
@@ -148,7 +146,7 @@ const DashboardAdmin = () => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6"
       >
         {statsConfig.map((item, index) => (
           <motion.div key={index}>
@@ -172,7 +170,7 @@ const DashboardAdmin = () => {
                   </CardTitle>
 
                   <div className="flex items-baseline gap-2">
-                    <p className="text-2xl font-black text-foreground tracking-tight transition-all group-hover:translate-x-0.5 duration-300">
+                    <p className="text-2xl font-black text-foreground tracking-tight transition-all group-hover:translate-x-0.5 duration-300 overflow-hidden text-ellipsis whitespace-nowrap">
                       {item.value}
                     </p>
                   </div>
@@ -188,41 +186,29 @@ const DashboardAdmin = () => {
         ))}
       </motion.div>
 
-      {/* Analytics Placeholders */}
-      <footer className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-10">
-        <PlaceholderCard
-          icon={<TrendingUp size={32} />}
-          title="Analytics Coming Soon"
-          desc="We're working on powerful data visualizations for your business metrics."
-          color="text-primary"
-          bgColor="bg-primary/10"
-        />
-        <PlaceholderCard
-          icon={<UserCheck size={32} />}
-          title="User Activity"
-          desc="Real-time monitoring of customer and vendor interactions will appear here."
-          color="text-violet-500"
-          bgColor="bg-violet-500/10"
-        />
-      </footer>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <ChartMultyChart 
+            chartConfig={chartConfig} 
+            chartData={revenueChartData} 
+            setYear={setYear} 
+          />
+        </div>
+        <div className="lg:col-span-1">
+          <PieChartComponent 
+            chartConfig={{
+              visitors: { label: "Users" },
+              Customers: { label: "Customers", color: "#93c5fd" },
+              Vendors: { label: "Vendors", color: "#1e40af" }
+            }} 
+            title="User Distribution" 
+            description="Customers vs Vendors" 
+            chartData={pieChartData} 
+          />
+        </div>
+      </div>
     </div>
   );
 };
-
-const PlaceholderCard = ({ icon, title, desc, color, bgColor }: any) => (
-  <Card className="glass-card border-none min-h-[300px] flex flex-col items-center justify-center p-10 text-center space-y-4">
-    <div
-      className={`w-16 h-16 ${bgColor} rounded-full flex items-center justify-center ${color}`}
-    >
-      {icon}
-    </div>
-    <div>
-      <h3 className="text-xl font-bold text-foreground">{title}</h3>
-      <p className="text-muted-foreground max-w-xs mx-auto text-sm mt-2 font-medium">
-        {desc}
-      </p>
-    </div>
-  </Card>
-);
 
 export default DashboardAdmin;

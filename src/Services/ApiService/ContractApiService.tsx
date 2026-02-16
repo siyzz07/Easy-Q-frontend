@@ -100,3 +100,14 @@ export const vendorContracts = async (page?:number,limit?:number,search?:string)
     });
     return response;
 };
+
+export const getVendorAppliedContracts = async (page?:number,limit?:number,search?:string) =>{
+    const response = await ContractAxiosInstance.get(CONTRACT_API_ROUTES.VENDOR_APPLIED_CONTRACTS,{
+        params:{
+            page,
+            limit,
+            search
+        }
+    });
+    return response;
+};
