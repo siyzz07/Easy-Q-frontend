@@ -12,59 +12,50 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 
-const MOCK_NOTIFICATIONS = [
-  {
-    id: "1",
-    title: "Booking Confirmed",
-    message: "Your appointment at 'Gentlemen's Cut' has been successfully scheduled for tomorrow at 10:00 AM.",
-    type: "success",
-    isRead: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-  },
-  {
-    id: "2",
-    title: "Account Security",
-    message: "Your password was changed successfully. If you didn't do this, please contact support immediately.",
-    type: "info",
-    isRead: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-  },
-  {
-    id: "3",
-    title: "Payment Reminder",
-    message: "Your pending payment for 'Spa Wellness' is due in 2 hours. Complete it now to avoid cancellation.",
-    type: "warning",
-    isRead: true,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-  },
-  {
-    id: "4",
-    title: "Service Unavailable",
-    message: "The 'Deep Tissue Massage' service is currently undergoing maintenance and will be back online soon.",
-    type: "error",
-    isRead: true,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
-  }
-];
+import { useDispatch, useSelector } from "react-redux";
+import { markAllAsRead } from "../../Redux/notificationSlice";
+import { updateNotification } from "../../Services/ApiService/NotificationApiService";
+import { formatDistanceToNow } from "date-fns";
 
 const NotificationPage = () => {
-  const notifications = MOCK_NOTIFICATIONS;
+  const dispatch = useDispatch();
+  const notifications = useSelector((state: any) => state.notification.notifications);
+  const unreadCount = useSelector((state: any) => state.notification.totalUnreaded);
+
+  const handleMarkAllRead = async () => {
+    try {
+      dispatch(markAllAsRead());
+      await updateNotification("all");
+    } catch (error) {
+      console.error("Failed to mark all as read:", error);
+    }
+  };
 
   const getIcon = (type: string) => {
     switch (type) {
-      case "success": return <CheckCircle2 className="text-emerald-500" size={20} />;
-      case "warning": return <AlertTriangle className="text-amber-500" size={20} />;
-      case "error": return <XCircle className="text-rose-500" size={20} />;
-      default: return <Info className="text-blue-500" size={20} />;
+      case "success":
+      case "booking_completed":
+        return <CheckCircle2 className="text-emerald-500" size={20} />;
+      case "warning":
+        return <AlertTriangle className="text-amber-500" size={20} />;
+      case "error":
+        return <XCircle className="text-rose-500" size={20} />;
+      default:
+        return <Info className="text-blue-500" size={20} />;
     }
   };
 
   const getBgColor = (type: string) => {
     switch (type) {
-      case "success": return "bg-emerald-50/50";
-      case "warning": return "bg-amber-50/50";
-      case "error": return "bg-rose-50/50";
-      default: return "bg-blue-50/50";
+      case "success":
+      case "booking_completed":
+        return "bg-emerald-50/50";
+      case "warning":
+        return "bg-amber-50/50";
+      case "error":
+        return "bg-rose-50/50";
+      default:
+        return "bg-blue-50/50";
     }
   };
 
@@ -75,7 +66,9 @@ const NotificationPage = () => {
         <div className="flex items-center gap-4">
            <div className="h-14 w-14 rounded-[1.2rem] bg-blue-50 flex items-center justify-center text-blue-600 relative">
               <Bell size={26} strokeWidth={1.5} />
-              <span className="absolute top-0 right-0 h-3 w-3 bg-blue-600 border-2 border-white rounded-full translate-x-1 -translate-y-1" />
+              {unreadCount > 0 && (
+                <span className="absolute top-0 right-0 h-3 w-3 bg-blue-600 border-2 border-white rounded-full translate-x-1 -translate-y-1" />
+              )}
            </div>
            <div>
               <h1 className="text-2xl font-[900] text-slate-800 tracking-tight leading-none">Notifications</h1>
@@ -84,7 +77,15 @@ const NotificationPage = () => {
         </div>
 
         <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 px-5 py-3 bg-slate-50 hover:bg-white hover:shadow-lg text-slate-600 rounded-xl text-xs font-black uppercase tracking-widest transition-all border border-slate-100">
+            <button 
+              onClick={handleMarkAllRead}
+              disabled={unreadCount === 0}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all border ${
+                unreadCount > 0 
+                ? "bg-slate-50 hover:bg-white hover:shadow-lg text-slate-600 border-slate-100" 
+                : "bg-slate-50 text-slate-300 border-transparent cursor-not-allowed"
+              }`}
+            >
               <CheckCheck size={16} />
               Mark Read
             </button>
@@ -98,53 +99,65 @@ const NotificationPage = () => {
       {/* Notifications List */}
       <div className="space-y-6">
           <AnimatePresence mode='popLayout'>
-            {notifications.map((notification, index) => (
-              <motion.div
-                layout
-                key={notification.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                className={`group relative p-6 rounded-[2rem] border transition-all cursor-pointer flex gap-6
-                  ${notification.isRead 
-                    ? "bg-white border-slate-100 opacity-60 hover:opacity-100" 
-                    : `${getBgColor(notification.type)} border-transparent shadow-xl shadow-slate-200/40 scale-[1.01]`
-                  }
-                `}
-              >
-                <div className={`shrink-0 h-14 w-14 rounded-2xl flex items-center justify-center shadow-inner
-                  ${notification.isRead ? "bg-slate-50" : "bg-white"}
-                `}>
-                  {notification.isRead ? <MailOpen className="text-slate-300" size={24} /> : getIcon(notification.type)}
+            {notifications.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center mb-6">
+                  <MailOpen className="text-slate-200" size={40} />
                 </div>
-
-                <div className="flex-1 min-w-0 pr-12 text-left">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <h4 className={`text-base font-black tracking-tight ${notification.isRead ? "text-slate-500" : "text-slate-900"}`}>
-                      {notification.title}
-                    </h4>
-                    {!notification.isRead && (
-                      <span className="h-2 w-2 bg-blue-600 rounded-full animate-pulse" />
-                    )}
+                <h3 className="text-xl font-black text-slate-800 tracking-tight">All caught up!</h3>
+                <p className="text-slate-400 text-sm font-medium mt-2">You don't have any notifications right now.</p>
+              </div>
+            ) : (
+              notifications.map((notification: any, index: number) => (
+                <motion.div
+                  layout
+                  key={notification._id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  className={`group relative p-6 rounded-[2rem] border transition-all cursor-pointer flex gap-6
+                    ${notification.isRead 
+                      ? "bg-white border-slate-100 opacity-60 hover:opacity-100" 
+                      : `${getBgColor(notification.type)} border-transparent shadow-xl shadow-slate-200/40 scale-[1.01]`
+                    }
+                  `}
+                >
+                  <div className={`shrink-0 h-14 w-14 rounded-2xl flex items-center justify-center shadow-inner
+                    ${notification.isRead ? "bg-slate-50" : "bg-white"}
+                  `}>
+                    {notification.isRead ? <MailOpen className="text-slate-300" size={24} /> : getIcon(notification.type)}
                   </div>
-                  <p className={`text-[13px] font-medium leading-relaxed ${notification.isRead ? "text-slate-400" : "text-slate-600"}`}>
-                    {notification.message}
-                  </p>
-                  <div className="flex items-center gap-2 mt-4">
-                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">Just Now</span>
-                     <div className="h-1 w-1 bg-slate-200 rounded-full" />
-                     <span className="text-[10px] font-black text-blue-600/40 uppercase tracking-[0.1em]">{notification.type}</span>
-                  </div>
-                </div>
 
-                <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-3">
-                   <button className="h-10 w-10 flex items-center justify-center rounded-xl text-slate-300 hover:text-rose-500 hover:bg-white md:opacity-0 group-hover:opacity-100 transition-all border border-transparent hover:border-rose-100">
-                     <Trash2 size={18} />
-                   </button>
-                   <ChevronRight size={16} className="text-slate-200 group-hover:text-slate-400 transition-colors" />
-                </div>
-              </motion.div>
-            ))}
+                  <div className="flex-1 min-w-0 pr-12 text-left">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <h4 className={`text-base font-black tracking-tight ${notification.isRead ? "text-slate-500" : "text-slate-900"}`}>
+                        {notification.title}
+                      </h4>
+                      {!notification.isRead && (
+                        <span className="h-2 w-2 bg-blue-600 rounded-full animate-pulse" />
+                      )}
+                    </div>
+                    <p className={`text-[13px] font-medium leading-relaxed ${notification.isRead ? "text-slate-400" : "text-slate-600"}`}>
+                      {notification.content}
+                    </p>
+                    <div className="flex items-center gap-2 mt-4">
+                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">
+                         {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
+                       </span>
+                       <div className="h-1 w-1 bg-slate-200 rounded-full" />
+                       <span className="text-[10px] font-black text-blue-600/40 uppercase tracking-[0.1em]">{notification.type}</span>
+                    </div>
+                  </div>
+
+                  <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-3">
+                     <button className="h-10 w-10 flex items-center justify-center rounded-xl text-slate-300 hover:text-rose-500 hover:bg-white md:opacity-0 group-hover:opacity-100 transition-all border border-transparent hover:border-rose-100">
+                       <Trash2 size={18} />
+                     </button>
+                     <ChevronRight size={16} className="text-slate-200 group-hover:text-slate-400 transition-colors" />
+                  </div>
+                </motion.div>
+              ))
+            )}
           </AnimatePresence>
       </div>
 

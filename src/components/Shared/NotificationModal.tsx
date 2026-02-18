@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo } from "react"; 
-import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 
@@ -8,17 +7,16 @@ import {
   AlertTriangle, 
   XCircle, 
   Info, 
-  ChevronRight,
   MailOpen,
-  Trash2,
   Check,
   X,
   Eye,
-  EyeOff
+  EyeOff,
+  CheckCheck
 } from "lucide-react";
 import { updateNotification } from "../../Services/ApiService/NotificationApiService";
 import { useDispatch, useSelector } from "react-redux";
-import { markAsRead, type INotification } from "../../Redux/notificationSlice";
+import { markAsRead, markAllAsRead, type INotification } from "../../Redux/notificationSlice";
 
 interface NotificationModalProps {
   isOpen: boolean;
@@ -73,15 +71,15 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
     }
   };
 
-  const getIcon = (type: string) => {
-    switch (type) {
-      case "success": return <CheckCircle2 className="text-emerald-500" size={20} />;
-      case "booking_completed": return <CheckCircle2 className="text-emerald-500" size={20} />;
-      case "warning": return <AlertTriangle className="text-amber-500" size={20} />;
-      case "error": return <XCircle className="text-rose-500" size={20} />;
-      default: return <Info className="text-blue-500" size={20} />;
+  const markAllNoitficaitonAsRead = async () => {
+    try {
+      dispatch(markAllAsRead());
+      await updateNotification("all");
+    } catch (error) {
+      console.log("notification error :>> ", error);
     }
   };
+
 
   const getBgColor = (type: string) => {
     switch (type) {
@@ -128,6 +126,17 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
                   {showOnlyUnread ? <Eye size={18} /> : <EyeOff size={18} />}
                   <span className="hidden sm:inline">{showOnlyUnread ? "All" : "Unread"}</span>
                 </button>
+
+                {unreadCount > 0 && (
+                  <button 
+                    onClick={markAllNoitficaitonAsRead}
+                    className="p-2 rounded-xl hover:bg-emerald-50 text-slate-500 hover:text-emerald-600 transition-all flex items-center gap-1.5 text-xs font-bold"
+                    title="Mark all as read"
+                  >
+                    <CheckCheck size={18} />
+                    <span className="hidden sm:inline">Mark all</span>
+                  </button>
+                )}
 
                 <div className="w-[1px] h-6 bg-slate-200 mx-1" />
                 

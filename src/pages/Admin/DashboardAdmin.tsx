@@ -75,14 +75,14 @@ const DashboardAdmin = () => {
 
   const statsConfig = useMemo(
     () => [
-      {
-        title: "Platform Revenue",
-        value: `₹${(data.bookingStats?.totalRevenue || 0).toLocaleString()}`,
-        icon: TrendingUp,
-        description: "Gross earnings",
-        color: "from-blue-600 to-indigo-500",
-        shadow: "shadow-blue-500/20",
-      },
+      // {
+      //   title: "Platform Revenue",
+      //   value: `₹${(data.bookingStats?.totalRevenue || 0).toLocaleString()}`,
+      //   icon: TrendingUp,
+      //   description: "Gross earnings",
+      //   color: "from-blue-600 to-indigo-500",
+      //   shadow: "shadow-blue-500/20",
+      // },
       {
         title: "Total Bookings",
         value: data.bookingStats?.totalBookings || 0,

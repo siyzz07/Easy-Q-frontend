@@ -95,8 +95,16 @@ const notificationSlice = createSlice({
       );
     },
 
+    markAllAsRead: (state) => {
+      state.notifications.forEach((n) => {
+        n.isRead = true;
+      });
+      state.totalUnreaded = 0;
+    },
+
     clearAll: (state) => {
       state.notifications = [];
+      state.totalUnreaded = 0;
     },
   },
 
@@ -126,6 +134,7 @@ const notificationSlice = createSlice({
 export const {
   setNotifications,
   markAsRead,
+  markAllAsRead, 
   removeNotification,
   clearAll,
   addNotification 
