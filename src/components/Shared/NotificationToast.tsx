@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { Bell, CheckCircle, XCircle, Info, X } from "lucide-react";
+import {  CheckCircle, XCircle, Info, X } from "lucide-react";
 
 type NotificationType = "info" | "success" | "error";
 

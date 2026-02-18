@@ -1,4 +1,3 @@
-import React from "react";
 import LoginForm from "../../components/Vendor/LoginForm";
 import { motion } from "framer-motion";
 import landingImage from "../../assets/vendor-login-image.png";

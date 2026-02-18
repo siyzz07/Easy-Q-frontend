@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import DeleteButton from "./DeleteButton";
 import Map from "../Shared/Map";
 import {
   addShopData,
@@ -11,7 +10,6 @@ import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
 import type {
   IServiceVendorTypes,
   IShopData,
-  IVendor,
 } from "../../Shared/types/Types";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";

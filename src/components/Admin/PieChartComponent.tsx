@@ -1,11 +1,8 @@
 import React from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 import { LabelList, Pie, Cell } from "recharts";
 import {  PieChart } from "recharts";
-import { TrendingUp } from "lucide-react";
-import { Title } from "@radix-ui/react-dialog";
-
 interface IPieChart {
     chartConfig:any
     chartData:any,

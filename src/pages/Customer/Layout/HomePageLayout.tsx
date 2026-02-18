@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import Navbar from "../../../components/Shared/Navbar";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../../../components/Shared/Footer";
@@ -6,8 +6,7 @@ import { getAccessToken } from "../../../utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import { fetchNotification } from "../../../Redux/notificationSlice";
 import type Store from "../../../Redux/Store";
-import { getSocket } from "../../../Services/Socket/Socket";
-import IncomingCallModal from "../../../components/Shared/IncomingCallModal";
+
 
 export type AppDispatch = typeof Store.dispatch;
 
@@ -28,23 +27,6 @@ const HomePageLayout = () => {
   const token = getAccessToken();
   const dispatch = useDispatch<AppDispatch>();
 
-
-  // useEffect(() => {
-  //   const socket = getSocket();
-  //   console.log('socket :>> ', socket);
-  //   if (!socket) return;
-
-  //   socket.on('incomming-vedio-call', (data: CallData) => {
-  //     console.log('data :>> ', data);
-  //     console.log("Incoming call data:", data);
-  //     setCallDetails(data);
-      
-  //   });
-
-  //   return () => {
-  //     socket.off('incomming-vedio-call');
-  //   };
-  // }, []);
 
   useEffect(() => {
     const pathSegments = pathname.split("/").filter(v => v.length > 0);

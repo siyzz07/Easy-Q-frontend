@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import type { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Upload } from "lucide-react";

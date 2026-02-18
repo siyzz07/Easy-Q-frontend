@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Plus, Map, MapPin, Globe, Home, Edit3, Trash2, Navigation } from "lucide-react";
+import { Plus, Map, MapPin, Globe, Home, Edit3, Navigation } from "lucide-react";
 import AddAddressModal from "./AddAddressModal";
 import {
   deleteCustomerAddress,

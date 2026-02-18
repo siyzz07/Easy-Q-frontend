@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Clock4, CalendarDays, XCircle, AlertCircle } from "lucide-react";
+import { Clock4, CalendarDays, XCircle } from "lucide-react";
 
 interface BookingActionsProps {
   status: string;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import  { useEffect, useRef } from "react";
 import type { FC } from "react";
 import Image from "../../components/Shared/Image";
 import image from "../../assets/customer-login-image.png";

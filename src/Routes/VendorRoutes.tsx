@@ -6,8 +6,6 @@ import SignupPage from "../pages/Vendor/SignupPage";
 import LoadingPage from "../pages/Vendor/LodingPage";
 import ShopDataPage from "../pages/Vendor/ShopDataPage";
 import Layout from "../pages/Vendor/Layout/Layout";
-// import Dashboard from "../components/Vendor/Dashboard";
-// import Services from "../components/Vendor/Services";
 import VendorProtectedRoute from "./ProtectedRoutes/VendorProtectedRoute";
 import PublicdRoute from "./PublicRoutes/PublicRoute";
 import { VENDOR_ROUTES } from "../Shared/Constants/RouteConstants";

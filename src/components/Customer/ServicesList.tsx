@@ -7,7 +7,7 @@ import { bookAvailableTime } from "../../Services/ApiService/BookingApiService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
-import { color } from "framer-motion";
+
 
 interface InterfaceServicesList {
   services: IService[];
@@ -20,7 +20,6 @@ const ServicesList: FC<InterfaceServicesList> = ({
   shopId,
   shopData,
 }) => {
-  console.log("services :>> ", services);
 
   const [bookService, setBookService] = useState<boolean>(false);
   const [serviceData, setServiceData] = useState<IService | null>(null);

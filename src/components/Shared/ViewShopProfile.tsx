@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import { MapPin, Star, Mail, Clock, Phone, Share2, Heart, Edit3 } from "lucide-react";
+import { MapPin, Star, Mail, Clock, Phone, Heart, Edit3 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import type { IvendroFullData } from "../../Shared/types/Types";
 import { convertRailwayTime } from "../../utils/convertRailwayTime";

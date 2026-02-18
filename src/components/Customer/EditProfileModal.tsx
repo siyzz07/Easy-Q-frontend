@@ -5,7 +5,7 @@ import { editProfile } from "../../Services/ApiService/CustomerApiService";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { X, User, Mail, Phone, ShieldCheck } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface ModalProps {
   name: string;

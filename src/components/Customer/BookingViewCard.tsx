@@ -1,16 +1,13 @@
 import { Card, CardContent } from "../ui/card";
 import {
-  MoreVertical,
   Calendar,
   Clock,
   MapPinned,
   ChevronRight,
-  Star,
   Clock4,
   CheckCircle2,
   XCircle,
   AlertCircle,
-  Map,
   MapPin,
 } from "lucide-react";
 import { Button } from "../ui/button";

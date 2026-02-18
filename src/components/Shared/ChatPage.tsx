@@ -2,25 +2,18 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import EmojiPicker from "emoji-picker-react";
 import {
-  Phone,
   Video,
   Users,
-  MoreVertical,
   Smile,
   Paperclip,
   Send,
   ArrowLeft,
-  Search,
-  CheckCheck,
-  Mic,
-  Image as ImageIcon,
   Trash2,
-  MessageCircle,
   X,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import type { IContractAddress, IContractData } from "../../Shared/types/Types";
+import type { IContractAddress } from "../../Shared/types/Types";
 import {
   getChatRoomData,
   getChatMessages,
@@ -87,7 +80,7 @@ const ChatPage: React.FC<ChatPageProps> = ({
   const [showParticipants, setShowParticipants] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [contractData ,setContractData] =useState(contract);
-  const [chatRoomData, setChatRoomData] = useState();
+  // const [chatRoomData, setChatRoomData] = useState();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const [roomId, setRoomId] = useState("");

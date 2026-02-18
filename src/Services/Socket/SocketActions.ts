@@ -1,6 +1,4 @@
-import { Slot } from "@radix-ui/react-slot";
 import { getSocket } from "./Socket";
-import { Socket } from "socket.io-client";
 
 
 export type AttachmentType = {

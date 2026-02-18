@@ -15,7 +15,6 @@ import {
   ChevronRight,
   Menu,
   X,
-  Hexagon
 } from "lucide-react";
 import { ADMIN_ROUTES } from "../../Shared/Constants/RouteConstants";
 

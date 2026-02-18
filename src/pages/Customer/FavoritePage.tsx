@@ -1,5 +1,4 @@
-import { MapPin, Search } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ShopDataCard from "../../components/Customer/ShopDataCard";
 import { getFavoriteShopes } from "../../Services/ApiService/CustomerApiService";
 

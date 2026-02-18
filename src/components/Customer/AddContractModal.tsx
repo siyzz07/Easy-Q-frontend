@@ -1,15 +1,13 @@
-import React, { useEffect, useState, type FC } from "react";
+import  { useEffect, useState, type FC } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { AxiosError } from "axios";
 import { X, ClipboardList, Phone, MapPin, Briefcase, AlignLeft } from "lucide-react";
 
 // API Imports
 import { getAddress } from "../../Services/ApiService/CustomerApiService";
 import { getServiceTypes } from "../../Services/ApiService/AdminApiService";
-import { addContract } from "../../Services/ApiService/ContractApiService";
-import type { IContractData, ICustomerAddress, IServiceVendorTypes } from "../../Shared/types/Types";
+import type { ICustomerAddress, IServiceVendorTypes } from "../../Shared/types/Types";
 
 export interface IAddContractInitialValues {
   contractName: string;

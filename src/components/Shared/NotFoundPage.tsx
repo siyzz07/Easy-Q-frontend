@@ -1,8 +1,7 @@
 
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Home, ArrowLeft, Calendar, User, MapPinOff } from "lucide-react";
+import { Home, ArrowLeft, MapPinOff } from "lucide-react";
 import { Button } from "../../components/ui/button";
 
 const NotFoundPage = () => {

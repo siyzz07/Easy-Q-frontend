@@ -1,8 +1,8 @@
 
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import Navbar from "../../../components/Vendor/Navbar";
 import Sidebar from "../../../components/Vendor/Sidebar";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { getAccessToken } from "../../../utils/tokenUtils";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../Customer/Layout/HomePageLayout";
@@ -11,7 +11,7 @@ import { fetchNotification } from "../../../Redux/notificationSlice";
 const Layout = () => {
 const [inChat, setInChat] = useState(true);
   const { pathname } = useLocation();
-  const navigate = useNavigate();  
+  // const navigate = useNavigate();  
      const token = getAccessToken();
      const dispatch = useDispatch<AppDispatch>();
 

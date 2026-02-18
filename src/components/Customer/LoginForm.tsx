@@ -16,8 +16,7 @@ import { useDispatch } from "react-redux";
 import { customerLoginSuccess } from "../../Redux/CustomeSlice";
 import { connectSocketAction } from "../../Redux/vediCallNotifySlice";
 import { GoogleLogin } from "@react-oauth/google";
-import { connectSocket } from "../../Services/Socket/Socket";
-import { registerSocketEvents } from "../../Services/Socket/SocketEvents";
+
 
 const LoginForm: FC = () => {
   let dispatch = useDispatch();

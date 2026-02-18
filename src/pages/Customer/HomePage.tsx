@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import Filter from "../../components/Customer/Filter";
 import { Search, MapPin, Navigation, Store, Loader2 } from "lucide-react";
 import ShopDataCard from "../../components/Customer/ShopDataCard";

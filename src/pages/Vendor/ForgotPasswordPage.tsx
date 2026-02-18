@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "../../components/Shared/Image";
 import image from "../../assets/vendor-login-image.png";
 import ForgotMailForm from "../../components/Shared/ForgotMailForm";

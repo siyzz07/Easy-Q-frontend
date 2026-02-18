@@ -4,12 +4,8 @@ import {
   Wallet,
   ArrowUpRight,
   ArrowDownLeft,
-  Plus,
-  TrendingUp,
   Calendar,
-  Filter,
   Download,
-  Search,
   CreditCard,
   CheckCircle2,
   XCircle,
@@ -22,8 +18,6 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import {
   getCustomerWalletBalance,
-  getWalletTransactions,
-  addMoneyToWallet,
 } from "../../Services/ApiService/WalletApiService";
 import { getTransactions } from "../../Services/ApiService/TransactionApiService";
 import Pagination from "../../components/Shared/Pagination";
@@ -82,17 +76,17 @@ const STATUS_CONFIG = {
 };
 
 const WalletPage = () => {
-  const called = useRef(false);
+  // const called = useRef(false);
   const [balance, setBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingTransactions, setLoadingTransactions] = useState(false);
+  // const [loadingTransactions, setLoadingTransactions] = useState(false);
   const [filter, setFilter] = useState<"all" | "credit" | "debit">("all");
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [limit, setLimit] = useState(5);
-  const [hasMore, setHasMore] = useState(true);
+  // const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     // if (called.current) return;

@@ -1,7 +1,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { MessageSquare, MapPin, Navigation, Phone } from "lucide-react";
+import {  MapPin, Navigation } from "lucide-react";
 import { Button } from "../../ui/button";
 import { GoogleMapDirection } from "../../../utils/GoogleMapDirection";
 

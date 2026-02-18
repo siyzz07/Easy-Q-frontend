@@ -1,5 +1,5 @@
 import React, { useState, type FC, useRef } from "react";
-import { Trash2, Plus, Image as ImageIcon, X } from "lucide-react";
+import { Trash2, Plus, Image as  X } from "lucide-react";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import ConfirmationModal from "./ConfirmationModal";

@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
 import type { FC } from "react";
 import { OrbitProgress } from "react-loading-indicators";
-import { useSearchParams } from "react-router-dom";
 
 
 interface LoadingVerifyProps {

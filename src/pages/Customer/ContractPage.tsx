@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
-import {
   Tabs,
   TabsContent,
   TabsList,
@@ -14,20 +8,15 @@ import {
 import { Button } from "../../components/ui/button";
 import {
   CheckCircle,
-  EyeOff,
   FileText,
   CircleOff ,
   Plus,
-  RefreshCcw,
   Upload,
   Briefcase,
-  MapPin,
   MessageCircle,
   Search,
   FolderOpen,
   Edit3,
-  CrossIcon,
-  Cross,
   Check,
 } from "lucide-react";
 import { Input } from "../../components/ui/input";

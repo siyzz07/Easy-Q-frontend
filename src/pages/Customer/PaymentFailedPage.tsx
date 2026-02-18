@@ -1,4 +1,4 @@
-import { XCircle, AlertTriangle, ArrowLeft, RefreshCw } from "lucide-react";
+import { XCircle, AlertTriangle, ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 

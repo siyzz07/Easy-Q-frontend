@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import Map from "../Shared/Map"; 
 import { postNewAddress } from "../../Services/ApiService/CustomerApiService";
 import { toast } from "react-toastify";
-import { Axios, AxiosError } from "axios";
+import { AxiosError } from "axios";
 
 const initialValues = {
   address: "",

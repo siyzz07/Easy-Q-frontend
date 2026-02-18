@@ -8,9 +8,8 @@ import type { IVendor } from "../../Shared/types/Types";
 import ReusableTable from "../../components/Shared/Table";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
-import { Search, Store, ExternalLink } from "lucide-react";
+import { Search, Store } from "lucide-react";
 import { useDebounce } from "../../hooks/useDebounce";
-import Pagination from "../../components/Shared/Pagination";
 import ConfirmationModal from "../../components/Shared/ConfirmationModal";
 
 const VendorListPage = () => {

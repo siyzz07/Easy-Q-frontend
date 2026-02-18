@@ -1,4 +1,3 @@
-import React from "react";
 import Works from "../../components/Vendor/Works";
 
 const WorksPage = () => {

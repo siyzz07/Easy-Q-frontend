@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import type { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import type { IVendor } from "../../Shared/types/Types";
-
-import { toast } from "react-toastify";
 
 
 interface IResetPasswordForm{

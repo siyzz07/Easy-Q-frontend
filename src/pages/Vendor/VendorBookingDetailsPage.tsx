@@ -15,7 +15,6 @@ import {
   Scissors,
   IndianRupee,
   Package,
-  MessageSquare,
   Coins,
 } from "lucide-react";
 import { format } from "date-fns";

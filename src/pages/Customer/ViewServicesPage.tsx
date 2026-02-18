@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getEachShopData, getEachShopServices } from "../../Services/ApiService/CustomerApiService";
 import ViewShopProfile from "../../components/Shared/ViewShopProfile";
 import ServicesList from "../../components/Customer/ServicesList";
-import type { IService, IServiceData, IVendroShopData, IvendroFullData } from "../../Shared/types/Types";
+import type { IvendroFullData } from "../../Shared/types/Types";
 import { AxiosError } from "axios";
 
 

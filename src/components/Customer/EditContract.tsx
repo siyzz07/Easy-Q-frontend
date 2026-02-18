@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type FC } from "react";
+import  { useEffect, useState, type FC } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -6,10 +6,6 @@ import { AxiosError } from "axios";
 import {
   X,
   ClipboardList,
-  Phone,
-  MapPin,
-  Briefcase,
-  AlignLeft,
   Activity,
   UserPlus,
   Loader2,

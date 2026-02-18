@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FileText, CircleCheckBig, CircleX, Edit, MoreVertical, Ban, Unlock, ShieldCheck, XCircle } from "lucide-react";
+import { FileText, Edit, Ban, Unlock, ShieldCheck, XCircle } from "lucide-react";
 import {
   Table as UITable,
   TableBody,

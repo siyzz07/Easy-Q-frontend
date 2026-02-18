@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
 import BookingViewCard from "../../components/Customer/BookingViewCard";
 import { motion } from "framer-motion";
-import { Calendar as CalendarIcon, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { Calendar as CalendarIcon, AlertCircle } from "lucide-react";
 import { getCustomerBookingData } from "../../Services/ApiService/BookingApiService";
 import { toast } from "react-toastify";
 import Pagination from "../../components/Shared/Pagination";

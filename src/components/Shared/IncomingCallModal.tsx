@@ -1,5 +1,5 @@
 import React from "react";
-import { Phone, PhoneOff, Video, User } from "lucide-react";
+import { Phone, PhoneOff, Video } from "lucide-react";
 
 interface IncomingCallProps {
   callerName: string;

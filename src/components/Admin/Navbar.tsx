@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { Bell, Search, User } from "lucide-react";
+import { User } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Navbar = () => {

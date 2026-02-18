@@ -1,14 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ChevronLeft, Share2, HelpCircle, MessageSquare } from "lucide-react";
-import { Button } from "../../components/ui/button";
+import { ChevronLeft} from "lucide-react";
 
 import DetailsHero from "../../components/Customer/BookingDetails/DetailsHero";
-import StatusStepper from "../../components/Customer/BookingDetails/BookingActionCard";
-import StaffSection from "../../components/Customer/BookingDetails/StaffSection";
 import LocationSection from "../../components/Customer/BookingDetails/LocationSection";
 import PaymentSummary from "../../components/Customer/BookingDetails/PaymentSummary";
-import ActionSidebar from "../../components/Customer/BookingDetails/ActionSidebar";
 import {
   bookingCanceling,
   bookingReschedule,
@@ -17,7 +13,6 @@ import {
 } from "../../Services/ApiService/BookingApiService";
 import { useEffect, useRef, useState } from "react";
 import type {
-  IBooking,
   IBookingPayload,
   IService,
   IServiceData,
@@ -27,7 +22,7 @@ import { toast } from "react-toastify";
 import BookingActionCard from "../../components/Customer/BookingDetails/BookingActionCard";
 import ConfirmationModal from "../../components/Shared/ConfirmationModal";
 import BookNow from "../../components/Customer/BookNow";
-import { getEachShopServices, getSelectedSerivce, getSelectedSerivcePopulated } from "../../Services/ApiService/CustomerApiService";
+import { getEachShopServices } from "../../Services/ApiService/CustomerApiService";
 import { razorpay } from "../../utils/razorpayUtil";
 
 

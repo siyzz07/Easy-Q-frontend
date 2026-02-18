@@ -20,11 +20,9 @@ import type {
 import { getAddress } from "../../Services/ApiService/CustomerApiService";
 import { useNavigate } from "react-router-dom";
 import { convertRailwayTime } from "../../utils/convertRailwayTime";
-import { toast } from "react-toastify";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../ui/button";
-import { bookAvailableTime } from "../../Services/ApiService/BookingApiService";
 
 interface IBookNow {
   onClose: () => void;

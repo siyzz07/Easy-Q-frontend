@@ -3,7 +3,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Store, CheckCircle2, Clock4, XCircle, AlertCircle } from "lucide-react";
 import { Badge } from "../../ui/badge";
-import type { IBooking } from "../../../Shared/types/Types";
 import { convertRailwayTime } from "../../../utils/convertRailwayTime";
 
 interface DetailsHeroProps {

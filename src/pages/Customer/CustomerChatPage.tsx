@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import ChatPage from "../../components/Shared/ChatPage";
 import type { IContractDataResponse } from "../../components/Shared/ChatPage";
 import { decodeToken } from "../../utils/tokenUtils";
 import { getSelectedContract } from "../../Services/ApiService/ContractApiService";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 
 const CustomerChatPage = () => {
   const { id } = useParams();

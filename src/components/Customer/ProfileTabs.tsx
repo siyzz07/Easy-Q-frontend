@@ -1,11 +1,8 @@
-"use client";
-
 import {
   User,
   Shield,
   MapPin,
   Wallet,
-  Bell,
   ChevronRight,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";

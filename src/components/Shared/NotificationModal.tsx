@@ -2,11 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 
-import { 
-  CheckCircle2, 
-  AlertTriangle, 
-  XCircle, 
-  Info, 
+import {  
   MailOpen,
   Check,
   X,
