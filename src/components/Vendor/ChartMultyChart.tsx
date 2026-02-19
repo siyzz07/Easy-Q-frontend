@@ -7,10 +7,12 @@ import { Calendar } from "lucide-react";
 interface IChartData {
   chartConfig: any,
   chartData: any,
-  setYear: (year: number) => void
+  setYear: (year: number) => void,
+  title?: string,
+  description?: string
 }
 
-const ChartMultyChart: React.FC<IChartData> = ({ chartConfig, chartData, setYear }) => {
+const ChartMultyChart: React.FC<IChartData> = ({ chartConfig, chartData, setYear, title, description }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   const currentYear = new Date().getFullYear();
@@ -23,15 +25,17 @@ const ChartMultyChart: React.FC<IChartData> = ({ chartConfig, chartData, setYear
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const configKeys = Object.keys(chartConfig).filter(key => key !== 'visitors' && key !== 'label');
+
   return (
-    <Card className="w-full shadow-2xl border-none  mt-3">
+    <Card className="w-full shadow-2xl border-none mt-3">
       <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 sm:p-8">
-        <div className="space-y-1.5">
+        <div className="space-y-1.5 text-left">
           <CardTitle className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-slate-50">
-            Analytics
+            {title || "Analytics"}
           </CardTitle>
           <CardDescription className="text-base font-medium text-slate-500">
-            Full 12-Month Performance Comparison
+            {description || "Full 12-Month Performance Comparison"}
           </CardDescription>
         </div>
 
@@ -53,46 +57,31 @@ const ChartMultyChart: React.FC<IChartData> = ({ chartConfig, chartData, setYear
         </div>
       </CardHeader>
 
-      <CardContent className="px-2 sm:px-4">
+      <CardContent className="px-2 sm:px-6">
         <ChartContainer 
           config={chartConfig} 
-          className="aspect-[4/5] sm:aspect-[2/1] lg:aspect-[2.4/1] w-full"
+          className="aspect-[2/1] w-full"
         >
           <BarChart 
             data={chartData}
-            margin={{ top: 20, right: 10, left: isMobile ? -30 : 0, bottom: 60 }}
-            barGap={isMobile ? 2 : 6}
+            margin={{ top: 20, right: 10, left: isMobile ? -30 : 0, bottom: 20 }}
+            barGap={isMobile ? 4 : 12}
           >
-            <defs>
-              <linearGradient id="darkBlue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="50%" stopColor="#323256" stopOpacity={1}/>
-                <stop offset="100%" stopColor="#323256" stopOpacity={0.5}/>
-              </linearGradient>
-              <linearGradient id="lightBlue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="50%" stopColor="#324d69" stopOpacity={1}/>
-                <stop offset="100%" stopColor="#324d69" stopOpacity={0.5}/>
-              </linearGradient>
-            </defs>
-
             <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-800" />
             
             <XAxis
               dataKey="month"
               tickLine={false}
               axisLine={false}
-              interval={0}
-              scale="band"
-              padding={{ left: 0, right: 0 }}
+              padding={{ left: 10, right: 10 }}
               tick={({ x, y, payload }) => (
                 <g transform={`translate(${x},${y})`}>
                   <text
-
-                    x={isMobile ? 0 : (window.innerWidth / (chartData.length * 2.5))} 
+                    x={0} 
                     y={0}
                     dy={16}
-                    textAnchor={isMobile ? "end" : "middle"}
-                    fill="#64748" 
-                    transform={isMobile ? "rotate(-45)" : "rotate(0)"}
+                    textAnchor="middle"
+                    fill="#64748b" 
                     className="text-[10px] sm:text-xs font-bold"
                   >
                     {payload.value.slice(0, 3)}
@@ -118,18 +107,15 @@ const ChartMultyChart: React.FC<IChartData> = ({ chartConfig, chartData, setYear
               className="justify-center md:justify-end gap-6 pt-10 font-bold" 
             />
             
-            <Bar 
-              dataKey="bookings" 
-              fill="url(#darkBlue)" 
-              radius={[4, 4, 0, 0]} 
-              barSize={isMobile ? 12 : 30} 
-            />
-            <Bar 
-              dataKey="contracts" 
-              fill="url(#lightBlue)" 
-              radius={[4, 4, 0, 0]} 
-              barSize={isMobile ? 12 : 30} 
-            />
+            {configKeys.map((key, idx) => (
+              <Bar 
+                key={key}
+                dataKey={key} 
+                fill={chartConfig[key].color || (idx === 0 ? "#3b82f6" : "#6366f1")} 
+                radius={[4, 4, 0, 0]} 
+                barSize={isMobile ? 12 : 30} 
+              />
+            ))}
           </BarChart>
         </ChartContainer>
       </CardContent>

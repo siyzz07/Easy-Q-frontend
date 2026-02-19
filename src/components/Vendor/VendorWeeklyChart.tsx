@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "../ui/chart";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { ChartContainer } from "../ui/chart";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
 
 interface IChartData {
   chartConfig: any,
@@ -18,85 +18,103 @@ const VendorWeeklyChart: React.FC<IChartData> = ({ chartConfig, chartData }) => 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Custom tool tip component for better aesthetics
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-2xl backdrop-blur-xl">
+          <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2">{label}</p>
+          <div className="space-y-1">
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-white text-xs font-bold">Bookings</span>
+              <span className="text-primary text-sm font-black">{payload[0].value}</span>
+            </div>
+            {payload[1] && (
+              <div className="flex items-center justify-between gap-4 border-t border-white/5 pt-1 mt-1">
+                <span className="text-slate-400 text-xs font-bold">Revenue</span>
+                <span className="text-emerald-400 text-sm font-black">₹{payload[1].value.toLocaleString()}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
-    <Card className="w-full shadow-2xl border-none mt-3">
-      <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 sm:p-8">
-        <div className="space-y-1.5">
-          <CardTitle className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-slate-50">
-            Weekly Bookings
-          </CardTitle>
-          <CardDescription className="text-base font-medium text-slate-500">
-            Performance based on days of the week
-          </CardDescription>
+    <Card className="w-full shadow-sm border border-slate-100 rounded-[2rem] bg-white overflow-hidden">
+      <CardHeader className="p-6 pb-2">
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-xl font-black text-slate-900">Weekly Performance</CardTitle>
+            <CardDescription className="text-slate-500 font-medium">Daily booking & revenue flow</CardDescription>
+          </div>
+          <div className="h-10 w-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          </div>
         </div>
       </CardHeader>
 
-      <CardContent className="px-2 sm:px-4">
+      <CardContent className="p-0">
         <ChartContainer 
           config={chartConfig} 
-          className="aspect-[4/5] sm:aspect-[2/1] lg:aspect-[2.4/1] w-full"
+          className="aspect-[2/1] w-full"
         >
-          <BarChart 
+          <AreaChart 
             data={chartData}
-            margin={{ top: 20, right: 10, left: isMobile ? -30 : 0, bottom: 60 }}
-            barGap={isMobile ? 2 : 6}
+            margin={{ top: 20, right: 20, left: isMobile ? -30 : 20, bottom: 20 }}
           >
             <defs>
-              <linearGradient id="bookingBlue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="50%" stopColor="#323256" stopOpacity={1}/>
-                <stop offset="100%" stopColor="#323256" stopOpacity={0.5}/>
+              <linearGradient id="bookingGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="#4F46E5" stopOpacity={0}/>
+              </linearGradient>
+              <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#10B981" stopOpacity={0.1}/>
+                <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
               </linearGradient>
             </defs>
-
-            <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-800" />
+            
+            <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-slate-100" />
             
             <XAxis
               dataKey="day"
               tickLine={false}
               axisLine={false}
-              interval={0}
-              scale="band"
-              padding={{ left: 0, right: 0 }}
-              tick={({ x, y, payload }) => (
-                <g transform={`translate(${x},${y})`}>
-                  <text
-                    x={0} 
-                    y={0}
-                    dy={16}
-                    textAnchor="middle"
-                    fill="#64748" 
-                    className="text-xs font-bold"
-                  >
-                    {payload.value}
-                  </text>
-                </g>
-              )}
+              className="text-[10px] font-black text-slate-400 uppercase tracking-tighter"
+              dy={10}
             />
             
             <YAxis 
               tickLine={false}
               axisLine={false}
               hide={isMobile}
-              className="text-xs font-bold text-slate-400"
+              className="text-[10px] font-black text-slate-400"
             />
 
-            <ChartTooltip
-              cursor={{ fill: "rgba(0,0,0,0.03)", radius: 4 }}
-              content={<ChartTooltipContent indicator="dot" />}
-            />
+            <Tooltip content={<CustomTooltip />} />
             
-            <ChartLegend 
-              content={<ChartLegendContent />} 
-              className="justify-center md:justify-end gap-6 pt-10 font-bold" 
-            />
-            
-            <Bar 
+            <Area
+              type="monotone"
               dataKey="bookings" 
-              fill="url(#bookingBlue)" 
-              radius={[4, 4, 0, 0]} 
-              barSize={isMobile ? 12 : 30} 
+              stroke="#4F46E5" 
+              strokeWidth={4}
+              fillOpacity={1}
+              fill="url(#bookingGradient)"
+              animationDuration={1500}
             />
-          </BarChart>
+            <Area
+              type="monotone"
+              dataKey="revenue" 
+              stroke="#10B981" 
+              strokeWidth={2}
+              strokeDasharray="5 5"
+              fillOpacity={1}
+              fill="url(#revenueGradient)"
+              animationDuration={2000}
+            />
+          </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>

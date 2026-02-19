@@ -70,7 +70,10 @@ const AddService: FC<IAddService> = ({ onClose }) => {
     try {
       let response = await getAllStffs();
       if (response?.data?.data) {
-        setStaffMembers(response.data.data);
+
+        let staffs = response.data.data.filter((data:IStaff)=> data.isActive == true)
+        setStaffMembers(staffs);
+
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

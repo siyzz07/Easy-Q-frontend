@@ -10,6 +10,7 @@ import {
 
 import {
   Card,
+  CardHeader,
   CardTitle,
   CardContent,
   CardDescription,
@@ -17,6 +18,8 @@ import {
 import { adminDashbordData } from "../../Services/ApiService/AdminApiService";
 import PieChartComponent from "../../components/Admin/PieChartComponent";
 import ChartMultyChart from "../../components/Vendor/ChartMultyChart";
+import PeakHoursChart from "../../components/Vendor/PeakHoursChart";
+import BookingStatusChart from "../../components/Vendor/BookingStatusChart";
 
 const DashboardAdmin = () => {
   const [data, setData] = useState<any>({
@@ -30,6 +33,11 @@ const DashboardAdmin = () => {
   });
   const [pieChartData, setPieChartData] = useState<any[]>([]);
   const [revenueChartData, setRevenueChartData] = useState<any[]>([]);
+  const [statusChartData, setStatusChartData] = useState<any[]>([]);
+  const [topVendors, setTopVendors] = useState<any[]>([]);
+  const [topServices, setTopServices] = useState<any[]>([]);
+  const [peakHoursData, setPeakHoursData] = useState<any[]>([]);
+  const [userGrowthChartData, setUserGrowthChartData] = useState<any[]>([]);
   const [year, setYear] = useState(new Date().getFullYear());
 
   const chartConfig = {
@@ -63,6 +71,11 @@ const DashboardAdmin = () => {
             },
           ]);
           setRevenueChartData(resData.revenueChartData || []);
+          setStatusChartData(resData.platformStatusBreakdown || []);
+          setTopVendors(resData.topVendors || []);
+          setTopServices(resData.topServices || []);
+          setPeakHoursData(resData.peakHours || []);
+          setUserGrowthChartData(resData.userGrowthChartData || []);
           setData(resData);
         }
       } catch (error) {
@@ -114,6 +127,14 @@ const DashboardAdmin = () => {
         description: "Combined ecosystem",
         color: "from-pink-500 to-rose-400",
         shadow: "shadow-pink-500/20",
+      },
+      {
+        title: "Verified Shops",
+        value: data.verifiedVendors || 0,
+        icon: ShieldCheck,
+        description: "Active partners",
+        color: "from-blue-500 to-indigo-400",
+        shadow: "shadow-blue-500/20",
       },
     ],
     [data]
@@ -186,14 +207,27 @@ const DashboardAdmin = () => {
         ))}
       </motion.div>
 
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ChartMultyChart 
+          chartConfig={chartConfig} 
+          chartData={revenueChartData} 
+          setYear={setYear} 
+          title="Revenue & Bookings"
+          description="Monthly platform performance"
+        />
+        <ChartMultyChart 
+          chartConfig={{
+            customers: { label: "Customers", color: "#3b82f6" },
+            vendors: { label: "Vendors", color: "#6366f1" }
+          }} 
+          chartData={userGrowthChartData} 
+          setYear={setYear}
+          title="User Growth"
+          description="New signups per month"
+        />
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <ChartMultyChart 
-            chartConfig={chartConfig} 
-            chartData={revenueChartData} 
-            setYear={setYear} 
-          />
-        </div>
         <div className="lg:col-span-1">
           <PieChartComponent 
             chartConfig={{
@@ -206,6 +240,90 @@ const DashboardAdmin = () => {
             chartData={pieChartData} 
           />
         </div>
+        <div className="lg:col-span-2">
+           <BookingStatusChart data={statusChartData} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <PeakHoursChart data={peakHoursData} />
+        {/* Top Vendors Leaderboard */}
+        <Card className="glass-card border-none overflow-hidden h-full">
+          <CardHeader className="p-6 border-b border-slate-100/50 bg-slate-50/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-xl font-black text-slate-900 tracking-tight">Top Performing Vendors</CardTitle>
+                <CardDescription className="text-xs font-bold text-slate-500 mt-1 uppercase tracking-widest">Revenue Leaders</CardDescription>
+              </div>
+              <ShieldCheck className="text-blue-500" size={24} />
+            </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="divide-y divide-slate-100">
+              {topVendors.length > 0 ? topVendors.map((vendor, index) => (
+                <div key={index} className="p-4 flex items-center justify-between hover:bg-slate-50/50 transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                      index === 0 ? "bg-amber-100 text-amber-600" : 
+                      index === 1 ? "bg-slate-100 text-slate-600" : "bg-blue-50 text-blue-500"
+                    }`}>
+                      {index + 1}
+                    </div>
+                    <div>
+                      <p className="font-bold text-slate-900">{vendor.shopName}</p>
+                      <p className="text-[10px] text-slate-400 font-bold uppercase">{vendor.email}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-black text-slate-900">₹{vendor.revenue.toLocaleString()}</p>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">{vendor.bookings} Bookings</p>
+                  </div>
+                </div>
+              )) : (
+                <div className="p-10 text-center text-slate-400 font-bold italic">No vendor data available</div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6">
+        {/* Top Services Leaderboard */}
+        <Card className="glass-card border-none overflow-hidden">
+          <CardHeader className="p-6 border-b border-slate-100/50 bg-slate-50/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-xl font-black text-slate-900 tracking-tight">Most Popular Services Platform-Wide</CardTitle>
+                <CardDescription className="text-xs font-bold text-slate-500 mt-1 uppercase tracking-widest">Global Service Demand Breakdown</CardDescription>
+              </div>
+              <ShoppingCart className="text-emerald-500" size={24} />
+            </div>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              {topServices.length > 0 ? topServices.map((service, index) => (
+                <div key={index} className="p-6 rounded-[2rem] bg-slate-50/50 border border-slate-100 hover:shadow-lg transition-all group">
+                  <div className="flex items-center justify-between mb-4">
+                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm bg-white shadow-sm`}>
+                        {index + 1}
+                     </div>
+                     <TrendingUp size={16} className="text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <p className="font-black text-slate-900 truncate">{service.name}</p>
+                  <div className="mt-4 flex flex-col">
+                    <span className="text-2xl font-black text-slate-900">{service.count}</span>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bookings</span>
+                  </div>
+                  <div className="mt-2 pt-2 border-t border-slate-100">
+                    <span className="text-xs font-bold text-emerald-600">₹{service.revenue.toLocaleString()}</span>
+                  </div>
+                </div>
+              )) : (
+                <div className="col-span-full p-10 text-center text-slate-400 font-bold italic">No service data available</div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

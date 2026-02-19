@@ -84,8 +84,12 @@ const AddService: FC<IAddService> = ({ onClose, data }) => {
   const getStaffs = async () => {
     try {
       const response = await getAllStffs();
-      console.log(response);
-      if (response?.data?.data) setStaffMembers(response.data.data);
+    
+      if (response?.data?.data){
+        let staffs = response.data.data.filter((data:IStaff)=> data.isActive == true)
+        setStaffMembers(staffs);
+      } 
+        
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.error("Error fetching staff:", error.message);
