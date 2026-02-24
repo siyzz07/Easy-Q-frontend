@@ -1,0 +1,61 @@
+# ═══════════════════════════════════════════════════════════
+#  EasyQ Frontend — CI Pipeline
+# ═══════════════════════════════════════════════════════════
+#  Triggers:
+#    - Push to main/develop    → Full CI (lint + build)
+#    - Pull Request to main    → CI (lint + build)
+#
+#  Note: CD (Deployment) is handled by Vercel automatically.
+#        Vercel listens for pushes to main and auto-deploys.
+#        This workflow only handles CI (quality checks).
+# ═══════════════════════════════════════════════════════════
+
+name: 🎨 EasyQ Frontend CI
+
+on:
+  push:
+    branches: [main, develop]
+
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  # ════════════════════════════════════════════════
+  # JOB 1: CI — Lint & Build
+  # ════════════════════════════════════════════════
+  ci:
+    name: 🔍 Lint & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Get the code
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Set up Node.js with caching
+      - name: 📦 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      # 3. Install dependencies
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      # 4. Lint the code
+      - name: 🔍 Lint check
+        run: npm run lint
+
+      # 5. TypeScript type check + Vite build
+      - name: 🏗️ Build
+        run: npm run build
+        env:
+          # Provide dummy env vars for build to succeed
+          # (real values are set in Vercel dashboard)
+          VITE_API_URL: https://placeholder.api.com
+          VITE_GOOGLE_CLIENT_ID: placeholder
+          VITE_GOOGLE_MAPS_API_KEY: placeholder
