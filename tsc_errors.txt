@@ -1,0 +1,68 @@
+﻿src/components/Admin/ListVendors.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/components/Customer/AddContractModal.tsx(60,61): error TS6133: 'actions' is declared but its value is never read.
+src/components/Customer/BookingDetails/ActionSidebar.tsx(9,54): error TS6133: 'bookingData' is declared but its value is never read.
+src/components/Customer/BookingDetails/DetailsHero.tsx(31,65): error TS6133: 'id' is declared but its value is never read.
+src/components/Customer/BookingViewCard.tsx(19,11): error TS6196: 'Booking' is declared but never used.
+src/components/Customer/BookingViewCard.tsx(39,9): error TS6133: 'iconColors' is declared but its value is never read.
+src/components/Customer/BookNow.tsx(49,3): error TS6133: 'shopId' is declared but its value is never read.
+src/components/Customer/BookNow.tsx(71,9): error TS6133: 'navigate' is declared but its value is never read.
+src/components/Customer/EditAddressModal.tsx(124,29): error TS6133: 'setFieldValue' is declared but its value is never read.
+src/components/Customer/EditAddressModal.tsx(124,44): error TS6133: 'values' is declared but its value is never read.
+src/components/Customer/Profile.tsx(5,48): error TS6133: 'Calendar' is declared but its value is never read.
+src/components/Customer/Profile.tsx(5,58): error TS6133: 'ShieldCheck' is declared but its value is never read.
+src/components/Customer/Profile.tsx(142,7): error TS6133: 'ChevronRight' is declared but its value is never read.
+src/components/Customer/ShopDataCard.tsx(23,9): error TS6133: 'navigate' is declared but its value is never read.
+src/components/Shared/ChatPage.tsx(27,10): error TS6133: 'Axios' is declared but its value is never read.
+src/components/Shared/Navbar.tsx(21,9): error TS6133: 'dispatch' is declared but its value is never read.
+src/components/Shared/Navbar.tsx(27,9): error TS6133: 'notifications' is declared but its value is never read.
+src/components/Shared/ResetPasswordForm.tsx(17,9): error TS6133: 'navigate' is declared but its value is never read.
+src/components/Shared/ShopViews.tsx(61,10): error TS6133: 'eligibility' is declared but its value is never read.
+src/components/Vendor/AddStaff.tsx(184,29): error TS6133: 'push' is declared but its value is never read.
+src/components/Vendor/BookingStatusChart.tsx(30,25): error TS2322: Type '{ size: number; }' is not assignable to type 'IntrinsicAttributes & CategoricalChartProps & RefAttributes<{ readonly eventEmitterSymbol: Symbol; clipPathId: string; accessibilityManager: AccessibilityManager; ... 65 more ...; UNSAFE_componentWillUpdate?(nextProps: Readonly<...>, nextState: Readonly<...>, nextContext: any): void; }>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & CategoricalChartProps & RefAttributes<{ readonly eventEmitterSymbol: Symbol; clipPathId: string; accessibilityManager: AccessibilityManager; ... 65 more ...; UNSAFE_componentWillUpdate?(nextProps: Readonly<...>, nextState: Readonly<...>, nextContext: any): void; }>'.
+src/components/Vendor/Dashboard.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/components/Vendor/EditProfileModal.tsx(23,9): error TS6133: 'navigate' is declared but its value is never read.
+src/components/Vendor/EditStaff.tsx(61,8): error TS6133: 'breakTimes' is declared but its value is never read.
+src/components/Vendor/EditStaff.tsx(61,19): error TS6133: 'setBreakTimes' is declared but its value is never read.
+src/components/Vendor/EditStaff.tsx(185,29): error TS6133: 'i' is declared but its value is never read.
+src/components/Vendor/EditStaff.tsx(203,29): error TS6133: 'push' is declared but its value is never read.
+src/components/Vendor/LoginForm.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/components/Vendor/Navbar.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/components/Vendor/Navbar.tsx(17,9): error TS6133: 'dispatch' is declared but its value is never read.
+src/components/Vendor/PeakHoursChart.tsx(4,56): error TS6133: 'ResponsiveContainer' is declared but its value is never read.
+src/components/Vendor/ServiceBookingsChart.tsx(4,54): error TS6133: 'ResponsiveContainer' is declared but its value is never read.
+src/components/Vendor/Services.tsx(36,17): error TS6133: 'setLimit' is declared but its value is never read.
+src/components/Vendor/SignupForm.tsx(63,13): error TS6133: 'response' is declared but its value is never read.
+src/components/Vendor/WorkDetailsModal.tsx(1,17): error TS6133: 'useEffect' is declared but its value is never read.
+src/components/Vendor/WorkDetailsModal.tsx(2,48): error TS6133: 'Clock' is declared but its value is never read.
+src/pages/Admin/LoginPage.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/Admin/VendorListPage.tsx(19,16): error TS6133: 'setPages' is declared but its value is never read.
+src/pages/Admin/VendorListPage.tsx(20,18): error TS6133: 'setLimit' is declared but its value is never read.
+src/pages/Admin/VendorListPage.tsx(21,10): error TS6133: 'totalPages' is declared but its value is never read.
+src/pages/Customer/BookingDetailsPage.tsx(69,5): error TS6133: 'service' is declared but its value is never read.
+src/pages/Customer/BookingsPage.tsx(38,17): error TS6133: 'setLimit' is declared but its value is never read.
+src/pages/Customer/CheckoutPage.tsx(9,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/Customer/CheckoutPage.tsx(27,1): error TS6133: 'loadRazorpay' is declared but its value is never read.
+src/pages/Customer/CheckoutPage.tsx(28,1): error TS6192: All imports in import declaration are unused.
+src/pages/Customer/CheckoutPage.tsx(29,1): error TS6133: 'CUSTOMER_ROUTES' is declared but its value is never read.
+src/pages/Customer/CheckoutPage.tsx(39,10): error TS6133: 'staffId' is declared but its value is never read.
+src/pages/Customer/CheckoutPage.tsx(40,10): error TS6133: 'selectedDate' is declared but its value is never read.
+src/pages/Customer/ContractPage.tsx(52,25): error TS6133: 'setTotalContract' is declared but its value is never read.
+src/pages/Customer/HomePage.tsx(29,10): error TS6133: 'locationError' is declared but its value is never read.
+src/pages/Customer/HomePage.tsx(30,26): error TS6133: 'setCategoryFilter' is declared but its value is never read.
+src/pages/Customer/HomePage.tsx(31,24): error TS6133: 'setRatingFilter' is declared but its value is never read.
+src/pages/Customer/HomePage.tsx(32,28): error TS6133: 'setSelectedDistance' is declared but its value is never read.
+src/pages/Customer/Layout/HomePageLayout.tsx(13,11): error TS6196: 'CallData' is declared but never used.
+src/pages/Customer/Layout/HomePageLayout.tsx(22,9): error TS6133: 'navigate' is declared but its value is never read.
+src/pages/Customer/Layout/ProfilePageLayout.tsx(3,24): error TS6133: 'Shield' is declared but its value is never read.
+src/pages/Customer/WalletPage.tsx(133,9): error TS6133: '_stats' is declared but its value is never read.
+src/pages/Vendor/VendorWalletPage.tsx(77,18): error TS6133: 'setSearch' is declared but its value is never read.
+src/Redux/VendorSlice.ts(6,1): error TS6133: 'act' is declared but its value is never read.
+src/Routes/AdminRoutes.tsx(4,1): error TS6133: 'Dashboard' is declared but its value is never read.
+src/Services/ApiService/ChatApiService.tsx(2,1): error TS6133: 'string' is declared but its value is never read.
+src/Services/ApiService/CustomerApiService.tsx(4,1): error TS6192: All imports in import declaration are unused.
+src/Services/ApiService/CustomerApiService.tsx(6,15): error TS6196: 'IBookingPayload' is declared but never used.
+src/Services/ApiService/CustomerApiService.tsx(235,11): error TS6133: 'response' is declared but its value is never read.
+src/Services/ApiService/NotificationApiService.tsx(24,11): error TS6133: 'response' is declared but its value is never read.
+src/Services/ApiService/VendorApiServices.tsx(3,41): error TS6196: 'IVendor' is declared but never used.
+src/utils/cloudinaryUtils.ts(2,1): error TS6133: 'string' is declared but its value is never read.

@@ -74,7 +74,7 @@ const VendorWalletPage = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "credit" | "debit">("all");
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);

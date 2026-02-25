@@ -1,7 +1,8 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
-import { Pie, PieChart, Label, Cell } from "recharts";
+import { Pie, PieChart as RechartsPieChart, Label, Cell } from "recharts";
+import { PieChart as PieChartIcon } from "lucide-react";
 
 interface IBookingStatusChartProps {
   data: any[];
@@ -27,13 +28,13 @@ const BookingStatusChart: React.FC<IBookingStatusChartProps> = ({ data }) => {
               <CardDescription className="text-xs font-bold text-slate-500 mt-1 uppercase tracking-widest">Platform performance flow</CardDescription>
            </div>
            <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400">
-              <PieChart size={20} />
+              <PieChartIcon size={20} />
            </div>
         </div>
       </CardHeader>
       <CardContent className="p-8 flex-1 flex flex-col justify-center items-center">
         <ChartContainer config={{}} className="aspect-square w-full max-w-[220px]">
-          <PieChart>
+          <RechartsPieChart>
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <Pie
               data={chartData}
@@ -82,7 +83,7 @@ const BookingStatusChart: React.FC<IBookingStatusChartProps> = ({ data }) => {
                 }}
               />
             </Pie>
-          </PieChart>
+          </RechartsPieChart>
         </ChartContainer>
         
         <div className="grid grid-cols-2 gap-x-12 gap-y-4 w-full mt-8 pt-8 border-t border-slate-50">
