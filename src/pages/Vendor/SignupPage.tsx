@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import SignupForm from "../../components/Vendor/SignupForm";
 import { motion } from "framer-motion";
 import landingImage from "../../assets/vendor-login-image.png";

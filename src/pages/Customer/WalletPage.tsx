@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Wallet,
@@ -85,7 +85,7 @@ const WalletPage = () => {
   // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const [limit] = useState(5);
   // const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
@@ -130,7 +130,7 @@ const WalletPage = () => {
     }
   };
 
-  const stats = {
+  const _stats = {
     totalCredit: transactions
       .filter((t) => t.flow === "credit" && t.status === "success")
       .reduce((sum, t) => sum + t.amount, 0),

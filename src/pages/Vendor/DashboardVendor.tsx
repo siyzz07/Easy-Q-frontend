@@ -5,7 +5,6 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
-  CardDescription,
 } from "../../components/ui/card";
 import {
   Users,
@@ -26,8 +25,7 @@ import BlookBookisModal from "../../components/Vendor/BlookBookisModal";
 import type { ChartConfig } from "../../components/ui/chart";
 import ChartMultyChart from "../../components/Vendor/ChartMultyChart";
 import VendorWeeklyChart from "../../components/Vendor/VendorWeeklyChart";
-import ServiceDistributionPieChart from "../../components/Vendor/ServiceDistributionPieChart";
-import PeakHoursChart from "../../components/Vendor/PeakHoursChart";
+
 import BookingStatusChart from "../../components/Vendor/BookingStatusChart";
 
 
@@ -45,9 +43,9 @@ const DashboardVendor = () => {
   const [completionRate, setCompletionRate] = useState<number>(0);
   const [topServices, setTopServices] = useState<any[]>([]);
   const [recentBookings, setRecentBookings] = useState<any[]>([]);
-  const [staffPerformance, setStaffPerformance] = useState<any[]>([]);
+  const [_staffPerformance, setStaffPerformance] = useState<any[]>([]);
   const [statusBreakdown, setStatusBreakdown] = useState<any[]>([]);
-  const [peakHours, setPeakHours] = useState<any[]>([]);
+  const [_peakHours, setPeakHours] = useState<any[]>([]);
   const shopInfo = useSelector((state: any) => state.vendorSlice.shopData);
 
   const chartConfig = {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Calendar,
   Clock,
   MoreVertical,
   CheckCircle2,
@@ -35,9 +34,7 @@ interface IBooking {
   status: string;
 }
 
-interface IPagination {
-  totalPages: number;
-}
+
 
 
 type ConfigItem = { color: string; bg: string; icon?: React.ReactNode };
