@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import type { IVendor } from "../../Shared/types/Types";
 import { verifyEmail } from "../../Services/ApiService/VendorApiServices";
 import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
 
 const SignupForm: FC = () => {
@@ -66,10 +67,13 @@ const SignupForm: FC = () => {
         autoClose: 5000,
       });
       navigate("/vendor/login");
-    } catch (error: any) {
-      console.log(error);
-      toast.error(error.response?.data.message || "Some error, please try later");
-      navigate("/vendor/login");  
+    } catch (error: unknown) {
+      if (error instanceof AxiosError && error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Something went wrong. Please try again later.");
+      }
+       navigate("/vendor/login");
     } finally {
       setSubmitting(false);
     }

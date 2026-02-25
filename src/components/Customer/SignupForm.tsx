@@ -6,6 +6,7 @@ import type { ICustomer } from "../../Shared/types/Types";
 import * as Yup from "yup";
 import { customerSignup } from "../../Services/ApiService/CustomerApiService";
 import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 const SignupForm: React.FC = () => {
   const navigate = useNavigate();
@@ -80,16 +81,12 @@ const SignupForm: React.FC = () => {
       });
       navigate("/customer/login");
 
-    }catch(error:any){
-      console.log(error);
-      
-        if(error.response.data){
-          toast.error(error.response.data.message);
-        }else{
-          toast.error("some error please try later");
-        }
-        navigate("/customer/login");
-        
+    }catch(error: unknown){
+      if (error instanceof AxiosError && error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Something went wrong. Please try again later.");
+      }
     }
   };
 

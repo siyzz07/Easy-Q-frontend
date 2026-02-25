@@ -6,6 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import type { IVendorLogin } from "../../Shared/types/Types";
 import { loginVendor } from "../../Services/ApiService/VendorApiServices";
+import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { hasShopData, shopData, vendorLoginSuccess } from "../../Redux/VendorSlice";
@@ -67,9 +68,11 @@ const LoginForm: FC = () => {
       } else {
         toast.error("Internal error please try again later");
       }
-    } catch (error: any) {
-      if (error.response.data) {
+    } catch (error: unknown) {
+      if (error instanceof AxiosError && error.response?.data?.message) {
         toast.error(error.response.data.message);
+      } else {
+        toast.error("Something went wrong. Please try again later.");
       }
     }
   };
