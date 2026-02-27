@@ -195,7 +195,9 @@ const LoginForm: FC = () => {
             </div>
 
             {/* Google Login Button */}
+            <div className="flex justify-center">
             <GoogleLogin onSuccess={ handleGoogleLogin} />
+            </div>
 
             <div className="relative flex py-1 items-center">
               <div className="flex-grow border-t border-gray-200"></div>
