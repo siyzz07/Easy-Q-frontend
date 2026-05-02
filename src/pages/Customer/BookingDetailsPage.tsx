@@ -24,6 +24,8 @@ import ConfirmationModal from "../../components/Shared/ConfirmationModal";
 import BookNow from "../../components/Customer/BookNow";
 import { getEachShopServices } from "../../Services/ApiService/CustomerApiService";
 import { razorpay } from "../../utils/razorpayUtil";
+import { PaymentStatusEnum } from "../../enums/paymentStatusEnum";
+import { TransactionTypeEnum } from "../../enums/transactionEnum";
 
 
 const BookingDetailsPage = () => {
@@ -106,7 +108,7 @@ const BookingDetailsPage = () => {
   };
 
   const paymentRetry = async () => {
-    let status = "failed";
+    let status: string = PaymentStatusEnum.FAILED;
 
     const result = await razorpay(bookingData.id);
 
@@ -119,7 +121,7 @@ const BookingDetailsPage = () => {
 
     const bookingPayload: IBookingPayload = {
       totalAmount: bookingData.totalAmount,
-      paymentMethod: "razorpay",
+      paymentMethod: TransactionTypeEnum.RAZORPAY,
       bookingId: bookingData.id,
       status: status,
     };
@@ -127,7 +129,7 @@ const BookingDetailsPage = () => {
     const response = await createBooking(bookingPayload);
 
     if (response?.data.data) {
-      if (response?.data.data.paymentStatus == "failed") {
+      if (response?.data.data.paymentStatus == PaymentStatusEnum.FAILED) {
         let data = {
           bookingDate: response.data.data.bookingDate,
           bookingTime: response.data.data.bookingTimeStart,

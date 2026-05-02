@@ -37,6 +37,7 @@ import ContractDetailsModal from "../../components/Customer/ContractDetailsModal
 import { useDebounce } from "../../hooks/useDebounce";
 import Pagination from "../../components/Shared/Pagination";
 import EditContract from "../../components/Customer/EditContract";
+import { ContractStatusEnum } from "../../enums/contractStatusEnum";
 
 const ContractPage = () => {
   const navigate = useNavigate();
@@ -133,11 +134,11 @@ const ContractPage = () => {
         }
         const counts = response.data.data.reduce(
           (acc: ContractCount, item: IContractData) => {
-            if (item.status === "open" || item.status === "in_progress") {
+            if (item.status === ContractStatusEnum.OPEN || item.status === ContractStatusEnum.IN_PROGRESS) {
               acc.ongoing++;
-            } else if (item.status === "completed") {
+            } else if (item.status === ContractStatusEnum.COMPLETED) {
               acc.completed++;
-            } else if (item.status === "cancelled") {
+            } else if (item.status === ContractStatusEnum.CANCELLED) {
               acc.cancelled++;
             }
             if(item.isHiring == true){
@@ -373,12 +374,12 @@ const ContractPage = () => {
                               {/* STATUS BADGE */}
                               <span
                                 className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wide border ${
-                                  contract.status === "completed" ||
-                                  contract.status === "open"
+                                  contract.status === ContractStatusEnum.COMPLETED ||
+                                  contract.status === ContractStatusEnum.OPEN
                                     ? "bg-emerald-100 text-emerald-700 border-emerald-200"
-                                    : contract.status === "in_progress"
+                                    : contract.status === ContractStatusEnum.IN_PROGRESS
                                       ? "bg-amber-100 text-amber-700 border-amber-200"
-                                      : contract.status === "cancelled"
+                                      : contract.status === ContractStatusEnum.CANCELLED
                                         ? "bg-red-100 text-red-700 border-red-200"
                                         : "bg-blue-100 text-blue-700 border-blue-200"
                                 }`}
@@ -398,8 +399,8 @@ const ContractPage = () => {
                               </span> */}
 
                               {/* EDIT BUTTON */}
-                              {(contract.status == "open" ||
-                                contract.status == "in_progress") && (
+                              {(contract.status == ContractStatusEnum.OPEN ||
+                                contract.status == ContractStatusEnum.IN_PROGRESS) && (
                                 <button
                                   onClick={() => handleEditContract(contract)}
                                   title="Edit Contract"

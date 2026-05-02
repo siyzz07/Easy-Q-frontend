@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { Badge } from "../ui/badge";
 import type { BookingCardDTO } from "../../pages/Customer/BookingsPage";
 import { GoogleMapDirection } from "../../utils/GoogleMapDirection";
+import { BookingStatusEnum } from "../../enums/bookingStatusEnum";
 
 interface Booking {
   id: number;
@@ -45,26 +46,25 @@ export default function BookingViewCard({
 
   const getStatusConfig = (status: string) => {
     switch (status.toLowerCase()) {
-      case "pending":
+      case BookingStatusEnum.PENDING:
         return {
           color: "bg-amber-50 text-amber-700 border-amber-200",
           icon: <Clock4 size={12} className="mr-1" />,
           theme: "amber",
         };
-      case "booked":
-      case "checked-in":
+      case BookingStatusEnum.CONFIRMED:
         return {
           color: "bg-indigo-50 text-indigo-700 border-indigo-200",
           icon: <CheckCircle2 size={12} className="mr-1" />,
           theme: "indigo",
         };
-      case "completed":
+      case BookingStatusEnum.COMPLETED:
         return {
           color: "bg-emerald-50 text-emerald-700 border-emerald-200",
           icon: <CheckCircle2 size={12} className="mr-1" />,
           theme: "emerald",
         };
-      case "cancelled":
+      case BookingStatusEnum.CANCELLED:
         return {
           color: "bg-rose-50 text-rose-700 border-rose-200",
           icon: <XCircle size={12} className="mr-1" />,

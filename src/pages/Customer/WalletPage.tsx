@@ -21,6 +21,7 @@ import {
 } from "../../Services/ApiService/WalletApiService";
 import { getTransactions } from "../../Services/ApiService/TransactionApiService";
 import Pagination from "../../components/Shared/Pagination";
+import { TransactionStatusEnum } from "../../enums/transactionEnum";
 
 // Transaction type
 interface Transaction {
@@ -55,19 +56,19 @@ const TRANSACTION_TYPE_CONFIG = {
 };
 
 const STATUS_CONFIG = {
-  success: {
+  [TransactionStatusEnum.SUCCESS]: {
     icon: <CheckCircle2 size={14} />,
     color: "text-emerald-600",
     bg: "bg-emerald-100/50",
     label: "Success",
   },
-  created: {
+  [TransactionStatusEnum.CREATED]: {
     icon: <Clock size={14} />,
     color: "text-amber-600",
     bg: "bg-amber-100/50",
     label: "Pending",
   },
-  failed: {
+  [TransactionStatusEnum.FAILED]: {
     icon: <XCircle size={14} />,
     color: "text-rose-600",
     bg: "bg-rose-100/50",
@@ -132,10 +133,10 @@ const WalletPage = () => {
 
   const _stats = {
     totalCredit: transactions
-      .filter((t) => t.flow === "credit" && t.status === "success")
+      .filter((t) => t.flow === "credit" && t.status === TransactionStatusEnum.SUCCESS)
       .reduce((sum, t) => sum + t.amount, 0),
     totalDebit: transactions
-      .filter((t) => t.flow === "debit" && t.status === "success")
+      .filter((t) => t.flow === "debit" && t.status === TransactionStatusEnum.SUCCESS)
       .reduce((sum, t) => sum + t.amount, 0),
     totalTransactions: transactions.length,
   };

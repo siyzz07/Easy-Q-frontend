@@ -6,6 +6,8 @@ import { Calendar as CalendarIcon, AlertCircle } from "lucide-react";
 import { getCustomerBookingData } from "../../Services/ApiService/BookingApiService";
 import { toast } from "react-toastify";
 import Pagination from "../../components/Shared/Pagination";
+import { BookingStatusEnum } from "../../enums/bookingStatusEnum";
+import { PaymentStatusEnum } from "../../enums/paymentStatusEnum";
 
 
 export type BookingCardDTO = {
@@ -56,8 +58,8 @@ const BookingsPage = () => {
       setTotalPage(totalPages);
 
       const mapped: BookingCardDTO[] = bookingArray.map((b: any) => {
-        const status = b?.status?.toLowerCase() || "pending";
-        const pStatus = b?.paymentStatus?.toLowerCase() || "pending";
+        const status = b?.status?.toLowerCase() || BookingStatusEnum.PENDING;
+        const pStatus = b?.paymentStatus?.toLowerCase() || PaymentStatusEnum.PENDING;
 
         return {
           id: b?.id,
@@ -67,21 +69,21 @@ const BookingsPage = () => {
           state:b?.shop?.state,
           date: b?.date, 
           time: `${b?.startTime} - ${b?.endTime}`,
-          status: b?.status || "Pending",
+          status: b?.status || BookingStatusEnum.PENDING,
           image: b?.shop?.profileImage || "", 
           amount: b?.totalAmount?.toString() || "0",
-          paymentStatus: b?.paymentStatus || "pending",
-          isPaymentFailed: pStatus === "failed",
+          paymentStatus: b?.paymentStatus || PaymentStatusEnum.PENDING,
+          isPaymentFailed: pStatus === PaymentStatusEnum.FAILED,
           paymentMethod:b?.paymentMethod,
           statusColor:
-            status === "completed" ? "bg-emerald-100 text-emerald-700" :
-            status === "pending" || status === "booked" ? "bg-amber-100 text-amber-700" :
-            status === "cancelled" ? "bg-rose-100 text-rose-700" :
+            status === BookingStatusEnum.COMPLETED ? "bg-emerald-100 text-emerald-700" :
+            status === BookingStatusEnum.PENDING || status === BookingStatusEnum.CONFIRMED ? "bg-amber-100 text-amber-700" :
+            status === BookingStatusEnum.CANCELLED ? "bg-rose-100 text-rose-700" :
             "bg-slate-100 text-slate-700",
           bgColor:
-            status === "completed" ? "bg-emerald-500/10" :
-            status === "pending" || status === "booked" ? "bg-amber-500/10" :
-            status === "cancelled" ? "bg-rose-500/10" :
+            status === BookingStatusEnum.COMPLETED ? "bg-emerald-500/10" :
+            status === BookingStatusEnum.PENDING || status === BookingStatusEnum.CONFIRMED ? "bg-amber-500/10" :
+            status === BookingStatusEnum.CANCELLED ? "bg-rose-500/10" :
             "bg-slate-500/10",
           icon: b?.serviceId?.serviceName?.charAt(0)?.toUpperCase() || "B"
         };
@@ -121,7 +123,7 @@ const BookingsPage = () => {
         <Tabs defaultValue="all" onValueChange={handleTabChange} className="w-full">
           <div className="flex justify-center mb-8">
             <TabsList className="bg-white/50 backdrop-blur-md p-1.5 rounded-2xl h-14 border border-white shadow-sm inline-flex w-full md:w-auto">
-              {["all", "pending", "completed", "cancelled"].map(tab => (
+              {["all", BookingStatusEnum.PENDING, BookingStatusEnum.COMPLETED, BookingStatusEnum.CANCELLED].map(tab => (
                 <TabsTrigger 
                   key={tab} 
                   value={tab} 

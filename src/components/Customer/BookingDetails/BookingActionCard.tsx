@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Clock4, CalendarDays, XCircle } from "lucide-react";
+import { BookingStatusEnum } from "../../../enums/bookingStatusEnum";
 
 interface BookingActionsProps {
   status: string;
@@ -43,7 +44,7 @@ const BookingActionCard: React.FC<BookingActionsProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-3 w-full md:w-auto">
-          {status !== "cancelled" && status !== "completed" && (
+          {status !== BookingStatusEnum.CANCELLED && status !== BookingStatusEnum.COMPLETED && (
             <>
           
              <button

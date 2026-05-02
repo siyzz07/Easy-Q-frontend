@@ -29,6 +29,8 @@ import { createTransaction, verifyPayment } from "../../Services/ApiService/Tran
 import { CUSTOMER_ROUTES } from "../../Shared/Constants/RouteConstants";
 import { razorpay } from "../../utils/razorpayUtil";
 import { getCustomerWalletBalance } from "../../Services/ApiService/WalletApiService";
+import { PaymentStatusEnum } from "../../enums/paymentStatusEnum";
+import { TransactionTypeEnum } from "../../enums/transactionEnum";
 
 const CheckoutPage = () => {
   const [serarchParams] = useSearchParams();
@@ -107,7 +109,7 @@ const CheckoutPage = () => {
   const handleProceedToPayment = async () => {
     try {
 
-      let status  ="pending";
+      let status: string = PaymentStatusEnum.PENDING;
       if (!serviceData || !customerData || !addressData || !shopData) {
         toast.error("Some booking data is missing. Please reload the page.");
         return;
@@ -118,7 +120,7 @@ const CheckoutPage = () => {
         return;
       }
 
-      if(selectedPayment == "razorpay"){
+      if(selectedPayment == TransactionTypeEnum.RAZORPAY){
         let result = await razorpay(bookingId);
        
         if(result && result == "razorpayError"){
@@ -130,7 +132,7 @@ const CheckoutPage = () => {
         }
       }
 
-      if(selectedPayment == "wallet"){
+      if(selectedPayment == TransactionTypeEnum.WALLET){
         if (Number(serviceData.price) > walletBalance) {
           toast.error("Insufficient balance , choose another payment method");
             return;
@@ -149,7 +151,7 @@ const CheckoutPage = () => {
 
       if(response?.data.data){
 
-        if(response?.data.data.paymentStatus=="failed"){
+        if(response?.data.data.paymentStatus==PaymentStatusEnum.FAILED){
              let data = {
           bookingDate: response.data.data.bookingDate,
           bookingTime: response.data.data.bookingTimeStart,
@@ -273,19 +275,19 @@ const CheckoutPage = () => {
               <div className="space-y-3">
                 {[
                   {
-                    id: "razorpay",
+                    id: TransactionTypeEnum.RAZORPAY,
                     name: "Razorpay",
                     color: "blue",
                     desc: "Pay securely with UPI, cards or net banking",
                   },
                   {
-                    id: "payAtShop",
+                    id: TransactionTypeEnum.PAYATSHOP,
                     name: "Pay at location",
                     color: "yellow",
                     desc: "Pay directly at the shop after service",
                   },
                   {
-                    id: "wallet",
+                    id: TransactionTypeEnum.WALLET,
                     name: "Wallet",
                     color: "green",
                     desc: (

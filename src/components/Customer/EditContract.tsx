@@ -19,6 +19,7 @@ import type {
   ICustomerAddress,
   IServiceVendorTypes,
 } from "../../Shared/types/Types";
+import { ContractStatusEnum } from "../../enums/contractStatusEnum";
 
 export interface IUpdateContractValues {
   contractName: string;
@@ -137,7 +138,7 @@ const EditContract: FC<IContractModalProps> = ({ onClose, contractData }) => {
               phone: contractData?.address?.phone || "",
               address: contractData?.address?._id || "",
               serviceType: contractData?.serviceType?._id || "",
-              status: contractData?.status || "open",
+              status: contractData?.status || ContractStatusEnum.OPEN,
               isHiring: contractData?.isHiring || false,
             }}
             validationSchema={validationSchema}
@@ -158,10 +159,10 @@ const EditContract: FC<IContractModalProps> = ({ onClose, contractData }) => {
                       name="status"
                       className="w-full bg-transparent text-sm font-bold text-slate-700 outline-none cursor-pointer"
                     >
-                      <option value="open"> Open </option>
-                      <option value="in_progress"> In Progress</option>
-                      <option value="completed"> Completed</option>
-                      <option value="cancelled"> Cancelled</option>
+                      <option value={ContractStatusEnum.OPEN}> Open </option>
+                      <option value={ContractStatusEnum.IN_PROGRESS}> In Progress</option>
+                      <option value={ContractStatusEnum.COMPLETED}> Completed</option>
+                      <option value={ContractStatusEnum.CANCELLED}> Cancelled</option>
                     </Field>
                   </div>
 

@@ -4,6 +4,8 @@ import { ShieldCheck, AlertCircle, RefreshCw, Coins } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Badge } from "../../ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { PaymentStatusEnum } from "../../../enums/paymentStatusEnum";
+import { BookingStatusEnum } from "../../../enums/bookingStatusEnum";
 
 interface PaymentSummaryProps {
   bookingData: any;
@@ -16,9 +18,9 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ bookingData, onRetry, o
   
 
   const status = bookingData.paymentStatus?.toLowerCase();
-  const isFailed = status === "failed";
-  const isPending = status === "pending";
-  const isPaid = status === "paid" || status === "completed";
+  const isFailed = status === PaymentStatusEnum.FAILED;
+  const isPending = status === PaymentStatusEnum.PENDING;
+  const isPaid = status === PaymentStatusEnum.PAID || status === "completed";
 
   // Dynamic Styles based on status
   const statusConfig = {
@@ -96,7 +98,7 @@ const PaymentSummary: React.FC<PaymentSummaryProps> = ({ bookingData, onRetry, o
 
           {/* Action Buttons */}
           <div className="space-y-3 pt-2">
-            {isFailed && bookingData.status!="cancelled" ? (
+            {isFailed && bookingData.status!=BookingStatusEnum.CANCELLED ? (
               <Button 
                 onClick={onRetry}
                 className="w-full rounded-2xl h-12 gap-2 font-bold bg-red-600 hover:bg-red-700 shadow-lg shadow-red-200"

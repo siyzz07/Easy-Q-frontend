@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Store, CheckCircle2, Clock4, XCircle, AlertCircle } from "lucide-react";
 import { Badge } from "../../ui/badge";
 import { convertRailwayTime } from "../../../utils/convertRailwayTime";
+import { BookingStatusEnum } from "../../../enums/bookingStatusEnum";
 
 interface DetailsHeroProps {
   bookingData: any;
@@ -12,18 +13,18 @@ interface DetailsHeroProps {
 
 const getStatusIcon = (status: string) => {
   switch (status.toLowerCase()) {
-    case "completed": return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
-    case "pending": return <Clock4 className="w-5 h-5 text-amber-500" />;
-    case "cancelled": return <XCircle className="w-5 h-5 text-rose-500" />;
+    case BookingStatusEnum.COMPLETED: return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
+    case BookingStatusEnum.PENDING: return <Clock4 className="w-5 h-5 text-amber-500" />;
+    case BookingStatusEnum.CANCELLED: return <XCircle className="w-5 h-5 text-rose-500" />;
     default: return <AlertCircle className="w-5 h-5 text-blue-500" />;
   }
 };
 
 const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
-    case "completed": return "bg-emerald-50 text-emerald-700 border-emerald-200";
-    case "pending": return "bg-amber-50 text-amber-700 border-amber-200";
-    case "cancelled": return "bg-rose-50 text-rose-700 border-rose-200";
+    case BookingStatusEnum.COMPLETED: return "bg-emerald-50 text-emerald-700 border-emerald-200";
+    case BookingStatusEnum.PENDING: return "bg-amber-50 text-amber-700 border-amber-200";
+    case BookingStatusEnum.CANCELLED: return "bg-rose-50 text-rose-700 border-rose-200";
     default: return "bg-blue-50 text-blue-700 border-blue-200";
   }
 };

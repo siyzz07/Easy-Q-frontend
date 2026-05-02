@@ -26,6 +26,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { updateContractRequest } from "../../Services/ApiService/ContractApiService";
 import { toast } from "react-toastify";
+import { ContractStatusEnum } from "../../enums/contractStatusEnum";
 
 export interface IAppliedVendors {
   _id: string;
@@ -45,21 +46,21 @@ interface ContractDetailsModalProps {
 
 const getStatusConfig = (status: string) => {
   switch (status?.toLowerCase()) {
-    case "completed":
+    case ContractStatusEnum.COMPLETED:
       return {
         icon: CheckCircle2,
         color: "text-emerald-600",
         bg: "bg-emerald-50",
         border: "border-emerald-200",
       };
-    case "inprogress":
+    case ContractStatusEnum.IN_PROGRESS:
       return {
         icon: Clock4,
         color: "text-blue-600",
         bg: "bg-blue-50",
         border: "border-blue-200",
       };
-    case "cancelled":
+    case ContractStatusEnum.CANCELLED:
       return {
         icon: XCircle,
         color: "text-rose-600",

@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { markAllAsRead } from "../../Redux/notificationSlice";
 import { updateNotification } from "../../Services/ApiService/NotificationApiService";
 import { formatDistanceToNow } from "date-fns";
+import { BookingNotificationTypeEnum } from "../../enums/notificationEnum";
 
 const NotificationPage = () => {
   const dispatch = useDispatch();
@@ -34,7 +35,7 @@ const NotificationPage = () => {
   const getIcon = (type: string) => {
     switch (type) {
       case "success":
-      case "booking_completed":
+      case BookingNotificationTypeEnum.BOOKING_COMPLETED:
         return <CheckCircle2 className="text-emerald-500" size={20} />;
       case "warning":
         return <AlertTriangle className="text-amber-500" size={20} />;
@@ -48,7 +49,7 @@ const NotificationPage = () => {
   const getBgColor = (type: string) => {
     switch (type) {
       case "success":
-      case "booking_completed":
+      case BookingNotificationTypeEnum.BOOKING_COMPLETED:
         return "bg-emerald-50/50";
       case "warning":
         return "bg-amber-50/50";
