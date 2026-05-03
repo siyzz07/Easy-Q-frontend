@@ -5,7 +5,7 @@ import { addServiceType } from "../../Services/ApiService/AdminApiService";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { X, Layers } from "lucide-react";
-
+//kl
 const validationSchema = Yup.object({
   serviceName: Yup.string()
     .matches(/^[A-Za-z ]+$/, "Only letters and spaces allowed")
